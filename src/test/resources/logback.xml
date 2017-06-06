@@ -1,0 +1,19 @@
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{HH:mm:ss.SSS} %thread %-5level %logger %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- the application log levels -->
+    <logger name="uk.gov.dvsa" level="debug"/>
+
+    <!-- default log levels for cucumber, selenium and 3rd party libraries -->
+    <logger name="org.openqu.selenium" level="info"/>
+    <logger name="org.apache.http" level="info"/>
+
+    <root level="ALL">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
