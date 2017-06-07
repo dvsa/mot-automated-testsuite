@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.otp.Generator;
 
+import javax.annotation.PreDestroy;
+
 /**
  * Wraps the <code>WebDriver</code> instances needed by step definitions.
  */
@@ -29,41 +31,41 @@ public class WebDriverWrapper {
      * @param env   The environment configuration to use
      */
     public WebDriverWrapper(Environment env) {
-        this.env = env;
         logger.debug("Creating WebDriverWrapper...");
-    }
+        this.env = env;
 
-    /**
-     * Creates a new <code>WebDriver</code>, ready to start a test scenario.
-     */
-    public void create() {
         logger.debug("Creating new chrome driver");
 
         String browser = env.getProperty("browser");
         if ("chrome".equals(browser)) {
             System.setProperty("webdriver.chrome.driver", "drivers/chromedriver"); // path to driver executable
             this.webDriver = new ChromeDriver();
+
         } else {
             String message = "Unsupported browser: " + browser;
             logger.error(message);
             throw new IllegalArgumentException(message);
         }
+
+        // ensure all previous sessions are invalidated
+        this.webDriver.manage().deleteAllCookies();
     }
 
     /**
-     * Destroys a <code>WebDriver</code> at the end of a test scenario.
+     * Resets the web driver between test scenarios.
      */
-    public void destroy() {
-        logger.debug("Destroying chrome driver");
+    public void reset() {
+        logger.debug("WebDriverWrapper.reset");
+        webDriver.manage().deleteAllCookies();
+    }
+
+    /**
+     * Called when Spring is about to shutdown the current application, which is at the end of each feature.
+     */
+    @PreDestroy
+    public void preDestroy() {
+        logger.debug("WebDriverWrapper.preDestroy...");
         webDriver.quit();
-    }
-
-    /**
-     * Get the <code>WebDriver</code>.
-     * @return The driver
-     */
-    public WebDriver getWebDriver() {
-        return webDriver;
     }
 
     /**
@@ -77,7 +79,7 @@ public class WebDriverWrapper {
         logger.debug("Browsing to {}", startingUrl);
 
         webDriver.get(startingUrl + "/login");
-        logger.debug("Got to page {} - \"{}\"", webDriver.getCurrentUrl(), webDriver.getTitle());
+        debugCurrentPage();
 
         // hidden duplicate of username field is ID "IDToken1"
         (new WebDriverWait(webDriver, 10))
@@ -90,7 +92,7 @@ public class WebDriverWrapper {
         passwordElement.sendKeys(password);
         passwordElement.submit();
 
-        logger.debug("Got to page {} - \"{}\"", webDriver.getCurrentUrl(), webDriver.getTitle());
+        debugCurrentPage();
 
         // find the 2FA pin field
         WebElement pinElement = webDriver.findElement(By.id("pin"));
@@ -102,6 +104,33 @@ public class WebDriverWrapper {
         pinElement.sendKeys(pin);
         pinElement.submit();
 
-        logger.debug("Got to page {} - \"{}\"", webDriver.getCurrentUrl(), webDriver.getTitle());
+        debugCurrentPage();
+    }
+
+    /**
+     * Browse to a page relative to the environment home.
+     * @param relativePath  The relative path, must start with "/"
+     */
+    public void browseTo(String relativePath) {
+        String url = env.getProperty("startingUrl") + relativePath;
+        logger.debug("Browsing to {}", url);
+        webDriver.get(url);
+
+        debugCurrentPage();
+    }
+
+    /**
+     * Get the title of the current page.
+     * @return The title
+     */
+    public String getCurrentPageTitle() {
+        return webDriver.getTitle();
+    }
+
+    /**
+     * Logs the current page URL and title as debug.
+     */
+    public void debugCurrentPage() {
+        logger.debug("** At page {} - \"{}\" **", webDriver.getCurrentUrl(), webDriver.getTitle());
     }
 }

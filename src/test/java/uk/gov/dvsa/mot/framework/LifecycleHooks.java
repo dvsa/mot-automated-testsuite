@@ -16,17 +16,33 @@ public class LifecycleHooks {
     /** The logger to use. */
     private static final Logger logger = LoggerFactory.getLogger(LifecycleHooks.class);
 
-    @Inject
-    private WebDriverWrapper driverWrapper;
+    /** The driver wrapper to use. */
+    private final WebDriverWrapper driverWrapper;
 
+    /**
+     * Creates a new instance.
+     * @param driverWrapper     The driver wrapper to use
+     */
+    @Inject
+    public LifecycleHooks(WebDriverWrapper driverWrapper) {
+        logger.debug("Creating LifecycleHooks...");
+        this.driverWrapper = driverWrapper;
+    }
+
+    /**
+     * Runs before every Cucumber test scenario.
+     * @param scenario      The test scenario being run
+     */
     @Before
     public void startup(Scenario scenario) {
         // test initialisation goes here
         logger.debug("Before cucumber scenario: {}", scenario.getName());
-
-        driverWrapper.create();
     }
 
+    /**
+     * Runs after every Cucumber test scenario.
+     * @param scenario      The test scenario that has run
+     */
     @After
     public void teardown(Scenario scenario) {
         logger.debug("After cucumber scenario: {}", scenario.getName());
@@ -40,6 +56,6 @@ public class LifecycleHooks {
 
         // test cleanup goes here
 
-        driverWrapper.destroy();
+        driverWrapper.reset();
     }
 }
