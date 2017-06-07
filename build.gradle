@@ -4,8 +4,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-    jcenter() // needed for corgette-jvm
-    mavenCentral() // TODO: check if all deps are avail on jcenter then get rid of this
+    jcenter()
 }
 
 configurations {
@@ -61,19 +60,21 @@ test {
     include 'uk/gov/dvsa/mot/junit/CourgetteRunner.class'
     testLogging.showStandardStreams = true
     outputs.upToDateWhen { false }
+    classpath = sourceSets.test.runtimeClasspath + sourceSets.test.resources.sourceDirectories
 }
 
 dependencies {
     testCompile 'info.cukes:cucumber-java8:1.2.5'
-    testCompile 'info.cukes:cucumber-guice:1.2.5'
+    testCompile 'info.cukes:cucumber-spring:1.2.5'
     testCompile 'info.cukes:cucumber-junit:1.2.5'
     testCompile 'io.github.prashant-ramcharan:courgette-jvm:1.3.0'
     testCompile 'org.seleniumhq.selenium:selenium-java:3.4.0'
     testCompile 'org.slf4j:slf4j-api:1.7.25'
     testCompile 'org.slf4j:log4j-over-slf4j:1.7.5'
     testCompile 'ch.qos.logback:logback-classic:1.2.3'
-    testCompile 'com.google.inject:guice:4.1.0'
-    testCompile 'org.apache.commons:commons-configuration2:2.1.1'
+    testCompile 'org.springframework:spring-context:4.3.8.RELEASE'
+    testCompile 'org.springframework:spring-test:4.3.8.RELEASE'
+    testCompile 'javax.inject:javax.inject:1'
 
     // depends upon the "mot/2fa-pin-generator" project being checked out alongside this project, then built manually
     testCompile files('../2fa-pin-generator/build/libs/2fa-generator-1.0.jar')

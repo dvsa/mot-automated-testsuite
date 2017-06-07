@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 
 /**
- * Created by chris.nappin on 02/06/2017.
+ * Handles Cucumber lifecycle hooks (events).
  */
 public class LifecycleHooks {
 

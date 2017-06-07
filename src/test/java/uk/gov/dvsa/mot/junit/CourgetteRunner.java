@@ -29,17 +29,4 @@ import org.slf4j.LoggerFactory;
                 }
         ))
 public class CourgetteRunner {
-
-    /** The logger to use. */
-    private static final Logger logger = LoggerFactory.getLogger(CourgetteRunner.class);
-
-    @BeforeClass
-    public static void setupAll() {
-        logger.debug("CourgetteRunner.setupAll...");
-    }
-
-    @AfterClass
-    public static void teardownAll() {
-        logger.debug("CourgetteRunner.teardownAll...");
-    }
 }
