@@ -60,7 +60,6 @@ test {
     include 'uk/gov/dvsa/mot/junit/CourgetteRunner.class'
     testLogging.showStandardStreams = true
     outputs.upToDateWhen { false }
-    classpath = sourceSets.test.runtimeClasspath + sourceSets.test.resources.sourceDirectories
 }
 
 dependencies {
