@@ -4,19 +4,18 @@ import courgette.api.CourgetteOptions;
 import courgette.api.CourgetteRunLevel;
 import courgette.api.junit.Courgette;
 import cucumber.api.CucumberOptions;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Junit/Courgette-JVM runner used to run the Gerkin features.
+ *
+ * <code>runLevel</code> of <code>FEATURE</code> results in one independent copy of the Spring Application Context
+ * being created for each cucumber **feature** (so shared between scenarios within each feature).
  */
 @RunWith(Courgette.class)
 @CourgetteOptions(
-        threads = 10,
-        runLevel = CourgetteRunLevel.SCENARIO,
+        threads = 1,
+        runLevel = CourgetteRunLevel.FEATURE,
         rerunFailedScenarios = false,
         showTestOutput = true,
         cucumberOptions = @CucumberOptions(
