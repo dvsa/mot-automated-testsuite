@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 @RunWith(ExtendedParallelCucumber.class)
 @ExtendedCucumberOptions(
         threadsCount = 3,
-        outputFolder = "target/",
+        outputFolder = "target",
         jsonReport = "target/cucumber.json",
         overviewReport = true,
         detailedReport = true
