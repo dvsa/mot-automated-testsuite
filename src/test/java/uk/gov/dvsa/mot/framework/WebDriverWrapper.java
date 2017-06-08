@@ -69,9 +69,9 @@ public class WebDriverWrapper {
     /**
      * Logs a user into the application, using 2FA (password and pin).
      * @param username  The username to use
-     * @param password  The password to use
      */
-    public void loginWith2FA(String username, String password) {
+    public void loginWith2FA(String username) {
+        String password = env.getProperty("password");
         logger.debug("Logging in as username {} and password {}", username, password);
         String startingUrl = env.getProperty("startingUrl");
         logger.debug("Browsing to {}", startingUrl);

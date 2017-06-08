@@ -5,7 +5,7 @@ Feature: Login
     Then The page title contains Sign in
 
   Scenario: Login with 2FA as a tester
-    When I login with 2FA as username CALL0020 and password xxx
+    When I login with 2FA as username CALL0020
     Then The page title contains Your home
 
   Scenario: Redirect to login page if go to an internal screen when not logged in

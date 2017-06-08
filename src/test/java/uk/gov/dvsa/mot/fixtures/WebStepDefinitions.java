@@ -28,8 +28,8 @@ public class WebStepDefinitions implements En {
         logger.debug("Creating WebStepDefinitions...");
         this.driverWrapper = driverWrapper;
 
-        Given("^I login with 2FA as username (\\w+) and password (\\w+)$", (String username, String password) -> {
-            driverWrapper.loginWith2FA(username, password);
+        Given("^I login with 2FA as username (\\w+)$", (String username) -> {
+            driverWrapper.loginWith2FA(username);
         });
 
         When("^I browse to (\\S+)$", (String relativePath) -> {
