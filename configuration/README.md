@@ -31,3 +31,7 @@ Supported values are:
 
 ## password
 The password that all user accounts are set to in the test environment being used
+
+## pageWait
+The maximum wait, in seconds, for each page refresh/submit to complete and any dynamic
+javascript to run, before using Selenium to locate elements in the web page

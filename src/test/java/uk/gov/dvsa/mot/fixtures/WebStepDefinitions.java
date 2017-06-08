@@ -40,6 +40,14 @@ public class WebStepDefinitions implements En {
             driverWrapper.pressButton(buttonText);
         });
 
+        When("^I click the \"([^\"]*)\" link$", (String linkText) -> {
+            driverWrapper.clickLink(linkText);
+        });
+
+        When("^I enter \"([^\"]*)\" in the \"([^\"]*)\" field$", (String text, String label) -> {
+            driverWrapper.enterIntoField(text, label);
+        });
+
         Then("^The page title contains (.*+)$", (String title) -> {
             logger.debug("Looking for page title {}", title);
             assertTrue("Wrong page title", driverWrapper.getCurrentPageTitle().contains(title));

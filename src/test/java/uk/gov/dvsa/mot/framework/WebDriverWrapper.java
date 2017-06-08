@@ -20,6 +20,7 @@ public class WebDriverWrapper {
     /** The logger to use. */
     private static final Logger logger = LoggerFactory.getLogger(WebDriverWrapper.class);
 
+    /** The web driver to use. */
     private WebDriver webDriver;
 
     /** The environment configuration to use. */
@@ -81,11 +82,10 @@ public class WebDriverWrapper {
         logger.debug("Browsing to {}", startingUrl);
 
         webDriver.get(startingUrl + "/login");
+        waitForPageLoad();
         debugCurrentPage();
 
         // hidden duplicate of username field is ID "IDToken1"
-        (new WebDriverWait(webDriver, 10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.id("IDToken1")));
         WebElement usernameElement = webDriver.findElement(By.xpath("//*[contains(@id,'_tid1')]"));
         WebElement passwordElement = webDriver.findElement(By.xpath("//*[contains(@id,'_tid2')]"));
 
@@ -93,7 +93,7 @@ public class WebDriverWrapper {
         usernameElement.sendKeys(username);
         passwordElement.sendKeys(password);
         passwordElement.submit();
-
+        waitForPageLoad();
         debugCurrentPage();
 
         // find the 2FA pin field
@@ -105,7 +105,7 @@ public class WebDriverWrapper {
 
         pinElement.sendKeys(pin);
         pinElement.submit();
-
+        waitForPageLoad();
         debugCurrentPage();
     }
 
@@ -117,7 +117,7 @@ public class WebDriverWrapper {
         String url = env.getProperty("startingUrl") + relativePath;
         logger.debug("Browsing to {}", url);
         webDriver.get(url);
-
+        waitForPageLoad();
         debugCurrentPage();
     }
 
@@ -128,6 +128,31 @@ public class WebDriverWrapper {
     public void pressButton(String buttonText) {
         WebElement button = webDriver.findElement(By.xpath("//input[@value = '" + buttonText + "']"));
         button.submit();
+
+        debugCurrentPage();
+    }
+
+    /**
+     * Clicks the specified link.
+     * @param linkText  The link text
+     */
+    public void clickLink(String linkText) {
+        WebElement link = webDriver.findElement(By.xpath("//a[contains(text(),'" + linkText + "')]"));
+        link.click();
+        waitForPageLoad();
+        debugCurrentPage();
+    }
+
+    /**
+     * Enters the specified text into the field.
+     * @param text  The text to enter
+     * @param label The field label
+     */
+    public void enterIntoField(String text, String label) {
+        // find the input associated with the specified label...
+        WebElement labelElement = webDriver.findElement(By.xpath("//label[contains(text(),'" + label + "')]"));
+        WebElement textElement = webDriver.findElement(By.id(labelElement.getAttribute("for")));
+        textElement.sendKeys(text);
 
         debugCurrentPage();
     }
@@ -159,9 +184,19 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Wait for the web page to fully re-load, and any onload javascript events to complete.
+     * Failure to do this between page transitions can result in intermittent failures, such as
+     * Selenium still being opn the previous page, or failure to find page element in the new page.
+     */
+    private void waitForPageLoad() {
+        int pageWait = Integer.parseInt(env.getProperty("pageWait"));
+        (new WebDriverWait(webDriver, pageWait))
+            .until(ExpectedConditions.presenceOfElementLocated(By.id("logo")));
+    }
+    /**
      * Logs the current page URL and title as debug.
      */
-    public void debugCurrentPage() {
+    private void debugCurrentPage() {
         logger.debug("** At page {} - \"{}\" **", webDriver.getCurrentUrl(), webDriver.getTitle());
     }
 }
