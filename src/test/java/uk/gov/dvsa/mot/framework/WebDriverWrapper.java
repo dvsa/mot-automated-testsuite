@@ -1,8 +1,6 @@
 package uk.gov.dvsa.mot.framework;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -120,11 +118,40 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Press the specified button.
+     * @param buttonText  The button text
+     */
+    public void pressButton(String buttonText) {
+        WebElement button = webDriver.findElement(By.xpath("//input[@value = '" + buttonText + "']"));
+        button.submit();
+
+        debugCurrentPage();
+    }
+
+    /**
      * Get the title of the current page.
      * @return The title
      */
     public String getCurrentPageTitle() {
         return webDriver.getTitle();
+    }
+
+    /**
+     * Takes a screenshot of the current browser window.
+     * @return The screenshot (in PNG format) or <code>null</code> if failed
+     */
+    public byte[] takeScreenshot() {
+        try {
+            return ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BYTES);
+
+        } catch (WebDriverException ex) {
+            logger.error("Error taking screenshot: " + ex.getMessage());
+            return null;
+
+        } catch (ClassCastException ex) {
+            logger.error("WebDriver does not support taking screenshots");
+            return null;
+        }
     }
 
     /**
