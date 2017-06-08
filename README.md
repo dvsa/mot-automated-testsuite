@@ -36,7 +36,7 @@ To run all feature tests in parallel, at the command line:
 ```
 ./gradlew test
 ```
-*(the number of concurrent threads used defaults to 10, and is set in ```src/test/java/uk/gov/dvsa/mot/junit/CorgetteRunner```)*
+*(the number of concurrent threads used defaults to 3, and is set in ```src/test/java/uk/gov/dvsa/mot/junit/CucumberRunner```)*
 
 ## Feature Tags
 
@@ -45,3 +45,7 @@ The following tags are used:
 * ```@BVT```??
 * ```@Regression```??
 * etc...
+
+## Reporting
+
+The cucumber reports are available after a test run in the `target/` directiory. Available reports are documented at [Cucumber Reports](http://mkolisnyk.github.io/cucumber-reports/).
