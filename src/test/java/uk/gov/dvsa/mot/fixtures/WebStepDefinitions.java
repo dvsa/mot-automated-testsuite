@@ -8,7 +8,6 @@ import uk.gov.dvsa.mot.di.SpringConfiguration;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import static junit.framework.TestCase.assertTrue;
 
@@ -29,12 +28,16 @@ public class WebStepDefinitions implements En {
         logger.debug("Creating WebStepDefinitions...");
         this.driverWrapper = driverWrapper;
 
+        Given("^I login with 2FA as username (\\w+) and password (\\w+)$", (String username, String password) -> {
+            driverWrapper.loginWith2FA(username, password);
+        });
+
         When("^I browse to (\\S+)$", (String relativePath) -> {
             driverWrapper.browseTo(relativePath);
         });
 
-        When("^I login as username (\\w+) and password (\\w+)$", (String username, String password) -> {
-            driverWrapper.loginWith2FA(username, password);
+        When("^I press the \"([^\"]*)\" button$", (String buttonText) -> {
+            driverWrapper.pressButton(buttonText);
         });
 
         Then("^The page title contains (.*+)$", (String title) -> {
