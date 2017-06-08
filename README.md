@@ -11,6 +11,7 @@ Checkout the ```mot/2fa-pin-generator``` project into a directory alongside the 
 ./gradlew build
 ```
 
+Get a copy of ```testsuite.properties``` from another member of the team and save it in the ```configuration``` directory. See [Configuration Settings](configuration/README.md) for further details.
 
 ## How to run
 
