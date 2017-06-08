@@ -19,7 +19,10 @@ Supported values are:
 
 * chrome
 
-# takeScreenshots
+## headless
+Boolean for running in headless mode
+
+## takeScreenshots
 When to take screenshots of the browser window at the end of each test scenario
 Supported values are: 
 
