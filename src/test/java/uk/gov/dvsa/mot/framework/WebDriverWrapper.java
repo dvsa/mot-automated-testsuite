@@ -2,6 +2,7 @@ package uk.gov.dvsa.mot.framework;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -36,9 +37,12 @@ public class WebDriverWrapper {
 
         String browser = env.getProperty("browser");
         if ("chrome".equals(browser)) {
+            ChromeOptions chromeOptions = new ChromeOptions();
+            if (env.getProperty("headless").equals("true")) {
+                chromeOptions.addArguments("--headless");
+            }
             System.setProperty("webdriver.chrome.driver", "drivers/chromedriver"); // path to driver executable
-            this.webDriver = new ChromeDriver();
-
+            this.webDriver = new ChromeDriver(chromeOptions);
         } else {
             String message = "Unsupported browser: " + browser;
             logger.error(message);
