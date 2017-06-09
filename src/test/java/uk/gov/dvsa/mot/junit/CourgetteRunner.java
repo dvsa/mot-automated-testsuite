@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
         rerunFailedScenarios = false,
         showTestOutput = true,
         cucumberOptions = @CucumberOptions(
-                features = "features",
+                features = "src/test/resources/features",
                 glue = "uk.gov.dvsa.mot",
                 plugin = {
                         "pretty",
