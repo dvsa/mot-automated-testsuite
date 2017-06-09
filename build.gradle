@@ -31,7 +31,10 @@ task('cucumber-feature') {
         javaexec {
             main = "cucumber.api.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.test.output
-            args = ['--plugin', 'pretty', '--glue', 'uk.gov.dvsa.mot', 'features/' + feature]
+
+            // Cucumber configuration, same as defined in CorgetteRunner
+            args = ['--plugin', 'pretty', '--plugin', 'json:build/reports/selenium/selenium.json',
+                    '--plugin', 'html:build/reports/selenium', '--glue', 'uk.gov.dvsa.mot', 'features/' + feature]
         }
     }
 }
@@ -46,7 +49,10 @@ task('cucumber-tag') {
         javaexec {
             main = "cucumber.api.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.test.output
-            args = ['--plugin', 'pretty', '--glue', 'uk.gov.dvsa.mot', '--tags', tag, 'features']
+
+            // Cucumber configuration, same as defined in CorgetteRunner
+            args = ['--plugin', 'pretty', '--plugin', 'json:build/reports/selenium/selenium.json',
+                    '--plugin', 'html:build/reports/selenium', '--glue', 'uk.gov.dvsa.mot', '--tags', tag, 'features']
         }
     }
 }
@@ -58,7 +64,10 @@ task('cucumber-all') {
         javaexec {
             main = "cucumber.api.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.test.output
-            args = ['--plugin', 'pretty', '--glue', 'uk.gov.dvsa.mot', 'features']
+
+            // Cucumber configuration, same as defined in CorgetteRunner
+            args = ['--plugin', 'pretty', '--plugin', 'json:build/reports/selenium/selenium.json',
+                    '--plugin', 'html:build/reports/selenium', '--glue', 'uk.gov.dvsa.mot', 'features']
         }
     }
 }
