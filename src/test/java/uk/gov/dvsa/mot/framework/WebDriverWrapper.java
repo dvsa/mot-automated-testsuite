@@ -85,7 +85,7 @@ public class WebDriverWrapper {
         waitForPageLoad();
         debugCurrentPage();
 
-        // hidden duplicate of username field is ID "IDToken1"
+        // the visible versions of the username and password fields have dynamic ids ending in _tid1 or _tid2
         WebElement usernameElement = webDriver.findElement(By.xpath("//*[contains(@id,'_tid1')]"));
         WebElement passwordElement = webDriver.findElement(By.xpath("//*[contains(@id,'_tid2')]"));
 
@@ -95,6 +95,14 @@ public class WebDriverWrapper {
         passwordElement.submit();
         waitForPageLoad();
         debugCurrentPage();
+
+        // check we got to the 2FA PIN screen
+        if (!(webDriver.getTitle().contains("Your security card PIN"))) {
+            // password authentication must have failed
+            String message = "password authentication failed for user: " + username;
+            logger.error(message);
+            throw new RuntimeException(message);
+        }
 
         // find the 2FA pin field
         WebElement pinElement = webDriver.findElement(By.id("pin"));
@@ -107,6 +115,14 @@ public class WebDriverWrapper {
         pinElement.submit();
         waitForPageLoad();
         debugCurrentPage();
+
+        // check we
+        if (webDriver.getTitle().contains("Your security card PIN")) {
+            // 2FA PIN authentication failed
+            String message = "2FA PIN authentication failed for user: " + username;
+            logger.error(message);
+            throw new RuntimeException(message);
+        }
     }
 
     /**
@@ -189,9 +205,24 @@ public class WebDriverWrapper {
      * Selenium still being opn the previous page, or failure to find page element in the new page.
      */
     private void waitForPageLoad() {
+        // initial wait (500 milliseconds) to give the selenium web driver time to tell the web browser to
+        // submit the current page
+        try {
+            Thread.sleep(500);
+
+        } catch (InterruptedException ex) {
+            // called if trying to shutdown the test suite
+            String message = "Wait for web browser to submit current page was interrupted";
+            logger.error(message, ex);
+
+            // propagate a fatal error so testsuite shuts down
+            throw new RuntimeException(message, ex);
+        }
+
+        // then wait for new page to load and initialise fully
         int pageWait = Integer.parseInt(env.getProperty("pageWait"));
         (new WebDriverWait(webDriver, pageWait))
-            .until(ExpectedConditions.presenceOfElementLocated(By.id("logo")));
+            .until(ExpectedConditions.presenceOfElementLocated(By.id("footer")));
     }
     /**
      * Logs the current page URL and title as debug.
