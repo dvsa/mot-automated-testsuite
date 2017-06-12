@@ -48,7 +48,7 @@ public class WebStepDefinitions implements En {
             driverWrapper.enterIntoField(text, label);
         });
 
-        Then("^The page title contains (.*+)$", (String title) -> {
+        Then("^The page title contains \"([^\"]*)\"$", (String title) -> {
             logger.debug("Looking for page title {}", title);
             assertTrue("Wrong page title", driverWrapper.getCurrentPageTitle().contains(title));
         });
