@@ -2,9 +2,12 @@ package uk.gov.dvsa.mot.di;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import uk.gov.dvsa.mot.framework.StaticTestDataProvider;
+import uk.gov.dvsa.mot.framework.TestDataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 /**
@@ -28,4 +31,7 @@ public class SpringConfiguration {
     public WebDriverWrapper webDriverWrapper() {
         return new WebDriverWrapper(env);
     }
+
+    @Bean
+    public TestDataProvider testDataProvider() {return new StaticTestDataProvider(); }
 }

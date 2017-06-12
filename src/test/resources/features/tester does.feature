@@ -10,7 +10,7 @@
 Feature: Tester does...
 
   Scenario: Tester enters an MOT test pass
-    Given I login with 2FA as username JOEN5622
+    Given I login with 2FA as a valid tester
     When I click the "Start MOT test" link
     And The page title contains "Find a vehicle"
     And I enter "HO94LFW" in the "Registration mark" field
