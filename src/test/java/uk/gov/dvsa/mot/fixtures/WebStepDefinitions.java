@@ -29,6 +29,10 @@ public class WebStepDefinitions implements En {
         logger.debug("Creating WebStepDefinitions...");
         this.driverWrapper = driverWrapper;
 
+        Given("^I login with 2FA as username (\\w+)$", (String username) -> {
+            driverWrapper.loginWith2FA(username);
+        });
+
         Given("^I login with 2FA as a valid (\\w+)$", (String userType) -> {
             String username = testDataProvider.getValidUserOfType(userType);
             driverWrapper.loginWith2FA(username);

@@ -17,6 +17,6 @@ public class StaticTestDataProvider implements TestDataProvider {
 
     @Override
     public String getValidUserOfType(String userType) {
-        return "JOEN5622";
+        return "DERE3460";
     }
 }
