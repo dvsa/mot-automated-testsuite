@@ -34,7 +34,8 @@ task('cucumber-feature') {
 
             // Cucumber configuration, same as defined in CorgetteRunner
             args = ['--plugin', 'pretty', '--plugin', 'json:build/reports/selenium/selenium.json',
-                    '--plugin', 'html:build/reports/selenium', '--glue', 'uk.gov.dvsa.mot', 'features/' + feature]
+                    '--plugin', 'html:build/reports/selenium', '--glue', 'uk.gov.dvsa.mot',
+                    'src/test/resources/features/' + feature]
         }
     }
 }
@@ -52,7 +53,8 @@ task('cucumber-tag') {
 
             // Cucumber configuration, same as defined in CorgetteRunner
             args = ['--plugin', 'pretty', '--plugin', 'json:build/reports/selenium/selenium.json',
-                    '--plugin', 'html:build/reports/selenium', '--glue', 'uk.gov.dvsa.mot', '--tags', tag, 'features']
+                    '--plugin', 'html:build/reports/selenium', '--glue', 'uk.gov.dvsa.mot', '--tags', tag,
+                    'src/test/resources/features']
         }
     }
 }
@@ -67,7 +69,8 @@ task('cucumber-all') {
 
             // Cucumber configuration, same as defined in CorgetteRunner
             args = ['--plugin', 'pretty', '--plugin', 'json:build/reports/selenium/selenium.json',
-                    '--plugin', 'html:build/reports/selenium', '--glue', 'uk.gov.dvsa.mot', 'features']
+                    '--plugin', 'html:build/reports/selenium', '--glue', 'uk.gov.dvsa.mot',
+                    'src/test/resources/features']
         }
     }
 }

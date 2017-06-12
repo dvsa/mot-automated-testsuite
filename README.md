@@ -3,7 +3,7 @@
 Using Cucumber-JVM and Selenium to test the DVSA MOT application through the web browser UI, with test fixtures
 written using Java (JDK 8 Lambda-format step definitions).
 
-This tests are written as Gerkin features, in the *features* directory.
+These tests are written as Gerkin features, in the *src/test/resources/features* directory.
 
 ## Pre-requisites
 Checkout the ```mot/2fa-pin-generator``` project into a directory alongside the top level directory of this project, and build it as follows:
