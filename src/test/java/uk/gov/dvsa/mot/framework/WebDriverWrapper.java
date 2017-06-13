@@ -3,7 +3,13 @@ package uk.gov.dvsa.mot.framework;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +17,8 @@ import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.otp.Generator;
 
 import javax.annotation.PreDestroy;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 /**
  * Wraps the <code>WebDriver</code> instances needed by step definitions.
@@ -42,6 +50,22 @@ public class WebDriverWrapper {
             if (env.getProperty("headless").equals("true")) {
                 chromeOptions.addArguments("--headless");
             }
+
+            LoggingPreferences loggingPreferences = new LoggingPreferences();
+
+            // logging turned off completely
+            loggingPreferences.enable(LogType.BROWSER, Level.OFF);
+            loggingPreferences.enable(LogType.PERFORMANCE, Level.OFF);
+            loggingPreferences.enable(LogType.PROFILER, Level.OFF);
+            loggingPreferences.enable(LogType.SERVER, Level.OFF);
+
+            // logging enabled
+            loggingPreferences.enable(LogType.DRIVER, Level.WARNING);
+            loggingPreferences.enable(LogType.CLIENT, Level.WARNING);
+
+            DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+            capabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
+            capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
             System.setProperty("webdriver.chrome.driver", "drivers/chromedriver"); // path to driver executable
             this.webDriver = new ChromeDriver(chromeOptions);
         } else {
@@ -94,7 +118,6 @@ public class WebDriverWrapper {
         passwordElement.sendKeys(password);
         passwordElement.submit();
         waitForPageLoad();
-        debugCurrentPage();
 
         // check we got to the 2FA PIN screen
         if (!(webDriver.getTitle().contains("Your security card PIN"))) {
@@ -114,7 +137,6 @@ public class WebDriverWrapper {
         pinElement.sendKeys(pin);
         pinElement.submit();
         waitForPageLoad();
-        debugCurrentPage();
 
         // check we
         if (webDriver.getTitle().contains("Your security card PIN")) {
@@ -134,7 +156,6 @@ public class WebDriverWrapper {
         logger.debug("Browsing to {}", url);
         webDriver.get(url);
         waitForPageLoad();
-        debugCurrentPage();
     }
 
     /**
@@ -144,8 +165,7 @@ public class WebDriverWrapper {
     public void pressButton(String buttonText) {
         WebElement button = webDriver.findElement(By.xpath("//input[@value = '" + buttonText + "']"));
         button.submit();
-
-        debugCurrentPage();
+        waitForPageLoad();
     }
 
     /**
@@ -156,7 +176,6 @@ public class WebDriverWrapper {
         WebElement link = webDriver.findElement(By.xpath("//a[contains(text(),'" + linkText + "')]"));
         link.click();
         waitForPageLoad();
-        debugCurrentPage();
     }
 
     /**
@@ -169,8 +188,33 @@ public class WebDriverWrapper {
         WebElement labelElement = webDriver.findElement(By.xpath("//label[contains(text(),'" + label + "')]"));
         WebElement textElement = webDriver.findElement(By.id(labelElement.getAttribute("for")));
         textElement.sendKeys(text);
+    }
 
-        debugCurrentPage();
+    /**
+     * Enters the specified text into the field.
+     *
+     * Note: This is a low-level way to locate the field. Please only use this method if the text <code>input</code>
+     * doesn't have a corresponding label, otherwise use the <code>enterIntoField(String,String)</code> method using
+     * the label text to identify the field.
+     *
+     * @param text  The text to enter
+     * @param id    The field id
+     */
+    public void enterIntoFieldWithId(String text, String id) {
+        WebElement textElement = webDriver.findElement(By.id(id));
+        textElement.sendKeys(text);
+    }
+
+    /**
+     * Selects the specified option in the (dropdown/multi-select) field.
+     * @param optionText  The text of the option to select
+     * @param label       The field label
+     */
+    public void selectOptionInField(String optionText, String label) {
+        // find the input associated with the specified label...
+        WebElement labelElement = webDriver.findElement(By.xpath("//label[contains(text(),'" + label + "')]"));
+        Select selectElement = new Select(webDriver.findElement(By.id(labelElement.getAttribute("for"))));
+        selectElement.selectByVisibleText(optionText);
     }
 
     /**
@@ -202,13 +246,15 @@ public class WebDriverWrapper {
     /**
      * Wait for the web page to fully re-load, and any onload javascript events to complete.
      * Failure to do this between page transitions can result in intermittent failures, such as
-     * Selenium still being opn the previous page, or failure to find page element in the new page.
+     * Selenium still being on the previous page, or failure to find page element in the new page.
      */
     private void waitForPageLoad() {
-        // initial wait (500 milliseconds) to give the selenium web driver time to tell the web browser to
+        logger.debug("Waiting for page reload...");
+
+        // initial wait (in milliseconds) to give the selenium web driver time to tell the web browser to
         // submit the current page
         try {
-            Thread.sleep(500);
+            Thread.sleep(250);
 
         } catch (InterruptedException ex) {
             // called if trying to shutdown the test suite
@@ -219,10 +265,25 @@ public class WebDriverWrapper {
             throw new RuntimeException(message, ex);
         }
 
-        // then wait for new page to load and initialise fully
+        logger.debug("Initial wait completed...");
+
+        // maximum time (in seconds) to wait before timing out
+        // as we poll much more frequently than this the actual delay should be much less
         int pageWait = Integer.parseInt(env.getProperty("pageWait"));
-        (new WebDriverWait(webDriver, pageWait))
+
+        // wait until page loaded, ready and JQuery processing completed...
+        new WebDriverWait(webDriver, pageWait).pollingEvery(200, TimeUnit.MILLISECONDS).until(
+                (ExpectedCondition<Boolean>) wd ->
+                    ((JavascriptExecutor) wd).executeScript("return jQuery.active").equals(new Long(0L)));
+
+        logger.debug("Page loaded, ready and JQuery activity complete, waiting for footer image...");
+
+        // then for good measure wait for the footer to be available
+        (new WebDriverWait(webDriver, pageWait)).pollingEvery(200, TimeUnit.MILLISECONDS)
             .until(ExpectedConditions.presenceOfElementLocated(By.id("footer")));
+
+        logger.debug("Footer image available");
+        debugCurrentPage();
     }
     /**
      * Logs the current page URL and title as debug.

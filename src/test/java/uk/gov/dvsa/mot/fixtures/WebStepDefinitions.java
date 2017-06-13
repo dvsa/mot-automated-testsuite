@@ -54,9 +54,20 @@ public class WebStepDefinitions implements En {
             driverWrapper.enterIntoField(text, label);
         });
 
-        Then("^The page title contains \"([^\"]*)\"$", (String title) -> {
-            logger.debug("Looking for page title {}", title);
-            assertTrue("Wrong page title", driverWrapper.getCurrentPageTitle().contains(title));
+        When("^I enter \"([^\"]*)\" in the field with id \"([^\"]*)\"$", (String text, String id) -> {
+            driverWrapper.enterIntoFieldWithId(text, id);
+        });
+
+        When("^I select \"([^\"]*)\" in the \"([^\"]*)\" field$", (String optionText, String label) -> {
+            driverWrapper.selectOptionInField(optionText, label);
+        });
+
+        Then("^The page title contains \"([^\"]*)\"$", (String expected) -> {
+            logger.debug("Looking for page title {}", expected);
+            String actual = driverWrapper.getCurrentPageTitle();
+            assertTrue("Wrong page title, on wrong page perhaps? " +
+                            "Expected the title to contain " + expected + ", but the title was " + actual,
+                    expected.contains(expected));
         });
 
     }
