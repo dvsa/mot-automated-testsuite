@@ -30,7 +30,7 @@ task('cucumber-feature') {
         }
         javaexec {
             main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.test.output
+            classpath = configurations.cucumberRuntime + sourceSets.test.output + sourceSets.test.resources.sourceDirectories
 
             // Cucumber configuration, same as defined in CorgetteRunner
             args = ['--plugin', 'pretty', '--plugin', 'json:build/reports/selenium/selenium.json',
@@ -49,7 +49,7 @@ task('cucumber-tag') {
         }
         javaexec {
             main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.test.output
+            classpath = configurations.cucumberRuntime + sourceSets.test.output + sourceSets.test.resources.sourceDirectories
 
             // Cucumber configuration, same as defined in CorgetteRunner
             args = ['--plugin', 'pretty', '--plugin', 'json:build/reports/selenium/selenium.json',
@@ -65,7 +65,7 @@ task('cucumber-all') {
     doLast {
         javaexec {
             main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.test.output
+            classpath = configurations.cucumberRuntime + sourceSets.test.output + sourceSets.test.resources.sourceDirectories
 
             // Cucumber configuration, same as defined in CorgetteRunner
             args = ['--plugin', 'pretty', '--plugin', 'json:build/reports/selenium/selenium.json',
