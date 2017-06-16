@@ -35,3 +35,12 @@ The password that all user accounts are set to in the test environment being use
 ## pageWait
 The maximum wait, in seconds, for each page refresh/submit to complete and any dynamic
 javascript to run, before using Selenium to locate elements in the web page
+
+## jdbc.url
+The MariaDB/MySQL URL of the environment under test
+ 
+## jdbc.username
+The database username to use. Only read access is needed
+  
+## jdbc.password
+The database password to use  

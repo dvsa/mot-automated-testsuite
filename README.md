@@ -5,6 +5,8 @@ written using Java (JDK 8 Lambda-format step definitions).
 
 These tests are written as Gerkin features, in the *src/test/resources/features* directory.
 
+Test data is loaded from the environment under test, using queries in the *src/test/resources/queries* directory.
+
 ## Pre-requisites
 Checkout the ```mot/2fa-pin-generator``` project into a directory alongside the top level directory of this project, and build it as follows:
 ```
@@ -42,9 +44,7 @@ To run all feature tests in parallel, at the command line:
 
 The following tags are used:
 
-* ```@BVT```??
-* ```@Regression```??
-* etc...
+* none yet...
 
 ## Reports
 Reporting is done via the [Extender Cucumber Runner](http://mkolisnyk.github.io/cucumber-reports/extended-cucumber-runner) library. The results are placed in the `target` directory along with screenshots of failing tests.
