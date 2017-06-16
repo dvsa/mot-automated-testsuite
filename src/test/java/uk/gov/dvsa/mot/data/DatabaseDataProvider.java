@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Handles provision of test data, using existing data from a test database.
  */
@@ -25,13 +27,13 @@ public class DatabaseDataProvider implements DataProvider {
     }
 
     /**
-     * Loads a user of the specified user type.
-     * @param userType The user type
-     * @return The username
+     * Loads an entry from the specified test data set.
+     * @param dataSetName   The data set name
+     * @return The data entry
      */
     @Transactional(readOnly = true)
     @Override
-    public String loadUser(String userType) {
+    public List<String> loadData(String dataSetName) {
         /*
          * TODO: If using a new runner with each test running in a separate thread, then this class can be updated to
           * load each dataset once then pass out one item (e.g. username) to each test as needed, so each test gets
@@ -40,9 +42,9 @@ public class DatabaseDataProvider implements DataProvider {
            * if can't get new runner to work, then will need global work around to achieve same thing across multiple
            * processes (shared file with locks?) - slower and more brittle
          */
-        logger.debug("Loading user type {}", userType);
-        String username = dataDao.loadUser(userType);
-        logger.debug("Found username {}", username);
-        return username;
+        logger.debug("Loading an entry from data set {}", dataSetName);
+        List<String> data = dataDao.loadData(dataSetName);
+        logger.debug("Found data {}", data);
+        return data;
     }
 }

@@ -21,10 +21,6 @@ public class WebStepDefinitions implements En {
     public WebStepDefinitions(WebDriverWrapper driverWrapper) {
         logger.debug("Creating WebStepDefinitions...");
 
-        Given("^I login with 2FA as \"([^\"]*)\"$", (String dataKey) -> {
-            driverWrapper.loginWith2FA(driverWrapper.getData(dataKey));
-        });
-
         When("^I browse to (\\S+)$", (String relativePath) -> {
             driverWrapper.browseTo(relativePath);
         });
@@ -39,6 +35,10 @@ public class WebStepDefinitions implements En {
 
         When("^I enter \"([^\"]*)\" in the \"([^\"]*)\" field$", (String text, String label) -> {
             driverWrapper.enterIntoField(text, label);
+        });
+
+        When("^I enter <([^>]*)> in the \"([^\"]*)\" field$", (String dataKey, String label) -> {
+            driverWrapper.enterIntoField(driverWrapper.getData(dataKey), label);
         });
 
         When("^I enter \"([^\"]*)\" in the field with id \"([^\"]*)\"$", (String text, String id) -> {

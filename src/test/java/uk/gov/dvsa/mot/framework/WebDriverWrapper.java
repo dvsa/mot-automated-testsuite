@@ -14,7 +14,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
-import uk.gov.dvsa.mot.otp.Generator;
 
 import javax.annotation.PreDestroy;
 import java.util.HashMap;
@@ -23,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 /**
- * Wraps the <code>WebDriver</code> instances needed by step definitions.
+ * Wraps the <code>WebDriver</code> instance needed by step definitions with a simplified generic API.
  */
 public class WebDriverWrapper {
 
@@ -127,58 +126,6 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Logs a user into the application, using 2FA (password and pin).
-     * @param username  The username to use
-     */
-    public void loginWith2FA(String username) {
-        String password = env.getRequiredProperty("password");
-        logger.debug("Logging in as username {} and password {}", username, password);
-        String startingUrl = env.getRequiredProperty("startingUrl");
-        logger.debug("Browsing to {}", startingUrl);
-
-        webDriver.get(startingUrl + "/login");
-        waitForPageLoad();
-        debugCurrentPage();
-
-        // the visible versions of the username and password fields have dynamic ids ending in _tid1 or _tid2
-        WebElement usernameElement = webDriver.findElement(By.xpath("//*[contains(@id,'_tid1')]"));
-        WebElement passwordElement = webDriver.findElement(By.xpath("//*[contains(@id,'_tid2')]"));
-
-        // complete the login form
-        usernameElement.sendKeys(username);
-        passwordElement.sendKeys(password);
-        passwordElement.submit();
-        waitForPageLoad();
-
-        // check we got to the 2FA PIN screen
-        if (!(webDriver.getTitle().contains("Your security card PIN"))) {
-            // password authentication must have failed
-            String message = "password authentication failed for user: " + username;
-            logger.error(message);
-            throw new RuntimeException(message);
-        }
-
-        // find the 2FA pin field
-        WebElement pinElement = webDriver.findElement(By.id("pin"));
-
-        // seed taken from the test OTP generator, used on all test systems
-        String pin = Generator.generatePin(env.getRequiredProperty("seed"));
-        logger.debug("Using PIN {}", pin);
-
-        pinElement.sendKeys(pin);
-        pinElement.submit();
-        waitForPageLoad();
-
-        // check we
-        if (webDriver.getTitle().contains("Your security card PIN")) {
-            // 2FA PIN authentication failed
-            String message = "2FA PIN authentication failed for user: " + username;
-            logger.error(message);
-            throw new RuntimeException(message);
-        }
-    }
-
-    /**
      * Browse to a page relative to the environment home.
      * @param relativePath  The relative path, must start with "/"
      */
@@ -233,6 +180,21 @@ public class WebDriverWrapper {
      */
     public void enterIntoFieldWithId(String text, String id) {
         WebElement textElement = webDriver.findElement(By.id(id));
+        textElement.sendKeys(text);
+    }
+
+    /**
+     * Enters the specified text into the field.
+     *
+     * Note: This is a low-level way to locate the field. Please only use this method if the text <code>input</code>
+     * doesn't have a corresponding label, otherwise use the <code>enterIntoField(String,String)</code> method using
+     * the label text to identify the field.
+     *
+     * @param text      The text to enter
+     * @param idSuffix  The field id suffix
+     */
+    public void enterIntoFieldWithIdSuffix(String text, String idSuffix) {
+        WebElement textElement = webDriver.findElement(By.xpath("//*[contains(@id,'" + idSuffix + "')]"));
         textElement.sendKeys(text);
     }
 

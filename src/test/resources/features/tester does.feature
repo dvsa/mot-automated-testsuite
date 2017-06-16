@@ -10,13 +10,14 @@
 Feature: Tester does...
 
   Scenario: Tester enters an MOT test pass
-    Given I load "MOT_TESTER_C" as "username1"
-    And I login with 2FA as "username1"
+    Given I load "MOT_TESTER_C" as <username1>
+    And I load "VEHICLE_CAR_H" as <registration1>, <vin1>, <mileage1>
+    And I login with 2FA as <username1>
     When I click the "Start MOT test" link
 
     And The page title contains "Find a vehicle"
-    And I enter "HO94LFW" in the "Registration mark" field
-    And I enter "452484" in the "VIN" field
+    And I enter <registration1> in the "Registration mark" field
+    And I enter <vin1> in the "VIN" field
     And I press the "Search" button
 
     And The page title contains "Find a vehicle"
@@ -35,7 +36,7 @@ Feature: Tester does...
     And I click the "Add reading" link
 
     And The page title contains "Odometer reading"
-    And I enter "120000" in the field with id "odometer"
+    And I enter <mileage1> plus 5000 in the odometer field
     And I press the "Update reading" button
 
     And The page title contains "MOT test results"

@@ -3,9 +3,14 @@ package uk.gov.dvsa.mot.data.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import uk.gov.dvsa.mot.data.DataDao;
 
 import javax.inject.Inject;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,6 +56,18 @@ public class DataDaoImpl implements DataDao {
                     " and is_deleted != 1" +
                     ")";
 
+    private static final String VEHICLE_CAR =
+            "select veh.registration, veh.vin, mtc.odometer_value " +
+            " from vehicle veh, model_detail md, model, make, mot_test_current mtc " +
+            " where veh.model_detail_id = md.id" +
+            " and md.model_id = model.id" +
+            " and model.name is not null" +
+            " and model.make_id = make.id" +
+            " and model.name is not null" +
+            " and md.vehicle_class_id = 4" + // cars only
+            " and mtc.vehicle_id = veh.id" +  // with current MOT
+            " and mtc.odometer_result_type = 'OK'"; // with successful previous odometer reading
+
     /**
      * Creates a new instance.
      * @param jdbcTemplate      The JDBC template to use
@@ -62,15 +79,15 @@ public class DataDaoImpl implements DataDao {
     }
 
     /**
-     * Loads a user of the specified user type.
-     * @param userType      The user type
-     * @return The username
+     * Loads an entry from the specified test data set.
+     * @param dataSetName   The data set name
+     * @return The data entry
      */
     @Override
-    public String loadUser(String userType) {
-        logger.debug("loadUser - userType is {}", userType);
+    public List<String> loadData(String dataSetName) {
+        logger.debug("loadData - data set is {}", dataSetName);
         String query = null;
-        switch (userType) {
+        switch (dataSetName) {
             case "MOT_TESTER_A":
                 query = MOT_TESTER + " and p.username like 'A%'"; // short term work-around
                 break;
@@ -79,21 +96,36 @@ public class DataDaoImpl implements DataDao {
                 query = MOT_TESTER + " and p.username like 'C%'"; // short term work-around
                 break;
 
+            case "VEHICLE_CAR_H":
+                query = VEHICLE_CAR + " and veh.registration like 'H%'"; // short term work-around
+                break;
+
             default:
-                String message = "Unknown data set name: '" + userType + "'";
+                String message = "Unknown data set name: '" + dataSetName + "'";
                 logger.error(message);
                 throw new IllegalArgumentException(message);
         }
-        // TODO: only query for first item, not a list
-        List<String> username = jdbcTemplate.queryForList(query, String.class);
 
-        if (username.size() == 0) {
-            String message = "No test data found matching data set name: '" + userType + "'";
+        List<List<String>> dataSet = jdbcTemplate.query(query, new RowMapper<List<String>> () {
+            public List<String> mapRow(ResultSet rs, int rowNum) throws SQLException {
+                List<String> row = new ArrayList<>();
+                ResultSetMetaData metaData = rs.getMetaData();
+
+                // JDBC column indices start at 1, not 0...
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                    row.add(rs.getString(i));
+                }
+                return row;
+            }
+        });
+
+        if (dataSet.size() == 0) {
+            String message = "No test data found matching data set name: '" + dataSetName + "'";
             logger.error(message);
             throw new IllegalStateException(message);
         }
 
-        logger.debug("found username {}", username.get(0));
-        return username.get(0);
+        logger.debug("found entry {}", dataSet.get(0));
+        return dataSet.get(0);
     }
 }

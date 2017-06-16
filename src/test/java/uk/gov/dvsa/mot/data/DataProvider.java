@@ -1,14 +1,16 @@
 package uk.gov.dvsa.mot.data;
 
+import java.util.List;
+
 /**
  * Handles provision of test data.
  */
 public interface DataProvider {
 
     /**
-     * Loads a user of the specified user type.
-     * @param userType      The user type
-     * @return The username
+     * Loads an entry from the specified test data set.
+     * @param dataSetName   The data set name
+     * @return The data entry
      */
-    String loadUser(String userType);
+    List<String> loadData(String dataSetName);
 }
