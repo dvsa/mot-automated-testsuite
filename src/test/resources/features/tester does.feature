@@ -10,7 +10,8 @@
 Feature: Tester does...
 
   Scenario: Tester enters an MOT test pass
-    Given I login with 2FA as username JOEN5622
+    Given I load "MOT_TESTER_C" as "username1"
+    And I login with 2FA as "username1"
     When I click the "Start MOT test" link
 
     And The page title contains "Find a vehicle"

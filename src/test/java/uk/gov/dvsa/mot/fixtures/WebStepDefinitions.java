@@ -3,9 +3,6 @@ package uk.gov.dvsa.mot.fixtures;
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.test.context.ContextConfiguration;
-import uk.gov.dvsa.mot.di.SpringConfiguration;
-import uk.gov.dvsa.mot.framework.TestDataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 import javax.inject.Inject;
@@ -15,27 +12,17 @@ import static junit.framework.TestCase.assertTrue;
 /**
  * Step definitions for web test steps.
  */
-@ContextConfiguration(classes=SpringConfiguration.class)
 public class WebStepDefinitions implements En {
 
     /** The logger to use. */
     private static final Logger logger = LoggerFactory.getLogger(WebStepDefinitions.class);
 
-    /** The driver wrapper to use. */
-    private final WebDriverWrapper driverWrapper;
-
     @Inject
-    public WebStepDefinitions(WebDriverWrapper driverWrapper, TestDataProvider testDataProvider) {
+    public WebStepDefinitions(WebDriverWrapper driverWrapper) {
         logger.debug("Creating WebStepDefinitions...");
-        this.driverWrapper = driverWrapper;
 
-        Given("^I login with 2FA as username (\\w+)$", (String username) -> {
-            driverWrapper.loginWith2FA(username);
-        });
-
-        Given("^I login with 2FA as a valid (\\w+)$", (String userType) -> {
-            String username = testDataProvider.getValidUserOfType(userType);
-            driverWrapper.loginWith2FA(username);
+        Given("^I login with 2FA as \"([^\"]*)\"$", (String dataKey) -> {
+            driverWrapper.loginWith2FA(driverWrapper.getData(dataKey));
         });
 
         When("^I browse to (\\S+)$", (String relativePath) -> {

@@ -2,16 +2,25 @@
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger %msg%n</pattern>
+            <pattern>%date{HH:mm:ss.SSS} %-5level %logger %msg%n</pattern>
         </encoder>
     </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>build/logs/testsuite.log</file>
-        <append>false</append>
-        <encoder>
-            <pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger %msg%n</pattern>
-        </encoder>
+    <!-- logs to a separate file per pid, relies upon pid being set in the MDC -->
+    <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator>
+            <key>pid</key>
+            <defaultValue>bootstrap</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="FILE-${pid}" class="ch.qos.logback.core.FileAppender">
+                <file>build/logs/${pid}.log</file>
+                <append>false</append>
+                <encoder>
+                    <pattern>%date{HH:mm:ss.SSS} %-5level %logger %msg%n</pattern>
+                </encoder>
+            </appender>
+        </sift>
     </appender>
 
     <!-- the application log levels -->
@@ -21,13 +30,22 @@
     <logger name="ch.qos.logback" level="warn"/>
     <logger name="org.openqa.selenium" level="info"/>
     <logger name="org.apache.http" level="info"/>
-    <logger name="org.springframework" level="warn"/>
+    <logger name="org.springframework" level="info"/>
+
+    <!-- set to debug to output SQL being executed -->
+    <logger name="org.springframework.jdbc.core.JdbcTemplate" level="debug"/>
+
+    <!-- set to at least info to see MySQL performance advice -->
+    <logger name="MySQL" level="debug"/>
+
+    <!-- set to debug to see db connection use and transactions -->
+    <logger name="org.springframework.jdbc.datasource" level="debug"/>
 
     <root level="ALL">
         <!-- Uncomment this to send logging to the console (useful but gets mixed with Cucumber output) -->
         <!--<appender-ref ref="STDOUT" />-->
 
-        <!-- Uncomment this to send logging to a file -->
-        <appender-ref ref="FILE" />
+        <!-- Uncomment this to send logging to files -->
+        <appender-ref ref="SIFT" />
     </root>
 </configuration>

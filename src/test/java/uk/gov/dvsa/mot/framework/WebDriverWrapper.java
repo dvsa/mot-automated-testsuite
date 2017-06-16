@@ -17,6 +17,8 @@ import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.otp.Generator;
 
 import javax.annotation.PreDestroy;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -34,6 +36,9 @@ public class WebDriverWrapper {
     /** The environment configuration to use. */
     private final Environment env;
 
+    /** The data map to use. */
+    private final Map<String, String> data;
+
     /**
      * Creates a new instance.
      * @param env   The environment configuration to use
@@ -41,10 +46,10 @@ public class WebDriverWrapper {
     public WebDriverWrapper(Environment env) {
         logger.debug("Creating WebDriverWrapper...");
         this.env = env;
+        this.data = new HashMap<>();
 
         logger.debug("Creating new chrome driver");
-
-        String browser = env.getProperty("browser");
+        String browser = env.getRequiredProperty("browser");
         if ("chrome".equals(browser)) {
             ChromeOptions chromeOptions = new ChromeOptions();
             if (env.getProperty("headless").equals("true")) {
@@ -84,6 +89,32 @@ public class WebDriverWrapper {
     public void reset() {
         logger.debug("WebDriverWrapper.reset");
         webDriver.manage().deleteAllCookies();
+        data.clear();
+    }
+
+    /**
+     * Get a data item.
+     * @param key   The data key
+     * @return The data value
+     * @throws IllegalStateException if data item not found
+     */
+    public String getData(String key) {
+        if (data.containsKey(key)) {
+            return data.get(key);
+        } else {
+            String message = "Data item '" + key + "' not populated, please check your scenario logic";
+            logger.error(message);
+            throw new IllegalStateException(message);
+        }
+    }
+
+    /**
+     * Set a data item. If an item already exists with the same key, the previous value will be over-written.
+     * @param key       The data key
+     * @param value     The data value
+     */
+    public void setData(String key, String value) {
+        data.put(key, value);
     }
 
     /**
@@ -100,9 +131,9 @@ public class WebDriverWrapper {
      * @param username  The username to use
      */
     public void loginWith2FA(String username) {
-        String password = env.getProperty("password");
+        String password = env.getRequiredProperty("password");
         logger.debug("Logging in as username {} and password {}", username, password);
-        String startingUrl = env.getProperty("startingUrl");
+        String startingUrl = env.getRequiredProperty("startingUrl");
         logger.debug("Browsing to {}", startingUrl);
 
         webDriver.get(startingUrl + "/login");
@@ -131,7 +162,7 @@ public class WebDriverWrapper {
         WebElement pinElement = webDriver.findElement(By.id("pin"));
 
         // seed taken from the test OTP generator, used on all test systems
-        String pin = Generator.generatePin(env.getProperty("seed"));
+        String pin = Generator.generatePin(env.getRequiredProperty("seed"));
         logger.debug("Using PIN {}", pin);
 
         pinElement.sendKeys(pin);
@@ -152,7 +183,7 @@ public class WebDriverWrapper {
      * @param relativePath  The relative path, must start with "/"
      */
     public void browseTo(String relativePath) {
-        String url = env.getProperty("startingUrl") + relativePath;
+        String url = env.getRequiredProperty("startingUrl") + relativePath;
         logger.debug("Browsing to {}", url);
         webDriver.get(url);
         waitForPageLoad();
@@ -231,6 +262,7 @@ public class WebDriverWrapper {
      */
     public byte[] takeScreenshot() {
         try {
+            logger.debug("Taking screenshot of current window as PNG");
             return ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BYTES);
 
         } catch (WebDriverException ex) {
@@ -269,7 +301,7 @@ public class WebDriverWrapper {
 
         // maximum time (in seconds) to wait before timing out
         // as we poll much more frequently than this the actual delay should be much less
-        int pageWait = Integer.parseInt(env.getProperty("pageWait"));
+        int pageWait = Integer.parseInt(env.getRequiredProperty("pageWait"));
 
         // wait until page loaded, ready and JQuery processing completed...
         new WebDriverWait(webDriver, pageWait).pollingEvery(200, TimeUnit.MILLISECONDS).until(

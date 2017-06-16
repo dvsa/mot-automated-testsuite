@@ -54,7 +54,7 @@ public class LifecycleHooks {
     @Before
     public void startup(Scenario scenario) {
         // test initialisation goes here
-        logger.debug("Before cucumber scenario: {}", scenario.getName());
+        logger.debug("Before cucumber scenario: ********** {} **********", scenario.getName());
     }
 
     /**
@@ -63,7 +63,7 @@ public class LifecycleHooks {
      */
     @After
     public void teardown(Scenario scenario) {
-        logger.debug("After cucumber scenario: {}", scenario.getName());
+        logger.debug("After cucumber scenario: ********** {} **********", scenario.getName());
 
         if ((takeScreenshotsOnErrorOnly && scenario.isFailed()) || !takeScreenshotsOnErrorOnly) {
             // take screenshot of the final page reached in the test
