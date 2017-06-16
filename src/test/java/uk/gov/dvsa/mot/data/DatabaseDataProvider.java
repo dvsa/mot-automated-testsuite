@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Handles provision of test data, using existing data from a test database.
  */
-public class DatabaseDataProvider implements DataProvider {
+public class DatabaseDataProvider {
 
     /** The logger to use. */
     private static final Logger logger = LoggerFactory.getLogger(DatabaseDataProvider.class);
@@ -32,7 +32,6 @@ public class DatabaseDataProvider implements DataProvider {
      * @return The data entry
      */
     @Transactional(readOnly = true)
-    @Override
     public List<String> loadData(String dataSetName) {
         /*
          * TODO: If using a new runner with each test running in a separate thread, then this class can be updated to

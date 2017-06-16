@@ -3,7 +3,7 @@ package uk.gov.dvsa.mot.fixtures;
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.dvsa.mot.data.DataProvider;
+import uk.gov.dvsa.mot.data.DatabaseDataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 import javax.inject.Inject;
@@ -20,7 +20,7 @@ public class DataStepDefinitions implements En {
     private static final Logger logger = LoggerFactory.getLogger(DataStepDefinitions.class);
 
     @Inject
-    public DataStepDefinitions(WebDriverWrapper driverWrapper, DataProvider dataProvider) {
+    public DataStepDefinitions(WebDriverWrapper driverWrapper, DatabaseDataProvider dataProvider) {
         logger.debug("Creating DataStepDefinitions...");
 
         When("^I load \"([^\"]*)\" as <([^>]*)>$",
@@ -51,7 +51,8 @@ public class DataStepDefinitions implements En {
      * @param dataSetName       The name of the data set
      * @param keys              The keys to populate
      */
-    private void loadData(WebDriverWrapper driverWrapper, DataProvider dataProvider, String dataSetName, String[] keys) {
+    private void loadData(WebDriverWrapper driverWrapper, DatabaseDataProvider dataProvider, String dataSetName,
+                          String[] keys) {
         List<String> dataSet = dataProvider.loadData(dataSetName);
 
         // check the number of items in the data set matches the number of keys in the test step

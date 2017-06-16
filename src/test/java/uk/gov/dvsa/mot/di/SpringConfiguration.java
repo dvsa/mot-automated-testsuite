@@ -11,10 +11,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import uk.gov.dvsa.mot.data.DataDao;
-import uk.gov.dvsa.mot.data.DataProvider;
 import uk.gov.dvsa.mot.data.DatabaseDataProvider;
-import uk.gov.dvsa.mot.data.impl.DataDaoImpl;
+import uk.gov.dvsa.mot.data.DataDao;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 import javax.sql.DataSource;
@@ -74,18 +72,17 @@ public class SpringConfiguration {
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        //jdbcTemplate.setResultsMapCaseInsensitive(true);
         return jdbcTemplate;
     }
 
     @Bean
-    public DataProvider dataProvider(DataDao dataDao) {
+    public DatabaseDataProvider dataProvider(DataDao dataDao) {
         return new DatabaseDataProvider(dataDao);
     }
 
     @Bean
-    public DataDao userDao(JdbcTemplate jdbcTemplate) {
-        return new DataDaoImpl(jdbcTemplate);
+    public DataDao dataDao(JdbcTemplate jdbcTemplate) {
+        return new DataDao(jdbcTemplate);
     }
 
     @Bean
