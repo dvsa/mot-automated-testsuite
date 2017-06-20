@@ -3,7 +3,6 @@ package uk.gov.dvsa.mot.data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 
 import javax.inject.Inject;
 import java.io.BufferedReader;
@@ -11,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,43 +35,23 @@ public class DataDao {
     }
 
     /**
-     * Loads an entry from the specified test data set.
+     * Loads a data set.
      * @param dataSetName   The data set name
-     * @return The data entry
+     * @return The dataset
      */
-    public List<String> loadData(String dataSetName) {
+    public List<List<String>> loadDataset(String dataSetName) {
         logger.debug("loadData - data set is {}", dataSetName);
-        String query = null;
-        switch (dataSetName) {
-            case "MOT_TESTER_A":
-                query = loadQuery("MOT_TESTER") + " and p.username like 'A%'"; // short term work-around
-                break;
+        String query = loadQuery(dataSetName);
 
-            case "MOT_TESTER_C":
-                query = loadQuery("MOT_TESTER") + " and p.username like 'C%'"; // short term work-around
-                break;
+        List<List<String>> dataSet = jdbcTemplate.query(query, (ResultSet rs, int rowNum) -> {
+            List<String> row = new ArrayList<>();
+            ResultSetMetaData metaData = rs.getMetaData();
 
-            case "VEHICLE_CAR_H":
-                query = loadQuery("VEHICLE_CAR") + " and veh.registration like 'H%'"; // short term work-around
-                break;
-
-            default:
-                String message = "Unknown data set name: '" + dataSetName + "'";
-                logger.error(message);
-                throw new IllegalArgumentException(message);
-        }
-
-        List<List<String>> dataSet = jdbcTemplate.query(query, new RowMapper<List<String>> () {
-            public List<String> mapRow(ResultSet rs, int rowNum) throws SQLException {
-                List<String> row = new ArrayList<>();
-                ResultSetMetaData metaData = rs.getMetaData();
-
-                // JDBC column indices start at 1, not 0...
-                for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    row.add(rs.getString(i));
-                }
-                return row;
+            // JDBC column indices start at 1, not 0...
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                row.add(rs.getString(i));
             }
+            return row;
         });
 
         if (dataSet.size() == 0) {
@@ -82,8 +60,8 @@ public class DataDao {
             throw new IllegalStateException(message);
         }
 
-        logger.debug("found entry {}", dataSet.get(0));
-        return dataSet.get(0);
+        logger.debug("loaded {} entries for dataset {}", dataSet.size(), dataSetName);
+        return dataSet;
     }
 
     /**
@@ -104,7 +82,7 @@ public class DataDao {
             return builder.toString();
 
         } catch (IOException ex) {
-            String message = "Error reading SQL query for dataset " + dataSetName;
+            String message = "Unknown dataset " + dataSetName;
             logger.error(message, ex);
             throw new IllegalArgumentException(message, ex);
         }

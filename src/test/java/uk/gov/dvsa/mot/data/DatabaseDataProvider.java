@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Handles provision of test data, using existing data from a test database.
@@ -16,6 +18,9 @@ public class DatabaseDataProvider {
 
     /** The DataDao to use. */
     private final DataDao dataDao;
+
+    /** The cached datasets to use, keyed by name. */
+    private final Map<String, List<List<String>>> datasets = new HashMap<>();
 
     /**
      * Creates a new instance.
@@ -33,17 +38,29 @@ public class DatabaseDataProvider {
      */
     @Transactional(readOnly = true)
     public List<String> loadData(String dataSetName) {
-        /*
-         * TODO: If using a new runner with each test running in a separate thread, then this class can be updated to
-          * load each dataset once then pass out one item (e.g. username) to each test as needed, so each test gets
-           * unique data
-           *
-           * if can't get new runner to work, then will need global work around to achieve same thing across multiple
-           * processes (shared file with locks?) - slower and more brittle
-         */
-        logger.debug("Loading an entry from data set {}", dataSetName);
-        List<String> data = dataDao.loadData(dataSetName);
-        logger.debug("Found data {}", data);
-        return data;
+        List<List<String>> dataset;
+        if (!datasets.containsKey(dataSetName)) {
+            // need to load the dataset
+            dataset = dataDao.loadDataset(dataSetName);
+
+            // add to in-memory cache
+            datasets.put(dataSetName, dataset);
+
+        } else {
+            dataset = datasets.get(dataSetName);
+        }
+
+        if (dataset.size() < 1) {
+            String message = "No more data available for dataset: " + dataSetName;
+            logger.error(message);
+            throw new IllegalStateException(message);
+        }
+
+        List<String> entry = dataset.get(0);
+        dataset.remove(entry);
+
+        logger.debug("Using {} from dataset {}", entry, dataSetName);
+
+        return entry;
     }
 }
