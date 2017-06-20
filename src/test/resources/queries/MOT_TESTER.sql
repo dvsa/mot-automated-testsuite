@@ -27,3 +27,7 @@ and p.username not in (
   where is_acknowledged != 1
   and is_deleted != 1
 )
+and p.id not in (
+  select last_updated_by from mot_test_current
+  where status_id = 4 -- exclude any testers with active tests
+)
