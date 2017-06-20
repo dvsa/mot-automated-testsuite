@@ -5,7 +5,7 @@ Feature: Login
     Then The page title contains "Sign in"
 
   Scenario: Login with 2FA as a tester
-    When I load "MOT_TESTER_A" as <username1>
+    When I load "MOT_TESTER" as <username1>
     And I login with 2FA as <username1>
     Then The page title contains "Your home"
 

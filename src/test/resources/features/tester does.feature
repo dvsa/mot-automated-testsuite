@@ -10,8 +10,8 @@
 Feature: Tester does...
 
   Scenario: Tester enters an MOT test pass
-    Given I load "MOT_TESTER_C" as <username1>
-    And I load "VEHICLE_CAR_H" as <registration1>, <vin1>, <mileage1>
+    Given I load "MOT_TESTER" as <username1>
+    And I load "VEHICLE_CAR" as <registration1>, <vin1>, <mileage1>
     And I login with 2FA as <username1>
     When I click the "Start MOT test" link
 
