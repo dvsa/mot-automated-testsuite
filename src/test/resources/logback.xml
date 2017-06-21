@@ -7,7 +7,7 @@
     </appender>
 
     <!-- logs to a separate file per pid, relies upon pid being set in the MDC -->
-    <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+    <!--<appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
         <discriminator>
             <key>pid</key>
             <defaultValue>bootstrap</defaultValue>
@@ -21,6 +21,14 @@
                 </encoder>
             </appender>
         </sift>
+    </appender>-->
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>build/logs/testsuite.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger %msg%n</pattern>
+        </encoder>
     </appender>
 
     <!-- the application log levels -->
@@ -36,16 +44,18 @@
     <logger name="org.springframework.jdbc.core.JdbcTemplate" level="debug"/>
 
     <!-- set to at least info to see MySQL performance advice -->
-    <logger name="MySQL" level="debug"/>
+    <logger name="MySQL" level="warn"/>
 
     <!-- set to debug to see db connection use and transactions -->
-    <logger name="org.springframework.jdbc.datasource" level="debug"/>
+    <logger name="org.springframework.jdbc.datasource" level="warn"/>
+
+    <logger name="uk.gov.dvsa.mot.runner.ParallelObjectFactory" level="warn"/>
 
     <root level="ALL">
         <!-- Uncomment this to send logging to the console (useful but gets mixed with Cucumber output) -->
         <!--<appender-ref ref="STDOUT" />-->
 
-        <!-- Uncomment this to send logging to files -->
-        <appender-ref ref="SIFT" />
+        <!-- Uncomment this to send logging to a file -->
+        <appender-ref ref="FILE" />
     </root>
 </configuration>

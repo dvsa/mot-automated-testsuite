@@ -34,12 +34,6 @@ To run all features with a specific tag, run the following at the command line. 
 ./gradlew cucumber-tag '-Ptag=<tag>'
 ```
 
-To run all feature tests in parallel, at the command line:
-```
-./gradlew test
-```
-*(the number of concurrent threads used defaults to 10, and is set in ```src/test/java/uk/gov/dvsa/mot/junit/CorgetteRunner```)*
-
 ## Feature Tags
 
 The following tags are used:
