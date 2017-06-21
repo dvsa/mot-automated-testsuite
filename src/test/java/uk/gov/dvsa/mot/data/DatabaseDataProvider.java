@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +19,7 @@ public class DatabaseDataProvider {
     private final DataDao dataDao;
 
     /** The cached datasets to use, keyed by name. */
-    private final Map<String, List<List<String>>> datasets = new HashMap<>();
+    private Map<String, List<List<String>>> datasets = null;
 
     /**
      * Creates a new instance.
@@ -32,19 +31,37 @@ public class DatabaseDataProvider {
     }
 
     /**
-     * Loads an entry from the specified test data set.
+     * Loads all test data sets, populating the in-memory cache.
+     *
+     * If called multiple times, does nothing once the cache has been populated.
+     */
+    @Transactional(readOnly = true)
+    public void loadAllDatasets() {
+        if (datasets == null) {
+            datasets = dataDao.loadAllDatasets();
+            logger.debug("{} datasets loaded", datasets.size());
+        } else {
+            logger.debug("datasets already loaded");
+        }
+    }
+
+    /**
+     * Get an entry from the specified test data set, and removes it from the in-memory cache.
      * @param dataSetName   The data set name
      * @return The data entry
      */
-    @Transactional(readOnly = true)
-    public List<String> loadData(String dataSetName) {
+    public List<String> getDatasetEntry(String dataSetName) {
+        if (datasets == null) {
+            String message = "No datasets loaded, please call \"loadAllDatasets\" first";
+            logger.error(message);
+            throw new IllegalStateException(message);
+        }
+
         List<List<String>> dataset;
         if (!datasets.containsKey(dataSetName)) {
-            // need to load the dataset
-            dataset = dataDao.loadDataset(dataSetName);
-
-            // add to in-memory cache
-            datasets.put(dataSetName, dataset);
+            String message = "Unknown dataset: " + dataSetName;
+            logger.error(message);
+            throw new IllegalStateException(message);
 
         } else {
             dataset = datasets.get(dataSetName);
@@ -60,7 +77,6 @@ public class DatabaseDataProvider {
         dataset.remove(entry);
 
         logger.debug("Using {} from dataset {}", entry, dataSetName);
-
         return entry;
     }
 }

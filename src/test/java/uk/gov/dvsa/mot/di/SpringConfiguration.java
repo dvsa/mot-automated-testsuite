@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -68,8 +70,13 @@ public class SpringConfiguration {
     }
 
     @Bean
-    public DataDao dataDao(JdbcTemplate jdbcTemplate) {
-        return new DataDao(jdbcTemplate);
+    public ResourcePatternResolver classpathScanner() {
+        return new PathMatchingResourcePatternResolver();
+    }
+
+    @Bean
+    public DataDao dataDao(JdbcTemplate jdbcTemplate, ResourcePatternResolver classpathScanner) {
+        return new DataDao(jdbcTemplate, classpathScanner);
     }
 
     @Bean

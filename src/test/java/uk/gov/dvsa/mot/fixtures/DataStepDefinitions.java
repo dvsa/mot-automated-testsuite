@@ -53,7 +53,7 @@ public class DataStepDefinitions implements En {
      */
     private void loadData(WebDriverWrapper driverWrapper, DatabaseDataProvider dataProvider, String dataSetName,
                           String[] keys) {
-        List<String> dataSet = dataProvider.loadData(dataSetName);
+        List<String> dataSet = dataProvider.getDatasetEntry(dataSetName);
 
         // check the number of items in the data set matches the number of keys in the test step
         assertEquals("Expected data set " + dataSetName + " to contain " + keys.length + " data items, " +

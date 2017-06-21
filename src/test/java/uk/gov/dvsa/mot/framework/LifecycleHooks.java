@@ -6,6 +6,7 @@ import cucumber.api.java.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import uk.gov.dvsa.mot.data.DatabaseDataProvider;
 
 import javax.inject.Inject;
 
@@ -20,6 +21,9 @@ public class LifecycleHooks {
     /** The driver wrapper to use. */
     private final WebDriverWrapper driverWrapper;
 
+    /** The data provider to use. */
+    private final DatabaseDataProvider dataProvider;
+
     /** The take screenshots configuration setting. */
     private final boolean takeScreenshotsOnErrorOnly;
 
@@ -27,11 +31,13 @@ public class LifecycleHooks {
      * Creates a new instance.
      * @param driverWrapper     The driver wrapper to use
      * @param env               The configuration settings
+     * @param dataProvider      The data provider to use
      */
     @Inject
-    public LifecycleHooks(WebDriverWrapper driverWrapper, Environment env) {
+    public LifecycleHooks(WebDriverWrapper driverWrapper, Environment env, DatabaseDataProvider dataProvider) {
         logger.debug("Creating LifecycleHooks...");
         this.driverWrapper = driverWrapper;
+        this.dataProvider = dataProvider;
 
         String takeScreenshots = env.getProperty("takeScreenshots");
         if ("always".equals(takeScreenshots)) {
@@ -53,7 +59,9 @@ public class LifecycleHooks {
      */
     @Before
     public void startup(Scenario scenario) {
-        // test initialisation goes here
+        // load the test datasets to use in the test(s)
+        dataProvider.loadAllDatasets();
+
         logger.debug("Before cucumber scenario: ********** {} **********", scenario.getName());
     }
 

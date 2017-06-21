@@ -2,6 +2,8 @@ package uk.gov.dvsa.mot.data;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.inject.Inject;
@@ -11,7 +13,9 @@ import java.io.InputStreamReader;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Handles MariaDB database queries to load test data.
@@ -24,25 +28,74 @@ public class DataDao {
     /** The JDBC template to use. */
     private final JdbcTemplate jdbcTemplate;
 
+    /** Used to scan for query files on the classpath. */
+    private final ResourcePatternResolver classpathScanner;
+
     /**
      * Creates a new instance.
      * @param jdbcTemplate      The JDBC template to use
+     * @param classpathScanner  The classpath scanner to use
      */
     @Inject
-    public DataDao(JdbcTemplate jdbcTemplate) {
+    public DataDao(JdbcTemplate jdbcTemplate, ResourcePatternResolver classpathScanner) {
         logger.debug("Creating DataDao...");
         this.jdbcTemplate = jdbcTemplate;
+        this.classpathScanner = classpathScanner;
+    }
+
+    /**
+     * Loads all datasets, by scanning the <i>queries</i> directory on the classpath.
+     * @return A map of datasets, keyed by dataset name
+     */
+    public Map<String, List<List<String>>> loadAllDatasets() {
+        logger.debug("loading all datasets");
+
+        Map<String, List<List<String>>> datasets = new HashMap<>();
+        Resource[] resources;
+        try {
+            // scan the classpath for query files
+            resources = classpathScanner.getResources("classpath*:queries/**.sql");
+        } catch (IOException ex) {
+            String message = "Error scanning the classpath for query files";
+            logger.error(message, ex);
+            throw new IllegalStateException(message, ex);
+        }
+
+        for (Resource resource : resources) {
+            String filename = resource.getFilename();
+
+            // dataset name is filename minus the ".sql" suffix
+            String datasetName = filename.substring(0, filename.length() - 4);
+
+            logger.debug("found query file {} for dataset {}", filename, datasetName);
+
+            // load the SQL query contained in the file
+            String query = loadQuery(resource);
+
+            // execute the SQL query to load the dataset
+            List<List<String>> dataset = loadDataset(query);
+
+            // check dataset is not empty
+            if (dataset.size() == 0) {
+                String message = "No test data found matching data set name: '" + datasetName + "'";
+                logger.error(message);
+                throw new IllegalStateException(message);
+            }
+            logger.debug("loaded {} entries for dataset {}", dataset.size(), datasetName);
+
+            // add the dataset to the map
+            datasets.put(datasetName, dataset);
+        }
+
+        return datasets;
     }
 
     /**
      * Loads a data set.
-     * @param dataSetName   The data set name
+     * @param query   The SQL query
      * @return The dataset
      */
-    public List<List<String>> loadDataset(String dataSetName) {
-        logger.debug("loadData - data set is {}", dataSetName);
-        String query = loadQuery(dataSetName);
-
+    private List<List<String>> loadDataset(String query) {
         List<List<String>> dataSet = jdbcTemplate.query(query, (ResultSet rs, int rowNum) -> {
             List<String> row = new ArrayList<>();
             ResultSetMetaData metaData = rs.getMetaData();
@@ -53,26 +106,16 @@ public class DataDao {
             }
             return row;
         });
-
-        if (dataSet.size() == 0) {
-            String message = "No test data found matching data set name: '" + dataSetName + "'";
-            logger.error(message);
-            throw new IllegalStateException(message);
-        }
-
-        logger.debug("loaded {} entries for dataset {}", dataSet.size(), dataSetName);
         return dataSet;
     }
 
     /**
-     * Load a SQL query from the queries directory on the classpath.
-     * @param dataSetName   The data set name (also query file name)
+     * Load a SQL query from a file on the classpath.
+     * @param resource   The query file resource
      * @return The query
      */
-    private String loadQuery(String dataSetName) {
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(
-                        this.getClass().getResourceAsStream("/queries/" + dataSetName + ".sql")))) {
+    private String loadQuery(Resource resource) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
 
             StringBuilder builder = new StringBuilder();
             String line;
@@ -82,7 +125,7 @@ public class DataDao {
             return builder.toString();
 
         } catch (IOException ex) {
-            String message = "Unknown dataset " + dataSetName;
+            String message = "Error reading query in " + resource.getFilename();
             logger.error(message, ex);
             throw new IllegalArgumentException(message, ex);
         }
