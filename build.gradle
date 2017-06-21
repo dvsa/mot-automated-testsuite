@@ -24,7 +24,7 @@ configurations {
 }
 
 task('cucumber-feature') {
-    description 'Runs a single feature test (specified using -Pfeature=<the .feature file>'
+    description 'Runs a single feature (specified using -Pfeature=...)'
     dependsOn assemble, compileTestJava
     finalizedBy 'cucumber-reporting'
     doLast {
@@ -41,8 +41,29 @@ task('cucumber-feature') {
     }
 }
 
+task('cucumber-scenario') {
+    description 'Runs matching scenarios within a single feature test (specified using -Pfeature=... -Pscenario=...)'
+    dependsOn assemble, compileTestJava
+    finalizedBy 'cucumber-reporting'
+    doLast {
+        if (!project.hasProperty('feature')) {
+            throw new GradleException('feature parameter must be defined')
+        }
+        if (!project.hasProperty('scenario')) {
+            throw new GradleException('scenario parameter must be defined')
+        }
+        javaexec {
+            main = "cucumber.api.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.test.output + sourceSets.test.resources.sourceDirectories
+
+            // Cucumber configuration
+            args = cucumberOptions + ['--name', scenario, 'src/test/resources/features/' + feature]
+        }
+    }
+}
+
 task('cucumber-tag') {
-    description 'Runs all features matching the tag(s) (specified using -Ptag=<tag(s)>'
+    description 'Runs all features matching the tag(s) (specified using -Ptag=...)'
     dependsOn assemble, compileTestJava
     finalizedBy 'cucumber-reporting'
     doLast {

@@ -17,12 +17,12 @@ Get a copy of ```testsuite.properties``` from another member of the team and sav
 
 ## How to run
 
-To run all feature tests in serial, at the command line:
+To run all features in serial, at the command line:
 ```
 ./gradlew cucumber-all
 ```
 
-To run one specific feature, run the following at the command line. The filename can include any sub-directories below the ```features``` directory (e.g. ```sub-dir/example.feature``):
+To run all scenarios within one specific feature, run the following at the command line. The filename can include any sub-directories below the ```features``` directory (e.g. ```sub-dir/example.feature``):
 
 ```
 ./gradlew cucumber-feature '-Pfeature=<the .feature file>'
@@ -32,6 +32,12 @@ To run all features with a specific tag, run the following at the command line. 
 
 ```
 ./gradlew cucumber-tag '-Ptag=<tag>'
+```
+
+To run a specific scenario within one feature, run the following at the command line, The scenario name can be a regex (e.g. ```-Pscenario=.\*aborts.\*``):
+
+```
+./gradlew cucumber-scenario '-Pfeature=<the .feature file>' '-Pscenario=<the scenario regex>'
 ```
 
 ## Feature Tags
