@@ -157,6 +157,32 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Clicks the specified element.
+     *
+     * Note: This is a low-level way to locate the element. Please only use this method if there is no better way to
+     * locate the element, e.g. using a label.
+     *
+     * @param id  The element id
+     */
+    public void clickElement(String id) {
+        WebElement element = webDriver.findElement(By.id(id));
+        element.click();
+    }
+
+    /**
+     * Get the text within the specified element.
+     *
+     * Note: This is a low-level way to locate the element. Please only use this method if there is no better way to
+     * locate the element, e.g. using a label.
+     *
+     * @param id  The element id
+     */
+    public String getElementText(String id) {
+        WebElement element = webDriver.findElement(By.id(id));
+        return element.getText();
+    }
+
+    /**
      * Enters the specified text into the field.
      * @param text  The text to enter
      * @param label The field label

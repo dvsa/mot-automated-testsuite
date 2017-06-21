@@ -11,4 +11,4 @@ and md.vehicle_class_id = 4 -- cars only
 and veh.id = latest_mot.vehicle_id
 and mtc.id = latest_mot.id
 and mtc.odometer_result_type = 'OK'
-and mtc.status_id != 4 -- not cars already in active mot test
+and mtc.status_id = 6 -- only previous mot test passes (not active or failed etc)

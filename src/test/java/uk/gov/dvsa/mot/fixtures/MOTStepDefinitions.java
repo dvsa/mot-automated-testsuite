@@ -9,6 +9,8 @@ import uk.gov.dvsa.mot.otp.Generator;
 
 import javax.inject.Inject;
 
+import static junit.framework.TestCase.assertTrue;
+
 /**
  * Step definitions specific to MOT screens.
  *
@@ -31,6 +33,16 @@ public class MOTStepDefinitions implements En {
         When("^I enter <([^>]*)> plus (\\d+) in the odometer field$", (String dataKey, Integer amount) -> {
             int newMileage = Integer.parseInt(driverWrapper.getData(dataKey)) + amount;
             driverWrapper.enterIntoFieldWithId(String.valueOf(newMileage), "odometer");
+        });
+
+        And("^I click the \"Aborted by VE\" radio button$", () -> {
+            // unfortunately given no proper formed label etc we have to use the id
+            driverWrapper.clickElement("reasonForCancel25");
+        });
+
+        And("^The MOT status is \"([^\"]*)\"$", (String status) -> {
+            // unfortunately given no proper formed label etc we have to use the id
+            assertTrue("Wrong MOT status", driverWrapper.getElementText("testStatus").contains(status));
         });
     }
 
