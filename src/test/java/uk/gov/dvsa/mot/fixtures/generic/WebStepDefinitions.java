@@ -1,4 +1,4 @@
-package uk.gov.dvsa.mot.fixtures;
+package uk.gov.dvsa.mot.fixtures.generic;
 
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 import javax.inject.Inject;
-
-import static junit.framework.TestCase.assertTrue;
 
 /**
  * Step definitions for web test steps.
@@ -50,11 +48,7 @@ public class WebStepDefinitions implements En {
         });
 
         Then("^The page title contains \"([^\"]*)\"$", (String expected) -> {
-            logger.debug("Looking for page title {}", expected);
-            String actual = driverWrapper.getCurrentPageTitle();
-            assertTrue("Wrong page title, on wrong page perhaps? " +
-                            "Expected the title to contain " + expected + ", but the title was " + actual,
-                    expected.contains(expected));
+            driverWrapper.checkCurrentPageTitle(expected);
         });
 
     }

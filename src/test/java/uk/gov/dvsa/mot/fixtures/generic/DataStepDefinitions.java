@@ -1,4 +1,4 @@
-package uk.gov.dvsa.mot.fixtures;
+package uk.gov.dvsa.mot.fixtures.generic;
 
 import cucumber.api.java8.En;
 import org.slf4j.Logger;

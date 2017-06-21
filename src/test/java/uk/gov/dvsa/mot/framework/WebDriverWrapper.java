@@ -237,11 +237,19 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Get the title of the current page.
-     * @return The title
+     * Checks the title of the current page contains the specified text.
+     * @param expected  The title text to look for
+     * @throws WrongPageException Expected title text not found
      */
-    public String getCurrentPageTitle() {
-        return webDriver.getTitle();
+    public void checkCurrentPageTitle(String expected) {
+        String actual = webDriver.getTitle();
+        logger.debug("Checking current page title for '{}' contains '{}'", actual, expected);
+        if (!actual.contains(expected)) {
+            String message = "Wrong page title, on wrong page perhaps? " +
+                    "Expected the title to contain " + expected + ", but the title was " + actual;
+            logger.error(message);
+            throw new WrongPageException(expected, actual);
+        }
     }
 
     /**

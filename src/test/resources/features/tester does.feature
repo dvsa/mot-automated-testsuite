@@ -13,22 +13,8 @@ Feature: Tester does...
     Given I load "MOT_TESTER" as <username1>
     And I load "VEHICLE_CAR" as <registration1>, <vin1>, <mileage1>
     And I login with 2FA as <username1>
-    When I click the "Start MOT test" link
 
-    And The page title contains "Find a vehicle"
-    And I enter <registration1> in the "Registration mark" field
-    And I enter <vin1> in the "VIN" field
-    And I press the "Search" button
-
-    And The page title contains "Find a vehicle"
-    And I click the "Select vehicle" link
-
-    And The page title contains "Confirm vehicle and start test"
-    And I press the "Confirm and start test" button
-
-    And The page title contains "MOT test started"
-    And I click the "Home" link
-
+    When I start an MOT test for <registration1>, <vin1>
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
@@ -64,28 +50,13 @@ Feature: Tester does...
 
     Then The page title contains "MOT test complete"
 
-  # TODO: various test fail scenarios
 
   Scenario: Tester enters an MOT test fail (service brakes using decelerometer)
     Given I load "MOT_TESTER" as <username1>
     And I load "VEHICLE_CAR" as <registration1>, <vin1>, <mileage1>
     And I login with 2FA as <username1>
-    When I click the "Start MOT test" link
 
-    And The page title contains "Find a vehicle"
-    And I enter <registration1> in the "Registration mark" field
-    And I enter <vin1> in the "VIN" field
-    And I press the "Search" button
-
-    And The page title contains "Find a vehicle"
-    And I click the "Select vehicle" link
-
-    And The page title contains "Confirm vehicle and start test"
-    And I press the "Confirm and start test" button
-
-    And The page title contains "MOT test started"
-    And I click the "Home" link
-
+    When I start an MOT test for <registration1>, <vin1>
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
@@ -121,26 +92,13 @@ Feature: Tester does...
 
     Then The page title contains "MOT test complete"
 
+
   Scenario: Tester aborts an MOT test
     Given I load "MOT_TESTER" as <username1>
     And I load "VEHICLE_CAR" as <registration1>, <vin1>, <mileage1>
     And I login with 2FA as <username1>
-    When I click the "Start MOT test" link
 
-    And The page title contains "Find a vehicle"
-    And I enter <registration1> in the "Registration mark" field
-    And I enter <vin1> in the "VIN" field
-    And I press the "Search" button
-
-    And The page title contains "Find a vehicle"
-    And I click the "Select vehicle" link
-
-    And The page title contains "Confirm vehicle and start test"
-    And I press the "Confirm and start test" button
-
-    And The page title contains "MOT test started"
-    And I click the "Home" link
-
+    When I start an MOT test for <registration1>, <vin1>
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
