@@ -34,7 +34,7 @@ To run all features with a specific tag, run the following at the command line. 
 ./gradlew cucumber-tag '-Ptag=<tag>'
 ```
 
-To run a specific scenario within one feature, run the following at the command line, The scenario name can be a regex (e.g. ```-Pscenario=.\*aborts.\*```):
+To run a specific scenario within one feature, run the following at the command line, The scenario name can be a regex (e.g. ```-Pscenario=.*aborts.*```):
 
 ```
 ./gradlew cucumber-scenario '-Pfeature=<the .feature file>' '-Pscenario=<the scenario regex>'
