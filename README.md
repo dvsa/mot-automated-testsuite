@@ -1,4 +1,4 @@
-# Cucumber Automated Test Proof of Concept
+# MOT Automated Test Suite
 
 Using Cucumber-JVM and Selenium to test the DVSA MOT application through the web browser UI, with test fixtures
 written using Java (JDK 8 Lambda-format step definitions).
