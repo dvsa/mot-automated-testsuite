@@ -32,7 +32,6 @@ public class DatabaseDataProvider {
 
     /**
      * Loads all test data sets, populating the in-memory cache.
-     *
      * If called multiple times, does nothing once the cache has been populated.
      */
     @Transactional(readOnly = true)

@@ -15,6 +15,10 @@ public class WebStepDefinitions implements En {
     /** The logger to use. */
     private static final Logger logger = LoggerFactory.getLogger(WebStepDefinitions.class);
 
+    /**
+     * Creates a new instance.
+     * @param driverWrapper     The driver wrapper to use
+     */
     @Inject
     public WebStepDefinitions(WebDriverWrapper driverWrapper) {
         logger.debug("Creating WebStepDefinitions...");

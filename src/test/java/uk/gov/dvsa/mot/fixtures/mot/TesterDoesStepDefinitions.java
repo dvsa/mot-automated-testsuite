@@ -1,13 +1,13 @@
 package uk.gov.dvsa.mot.fixtures.mot;
 
+import static junit.framework.TestCase.assertTrue;
+
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 import javax.inject.Inject;
-
-import static junit.framework.TestCase.assertTrue;
 
 /**
  * Step definitions specific to the <i>Tester does...</i> feature.
@@ -20,6 +20,10 @@ public class TesterDoesStepDefinitions implements En {
     /** The web driver to use. */
     private final WebDriverWrapper driverWrapper;
 
+    /**
+     * Creates a new instance.
+     * @param driverWrapper The driver wrapper to use
+     */
     @Inject
     public TesterDoesStepDefinitions(WebDriverWrapper driverWrapper) {
         logger.debug("Creating TesterDoesStepDefinitions...");
@@ -41,7 +45,7 @@ public class TesterDoesStepDefinitions implements En {
         });
 
         When("^I start an MOT test for <([^>]*)>, <([^>]*)>$", (String regKey, String vinKey) -> {
-            startMOTTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey));
+            startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey));
         });
     }
 
@@ -51,7 +55,7 @@ public class TesterDoesStepDefinitions implements En {
      * @param registration  The registration number to use
      * @param vin           The VIN to use
      */
-    private void startMOTTest(String registration, String vin) {
+    private void startMotTest(String registration, String vin) {
         // When I click the "Start MOT test" link
         driverWrapper.clickLink("Start MOT test");
 

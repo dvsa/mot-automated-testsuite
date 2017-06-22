@@ -12,20 +12,18 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import uk.gov.dvsa.mot.data.DatabaseDataProvider;
 import uk.gov.dvsa.mot.data.DataDao;
+import uk.gov.dvsa.mot.data.DatabaseDataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 import javax.sql.DataSource;
 
 /**
  * Spring configuration class for the test suite.
- *
- * Note: Using the Cucumber cli runner with the Cucumber-JVM Spring module results in a single Spring application
- * created for the testsuite, shared between every Cucumber feature being run.
- *
- * Note 2: New instances of hooks and step definitions are created by Spring for every scenario within each feature,
- * with Spring dependencies injected from the current Spring application.
+ * <p>Note: Using the Cucumber cli runner with the Cucumber-JVM Spring module results in a single Spring application
+ * created for the testsuite, shared between every Cucumber feature being run.</p>
+ * <p>Note 2: New instances of hooks and step definitions are created by Spring for every scenario within each feature,
+ * with Spring dependencies injected from the current Spring application.</p>
  */
 @Configuration
 @EnableTransactionManagement
@@ -35,15 +33,20 @@ public class SpringConfiguration {
     @Autowired
     Environment env;
 
+    /**
+     * Creates the database data source.
+     * @return A connection pool based data source
+     */
     @Bean
     public DataSource dataSource() {
         // use connection pool so that the connection gets re-used between scenarios in a feature
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl(env.getRequiredProperty("jdbc.url") +
-            // useful mysql JDBC driver properties for debugging and logging
-            // if switch to mariadb JDBC driver then change these
-            "?logSlowQueries=true&slowQueryThresholdMillis=500&dumpQueriesOnException=true&gatherPerfMetrics=true" +
-            "&useUsageAdvisor=true&explainSlowQueries=true&reportMetricsIntervalMillis=60000&logger=Slf4JLogger");
+        dataSource.setUrl(env.getRequiredProperty("jdbc.url")
+                // useful mysql JDBC driver properties for debugging and logging
+                // if switch to mariadb JDBC driver then change these
+                + "?logSlowQueries=true&slowQueryThresholdMillis=500&dumpQueriesOnException=true"
+                + "&gatherPerfMetrics=true&useUsageAdvisor=true&explainSlowQueries=true"
+                + "&reportMetricsIntervalMillis=60000&logger=Slf4JLogger");
         dataSource.setUsername(env.getRequiredProperty("jdbc.username"));
         dataSource.setPassword(env.getRequiredProperty("jdbc.password"));
         dataSource.setDefaultAutoCommit(false);

@@ -43,7 +43,7 @@ public class CucumberReporting {
     }
 
     /**
-     * Generate the overview HTML report including pie chart, feature breakdown, and scenario breakdown
+     * Generate the overview HTML report including pie chart, feature breakdown, and scenario breakdown.
      * @param outputDirectory       The directory to output the report to
      * @param sourceFile            The json file used to generate the HTML reports
      * @param outputName            The prefix given to the report

@@ -21,13 +21,18 @@ public class AuthenticationStepDefinitions implements En {
     /** The web driver to use. */
     private final WebDriverWrapper driverWrapper;
 
+    /**
+     * Creates a new instance.
+     * @param driverWrapper     The driver wrapper to use
+     * @param env               The config settings to use
+     */
     @Inject
     public AuthenticationStepDefinitions(WebDriverWrapper driverWrapper, Environment env) {
         logger.debug("Creating AuthenticationStepDefinitions...");
         this.driverWrapper = driverWrapper;
 
         Given("^I login with 2FA as <([^>]*)>$", (String dataKey) -> {
-            loginWith2FA(driverWrapper.getData(dataKey),
+            loginWith2fa(driverWrapper.getData(dataKey),
                     env.getRequiredProperty("password"), env.getRequiredProperty("seed"));
         });
     }
@@ -38,7 +43,7 @@ public class AuthenticationStepDefinitions implements En {
      * @param password      The password to use
      * @param seed          The OTP seed to use
      */
-    private void loginWith2FA(String username, String password, String seed) {
+    private void loginWith2fa(String username, String password, String seed) {
         logger.debug("Logging in as username {} and password {}", username, password);
         driverWrapper.browseTo("/login");
 
@@ -69,7 +74,7 @@ public class AuthenticationStepDefinitions implements En {
         try {
             driverWrapper.checkCurrentPageTitle("Your home");
 
-        } catch (WrongPageException ex){
+        } catch (WrongPageException ex) {
             // 2FA PIN authentication failed
             String message = "2FA PIN authentication failed for user: " + username;
             logger.error(message);

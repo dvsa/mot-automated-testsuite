@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'checkstyle'
 
 ext {
     javaVersion = '1.8'
@@ -6,6 +7,7 @@ ext {
     seleniumVersion = '3.4.0'
     springVersion = '4.3.9.RELEASE'
     slf4jVersion = '1.7.5'
+    checkstyleVersion = '6.15'
     cucumberOptions = ['--plugin', 'pretty', '--plugin', 'json:build/reports/selenium/selenium.json',
                        '--plugin', 'html:build/reports/selenium', '--glue', 'uk.gov.dvsa.mot']
 }
@@ -21,6 +23,11 @@ configurations {
     cucumberRuntime {
         extendsFrom testRuntime
     }
+}
+
+checkstyle {
+    configFile = new File(rootDir, "dvsa_java_checks.xml")
+    toolVersion = checkstyleVersion
 }
 
 task('cucumber-feature') {

@@ -1,6 +1,12 @@
 package uk.gov.dvsa.mot.framework;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.logging.LogType;
@@ -15,11 +21,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 
-import javax.annotation.PreDestroy;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import javax.annotation.PreDestroy;
 
 /**
  * Wraps the <code>WebDriver</code> instance needed by step definitions with a simplified generic API.
@@ -158,10 +164,8 @@ public class WebDriverWrapper {
 
     /**
      * Clicks the specified element.
-     *
-     * Note: This is a low-level way to locate the element. Please only use this method if there is no better way to
-     * locate the element, e.g. using a label.
-     *
+     * <p>Note: This is a low-level way to locate the element. Please only use this method if there is no better way to
+     * locate the element, e.g. using a label.</p>
      * @param id  The element id
      */
     public void clickElement(String id) {
@@ -171,10 +175,8 @@ public class WebDriverWrapper {
 
     /**
      * Get the text within the specified element.
-     *
-     * Note: This is a low-level way to locate the element. Please only use this method if there is no better way to
-     * locate the element, e.g. using a label.
-     *
+     * <p>Note: This is a low-level way to locate the element. Please only use this method if there is no better way to
+     * locate the element, e.g. using a label.</p>
      * @param id  The element id
      */
     public String getElementText(String id) {
@@ -196,11 +198,9 @@ public class WebDriverWrapper {
 
     /**
      * Enters the specified text into the field.
-     *
-     * Note: This is a low-level way to locate the field. Please only use this method if the text <code>input</code>
+     * <p>Note: This is a low-level way to locate the field. Please only use this method if the text <code>input</code>
      * doesn't have a corresponding label, otherwise use the <code>enterIntoField(String,String)</code> method using
-     * the label text to identify the field.
-     *
+     * the label text to identify the field.</p>
      * @param text  The text to enter
      * @param id    The field id
      */
@@ -211,11 +211,9 @@ public class WebDriverWrapper {
 
     /**
      * Enters the specified text into the field.
-     *
-     * Note: This is a low-level way to locate the field. Please only use this method if the text <code>input</code>
+     * <p>Note: This is a low-level way to locate the field. Please only use this method if the text <code>input</code>
      * doesn't have a corresponding label, otherwise use the <code>enterIntoField(String,String)</code> method using
-     * the label text to identify the field.
-     *
+     * the label text to identify the field.</p>
      * @param text      The text to enter
      * @param idSuffix  The field id suffix
      */
@@ -245,8 +243,8 @@ public class WebDriverWrapper {
         String actual = webDriver.getTitle();
         logger.debug("Checking current page title for '{}' contains '{}'", actual, expected);
         if (!actual.contains(expected)) {
-            String message = "Wrong page title, on wrong page perhaps? " +
-                    "Expected the title to contain " + expected + ", but the title was " + actual;
+            String message = "Wrong page title, on wrong page perhaps? "
+                    + "Expected the title to contain " + expected + ", but the title was " + actual;
             logger.error(message);
             throw new WrongPageException(expected, actual);
         }
@@ -313,6 +311,7 @@ public class WebDriverWrapper {
         logger.debug("Footer image available");
         debugCurrentPage();
     }
+
     /**
      * Logs the current page URL and title as debug.
      */
