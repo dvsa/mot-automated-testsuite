@@ -47,6 +47,10 @@ public class TesterDoesStepDefinitions implements En {
         When("^I start an MOT test for <([^>]*)>, <([^>]*)>$", (String regKey, String vinKey) -> {
             startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey));
         });
+
+        Then("^The completed test status is \"([^\"]*)\"$", (String result) -> {
+            completeTest(result);
+        });
     }
 
     /**
@@ -82,5 +86,27 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.checkCurrentPageTitle("MOT test started");
         //And I click the "Home" link
         driverWrapper.clickLink("Home");
+    }
+
+    /**
+     * Completes an MOT test and checks for the specified result. Refactored repeated cucumber steps, the original
+     * steps are detailed below.
+     * @param result The expected MOT status
+     */
+    private void completeTest(String result) {
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
+        // And I press the "Review test" button
+        driverWrapper.pressButton("Review test");
+
+        // And The page title contains "MOT test summary"
+        driverWrapper.checkCurrentPageTitle("MOT test summary");
+        // And The MOT status is <result>
+        assertTrue("Wrong MOT status", driverWrapper.getElementText("testStatus").contains(result));
+        // And I press the "Save test result" button
+        driverWrapper.pressButton("Save test result");
+
+        // Then The page title contains "MOT test complete"
+        driverWrapper.checkCurrentPageTitle("MOT test complete");
     }
 }

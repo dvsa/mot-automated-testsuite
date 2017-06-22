@@ -41,14 +41,7 @@ Feature: Tester does...
     And The page title contains "Brake test summary"
     And I click the "Done" link
 
-    And The page title contains "MOT test results"
-    And I press the "Review test" button
-
-    And The page title contains "MOT test summary"
-    And The MOT status is "Pass"
-    And I press the "Save test result" button
-
-    Then The page title contains "MOT test complete"
+    Then The completed test status is "Pass"
 
 
   Scenario: Tester enters an MOT test fail (service brakes using decelerometer)
@@ -83,14 +76,7 @@ Feature: Tester does...
     And The page title contains "Brake test summary"
     And I click the "Done" link
 
-    And The page title contains "MOT test results"
-    And I press the "Review test" button
-
-    And The page title contains "MOT test summary"
-    And The MOT status is "Fail"
-    And I press the "Save test result" button
-
-    Then The page title contains "MOT test complete"
+    Then The completed test status is "Fail"
 
 
   Scenario: Tester aborts an MOT test
