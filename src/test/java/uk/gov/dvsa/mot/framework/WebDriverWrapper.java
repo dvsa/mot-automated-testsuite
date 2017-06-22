@@ -2,6 +2,7 @@ package uk.gov.dvsa.mot.framework;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -147,7 +149,17 @@ public class WebDriverWrapper {
      * @param buttonText  The button text
      */
     public void pressButton(String buttonText) {
-        WebElement button = webDriver.findElement(By.xpath("//input[@value = '" + buttonText + "']"));
+        WebElement button;
+
+
+        try {
+            // try to find <input value="..buttonText.."/>
+            button = webDriver.findElement(By.xpath("//input[@value = '" + buttonText + "']"));
+
+        } catch (NoSuchElementException ex) {
+            // otherwise try to find <button>..buttonText..</button>
+            button = webDriver.findElement(By.xpath("//button[contains(text(),'" + buttonText + "')]"));
+        }
         button.submit();
         waitForPageLoad();
     }
@@ -163,6 +175,22 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Clicks the specified link found by locating the starting text then following the relative XPath expression.
+     * @param startTag          The tag containing the starting text
+     * @param startText         The starting text
+     * @param relativeXPath     The relative XPath expression
+     * @param linkText          The link text to look for below the relative expression
+     */
+    public void clickLink(String startTag, String startText, String relativeXPath, String linkText) {
+        WebElement startingTextElement = webDriver.findElement(
+                By.xpath("//" + startTag.toLowerCase() + "[contains(text(),'" + startText + "')]"));
+        WebElement link = startingTextElement.findElement(
+                By.xpath(relativeXPath + ".//a[contains(text(),'" + linkText + "')]"));
+        link.click();
+        waitForPageLoad();
+    }
+
+    /**
      * Clicks the specified element.
      * <p>Note: This is a low-level way to locate the element. Please only use this method if there is no better way to
      * locate the element, e.g. using a label.</p>
@@ -171,6 +199,22 @@ public class WebDriverWrapper {
     public void clickElement(String id) {
         WebElement element = webDriver.findElement(By.id(id));
         element.click();
+    }
+
+    /**
+     * Clicks the specified element.
+     * <p>Note: This is a low-level way to locate the element. Please only use this method if there is no better way to
+     * locate the element, e.g. using a label.</p>
+     * @param name  The element name
+     */
+    public void clickFirstElementByName(String name) {
+        List<WebElement> elements = webDriver.findElements(By.name(name));
+        if (elements == null || elements.size() == 0) {
+            String message = "Unable to find any elements with name: " + name;
+            logger.error(message);
+            throw new IllegalStateException(message);
+        }
+        elements.get(0).click();
     }
 
     /**
@@ -248,6 +292,15 @@ public class WebDriverWrapper {
             logger.error(message);
             throw new WrongPageException(expected, actual);
         }
+    }
+
+    /**
+     * Get the current page title. Use for tests that need to react to where the user is taken to, to check whether the
+     * page is as expected use <code>checkCurrentPageTitle</code>
+     * @return The title
+     */
+    public String getCurrentPageTitle() {
+        return webDriver.getTitle();
     }
 
     /**

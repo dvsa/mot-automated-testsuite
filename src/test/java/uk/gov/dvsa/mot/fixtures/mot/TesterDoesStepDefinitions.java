@@ -48,6 +48,12 @@ public class TesterDoesStepDefinitions implements En {
             startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey));
         });
 
+        And("^I add a \"([^\"]*)\" defect of \\(\"([^\"]*)\", \"([^\"]*)\", \"([^\"]*)\"\\) "
+                + "with comment \"([^\"]*)\"$", (String defectType, String category, String subcategory, String defect,
+                    String comment) -> {
+                addDefect(defectType, category, subcategory, defect, comment);
+            });
+
         Then("^The completed test status is \"([^\"]*)\"$", (String result) -> {
             completeTest(result);
         });
@@ -62,6 +68,14 @@ public class TesterDoesStepDefinitions implements En {
     private void startMotTest(String registration, String vin) {
         // When I click the "Start MOT test" link
         driverWrapper.clickLink("Start MOT test");
+
+        // if page title Select your current site
+        if (driverWrapper.getCurrentPageTitle().contains("Select your current site")) {
+            // select the first site (radios of name vtsId)
+            driverWrapper.clickFirstElementByName("vtsId");
+            // press "Confirm" button
+            driverWrapper.pressButton("Confirm");
+        }
 
         // And The page title contains "Find a vehicle"
         driverWrapper.checkCurrentPageTitle("Find a vehicle");
@@ -108,5 +122,59 @@ public class TesterDoesStepDefinitions implements En {
 
         // Then The page title contains "MOT test complete"
         driverWrapper.checkCurrentPageTitle("MOT test complete");
+    }
+
+    /**
+     * Adds a defect to the current MOT test, by browsing through the specified category and sub-category. Refactored
+     * repeated cucumber steps, the original steps are detailed below.
+     * @param defectType    The defect type, must be "Advisory", "PRS" or "Failure"
+     * @param category      The defect category
+     * @param subcategory   The defect sub-category
+     * @param defect        The defect
+     * @param comment       The comment to use
+     */
+    private void addDefect(String defectType, String category, String subcategory, String defect, String comment) {
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
+        // And I click the "Add a defect" link
+        driverWrapper.clickLink("Add a defect");
+
+        // And The page title contains "Defect categories"
+        driverWrapper.checkCurrentPageTitle("Defect categories");
+        // And I click the <category> link
+        driverWrapper.clickLink(category);
+        // And I click the <subcategory> link
+        driverWrapper.clickLink(subcategory);
+        switch (defectType) {
+            case "Failure":
+                // <strong> Steering system excessively tight .. .. ul 3rd li, link "Failure" (2nd "PRS", 1st "Advisory")
+                driverWrapper.clickLink("strong", defect, "../../ul/", "Failure");
+                // And The page title contains "Add a failure"
+                driverWrapper.checkCurrentPageTitle("Add a failure");
+                // And I enter <comment> into the "Add any further comments if required" field
+                driverWrapper.enterIntoField(comment, "Add any further comments if required");
+                // And I press the "Add failure" button
+                driverWrapper.pressButton("Add failure");
+                break;
+
+            case "PRS":
+                break;
+
+            case "Advisory":
+                break;
+
+            default:
+                String message = "Unknown defect type: " + defectType;
+                logger.error(message);
+                throw new IllegalArgumentException(message);
+        }
+
+        // And The page title contains "Defects"
+        driverWrapper.checkCurrentPageTitle("Defects");
+        // And I click the "Finish and return to MOT test results" link
+        driverWrapper.clickLink("Finish and return to MOT test results");
+
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
     }
 }
