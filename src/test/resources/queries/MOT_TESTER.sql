@@ -31,3 +31,4 @@ and p.id not in (
   select last_updated_by from mot_test_current
   where status_id = 4 -- exclude any testers with active tests
 )
+limit 50
