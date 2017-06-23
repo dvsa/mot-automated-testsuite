@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,6 +114,14 @@ public class WebDriverWrapper {
             logger.error(message);
             throw new IllegalStateException(message);
         }
+    }
+
+    /**
+     * Gets all the current data keys.
+     * @return A List of key names, possibly empty but never <code>null</code>
+     */
+    public List<String> getAllDataKeys() {
+        return new ArrayList<String>(data.keySet());
     }
 
     /**

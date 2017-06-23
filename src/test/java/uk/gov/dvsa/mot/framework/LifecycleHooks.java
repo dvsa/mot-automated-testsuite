@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.data.DatabaseDataProvider;
 
+import java.util.List;
 import javax.inject.Inject;
 
 /**
@@ -72,6 +73,15 @@ public class LifecycleHooks {
     @After
     public void teardown(Scenario scenario) {
         logger.debug("After cucumber scenario: ********** {} **********", scenario.getName());
+
+        // output the values of any datasets used in the test, useful for investigating etc.
+        List<String> keys = driverWrapper.getAllDataKeys();
+        if (keys.size() > 0) {
+            scenario.write("The following data values were used in this test run:");
+            for (String key: keys) {
+                scenario.write("{" + key + "} => " + driverWrapper.getData(key));
+            }
+        }
 
         if ((takeScreenshotsOnErrorOnly && scenario.isFailed()) || !takeScreenshotsOnErrorOnly) {
             // take screenshot of the final page reached in the test
