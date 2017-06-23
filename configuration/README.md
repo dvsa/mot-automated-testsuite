@@ -19,6 +19,13 @@ Supported values are:
 
 * chrome
 
+## driver
+The Selenium browser driver binary to use. See ```drivers\readme.txt``` for details of what has been downloaded and checked in.
+Supported values are:
+
+* drivers/mac-chromedriver
+* driver/linux-chromedriver
+
 ## headless
 Boolean for running in headless mode
 

@@ -79,7 +79,10 @@ public class WebDriverWrapper {
             DesiredCapabilities capabilities = DesiredCapabilities.chrome();
             capabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
             capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
-            System.setProperty("webdriver.chrome.driver", "drivers/chromedriver"); // path to driver executable
+
+            // path to driver executable
+            System.setProperty("webdriver.chrome.driver", env.getRequiredProperty("driver"));
+
             this.webDriver = new ChromeDriver(chromeOptions);
         } else {
             String message = "Unsupported browser: " + browser;
