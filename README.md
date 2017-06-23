@@ -3,7 +3,7 @@
 Using Cucumber-JVM and Selenium to test the DVSA MOT application through the web browser UI, with test fixtures
 written using Java (JDK 8 Lambda-format step definitions).
 
-These tests are written as Gerkin features, in the *src/test/resources/features* directory.
+These tests are written as Gherkin features, in the *src/test/resources/features* directory.
 
 Test data is loaded from the environment under test, using queries in the *src/test/resources/queries* directory.
 
@@ -44,7 +44,8 @@ To run a specific scenario within one feature, run the following at the command 
 
 The following tags are used:
 
-* none yet...
+* **@regression** = Theme 1 regression tests
+* **@smoke** = Smoke tests
 
 ## Reports
 Reporting is done via the [Extender Cucumber Runner](http://mkolisnyk.github.io/cucumber-reports/extended-cucumber-runner) library. The results are placed in the `target` directory along with screenshots of failing tests.
