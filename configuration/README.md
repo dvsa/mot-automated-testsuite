@@ -23,11 +23,12 @@ Supported values are:
 Boolean for running in headless mode
 
 ## takeScreenshots
-When to take screenshots of the browser window at the end of each test scenario
+When to take screenshots of the browser window at the end of each test scenario.
 Supported values are: 
 
 * always
 * onErrorOnly
+* never
 
 ## password
 The password that all user accounts are set to in the test environment being used

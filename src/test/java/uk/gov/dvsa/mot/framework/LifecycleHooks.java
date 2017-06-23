@@ -25,8 +25,8 @@ public class LifecycleHooks {
     /** The data provider to use. */
     private final DatabaseDataProvider dataProvider;
 
-    /** The take screenshots configuration setting. */
-    private final boolean takeScreenshotsOnErrorOnly;
+    /** The configuration settings to use. */
+    private final Environment env;
 
     /**
      * Creates a new instance.
@@ -39,19 +39,7 @@ public class LifecycleHooks {
         logger.debug("Creating LifecycleHooks...");
         this.driverWrapper = driverWrapper;
         this.dataProvider = dataProvider;
-
-        String takeScreenshots = env.getProperty("takeScreenshots");
-        if ("always".equals(takeScreenshots)) {
-            this.takeScreenshotsOnErrorOnly = false;
-
-        } else if ("onErrorOnly".equals(takeScreenshots)) {
-            this.takeScreenshotsOnErrorOnly = true;
-
-        } else {
-            String message = "Unknown takeScreenshots setting: " + takeScreenshots;
-            logger.error(message);
-            throw new IllegalArgumentException(message);
-        }
+        this.env = env;
     }
 
     /**
@@ -74,7 +62,20 @@ public class LifecycleHooks {
     public void teardown(Scenario scenario) {
         logger.debug("After cucumber scenario: ********** {} **********", scenario.getName());
 
-        // output the values of any datasets used in the test, useful for investigating etc.
+        // add to the test report
+        outputDataUse(scenario);
+        outputFinalScreenshot(scenario);
+
+        // test cleanup
+        driverWrapper.reset();
+    }
+
+    /**
+     * Output the values of any dataset entries used in this test scenario, useful for investigating test failures and
+     * as a record of what exactly was tested. The output gets picked up by the Cucumber reports and plugins.
+     * @param scenario  The scenario just completed
+     */
+    private void outputDataUse(Scenario scenario) {
         List<String> keys = driverWrapper.getAllDataKeys();
         if (keys.size() > 0) {
             scenario.write("The following data values were used in this test run:");
@@ -82,16 +83,38 @@ public class LifecycleHooks {
                 scenario.write("{" + key + "} => " + driverWrapper.getData(key));
             }
         }
+    }
 
-        if ((takeScreenshotsOnErrorOnly && scenario.isFailed()) || !takeScreenshotsOnErrorOnly) {
-            // take screenshot of the final page reached in the test
-            byte[] screenshot = driverWrapper.takeScreenshot();
-            if (screenshot != null ) {
-                scenario.embed(screenshot, "image/png");
-            }
+    /**
+     * Output a screenshot of the final web page reached in this test scenario, useful for investigating test
+     * failures and as a record of what exactly was tested. The output gets picked up by the Cucumber reports and
+     * plugins.
+     * <p>Uses the <i>takeScreenshots</i> configuration setting.</p>
+     * <p>Note: most Selenium web drivers, especially Chrome, only output the visible portion of the screen.</p>
+     * @param scenario
+     */
+    private void outputFinalScreenshot(Scenario scenario) {
+        String takeScreenshots = env.getRequiredProperty("takeScreenshots");
+        switch (takeScreenshots) {
+            case "onErrorOnly":
+                if (!scenario.isFailed()) {
+                    // don't fall through to next case block if scenario passed
+                    break;
+                }
+
+            case "always":
+                byte[] screenshot = driverWrapper.takeScreenshot();
+                if (screenshot != null ) {
+                    scenario.embed(screenshot, "image/png");
+                }
+
+            case "never":
+                break;
+
+            default:
+                String message = "Unknown takeScreenshots setting: " + takeScreenshots;
+                logger.error(message);
+                throw new IllegalArgumentException(message);
         }
-
-        // test cleanup
-        driverWrapper.reset();
     }
 }
