@@ -28,22 +28,22 @@ public class DataStepDefinitions implements En {
     public DataStepDefinitions(WebDriverWrapper driverWrapper, DatabaseDataProvider dataProvider) {
         logger.debug("Creating DataStepDefinitions...");
 
-        When("^I load \"([^\"]*)\" as <([^>]*)>$",
+        When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}$",
                 (String dataSetName, String key1) -> {
                     loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1});
             });
 
-        When("^I load \"([^\"]*)\" as <([^>]*)>, <([^>]*)>$",
+        When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String dataSetName, String key1, String key2) -> {
                     loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2});
             });
 
-        When("^I load \"([^\"]*)\" as <([^>]*)>, <([^>]*)>, <([^>]*)>$",
+        When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String dataSetName, String key1, String key2, String key3) -> {
                     loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2, key3});
             });
 
-        When("^I load \"([^\"]*)\" as <([^>]*)>, <([^>]*)>, <([^>]*)>, <([^>]*)>$",
+        When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String dataSetName, String key1, String key2, String key3, String key4) -> {
                     loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2, key3, key4});
             });

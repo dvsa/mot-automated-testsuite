@@ -27,31 +27,31 @@ public class WebStepDefinitions implements En {
             driverWrapper.browseTo(relativePath);
         });
 
-        When("^I press the \"([^\"]*)\" button$", (String buttonText) -> {
+        When("^I press the \"([^\"]+)\" button$", (String buttonText) -> {
             driverWrapper.pressButton(buttonText);
         });
 
-        When("^I click the \"([^\"]*)\" link$", (String linkText) -> {
+        When("^I click the \"([^\"]+)\" link$", (String linkText) -> {
             driverWrapper.clickLink(linkText);
         });
 
-        When("^I enter \"([^\"]*)\" in the \"([^\"]*)\" field$", (String text, String label) -> {
+        When("^I enter \"([^\"]+)\" in the \"([^\"]+)\" field$", (String text, String label) -> {
             driverWrapper.enterIntoField(text, label);
         });
 
-        When("^I enter <([^>]*)> in the \"([^\"]*)\" field$", (String dataKey, String label) -> {
+        When("^I enter \\{([^\\}]+)\\} in the \"([^\"]+)\" field$", (String dataKey, String label) -> {
             driverWrapper.enterIntoField(driverWrapper.getData(dataKey), label);
         });
 
-        When("^I enter \"([^\"]*)\" in the field with id \"([^\"]*)\"$", (String text, String id) -> {
+        When("^I enter \"([^\"]+)\" in the field with id \"([^\"]+)\"$", (String text, String id) -> {
             driverWrapper.enterIntoFieldWithId(text, id);
         });
 
-        When("^I select \"([^\"]*)\" in the \"([^\"]*)\" field$", (String optionText, String label) -> {
+        When("^I select \"([^\"]+)\" in the \"([^\"]+)\" field$", (String optionText, String label) -> {
             driverWrapper.selectOptionInField(optionText, label);
         });
 
-        Then("^The page title contains \"([^\"]*)\"$", (String expected) -> {
+        Then("^The page title contains \"([^\"]+)\"$", (String expected) -> {
             driverWrapper.checkCurrentPageTitle(expected);
         });
 

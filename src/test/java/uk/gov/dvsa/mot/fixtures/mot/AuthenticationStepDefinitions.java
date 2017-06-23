@@ -31,7 +31,7 @@ public class AuthenticationStepDefinitions implements En {
         logger.debug("Creating AuthenticationStepDefinitions...");
         this.driverWrapper = driverWrapper;
 
-        Given("^I login with 2FA as <([^>]*)>$", (String dataKey) -> {
+        Given("^I login with 2FA as \\{([^\\}]+)\\}$", (String dataKey) -> {
             loginWith2fa(driverWrapper.getData(dataKey),
                     env.getRequiredProperty("password"), env.getRequiredProperty("seed"));
         });

@@ -15,14 +15,15 @@
 # the end of the world if the same ones are used in each test.
 #
 # vary if tester aborts, fellow tester at same site aborts
+@regression
 Feature: Tester does...
 
   Scenario: Tester enters an MOT test pass
-    Given I load "MOT_TESTER" as <username1>
-    And I load "VEHICLE_CAR" as <registration1>, <vin1>, <mileage1>
-    And I login with 2FA as <username1>
+    Given I load "MOT_TESTER" as {username1}
+    And I load "VEHICLE_CAR" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA as {username1}
 
-    When I start an MOT test for <registration1>, <vin1>
+    When I start an MOT test for {registration1}, {vin1}
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
@@ -30,7 +31,7 @@ Feature: Tester does...
     And I click the "Add reading" link
 
     And The page title contains "Odometer reading"
-    And I enter <mileage1> plus 5000 in the odometer field
+    And I enter {mileage1} plus 5000 in the odometer field
     And I press the "Update reading" button
 
     And The page title contains "MOT test results"
@@ -53,11 +54,11 @@ Feature: Tester does...
 
 
   Scenario: Tester enters an MOT test fail (service brakes using decelerometer)
-    Given I load "MOT_TESTER" as <username1>
-    And I load "VEHICLE_CAR" as <registration1>, <vin1>, <mileage1>
-    And I login with 2FA as <username1>
+    Given I load "MOT_TESTER" as {username1}
+    And I load "VEHICLE_CAR" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA as {username1}
 
-    When I start an MOT test for <registration1>, <vin1>
+    When I start an MOT test for {registration1}, {vin1}
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
@@ -65,7 +66,7 @@ Feature: Tester does...
     And I click the "Add reading" link
 
     And The page title contains "Odometer reading"
-    And I enter <mileage1> plus 5000 in the odometer field
+    And I enter {mileage1} plus 5000 in the odometer field
     And I press the "Update reading" button
 
     And The page title contains "MOT test results"
@@ -87,11 +88,11 @@ Feature: Tester does...
     Then The completed test status is "Fail"
 
   Scenario: Tester enters an MOT test fail (with defect - steering - failure)
-    Given I load "MOT_TESTER" as <username1>
-    And I load "VEHICLE_CAR" as <registration1>, <vin1>, <mileage1>
-    And I login with 2FA as <username1>
+    Given I load "MOT_TESTER" as {username1}
+    And I load "VEHICLE_CAR" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA as {username1}
 
-    When I start an MOT test for <registration1>, <vin1>
+    When I start an MOT test for {registration1}, {vin1}
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
@@ -99,7 +100,7 @@ Feature: Tester does...
     And I click the "Add reading" link
 
     And The page title contains "Odometer reading"
-    And I enter <mileage1> plus 5000 in the odometer field
+    And I enter {mileage1} plus 5000 in the odometer field
     And I press the "Update reading" button
 
     And I add a "Failure" defect of ("Steering", "Steering operation", "Steering system excessively tight") with comment "Test defect 1"
@@ -123,11 +124,11 @@ Feature: Tester does...
     Then The completed test status is "Fail"
 
   Scenario: Tester aborts an MOT test
-    Given I load "MOT_TESTER" as <username1>
-    And I load "VEHICLE_CAR" as <registration1>, <vin1>, <mileage1>
-    And I login with 2FA as <username1>
+    Given I load "MOT_TESTER" as {username1}
+    And I load "VEHICLE_CAR" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA as {username1}
 
-    When I start an MOT test for <registration1>, <vin1>
+    When I start an MOT test for {registration1}, {vin1}
     And The page title contains "Your home"
     And I click the "Enter test results" link
 

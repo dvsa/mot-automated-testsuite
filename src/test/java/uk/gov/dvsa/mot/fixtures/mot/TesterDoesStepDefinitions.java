@@ -29,7 +29,7 @@ public class TesterDoesStepDefinitions implements En {
         logger.debug("Creating TesterDoesStepDefinitions...");
         this.driverWrapper = driverWrapper;
 
-        When("^I enter <([^>]*)> plus (\\d+) in the odometer field$", (String dataKey, Integer amount) -> {
+        When("^I enter \\{([^\\}]+)\\} plus (\\d+) in the odometer field$", (String dataKey, Integer amount) -> {
             int newMileage = Integer.parseInt(driverWrapper.getData(dataKey)) + amount;
             driverWrapper.enterIntoFieldWithId(String.valueOf(newMileage), "odometer");
         });
@@ -39,22 +39,22 @@ public class TesterDoesStepDefinitions implements En {
             driverWrapper.clickElement("reasonForCancel25");
         });
 
-        And("^The MOT status is \"([^\"]*)\"$", (String status) -> {
+        And("^The MOT status is \"([^\"]+)\"$", (String status) -> {
             // unfortunately given no proper formed label etc we have to use the id
             assertTrue("Wrong MOT status", driverWrapper.getElementText("testStatus").contains(status));
         });
 
-        When("^I start an MOT test for <([^>]*)>, <([^>]*)>$", (String regKey, String vinKey) -> {
+        When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", (String regKey, String vinKey) -> {
             startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey));
         });
 
-        And("^I add a \"([^\"]*)\" defect of \\(\"([^\"]*)\", \"([^\"]*)\", \"([^\"]*)\"\\) "
-                + "with comment \"([^\"]*)\"$", (String defectType, String category, String subcategory, String defect,
+        And("^I add a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"\\) "
+                + "with comment \"([^\"]+)\"$", (String defectType, String category, String subcategory, String defect,
                     String comment) -> {
                 addDefect(defectType, category, subcategory, defect, comment);
             });
 
-        Then("^The completed test status is \"([^\"]*)\"$", (String result) -> {
+        Then("^The completed test status is \"([^\"]+)\"$", (String result) -> {
             completeTest(result);
         });
     }
