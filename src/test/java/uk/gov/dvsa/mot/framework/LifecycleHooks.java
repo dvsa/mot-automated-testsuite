@@ -90,23 +90,20 @@ public class LifecycleHooks {
      * failures and as a record of what exactly was tested. The output gets picked up by the Cucumber reports and
      * plugins.
      * <p>Uses the <i>takeScreenshots</i> configuration setting.</p>
-     * <p>Note: most Selenium web drivers, especially Chrome, only output the visible portion of the screen.</p>
-     * @param scenario
+     * @param scenario  The scenario just completed
      */
     private void outputFinalScreenshot(Scenario scenario) {
         String takeScreenshots = env.getRequiredProperty("takeScreenshots");
         switch (takeScreenshots) {
             case "onErrorOnly":
-                if (!scenario.isFailed()) {
-                    // don't fall through to next case block if scenario passed
-                    break;
+                if (scenario.isFailed()) {
+                    takeScreenshot(scenario);
                 }
+                break;
 
             case "always":
-                byte[] screenshot = driverWrapper.takeScreenshot();
-                if (screenshot != null ) {
-                    scenario.embed(screenshot, "image/png");
-                }
+                takeScreenshot(scenario);
+                break;
 
             case "never":
                 break;
@@ -115,6 +112,19 @@ public class LifecycleHooks {
                 String message = "Unknown takeScreenshots setting: " + takeScreenshots;
                 logger.error(message);
                 throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * Take a screenshot of the current browser window, and outputs it to the report, which gets picked up by the
+     * Cucumber default reports and reporting plugins.
+     * <p>Note: most Selenium web drivers, especially Chrome, only output the visible portion of the screen.</p>
+     * @param scenario  The current scenario
+     */
+    private void takeScreenshot(Scenario scenario) {
+        byte[] screenshot = driverWrapper.takeScreenshot();
+        if (screenshot != null ) {
+            scenario.embed(screenshot, "image/png");
         }
     }
 }

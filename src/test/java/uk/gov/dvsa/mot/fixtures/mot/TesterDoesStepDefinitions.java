@@ -147,7 +147,7 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.clickLink(subcategory);
         switch (defectType) {
             case "Failure":
-                // <strong> Steering system excessively tight .. .. ul 3rd li, link "Failure" (2nd "PRS", 1st "Advisory")
+                // And I click the Failure button for the specified defect
                 driverWrapper.clickLink("strong", defect, "../../ul/", "Failure");
                 // And The page title contains "Add a failure"
                 driverWrapper.checkCurrentPageTitle("Add a failure");
