@@ -29,10 +29,10 @@ public class TesterDoesStepDefinitions implements En {
         logger.debug("Creating TesterDoesStepDefinitions...");
         this.driverWrapper = driverWrapper;
 
-        When("^I enter \\{([^\\}]+)\\} plus (\\d+) in the odometer field$", (String dataKey, Integer amount) -> {
-            int newMileage = Integer.parseInt(driverWrapper.getData(dataKey)) + amount;
-            driverWrapper.enterIntoFieldWithId(String.valueOf(newMileage), "odometer");
-        });
+        And("^I enter an odometer reading of \\{([^\\}]+)\\} plus (\\d+)$",
+                (String dataKey, Integer amount) -> {
+                    enterOdometerReading(driverWrapper.getData(dataKey), amount);
+            });
 
         And("^I click the \"Aborted by VE\" radio button$", () -> {
             // unfortunately given no proper formed label etc we have to use the id
@@ -51,7 +51,12 @@ public class TesterDoesStepDefinitions implements En {
         And("^I add a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"\\) "
                 + "with comment \"([^\"]+)\"$", (String defectType, String category, String subcategory, String defect,
                     String comment) -> {
-                addDefect(defectType, category, subcategory, defect, comment);
+                        addDefect(defectType, category, subcategory, defect, comment);
+            });
+
+        And("^I enter decelerometer results of service brake (\\d+) and parking brake (\\d+)$",
+                (Integer serviceBrakeResult, Integer parkingBrakeResult) -> {
+                    enterDecelerometerBrakeResults(serviceBrakeResult, parkingBrakeResult);
             });
 
         Then("^The completed test status is \"([^\"]+)\"$", (String result) -> {
@@ -100,6 +105,63 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.checkCurrentPageTitle("MOT test started");
         //And I click the "Home" link
         driverWrapper.clickLink("Home");
+    }
+
+    /**
+     * Enter an odometer reading of mileage plus the specified amount. Refactored repeated cucumber steps, the
+     * original steps are detailed below.
+     * @param mileage   The mileage
+     * @param amount    The additional amount
+     */
+    private void enterOdometerReading(String mileage, int amount) {
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
+        // And I click the "Add reading" link
+        driverWrapper.clickLink("Add reading");
+
+        // And The page title contains "Odometer reading"
+        driverWrapper.checkCurrentPageTitle("Odometer reading");
+        // And I enter {mileage1} plus <n> in the odometer field
+        int newMileage = Integer.parseInt(mileage) + amount;
+        driverWrapper.enterIntoFieldWithId(String.valueOf(newMileage), "odometer");
+        // And I press the "Update reading" button
+        driverWrapper.pressButton("Update reading");
+    }
+
+    /**
+     * Enter a Decelerometer brake test result. Refactored repeated cucumber steps, the original steps are detailed
+     * below.
+     * @param serviceBrakeResult    The service brake result
+     * @param parkingBrakeResult    The parking brake result
+     */
+    private void enterDecelerometerBrakeResults(int serviceBrakeResult, int parkingBrakeResult) {
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
+        // And I click the "Add brake test" link
+        driverWrapper.clickLink("Add brake test");
+
+        // And The page title contains "Brake test configuration"
+        driverWrapper.checkCurrentPageTitle("Brake test configuration");
+        // And I select "Decelerometer" in the "Service brake test type" field
+        driverWrapper.selectOptionInField("Decelerometer", "Service brake test type");
+        // And I select "Decelerometer" in the "Parking brake test type" field
+        driverWrapper.selectOptionInField("Decelerometer", "Parking brake test type");
+        // And I press the "Next" button
+        driverWrapper.pressButton("Next");
+
+        // And The page title contains "Add brake test results"
+        driverWrapper.checkCurrentPageTitle("Add brake test results");
+        // And I enter <n> in the "Service brake" field
+        driverWrapper.enterIntoField(String.valueOf(serviceBrakeResult), "Service brake");
+        // And I enter <n> in the "Parking brake" field
+        driverWrapper.enterIntoField(String.valueOf(parkingBrakeResult), "Parking brake");
+        // And I press the "Submit" button
+        driverWrapper.pressButton("Submit");
+
+        // And The page title contains "Brake test summary"
+        driverWrapper.checkCurrentPageTitle("Brake test summary");
+        // And I click the "Done" link
+        driverWrapper.clickLink("Done");
     }
 
     /**
