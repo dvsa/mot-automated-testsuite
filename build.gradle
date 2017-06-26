@@ -28,11 +28,15 @@ configurations {
 checkstyle {
     configFile = new File(rootDir, "dvsa_java_checks.xml")
     toolVersion = checkstyleVersion
+    ignoreFailures = false
+    maxErrors = 0
+    maxWarnings = 0
+    showViolations = true
 }
 
 task('cucumber-feature') {
     description 'Runs a single feature (specified using -Pfeature=...)'
-    dependsOn assemble, compileTestJava
+    dependsOn assemble, compileTestJava, check
     finalizedBy 'cucumber-reporting'
     doLast {
         if (!project.hasProperty('feature')) {
@@ -50,7 +54,7 @@ task('cucumber-feature') {
 
 task('cucumber-scenario') {
     description 'Runs matching scenarios within a single feature test (specified using -Pfeature=... -Pscenario=...)'
-    dependsOn assemble, compileTestJava
+    dependsOn assemble, compileTestJava, check
     finalizedBy 'cucumber-reporting'
     doLast {
         if (!project.hasProperty('feature')) {
@@ -71,7 +75,7 @@ task('cucumber-scenario') {
 
 task('cucumber-tag') {
     description 'Runs all features matching the tag(s) (specified using -Ptag=...)'
-    dependsOn assemble, compileTestJava
+    dependsOn assemble, compileTestJava, check
     finalizedBy 'cucumber-reporting'
     doLast {
         if (!project.hasProperty('tag')) {
@@ -89,7 +93,7 @@ task('cucumber-tag') {
 
 task('cucumber-all') {
     description 'Runs all feature tests in serial'
-    dependsOn assemble, compileTestJava
+    dependsOn assemble, compileTestJava, check
     finalizedBy 'cucumber-reporting'
     doLast {
         javaexec {
@@ -107,7 +111,7 @@ clean.doFirst {
 }
 
 task('cucumber-reporting') {
-    dependsOn assemble, compileTestJava
+    dependsOn assemble, compileTestJava, check
     doLast{
         javaexec {
             main = "uk.gov.dvsa.mot.reporting.CucumberReporting"
