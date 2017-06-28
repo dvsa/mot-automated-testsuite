@@ -1,3 +1,4 @@
+@smoke
 Feature: Login
 
   Scenario: Redirect to login page from home page
