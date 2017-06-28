@@ -19,7 +19,7 @@
 Feature: Tester does...
 
   Scenario: Tester enters an MOT test pass
-    Given I load "MOT_TESTER" as {username1}
+    Given I load "MOT_TESTER_CLASS_4" as {username1}
     And I load "VEHICLE_CAR" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA as {username1}
 
@@ -33,7 +33,7 @@ Feature: Tester does...
 
 
   Scenario: Tester enters an MOT test fail (service brakes using decelerometer)
-    Given I load "MOT_TESTER" as {username1}
+    Given I load "MOT_TESTER_CLASS_4" as {username1}
     And I load "VEHICLE_CAR" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA as {username1}
 
@@ -47,7 +47,7 @@ Feature: Tester does...
 
 
   Scenario: Tester enters an MOT test fail (with defect - steering - failure)
-    Given I load "MOT_TESTER" as {username1}
+    Given I load "MOT_TESTER_CLASS_4" as {username1}
     And I load "VEHICLE_CAR" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA as {username1}
 
@@ -62,7 +62,7 @@ Feature: Tester does...
 
 
   Scenario: Tester aborts an MOT test
-    Given I load "MOT_TESTER" as {username1}
+    Given I load "MOT_TESTER_CLASS_4" as {username1}
     And I load "VEHICLE_CAR" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA as {username1}
 
@@ -80,7 +80,7 @@ Feature: Tester does...
 
 
   Scenario: Tester retests a fail, all failures repaired, no need to repeat brake test
-    Given I load "MOT_TESTER" as {username1}
+    Given I load "MOT_TESTER_CLASS_4" as {username1}
     And I load "VEHICLE_CAR" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA as {username1}
 

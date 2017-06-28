@@ -228,14 +228,6 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Determines whether the current page contains the specified link.
-     * @param linkText  The link text
-     */
-    public boolean hasLink(String linkText) {
-        return findLinks(linkText).size() > 0;
-    }
-
-    /**
      * Finds any links that have the specified text.
      * @param linkText  The link text
      * @return A List of zero or more Elements
@@ -243,6 +235,14 @@ public class WebDriverWrapper {
     private List<WebElement> findLinks(String linkText) {
         // find any "a" elements with text containing the link text (can be partial match)
         return webDriver.findElements(By.xpath("//a[contains(text(),'" + linkText + "')]"));
+    }
+
+    /**
+     * Determines whether the current page contains the specified link.
+     * @param linkText  The link text
+     */
+    public boolean hasLink(String linkText) {
+        return findLinks(linkText).size() > 0;
     }
 
     /**
