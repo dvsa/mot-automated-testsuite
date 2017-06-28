@@ -326,6 +326,25 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Click a radio button by the text in the input. Please only use this if there is no better way.
+     * @param text  The text in the element
+     */
+    public void clickRadioButtonByText(String text) {
+        WebElement radioButton = webDriver.findElement(By.xpath("//strong[contains(text(),'" + text + "')]"));
+        radioButton.click();
+    }
+
+    /**
+     * Enter text into field with a name.
+     * @param name  The name for the field
+     * @param text  The text to enter into the field
+     */
+    public void enterTextInFieldWithName(String name, String text) {
+        WebElement element = webDriver.findElement(By.name(name));
+        element.sendKeys(text);
+    }
+
+    /**
      * Clicks the specified element.
      * <p>Note: This is a low-level way to locate the element. Please only use this method if there is no better way to
      * locate the element, e.g. using a label.</p>
@@ -414,6 +433,26 @@ public class WebDriverWrapper {
         // find the input associated with the specified label...
         WebElement labelElement = webDriver.findElement(By.xpath("//label[contains(text(),'" + label + "')]"));
         Select selectElement = new Select(webDriver.findElement(By.id(labelElement.getAttribute("for"))));
+        selectElement.selectByVisibleText(optionText);
+    }
+
+    /**
+     * Fetchs the data in the td column in the same row as a tr element.
+     * @param rowText - The text that will find the first row
+     * @return          Return the text found in the table
+     */
+    public String getTextFromTableRow(String rowText) {
+        WebElement webElement = webDriver.findElement(By.xpath("//th[contains(text(),'" + rowText + "')]/../td"));
+        return webElement.getText();
+    }
+
+    /**
+     * Selects a specified option in a dropdown field using the name to identify it, temporary fix for incorrect label.
+     * @param optionText    The text of the option to select
+     * @param name          The field name
+     */
+    public void selectOptionInFieldByName(String optionText, String name) {
+        Select selectElement = new Select(webDriver.findElement(By.name(name)));
         selectElement.selectByVisibleText(optionText);
     }
 

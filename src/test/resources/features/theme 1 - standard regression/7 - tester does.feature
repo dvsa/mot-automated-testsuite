@@ -2,7 +2,7 @@
 Feature: 7 - Tester does...
 
   Scenario: Tester enters a class 4 MOT test pass, with no defects
-    Given I load "MOT_TESTER_CLASS_4" as {username1}
+    Given I load "MOT_TESTER_CLASS_4" as {username1}, {site}
     And I load "VEHICLE_CAR" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA as {username1}
 
@@ -18,7 +18,7 @@ Feature: 7 - Tester does...
 
 
   Scenario: Tester enters a class 4 MOT test fail, with brake test failure
-    Given I load "MOT_TESTER_CLASS_4" as {username1}
+    Given I load "MOT_TESTER_CLASS_4" as {username1}, {site}
     And I load "VEHICLE_CAR" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA as {username1}
 
@@ -32,7 +32,7 @@ Feature: 7 - Tester does...
 
 
   Scenario: Tester enters a class 4 MOT test fail, with failure defects
-    Given I load "MOT_TESTER_CLASS_4" as {username1}
+    Given I load "MOT_TESTER_CLASS_4" as {username1}, {site}
     And I load "VEHICLE_CAR" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA as {username1}
 
@@ -75,7 +75,7 @@ Feature: 7 - Tester does...
 
 
   Scenario: Tester aborts an MOT test
-    Given I load "MOT_TESTER_CLASS_4" as {username1}
+    Given I load "MOT_TESTER_CLASS_4" as {username1}, {site}
     And I load "VEHICLE_CAR" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA as {username1}
 
@@ -93,7 +93,7 @@ Feature: 7 - Tester does...
 
 
   Scenario: Tester enters a class 4 MOT retest pass, all failures repaired, no need to repeat brake test
-    Given I load "MOT_TESTER_CLASS_4" as {username1}
+    Given I load "MOT_TESTER_CLASS_4" as {username1}, {site}
     And I load "VEHICLE_CAR" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA as {username1}
 

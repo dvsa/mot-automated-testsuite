@@ -68,6 +68,10 @@ public class TesterDoesStepDefinitions implements En {
             markAsRepaired(defect);
         });
 
+        And("^I search for a vehicle with \"([^\"]+)\", \"([^\"]+)\"$", (String reg, String vin) -> {
+            searchForVehicle(reg, vin);
+        });
+
         Then("^The completed test status is \"([^\"]+)\"$", (String result) -> {
             completeTest(result, false);
         });
@@ -85,28 +89,8 @@ public class TesterDoesStepDefinitions implements En {
      * @param isRetest      Whether this is a retest
      */
     private void startMotTest(String registration, String vin, boolean isRetest) {
-        // When I click the "Start MOT test" link
-        driverWrapper.clickLink("Start MOT test");
-
-        // if page title Select your current site
-        if (driverWrapper.getCurrentPageTitle().contains("Select your current site")) {
-            // select the first site (radios of name vtsId)
-            driverWrapper.clickFirstElementByName("vtsId");
-            // press "Confirm" button
-            driverWrapper.pressButton("Confirm");
-        }
-
-        // And The page title contains "Find a vehicle"
-        driverWrapper.checkCurrentPageTitle("Find a vehicle");
-        //And I enter <registration1> in the "Registration mark" field
-        driverWrapper.enterIntoField(registration, "Registration mark");
-        //And I enter <vin1> in the "VIN" field
-        driverWrapper.enterIntoField(vin, "VIN");
-        //And I press the "Search" button
-        driverWrapper.pressButton("Search");
-
-        //And The page title contains "Find a vehicle"
-        driverWrapper.checkCurrentPageTitle("Find a vehicle");
+        //And I Search for a vehicle
+        searchForVehicle(registration, vin);
 
         if (isRetest) {
             // check for the retest marker next to the select vehicle link
@@ -141,6 +125,36 @@ public class TesterDoesStepDefinitions implements En {
 
         //And I click the "Continue to home" link
         driverWrapper.clickLink("Continue to home");
+    }
+
+    /**
+     * Search for a vehicle from the trade user search.
+     * @param registration  The registration of the vehicle to find
+     * @param vin           The vin number of the vehicle to find
+     */
+    private void searchForVehicle(String registration, String vin) {
+        // When I click the "Start MOT test" link
+        driverWrapper.clickLink("Start MOT test");
+
+        // if page title Select your current site
+        if (driverWrapper.getCurrentPageTitle().contains("Select your current site")) {
+            // select the first site (radios of name vtsId)
+            driverWrapper.clickRadioButtonByText(driverWrapper.getData("site"));
+            // press "Confirm" button
+            driverWrapper.pressButton("Confirm");
+        }
+
+        // And The page title contains "Find a vehicle"
+        driverWrapper.checkCurrentPageTitle("Find a vehicle");
+        //And I enter <registration1> in the "Registration mark" field
+        driverWrapper.enterIntoField(registration, "Registration mark");
+        //And I enter <vin1> in the "VIN" field
+        driverWrapper.enterIntoField(vin, "VIN");
+        //And I press the "Search" button
+        driverWrapper.pressButton("Search");
+
+        //And The page title contains "Find a vehicle"
+        driverWrapper.checkCurrentPageTitle("Find a vehicle");
     }
 
     /**
