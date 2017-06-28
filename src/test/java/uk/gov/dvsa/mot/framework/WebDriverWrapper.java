@@ -232,7 +232,17 @@ public class WebDriverWrapper {
      * @param linkText  The link text
      */
     public boolean hasLink(String linkText) {
-        return webDriver.findElements(By.xpath("//a[contains(text(),'" + linkText + "')]")).size() > 0;
+        return findLinks(linkText).size() > 0;
+    }
+
+    /**
+     * Finds any links that have the specified text.
+     * @param linkText  The link text
+     * @return A List of zero or more Elements
+     */
+    private List<WebElement> findLinks(String linkText) {
+        // find any "a" elements with text containing the link text (can be partial match)
+        return webDriver.findElements(By.xpath("//a[contains(text(),'" + linkText + "')]"));
     }
 
     /**
@@ -257,9 +267,21 @@ public class WebDriverWrapper {
      * @param linkText  The link text
      */
     public void clickLink(String linkText) {
-        WebElement link = webDriver.findElement(By.xpath("//a[contains(text(),'" + linkText + "')]"));
-        link.click();
-        waitForPageLoad();
+        List<WebElement> links = findLinks(linkText);
+        if (links.size() == 0) {
+            String message = "No links found with text: " + linkText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else if (links.size() > 1) {
+            String message = "Several links found with text: " + linkText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            links.get(0).click();
+            waitForPageLoad();
+        }
     }
 
     /**
