@@ -13,3 +13,4 @@ and veh.id = latest_mot.vehicle_id
 and mtc.id = latest_mot.id
 and mtc.odometer_result_type = 'OK'
 and mtc.status_id = 6 -- only previous mot test passes (not active or failed etc)
+and veh.registration not like "%-%" -- exclude dodgy test data on ACPT

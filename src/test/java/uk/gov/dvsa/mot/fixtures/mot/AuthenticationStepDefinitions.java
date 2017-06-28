@@ -1,5 +1,7 @@
 package uk.gov.dvsa.mot.fixtures.mot;
 
+import static junit.framework.TestCase.assertFalse;
+
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,5 +82,38 @@ public class AuthenticationStepDefinitions implements En {
             logger.error(message);
             throw new RuntimeException(message);
         }
+
+        // check if any special notices need clearing down
+        if (driverWrapper.hasLink("Read and acknowledge")) {
+            clearDownSpecialNotices();
+        }
+    }
+
+    /**
+     * Clears down any special notices, then returns to the home page.
+     */
+    private void clearDownSpecialNotices() {
+        logger.debug("Special notices need clearing down");
+
+        driverWrapper.clickLink("Read and acknowledge");
+        driverWrapper.checkCurrentPageTitle("Special Notices");
+
+        // note that the label has two spaces - View--and!
+        while (driverWrapper.hasLink(
+                "span", "View  and acknowledge", "../../")) {
+            logger.debug("Special notice found, acknowledging");
+
+            driverWrapper.clickLink(
+                    "span", "View  and acknowledge", "../../");
+            driverWrapper.pressButton("Acknowledge");
+        }
+        driverWrapper.clickLink("Back");
+
+        // back on "Your home"
+        driverWrapper.checkCurrentPageTitle("Your home");
+
+        // check special notices warning has gone
+        assertFalse("Expected special notices to be cleared down",
+                driverWrapper.hasLink("Read and acknowledge"));
     }
 }

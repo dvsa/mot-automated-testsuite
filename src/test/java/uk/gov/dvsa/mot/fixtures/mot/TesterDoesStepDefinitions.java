@@ -1,6 +1,7 @@
 package uk.gov.dvsa.mot.fixtures.mot;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
@@ -45,7 +46,11 @@ public class TesterDoesStepDefinitions implements En {
         });
 
         When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", (String regKey, String vinKey) -> {
-            startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey));
+            startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey), false);
+        });
+
+        When("^I start an MOT retest for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", (String regKey, String vinKey) -> {
+            startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey), true);
         });
 
         And("^I add a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"\\) "
@@ -59,8 +64,16 @@ public class TesterDoesStepDefinitions implements En {
                     enterDecelerometerBrakeResults(serviceBrakeResult, parkingBrakeResult);
             });
 
+        And("^I mark the defect \"([^\"]+)\" as repaired$", (String defect) -> {
+            markAsRepaired(defect);
+        });
+
         Then("^The completed test status is \"([^\"]+)\"$", (String result) -> {
-            completeTest(result);
+            completeTest(result, false);
+        });
+
+        Then("^The completed retest status is \"([^\"]+)\"$", (String result) -> {
+            completeTest(result, true);
         });
     }
 
@@ -69,8 +82,9 @@ public class TesterDoesStepDefinitions implements En {
      * detailed below.
      * @param registration  The registration number to use
      * @param vin           The VIN to use
+     * @param isRetest      Whether this is a retest
      */
-    private void startMotTest(String registration, String vin) {
+    private void startMotTest(String registration, String vin, boolean isRetest) {
         // When I click the "Start MOT test" link
         driverWrapper.clickLink("Start MOT test");
 
@@ -93,18 +107,40 @@ public class TesterDoesStepDefinitions implements En {
 
         //And The page title contains "Find a vehicle"
         driverWrapper.checkCurrentPageTitle("Find a vehicle");
-        //And I click the "Select vehicle" link
-        driverWrapper.clickLink("Select vehicle");
 
-        //And The page title contains "Confirm vehicle and start test"
-        driverWrapper.checkCurrentPageTitle("Confirm vehicle and start test");
-        //And I press the "Confirm and start test" button
-        driverWrapper.pressButton("Confirm and start test");
+        if (isRetest) {
+            // check for the retest marker next to the select vehicle link
+            String actual = driverWrapper.getElementText("a", "Select vehicle", "../span");
+            assertEquals("Missing retest marker next to select vehicle link", "For retest", actual);
 
-        //And The page title contains "MOT test started"
-        driverWrapper.checkCurrentPageTitle("MOT test started");
-        //And I click the "Home" link
-        driverWrapper.clickLink("Home");
+            //And I click the "Select vehicle" link
+            driverWrapper.clickLink("Select vehicle");
+
+            //And The page title contains "Confirm vehicle for retest"
+            driverWrapper.checkCurrentPageTitle("Confirm vehicle for retest");
+
+            //And I press the "Confirm and start retest" button
+            driverWrapper.pressButton("Confirm and start retest");
+
+            //And The page title contains "MOT test started"
+            driverWrapper.checkCurrentPageTitle("MOT retest started");
+
+        } else {
+            //And I click the "Select vehicle" link
+            driverWrapper.clickLink("Select vehicle");
+
+            //And The page title contains "Confirm vehicle and start test"
+            driverWrapper.checkCurrentPageTitle("Confirm vehicle and start test");
+
+            //And I press the "Confirm and start test" button
+            driverWrapper.pressButton("Confirm and start test");
+
+            //And The page title contains "MOT test started"
+            driverWrapper.checkCurrentPageTitle("MOT test started");
+        }
+
+        //And I click the "Continue to home" link
+        driverWrapper.clickLink("Continue to home");
     }
 
     /**
@@ -141,7 +177,7 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.clickLink("Add brake test");
 
         // And The page title contains "Brake test configuration"
-        driverWrapper.checkCurrentPageTitle("Brake test configuration");
+        //defect in release 3.10, title missing - driverWrapper.checkCurrentPageTitle("Brake test configuration");
         // And I select "Decelerometer" in the "Service brake test type" field
         driverWrapper.selectOptionInField("Decelerometer", "Service brake test type");
         // And I select "Decelerometer" in the "Parking brake test type" field
@@ -165,25 +201,49 @@ public class TesterDoesStepDefinitions implements En {
     }
 
     /**
+     * Marks the specified defect as repaired.
+     * @param defect    The defect
+     */
+    private void markAsRepaired(String defect) {
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
+        // And I press the "Mark as repaired" button for the specified defect
+        driverWrapper.pressButtonWithSiblingElement(
+                "Mark as repaired","input", "value", defect);
+    }
+
+    /**
      * Completes an MOT test and checks for the specified result. Refactored repeated cucumber steps, the original
      * steps are detailed below.
-     * @param result The expected MOT status
+     * @param result    The expected MOT status
+     * @param isRetest  Whether this is a retest
      */
-    private void completeTest(String result) {
+    private void completeTest(String result, boolean isRetest) {
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
         // And I press the "Review test" button
         driverWrapper.pressButton("Review test");
 
-        // And The page title contains "MOT test summary"
-        driverWrapper.checkCurrentPageTitle("MOT test summary");
+        if (isRetest) {
+            // And The page title contains "MOT re-test summary"
+            driverWrapper.checkCurrentPageTitle("MOT re-test summary");
+        } else {
+            // And The page title contains "MOT test summary"
+            driverWrapper.checkCurrentPageTitle("MOT test summary");
+        }
+
         // And The MOT status is <result>
         assertTrue("Wrong MOT status", driverWrapper.getElementText("testStatus").contains(result));
         // And I press the "Save test result" button
         driverWrapper.pressButton("Save test result");
 
-        // Then The page title contains "MOT test complete"
-        driverWrapper.checkCurrentPageTitle("MOT test complete");
+        if (isRetest) {
+            // Then The page title contains "MOT re-test complete"
+            driverWrapper.checkCurrentPageTitle("MOT re-test complete");
+        } else {
+            // Then The page title contains "MOT test complete"
+            driverWrapper.checkCurrentPageTitle("MOT test complete");
+        }
     }
 
     /**

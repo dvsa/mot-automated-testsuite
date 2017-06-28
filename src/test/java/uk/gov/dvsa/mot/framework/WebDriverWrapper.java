@@ -161,19 +161,95 @@ public class WebDriverWrapper {
      * @param buttonText  The button text
      */
     public void pressButton(String buttonText) {
-        WebElement button;
+        List<WebElement> buttons = findButtons(buttonText);
+        if (buttons.size() == 0) {
+            String message = "No buttons found with text: " + buttonText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
 
+        } else if (buttons.size() > 1) {
+            String message = "Several buttons found with text: " + buttonText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
 
-        try {
-            // try to find <input value="..buttonText.."/>
-            button = webDriver.findElement(By.xpath("//input[@value = '" + buttonText + "']"));
-
-        } catch (NoSuchElementException ex) {
-            // otherwise try to find <button>..buttonText..</button>
-            button = webDriver.findElement(By.xpath("//button[contains(text(),'" + buttonText + "')]"));
+        } else {
+            buttons.get(0).submit();
+            waitForPageLoad();
         }
-        button.submit();
-        waitForPageLoad();
+    }
+
+    /**
+     * Presses the button located by the matching sibling element (located by attribute value).
+     * @param buttonText        The button text
+     * @param siblingTag        The sibling element tag name
+     * @param attributeName     The sibling element attribute name
+     * @param attributeValue    The sibling element attribute value
+     */
+    public void pressButtonWithSiblingElement(String buttonText, String siblingTag, String attributeName,
+                                              String attributeValue) {
+        List<WebElement> buttons = findButtons(buttonText);
+        if (buttons.size() == 0) {
+            String message = "No buttons found with text: " + buttonText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            String xpath = "../" + siblingTag + "[@" + attributeName + " = '" + attributeValue + "']";
+            for (WebElement button : buttons) {
+                List<WebElement> siblings = button.findElements(By.xpath(xpath));
+                if (siblings.size() > 0) {
+                    logger.debug("button found!");
+                    button.click();
+                    waitForPageLoad();
+                    return;
+                }
+            }
+            String message = "No matching sibling elements found (xpath: " + xpath
+                    + ") for buttons with text: " + buttonText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * Finds any buttons that have the specified text. Handles buttons implemented as either "input" elements or
+     * "button" elements.
+     * @param buttonText    The button text
+     * @return A List of zero or more Elements
+     */
+    private List<WebElement> findButtons(String buttonText) {
+        // find any "input" elements with value matching the button text (exact match)
+        List<WebElement> inputs = webDriver.findElements(By.xpath("//input[@value = '" + buttonText + "']"));
+
+        // plus find any "button" elements with text containing the button text (can be partial match)
+        inputs.addAll(webDriver.findElements(By.xpath("//button[contains(text(),'" + buttonText + "')]")));
+
+        return inputs;
+    }
+
+    /**
+     * Determines whether the current page contains the specified link.
+     * @param linkText  The link text
+     */
+    public boolean hasLink(String linkText) {
+        return webDriver.findElements(By.xpath("//a[contains(text(),'" + linkText + "')]")).size() > 0;
+    }
+
+    /**
+     * Determines whether the current page contains the specified link, found by locating the starting text then
+     * following the relative XPath expression.
+     * @param startTag          The tag containing the starting text
+     * @param startText         The starting text
+     * @param relativeXPath     The relative XPath expression
+     */
+    public boolean hasLink(String startTag, String startText, String relativeXPath) {
+        try {
+            WebElement startingTextElement = webDriver.findElement(
+                    By.xpath("//" + startTag.toLowerCase() + "[contains(text(),'" + startText + "')]"));
+            return startingTextElement.findElements(By.xpath(relativeXPath + ".//a")).size() > 0;
+        } catch (NoSuchElementException ex) {
+            return false;
+        }
     }
 
     /**
@@ -182,6 +258,20 @@ public class WebDriverWrapper {
      */
     public void clickLink(String linkText) {
         WebElement link = webDriver.findElement(By.xpath("//a[contains(text(),'" + linkText + "')]"));
+        link.click();
+        waitForPageLoad();
+    }
+
+    /**
+     * Clicks the specified link found by locating the starting text then following the relative XPath expression.
+     * @param startTag          The tag containing the starting text
+     * @param startText         The starting text
+     * @param relativeXPath     The relative XPath expression
+     */
+    public void clickLink(String startTag, String startText, String relativeXPath) {
+        WebElement startingTextElement = webDriver.findElement(
+                By.xpath("//" + startTag.toLowerCase() + "[contains(text(),'" + startText + "')]"));
+        WebElement link = startingTextElement.findElement(By.xpath(relativeXPath + ".//a"));
         link.click();
         waitForPageLoad();
     }
@@ -238,6 +328,21 @@ public class WebDriverWrapper {
     public String getElementText(String id) {
         WebElement element = webDriver.findElement(By.id(id));
         return element.getText();
+    }
+
+    /**
+     * Get the text within the specified element, found by locating the starting text then following the relative XPath
+     * expression.
+     * @param startTag          The tag containing the starting text
+     * @param startText         The starting text
+     * @param relativeXPath     The relative XPath expression
+     * @return The text
+     */
+    public String getElementText(String startTag, String startText, String relativeXPath) {
+        WebElement startingElement = webDriver.findElement(
+                By.xpath("//" + startTag.toLowerCase() + "[contains(text(),'" + startText + "')]"));
+        WebElement relativeElement = startingElement.findElement(By.xpath(relativeXPath));
+        return relativeElement.getText();
     }
 
     /**

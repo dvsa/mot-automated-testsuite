@@ -77,3 +77,27 @@ Feature: Tester does...
     And I click the "Aborted by VE" radio button
     And I press the "Confirm and cancel test" button
     Then The page title contains "MOT test aborted"
+
+
+  Scenario: Tester retests a fail, all failures repaired, no need to repeat brake test
+    Given I load "MOT_TESTER" as {username1}
+    And I load "VEHICLE_CAR" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA as {username1}
+
+    And I start an MOT test for {registration1}, {vin1}
+    And The page title contains "Your home"
+    And I click the "Enter test results" link
+
+    And I enter an odometer reading of {mileage1} plus 5000
+    And I add a "Failure" defect of ("Steering", "Steering operation", "Steering system excessively tight") with comment "Test defect 1"
+    And I enter decelerometer results of service brake 60 and parking brake 60
+    And The completed test status is "Fail"
+
+    When I click the "Back to user home" link
+    And I start an MOT retest for {registration1}, {vin1}
+    And The page title contains "Your home"
+    And I click the "Enter retest results" link
+
+    And I enter an odometer reading of {mileage1} plus 5000
+    And I mark the defect "Steering system excessively tight" as repaired
+    Then The completed retest status is "Pass"
