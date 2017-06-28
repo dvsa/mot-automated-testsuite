@@ -44,7 +44,7 @@ task('cucumber-feature') {
         }
         javaexec {
             main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.test.output + sourceSets.test.resources.sourceDirectories
+            classpath = configurations.cucumberRuntime + sourceSets.test.output
 
             // Cucumber configuration
             args = cucumberOptions + ['src/test/resources/features/' + feature]
@@ -65,7 +65,7 @@ task('cucumber-scenario') {
         }
         javaexec {
             main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.test.output + sourceSets.test.resources.sourceDirectories
+            classpath = configurations.cucumberRuntime + sourceSets.test.output
 
             // Cucumber configuration
             args = cucumberOptions + ['--name', scenario, 'src/test/resources/features/' + feature]
@@ -83,7 +83,7 @@ task('cucumber-tag') {
         }
         javaexec {
             main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.test.output + sourceSets.test.resources.sourceDirectories
+            classpath = configurations.cucumberRuntime + sourceSets.test.output
 
             // Cucumber configuration
             args = cucumberOptions + ['--tags', tag, 'src/test/resources/features']
@@ -98,7 +98,7 @@ task('cucumber-all') {
     doLast {
         javaexec {
             main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.test.output + sourceSets.test.resources.sourceDirectories
+            classpath = configurations.cucumberRuntime + sourceSets.test.output
 
             // Cucumber configuration
             args = cucumberOptions + ['src/test/resources/features']
