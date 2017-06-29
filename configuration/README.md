@@ -52,3 +52,7 @@ The database username to use. Only read access is needed
   
 ## jdbc.password
 The database password to use  
+
+## maxLoginRetries
+The number of times to try failed logins before failing the test scenario.
+To accommodate changed user passwords, the testsuite tries again with another user.

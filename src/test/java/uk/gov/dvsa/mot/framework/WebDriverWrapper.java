@@ -437,13 +437,22 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Fetchs the data in the td column in the same row as a tr element.
+     * Fetches the data in the td column in the same row as a tr element.
      * @param rowText - The text that will find the first row
      * @return          Return the text found in the table
      */
     public String getTextFromTableRow(String rowText) {
-        WebElement webElement = webDriver.findElement(By.xpath("//th[contains(text(),'" + rowText + "')]/../td"));
-        return webElement.getText();
+        return webDriver.findElement(By.xpath("//th[contains(text(),'" + rowText + "')]/../td")).getText();
+    }
+
+    /**
+     * Fetches the data in the dd element following a specific dt element, in a flat dt/dd list.
+     * @param termText  The text that will find the term
+     * @return The description text found
+     */
+    public String getTextFromDefinitionList(String termText) {
+        return webDriver.findElement(
+                By.xpath("//dt[contains(text(),'" + termText + "')]/following-sibling::dd[1]")).getText();
     }
 
     /**

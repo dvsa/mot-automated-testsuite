@@ -72,6 +72,11 @@ public class TesterDoesStepDefinitions implements En {
             searchForVehicle(reg, vin);
         });
 
+        And("^I check the vehicle summary section of the test summary has \"([^\"]+)\" of \\{([^\\}]+)\\}$",
+                (String field, String key) -> {
+                    assertEquals(driverWrapper.getData(key), driverWrapper.getTextFromDefinitionList(field));
+            });
+
         Then("^The completed test status is \"([^\"]+)\"$", (String result) -> {
             completeTest(result, false);
         });

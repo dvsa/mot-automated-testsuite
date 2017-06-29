@@ -1,8 +1,7 @@
 Feature: Create Vehicle
 
   Scenario Outline: Tester Creates a new vehicle with class <class>
-    Given I load "<User>" as {username1}, {site}
-    And I login with 2FA as {username1}
+    Given I login with 2FA using "<User>" as {username1}, {site}
 
     When I search for a vehicle with " ", " "
     And I click the "create a new vehicle record" link

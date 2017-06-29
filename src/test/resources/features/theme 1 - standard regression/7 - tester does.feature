@@ -1,10 +1,10 @@
 @regression
 Feature: 7 - Tester does...
 
+  # TODO: add explicit checks on generated PDF (if possible?)
   Scenario: Tester enters a class 4 MOT test pass, with no defects
-    Given I load "MOT_TESTER_CLASS_4" as {username1}, {site}
-    And I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
-    And I login with 2FA as {username1}
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
     When I start an MOT test for {registration1}, {vin1}
     And The page title contains "Your home"
@@ -12,15 +12,17 @@ Feature: 7 - Tester does...
 
     And I enter an odometer reading of {mileage1} plus 5000
     And I enter decelerometer results of service brake 60 and parking brake 60
-    # TODO: add more explicit checks (for all tests) on summary page
-    # TODO: add explicit checks on generated PDF (if possible?)
-    Then The completed test status is "Pass"
+    And I press the "Review test" button
+
+    Then The page title contains "MOT test summary"
+    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I press the "Save test result" button
+    And The page title contains "MOT test complete"
 
 
   Scenario: Tester enters a class 4 MOT test fail, with brake test failure
-    Given I load "MOT_TESTER_CLASS_4" as {username1}, {site}
-    And I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
-    And I login with 2FA as {username1}
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
     When I start an MOT test for {registration1}, {vin1}
     And The page title contains "Your home"
@@ -32,9 +34,8 @@ Feature: 7 - Tester does...
 
 
   Scenario: Tester enters a class 4 MOT test fail, with failure defects
-    Given I load "MOT_TESTER_CLASS_4" as {username1}, {site}
-    And I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
-    And I login with 2FA as {username1}
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
     When I start an MOT test for {registration1}, {vin1}
     And The page title contains "Your home"
@@ -75,9 +76,8 @@ Feature: 7 - Tester does...
 
 
   Scenario: Tester aborts an MOT test
-    Given I load "MOT_TESTER_CLASS_4" as {username1}, {site}
-    And I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
-    And I login with 2FA as {username1}
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
     When I start an MOT test for {registration1}, {vin1}
     And The page title contains "Your home"
@@ -93,9 +93,8 @@ Feature: 7 - Tester does...
 
 
   Scenario: Tester enters a class 4 MOT retest pass, all failures repaired, no need to repeat brake test
-    Given I load "MOT_TESTER_CLASS_4" as {username1}, {site}
-    And I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
-    And I login with 2FA as {username1}
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
     And I start an MOT test for {registration1}, {vin1}
     And The page title contains "Your home"
