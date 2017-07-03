@@ -77,12 +77,12 @@ public class TesterDoesStepDefinitions implements En {
                     assertEquals(driverWrapper.getData(key), driverWrapper.getTextFromDefinitionList(field));
             });
 
-        Then("^The completed test status is \"([^\"]+)\"$", (String result) -> {
-            completeTest(result, false);
+        And("^I check the test information section of the test summary is \"([^\"]+)\"$", (String text) -> {
+            assertTrue(driverWrapper.getTextFromHeading("Test information").contains(text));
         });
 
-        Then("^The completed retest status is \"([^\"]+)\"$", (String result) -> {
-            completeTest(result, true);
+        And("^I check the Brake results section of the test summary is \"([^\"]+)\"$", (String text) -> {
+            assertEquals(text, driverWrapper.getRelativeTextFromHeading("Brake results overall"));
         });
     }
 
@@ -229,40 +229,6 @@ public class TesterDoesStepDefinitions implements En {
         // And I press the "Mark as repaired" button for the specified defect
         driverWrapper.pressButtonWithSiblingElement(
                 "Mark as repaired","input", "value", defect);
-    }
-
-    /**
-     * Completes an MOT test and checks for the specified result. Refactored repeated cucumber steps, the original
-     * steps are detailed below.
-     * @param result    The expected MOT status
-     * @param isRetest  Whether this is a retest
-     */
-    private void completeTest(String result, boolean isRetest) {
-        // And The page title contains "MOT test results"
-        driverWrapper.checkCurrentPageTitle("MOT test results");
-        // And I press the "Review test" button
-        driverWrapper.pressButton("Review test");
-
-        if (isRetest) {
-            // And The page title contains "MOT re-test summary"
-            driverWrapper.checkCurrentPageTitle("MOT re-test summary");
-        } else {
-            // And The page title contains "MOT test summary"
-            driverWrapper.checkCurrentPageTitle("MOT test summary");
-        }
-
-        // And The MOT status is <result>
-        assertTrue("Wrong MOT status", driverWrapper.getElementText("testStatus").contains(result));
-        // And I press the "Save test result" button
-        driverWrapper.pressButton("Save test result");
-
-        if (isRetest) {
-            // Then The page title contains "MOT re-test complete"
-            driverWrapper.checkCurrentPageTitle("MOT re-test complete");
-        } else {
-            // Then The page title contains "MOT test complete"
-            driverWrapper.checkCurrentPageTitle("MOT test complete");
-        }
     }
 
     /**

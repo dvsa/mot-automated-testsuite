@@ -179,6 +179,23 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Press the first of the specified buttons.
+     * @param buttonText  The button text
+     */
+    public void pressFirstButton(String buttonText) {
+        List<WebElement> buttons = findButtons(buttonText);
+        if (buttons.size() == 0) {
+            String message = "No buttons found with text: " + buttonText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            buttons.get(0).submit();
+            waitForPageLoad();
+        }
+    }
+
+    /**
      * Presses the button located by the matching sibling element (located by attribute value).
      * @param buttonText        The button text
      * @param siblingTag        The sibling element tag name
@@ -453,6 +470,30 @@ public class WebDriverWrapper {
     public String getTextFromDefinitionList(String termText) {
         return webDriver.findElement(
                 By.xpath("//dt[contains(text(),'" + termText + "')]/following-sibling::dd[1]")).getText();
+    }
+
+    /**
+     * Fetches the text from any span elements within a h2 element that also has the specified text.
+     * @param headingText  The heading text
+     * @return The span text found
+     */
+    public String getTextFromHeading(String headingText) {
+        List<WebElement> spans = webDriver.findElements(By.xpath("//h2[contains(text(),'" + headingText + "')]/span"));
+        StringBuilder builder = new StringBuilder();
+        for (WebElement span : spans) {
+            builder.append(span.getText());
+        }
+        return builder.toString();
+    }
+
+    /**
+     * Fetches the text from the p element within a div following a h2 element within a div that has the specified text.
+     * @param headingText  The heading text
+     * @return The relative text found
+     */
+    public String getRelativeTextFromHeading(String headingText) {
+        return webDriver.findElement(
+                By.xpath("//h2[contains(text(),'" + headingText + "')]/../following-sibling::div[1]/p")).getText();
     }
 
     /**

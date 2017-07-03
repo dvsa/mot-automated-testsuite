@@ -176,7 +176,7 @@ public class AuthenticationStepDefinitions implements En {
 
             driverWrapper.clickLink(
                     "span", "View  and acknowledge", "../../");
-            driverWrapper.pressButton("Acknowledge");
+            driverWrapper.pressFirstButton("Acknowledge");
         }
         driverWrapper.clickLink("Back");
 
