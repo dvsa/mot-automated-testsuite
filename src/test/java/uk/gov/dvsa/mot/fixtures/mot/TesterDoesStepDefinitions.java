@@ -81,8 +81,20 @@ public class TesterDoesStepDefinitions implements En {
             assertTrue(driverWrapper.getTextFromHeading("Test information").contains(text));
         });
 
-        And("^I check the Brake results section of the test summary is \"([^\"]+)\"$", (String text) -> {
+        And("^I check the brake results section of the test summary is \"([^\"]+)\"$", (String text) -> {
             assertEquals(text, driverWrapper.getRelativeTextFromHeading("Brake results overall"));
+        });
+
+        And("^I check the fails section of the test summary has \"([^\"]+)\"$", (String text) -> {
+            assertTrue(driverWrapper.getTextFromUnorderedList("Fails").contains(text));
+        });
+
+        And("^I check the prs section of the test summary has \"([^\"]+)\"$", (String text) -> {
+            assertTrue(driverWrapper.getTextFromUnorderedList("PRS").contains(text));
+        });
+
+        And("^I check the advisory section of the test summary has \"([^\"]+)\"$", (String text) -> {
+            assertTrue(driverWrapper.getTextFromUnorderedList("Advisory").contains(text));
         });
     }
 

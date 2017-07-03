@@ -463,6 +463,21 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Fetches the text in any list items in a div following the h2 element (also in a div).
+     * @param headingText   The heading text
+     * @return The list item text (concatenated together)
+     */
+    public String getTextFromUnorderedList(String headingText) {
+        WebElement heading = webDriver.findElement(By.xpath("//h2[contains(text(),'" + headingText + "')]"));
+        StringBuilder builder = new StringBuilder();
+        for (WebElement listItem : heading.findElements(By.xpath("../following-sibling::div[1]/ul/li"))) {
+            builder.append(listItem.getText());
+        }
+        return builder.toString();
+    }
+
+
+    /**
      * Fetches the data in the dd element following a specific dt element, in a flat dt/dd list.
      * @param termText  The text that will find the term
      * @return The description text found

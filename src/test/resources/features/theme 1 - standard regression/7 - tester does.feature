@@ -17,7 +17,7 @@ Feature: 7 - Tester does...
     And I check the test information section of the test summary is "Pass"
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the Brake results section of the test summary is "Pass"
+    And I check the brake results section of the test summary is "Pass"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
 
@@ -38,7 +38,7 @@ Feature: 7 - Tester does...
     And I check the test information section of the test summary is "Fail"
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the Brake results section of the test summary is "Fail"
+    And I check the brake results section of the test summary is "Fail"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
 
@@ -62,8 +62,13 @@ Feature: 7 - Tester does...
     And I check the test information section of the test summary is "Fail"
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the Brake results section of the test summary is "Fail"
-    # check for defects
+    And I check the brake results section of the test summary is "Pass"
+    And I check the fails section of the test summary has "Steering system excessively tight"
+    And I check the fails section of the test summary has "Exhaust has a major leak of exhaust gases"
+    And I check the fails section of the test summary has "Battery leaking electrolyte"
+    And I check the fails section of the test summary has "Test defect 1"
+    And I check the fails section of the test summary has "Test defect 2"
+    And I check the fails section of the test summary has "Test defect 3"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
 
@@ -131,8 +136,10 @@ Feature: 7 - Tester does...
     And I check the test information section of the test summary is "Fail"
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the Brake results section of the test summary is "Pass"
-    # check defects
+    And I check the brake results section of the test summary is "Pass"
+    And I check the fails section of the test summary has "engine mounting missing"
+    And I check the fails section of the test summary has "Anti-lock braking system component missing"
+    And I check the fails section of the test summary has "Wheel insecure"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
 
@@ -151,7 +158,7 @@ Feature: 7 - Tester does...
     And I check the test information section of the test summary is "Pass"
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the Brake results section of the test summary is "Pass"
+    And I check the brake results section of the test summary is "None Recorded"
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
 
