@@ -48,10 +48,10 @@ public class LifecycleHooks {
      */
     @Before
     public void startup(Scenario scenario) {
+        logger.debug("Before cucumber scenario: ********** {} **********", scenario.getName());
+
         // load the test datasets to use in the test(s)
         dataProvider.loadAllDatasets();
-
-        logger.debug("Before cucumber scenario: ********** {} **********", scenario.getName());
     }
 
     /**
