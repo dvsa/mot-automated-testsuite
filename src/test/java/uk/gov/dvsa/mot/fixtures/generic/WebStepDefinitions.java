@@ -1,5 +1,8 @@
 package uk.gov.dvsa.mot.fixtures.generic;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
+
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,5 +58,12 @@ public class WebStepDefinitions implements En {
             driverWrapper.checkCurrentPageTitle(expected);
         });
 
+        And("^I check there is a \"([^\"]+)\" link$", (String link) -> {
+            assertTrue(driverWrapper.hasLink(link));
+        });
+
+        And("^I check there is no \"([^\"]+)\" link$", (String link) -> {
+            assertFalse(driverWrapper.hasLink(link));
+        });
     }
 }

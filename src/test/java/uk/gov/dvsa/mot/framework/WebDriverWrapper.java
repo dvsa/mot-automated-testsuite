@@ -255,6 +255,28 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Get the class(es) for the specified link.
+     * @param linkText  The link text
+     * @return The class(es)
+     */
+    public String getLinkClass(String linkText) {
+        List<WebElement> links = findLinks(linkText);
+        if (links.size() == 0) {
+            String message = "No links found with text: " + linkText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else if (links.size() > 1) {
+            String message = "Several links found with text: " + linkText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            return links.get(0).getAttribute("class");
+        }
+    }
+
+    /**
      * Determines whether the current page contains the specified link.
      * @param linkText  The link text
      */
@@ -442,6 +464,27 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Selects the specified radio button.
+     * @param label  The radio button label
+     */
+    public void selectRadio(String label) {
+        // find the input associated with the specified label...
+        WebElement labelElement = webDriver.findElement(By.xpath("//label[contains(text(),'" + label + "')]"));
+        webDriver.findElement(By.id(labelElement.getAttribute("for"))).click();
+    }
+
+    /**
+     * Selects the specified radio button, located by id.
+     * <p>Note: This is a low-level way to locate the field. Please only use this method if the radio button doesn't
+     * have a well-formed label, otherwise use the <code>selectRadio(String)</code> method using the label text to
+     * identify the radio button.</p>
+     * @param id  The radio button id
+     */
+    public void selectRadioById(String id) {
+        webDriver.findElement(By.id(id)).click();
+    }
+
+    /**
      * Selects the specified option in the (dropdown/multi-select) field.
      * @param optionText  The text of the option to select
      * @param label       The field label
@@ -596,7 +639,7 @@ public class WebDriverWrapper {
         // wait until page loaded, ready and JQuery processing completed...
         new WebDriverWait(webDriver, pageWait).pollingEvery(200, TimeUnit.MILLISECONDS).until(
                 (ExpectedCondition<Boolean>) wd ->
-                    ((JavascriptExecutor) wd).executeScript("return jQuery.active").equals(new Long(0L)));
+                    ((JavascriptExecutor) wd).executeScript("return jQuery.active").equals(0L));
 
         logger.debug("Page loaded, ready and JQuery activity complete, waiting for footer image...");
 

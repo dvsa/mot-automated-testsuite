@@ -35,6 +35,10 @@ public class TesterDoesStepDefinitions implements En {
                     enterOdometerReading(driverWrapper.getData(dataKey), amount);
             });
 
+        And("^I enter odometer not present$", () -> {
+            enterOdometerNotPresent();
+        });
+
         And("^I click the \"Aborted by VE\" radio button$", () -> {
             // unfortunately given no proper formed label etc we have to use the id
             driverWrapper.clickElement("reasonForCancel25");
@@ -53,10 +57,15 @@ public class TesterDoesStepDefinitions implements En {
             startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey), true);
         });
 
-        And("^I add a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"\\) "
+        And("^I browse for a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"\\) "
                 + "with comment \"([^\"]+)\"$", (String defectType, String category, String subcategory, String defect,
                     String comment) -> {
-                        addDefect(defectType, category, subcategory, defect, comment);
+                        browseForDefect(defectType, category, subcategory, defect, comment);
+            });
+
+        And("^I search for a \"([^\"]+)\" defect of \"([^\"]+)\" with comment \"([^\"]+)\"$",
+                (String defectType, String defect, String comment) -> {
+                    searchForDefect(defectType, defect, comment);
             });
 
         And("^I enter decelerometer results of service brake (\\d+) and parking brake (\\d+)$",
@@ -70,6 +79,10 @@ public class TesterDoesStepDefinitions implements En {
 
         And("^I search for a vehicle with \"([^\"]+)\", \"([^\"]+)\"$", (String reg, String vin) -> {
             searchForVehicle(reg, vin);
+        });
+
+        And("^I check the \"Add brake test\" link is hidden$", () -> {
+            assertTrue(driverWrapper.getLinkClass("Add brake test").contains("hidden"));
         });
 
         And("^I check the vehicle summary section of the test summary has \"([^\"]+)\" of \\{([^\\}]+)\\}$",
@@ -196,6 +209,23 @@ public class TesterDoesStepDefinitions implements En {
     }
 
     /**
+     * Enter odometer not present. Refactored repeated cucumber steps, the original steps are detailed below.
+     */
+    private void enterOdometerNotPresent() {
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
+        // And I click the "Add reading" link
+        driverWrapper.clickLink("Add reading");
+
+        // And The page title contains "Odometer reading"
+        driverWrapper.checkCurrentPageTitle("Odometer reading");
+        // And I select the "Odometer is not present" radio button (using id as has badly formed label)
+        driverWrapper.selectRadioById("noOdometer");
+        // And I press the "Update reading" button
+        driverWrapper.pressButton("Update reading");
+    }
+
+    /**
      * Enter a Decelerometer brake test result. Refactored repeated cucumber steps, the original steps are detailed
      * below.
      * @param serviceBrakeResult    The service brake result
@@ -252,7 +282,8 @@ public class TesterDoesStepDefinitions implements En {
      * @param defect        The defect
      * @param comment       The comment to use
      */
-    private void addDefect(String defectType, String category, String subcategory, String defect, String comment) {
+    private void browseForDefect(String defectType, String category, String subcategory, String defect,
+                                 String comment) {
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
         // And I click the "Add a defect" link
@@ -290,6 +321,58 @@ public class TesterDoesStepDefinitions implements En {
 
         // And The page title contains "Defects"
         driverWrapper.checkCurrentPageTitle("Defects");
+        // And I click the "Finish and return to MOT test results" link
+        driverWrapper.clickLink("Finish and return to MOT test results");
+
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
+    }
+
+    /**
+     * Adds a defect to the current MOT test, by searching for the specified defect text. Refactored repeated cucumber
+     * steps, the original steps are detailed below.
+     * @param defectType    The defect type, must be "Advisory", "PRS" or "Failure"
+     * @param defect        The defect
+     * @param comment       The comment to use
+     */
+    private void searchForDefect(String defectType, String defect, String comment) {
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
+        // And I click the "Search for a defect" link
+        driverWrapper.clickLink("Search for a defect");
+
+        // And The page title contains "Search for a defect"
+        driverWrapper.checkCurrentPageTitle("Search for a defect");
+        // And I enter <text> into the <search-main> field (has no label)
+        driverWrapper.enterIntoFieldWithId(defect, "search-main");
+        // And I press the "Search" button
+        driverWrapper.pressButton("Search");
+        switch (defectType) {
+            case "Failure":
+                // And I click the Failure button for the specified defect
+                driverWrapper.clickLink("div/strong", defect, "../../ul/", "Failure");
+                // And The page title contains "Add a failure"
+                driverWrapper.checkCurrentPageTitle("Add a failure");
+                // And I enter <comment> into the "Add any further comments if required" field
+                driverWrapper.enterIntoField(comment, "Add any further comments if required");
+                // And I press the "Add failure" button
+                driverWrapper.pressButton("Add failure");
+                break;
+
+            case "PRS":
+                break;
+
+            case "Advisory":
+                break;
+
+            default:
+                String message = "Unknown defect type: " + defectType;
+                logger.error(message);
+                throw new IllegalArgumentException(message);
+        }
+
+        // And The page title contains "Search for a defect"
+        driverWrapper.checkCurrentPageTitle("Search for a defect");
         // And I click the "Finish and return to MOT test results" link
         driverWrapper.clickLink("Finish and return to MOT test results");
 
