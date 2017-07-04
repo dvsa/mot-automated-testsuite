@@ -97,9 +97,40 @@ Feature: 7 - Tester does...
     And The page title contains "MOT test complete"
 
 
-  # Scenario: Tester enters a class 4 MOT test pass, with advisory defects
-    # Add advisory and manual advisory defects
-    # roller brake tests
+  Scenario: Tester enters a class 4 MOT test pass, with advisory defects
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+
+    When I start an MOT test for {registration1}, {vin1}
+    And The page title contains "Your home"
+    And I click the "Enter test results" link
+
+    And I enter an odometer reading of {mileage1} plus 5000
+    And I browse for a "Advisory" defect of ("Drivers view of the road", "Mirrors", "Obligatory mirror seriously obscured affecting the rear view") with comment "Test advisory 1"
+    And I browse for a "Advisory" defect of ("Towbars", "Adjustable towbar", "Adjustable towbar bracket excessively worn") with comment "Test advisory 2"
+    And I search for a "Advisory" defect of "Body or chassis has excessive corrosion, seriously affecting its strength within 30cm of the body mountings" with comment "Test advisory 3"
+    And I search for a "Advisory" defect of "Electrical wiring damaged, likely to cause a short" with comment "Test advisory 4"
+    And I add a manual advisory of "Test manual advisory"
+    # after release 3.11 - use roller brake tests
+    And I enter decelerometer results of service brake 60 and parking brake 60
+    And I press the "Review test" button
+
+    Then The page title contains "MOT test summary"
+    And I check the test information section of the test summary is "Pass"
+    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
+    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the brake results section of the test summary is "Pass"
+    And I check the advisory section of the test summary has "Obligatory mirror obscured but not seriously affecting the rear view"
+    And I check the advisory section of the test summary has "Adjustable towbar bracket slightly worn"
+    And I check the advisory section of the test summary has "Body has slight corrosion"
+    And I check the advisory section of the test summary has "Electrical wiring damaged, but not likely to cause a short"
+    And I check the advisory section of the test summary has "Test advisory 1"
+    And I check the advisory section of the test summary has "Test advisory 2"
+    And I check the advisory section of the test summary has "Test advisory 3"
+    And I check the advisory section of the test summary has "Test advisory 4"
+    And I check the advisory section of the test summary has "Test manual advisory"
+    And I press the "Save test result" button
+    And The page title contains "MOT test complete"
 
 
   # Scenario: Tester enters a class 4 MOT test pass, with advisory and PRS defects

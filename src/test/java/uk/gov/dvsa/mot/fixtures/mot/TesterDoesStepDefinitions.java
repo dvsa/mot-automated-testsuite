@@ -35,9 +35,7 @@ public class TesterDoesStepDefinitions implements En {
                     enterOdometerReading(driverWrapper.getData(dataKey), amount);
             });
 
-        And("^I enter odometer not present$", () -> {
-            enterOdometerNotPresent();
-        });
+        And("^I enter odometer not present$", this::enterOdometerNotPresent);
 
         And("^I click the \"Aborted by VE\" radio button$", () -> {
             // unfortunately given no proper formed label etc we have to use the id
@@ -58,28 +56,19 @@ public class TesterDoesStepDefinitions implements En {
         });
 
         And("^I browse for a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"\\) "
-                + "with comment \"([^\"]+)\"$", (String defectType, String category, String subcategory, String defect,
-                    String comment) -> {
-                        browseForDefect(defectType, category, subcategory, defect, comment);
-            });
+                + "with comment \"([^\"]+)\"$", this::browseForDefect);
 
         And("^I search for a \"([^\"]+)\" defect of \"([^\"]+)\" with comment \"([^\"]+)\"$",
-                (String defectType, String defect, String comment) -> {
-                    searchForDefect(defectType, defect, comment);
-            });
+                this::searchForDefect);
+
+        And("^I add a manual advisory of \"([^\"]+)\"$", this::addManualAdvisory);
 
         And("^I enter decelerometer results of service brake (\\d+) and parking brake (\\d+)$",
-                (Integer serviceBrakeResult, Integer parkingBrakeResult) -> {
-                    enterDecelerometerBrakeResults(serviceBrakeResult, parkingBrakeResult);
-            });
+                this::enterDecelerometerBrakeResults);
 
-        And("^I mark the defect \"([^\"]+)\" as repaired$", (String defect) -> {
-            markAsRepaired(defect);
-        });
+        And("^I mark the defect \"([^\"]+)\" as repaired$", this::markAsRepaired);
 
-        And("^I search for a vehicle with \"([^\"]+)\", \"([^\"]+)\"$", (String reg, String vin) -> {
-            searchForVehicle(reg, vin);
-        });
+        And("^I search for a vehicle with \"([^\"]+)\", \"([^\"]+)\"$", this::searchForVehicle);
 
         And("^I check the \"Add brake test\" link is hidden$", () -> {
             assertTrue(driverWrapper.getLinkClass("Add brake test").contains("hidden"));
@@ -107,7 +96,7 @@ public class TesterDoesStepDefinitions implements En {
         });
 
         And("^I check the advisory section of the test summary has \"([^\"]+)\"$", (String text) -> {
-            assertTrue(driverWrapper.getTextFromUnorderedList("Advisory").contains(text));
+            assertTrue(driverWrapper.getTextFromUnorderedList("Advisory text").contains(text));
         });
     }
 
@@ -231,7 +220,7 @@ public class TesterDoesStepDefinitions implements En {
      * @param serviceBrakeResult    The service brake result
      * @param parkingBrakeResult    The parking brake result
      */
-    private void enterDecelerometerBrakeResults(int serviceBrakeResult, int parkingBrakeResult) {
+    private void enterDecelerometerBrakeResults(Integer serviceBrakeResult, Integer parkingBrakeResult) {
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
         // And I click the "Add brake test" link
@@ -308,9 +297,25 @@ public class TesterDoesStepDefinitions implements En {
                 break;
 
             case "PRS":
+                // And I click the PRS button for the specified defect
+                driverWrapper.clickLink("strong", defect, "../../ul/", "PRS");
+                // And The page title contains "Add a PRS"
+                driverWrapper.checkCurrentPageTitle("Add a PRS");
+                // And I enter <comment> into the "Add any further comments if required" field
+                driverWrapper.enterIntoField(comment, "Add any further comments if required");
+                // And I press the "Add PRS" button
+                driverWrapper.pressButton("Add PRS");
                 break;
 
             case "Advisory":
+                // And I click the Advisory button for the specified defect
+                driverWrapper.clickLink("strong", defect, "../../ul/", "Advisory");
+                // And The page title contains "Add an advisory"
+                driverWrapper.checkCurrentPageTitle("Add an advisory");
+                // And I enter <comment> into the "Add any further comments if required" field
+                driverWrapper.enterIntoField(comment, "Add any further comments if required");
+                // And I press the "Add advisory" button
+                driverWrapper.pressButton("Add advisory");
                 break;
 
             default:
@@ -321,6 +326,37 @@ public class TesterDoesStepDefinitions implements En {
 
         // And The page title contains "Defects"
         driverWrapper.checkCurrentPageTitle("Defects");
+        // And I click the "Finish and return to MOT test results" link
+        driverWrapper.clickLink("Finish and return to MOT test results");
+
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
+    }
+
+    /**
+     * Adds a manual advisory defect to the current MOT test. Refactored repeated cucumber steps, the original steps
+     * are detailed below.
+     * @param comment       The comment to use
+     */
+    private void addManualAdvisory(String comment) {
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
+        // And I click the "Add a defect" link
+        driverWrapper.clickLink("Add a defect");
+
+        // And The page title contains "Defect categories"
+        driverWrapper.checkCurrentPageTitle("Defect categories");
+        // And I click the "Add a manual advisory" link
+        driverWrapper.clickLink("Add a manual advisory");
+
+        // note - page title is blank
+        // And I enter <comment> into the "Give brief details of the defect" field
+        driverWrapper.enterIntoField(comment, "Give brief details of the defect");
+        // And I press the "Add manual advisory" button
+        driverWrapper.pressButton("Add manual advisory");
+
+        // And The page title contains "Defect categories"
+        driverWrapper.checkCurrentPageTitle("Defect categories");
         // And I click the "Finish and return to MOT test results" link
         driverWrapper.clickLink("Finish and return to MOT test results");
 
@@ -360,9 +396,25 @@ public class TesterDoesStepDefinitions implements En {
                 break;
 
             case "PRS":
+                // And I click the PRS button for the specified defect
+                driverWrapper.clickLink("div/strong", defect, "../../ul/", "PRS");
+                // And The page title contains "Add a PRS"
+                driverWrapper.checkCurrentPageTitle("Add a PRS");
+                // And I enter <comment> into the "Add any further comments if required" field
+                driverWrapper.enterIntoField(comment, "Add any further comments if required");
+                // And I press the "Add PRS" button
+                driverWrapper.pressButton("Add PRS");
                 break;
 
             case "Advisory":
+                // And I click the Advisory button for the specified defect
+                driverWrapper.clickLink("div/strong", defect, "../../ul/", "Advisory");
+                // And The page title contains "Add an advisory"
+                driverWrapper.checkCurrentPageTitle("Add an advisory");
+                // And I enter <comment> into the "Add any further comments if required" field
+                driverWrapper.enterIntoField(comment, "Add any further comments if required");
+                // And I press the "Add advisory" button
+                driverWrapper.pressButton("Add advisory");
                 break;
 
             default:
