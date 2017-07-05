@@ -1,5 +1,6 @@
 package uk.gov.dvsa.mot.fixtures.mot;
 
+import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
@@ -30,30 +31,24 @@ public class TesterDoesStepDefinitions implements En {
         logger.debug("Creating TesterDoesStepDefinitions...");
         this.driverWrapper = driverWrapper;
 
-        And("^I enter an odometer reading of \\{([^\\}]+)\\} plus (\\d+)$",
-                (String dataKey, Integer amount) -> {
-                    enterOdometerReading(driverWrapper.getData(dataKey), amount);
-            });
+        And("^I enter an odometer reading of \\{([^\\}]+)\\} plus (\\d+)$", (String dataKey, Integer amount) ->
+                enterOdometerReading(driverWrapper.getData(dataKey), amount));
 
         And("^I enter odometer not present$", this::enterOdometerNotPresent);
 
-        And("^I click the \"Aborted by VE\" radio button$", () -> {
-            // unfortunately given no proper formed label etc we have to use the id
-            driverWrapper.clickElement("reasonForCancel25");
-        });
+        And("^I click the \"Aborted by VE\" radio button$", () ->
+                // unfortunately given no proper formed label etc we have to use the id
+                driverWrapper.clickElement("reasonForCancel25"));
 
-        And("^The MOT status is \"([^\"]+)\"$", (String status) -> {
-            // unfortunately given no proper formed label etc we have to use the id
-            assertTrue("Wrong MOT status", driverWrapper.getElementText("testStatus").contains(status));
-        });
+        And("^The MOT status is \"([^\"]+)\"$", (String status) ->
+                // unfortunately given no proper formed label etc we have to use the id
+                assertTrue("Wrong MOT status", driverWrapper.getElementText("testStatus").contains(status)));
 
-        When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", (String regKey, String vinKey) -> {
-            startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey), false);
-        });
+        When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", (String regKey, String vinKey) ->
+                startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey), false));
 
-        When("^I start an MOT retest for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", (String regKey, String vinKey) -> {
-            startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey), true);
-        });
+        When("^I start an MOT retest for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", (String regKey, String vinKey) ->
+                startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey), true));
 
         And("^I browse for a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"\\) "
                 + "with comment \"([^\"]+)\"$", this::browseForDefect);
@@ -62,6 +57,16 @@ public class TesterDoesStepDefinitions implements En {
                 this::searchForDefect);
 
         And("^I add a manual advisory of \"([^\"]+)\"$", this::addManualAdvisory);
+
+        And("^I edit the \"([^\"]+)\" defect of \"([^\"]+)\" with comment \"([^\"]+)\" and not dangerous$",
+                (String defectType, String defect, String updatedComment) ->
+                    editDefect(defectType, defect, updatedComment, false));
+
+        And("^I edit the \"([^\"]+)\" defect of \"([^\"]+)\" with comment \"([^\"]+)\" and is dangerous$",
+                (String defectType, String defect, String updatedComment) ->
+                    editDefect(defectType, defect, updatedComment, true));
+
+        And("^I remove the \"([^\"]+)\" defect of \"([^\"]+)\"$", this::removeDefect);
 
         And("^I enter decelerometer results of service brake (\\d+) and parking brake (\\d+)$",
                 this::enterDecelerometerBrakeResults);
@@ -73,34 +78,36 @@ public class TesterDoesStepDefinitions implements En {
 
         And("^I search for a vehicle with \"([^\"]+)\", \"([^\"]+)\"$", this::searchForVehicle);
 
-        And("^I check the \"Add brake test\" link is hidden$", () -> {
-            assertTrue(driverWrapper.getLinkClass("Add brake test").contains("hidden"));
-        });
+        And("^I check the \"Add brake test\" link is hidden$", () ->
+                assertTrue(driverWrapper.getLinkClass("Add brake test").contains("hidden")));
 
         And("^I check the vehicle summary section of the test summary has \"([^\"]+)\" of \\{([^\\}]+)\\}$",
-                (String field, String key) -> {
-                    assertEquals(driverWrapper.getData(key), driverWrapper.getTextFromDefinitionList(field));
-            });
+                (String field, String key) ->
+                    assertEquals(driverWrapper.getData(key), driverWrapper.getTextFromDefinitionList(field)));
 
-        And("^I check the test information section of the test summary is \"([^\"]+)\"$", (String text) -> {
-            assertTrue(driverWrapper.getTextFromHeading("Test information").contains(text));
-        });
+        And("^I check the test information section of the test summary is \"([^\"]+)\"$", (String text) ->
+                assertTrue(driverWrapper.getTextFromHeading("Test information").contains(text)));
 
-        And("^I check the brake results section of the test summary is \"([^\"]+)\"$", (String text) -> {
-            assertEquals(text, driverWrapper.getRelativeTextFromHeading("Brake results overall"));
-        });
+        And("^I check the brake results section of the test summary is \"([^\"]+)\"$", (String text) ->
+                assertEquals(text, driverWrapper.getRelativeTextFromHeading("Brake results overall")));
 
-        And("^I check the fails section of the test summary has \"([^\"]+)\"$", (String text) -> {
-            assertTrue(driverWrapper.getTextFromUnorderedList("Fails").contains(text));
-        });
+        And("^I check the fails section of the test summary has \"([^\"]+)\"$", (String text) ->
+                assertTrue(driverWrapper.getTextFromUnorderedList("Fails").contains(text)));
 
-        And("^I check the prs section of the test summary has \"([^\"]+)\"$", (String text) -> {
-            assertTrue(driverWrapper.getTextFromUnorderedList("PRS").contains(text));
-        });
+        And("^I check the prs section of the test summary has \"([^\"]+)\"$", (String text) ->
+                assertTrue(driverWrapper.getTextFromUnorderedList("PRS").contains(text)));
 
-        And("^I check the advisory section of the test summary has \"([^\"]+)\"$", (String text) -> {
-            assertTrue(driverWrapper.getTextFromUnorderedList("Advisory text").contains(text));
-        });
+        And("^I check the advisory section of the test summary has \"([^\"]+)\"$", (String text) ->
+                assertTrue(driverWrapper.getTextFromUnorderedList("Advisory text").contains(text)));
+
+        And("^I check the fails section of the test summary does not have \"([^\"]+)\"$", (String text) ->
+                assertFalse(driverWrapper.getTextFromUnorderedList("Fails").contains(text)));
+
+        And("^I check the prs section of the test summary does not have \"([^\"]+)\"$", (String text) ->
+                assertFalse(driverWrapper.getTextFromUnorderedList("PRS").contains(text)));
+
+        And("^I check the advisory section of the test summary does not have \"([^\"]+)\"$", (String text) ->
+                assertFalse(driverWrapper.getTextFromUnorderedList("Advisory text").contains(text)));
     }
 
     /**
@@ -314,6 +321,103 @@ public class TesterDoesStepDefinitions implements En {
         // And I press the "Mark as repaired" button for the specified defect
         driverWrapper.pressButtonWithSiblingElement(
                 "Mark as repaired","input", "value", defect);
+    }
+
+    /**
+     * Edits the specified defect, updating the comment, and possibly marking as dangerous. Refactored repeated
+     * cucumber steps, the original steps are detailed below.
+     * @param defectType        The defect type, must be "Advisory", "PRS" or "Failure"
+     * @param defect            The defect
+     * @param updatedComment    The updated comment
+     * @param isDangerous       Whether this defect should be marked as dangerous
+     */
+    private void editDefect(String defectType, String defect, String updatedComment, boolean isDangerous) {
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
+
+        // And I click the "Edit" link for the specified defect
+        driverWrapper.clickLink("h4", defect, "../../ul/", "Edit");
+
+        // Note: page title is blank
+        // And I enter <comment> into the "Add any further comments if required" field
+        driverWrapper.enterIntoField(updatedComment, "Add any further comments if required");
+
+        switch (defectType) {
+            case "Failure":
+                if (isDangerous) {
+                    // And I select the dangerous radio button (by id as label badly formed)
+                    driverWrapper.selectRadioById("failureDangerous");
+                }
+                // And I press the "Edit failure" button
+                driverWrapper.pressButton("Edit failure");
+                break;
+
+            case "PRS":
+                if (isDangerous) {
+                    // And I select the dangerous radio button (by id as label badly formed)
+                    driverWrapper.selectRadioById("prsDangerous");
+                }
+                // And I press the "Edit PRS" button
+                driverWrapper.pressButton("Edit PRS");
+                break;
+
+            case "Advisory":
+                if (isDangerous) {
+                    // And I select the dangerous radio button (by id as label badly formed)
+                    driverWrapper.selectRadioById("advisoryDangerous");
+                }
+                // And I press the "Edit advisory" button
+                driverWrapper.pressButton("Edit advisory");
+                break;
+
+            default:
+                String message = "Unknown defect type: " + defectType;
+                logger.error(message);
+                throw new IllegalArgumentException(message);
+        }
+
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
+    }
+
+    /**
+     * Removes the specified defect. Refactored repeated cucumber steps, the original steps are detailed below.
+     * @param defectType        The defect type, must be "Advisory", "PRS" or "Failure"
+     * @param defect            The defect
+     */
+    private void removeDefect(String defectType, String defect) {
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
+
+        // And I click the "Remove" link for the specified defect
+        driverWrapper.clickLink("h4", defect, "../../ul/", "Remove");
+
+        // Note: page title is blank
+
+        switch (defectType) {
+            case "Failure":
+                // And I press the "Remove failure" button
+                driverWrapper.pressButton("Remove failure");
+                break;
+
+            case "PRS":
+                // And I press the "Remove PRS" button
+                driverWrapper.pressButton("Remove PRS");
+                break;
+
+            case "Advisory":
+                // And I press the "Remove advisory" button
+                driverWrapper.pressButton("Remove advisory");
+                break;
+
+            default:
+                String message = "Unknown defect type: " + defectType;
+                logger.error(message);
+                throw new IllegalArgumentException(message);
+        }
+
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
     }
 
     /**
