@@ -14,6 +14,7 @@ import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -22,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +86,16 @@ public class WebDriverWrapper {
             // path to driver executable
             System.setProperty("webdriver.chrome.driver", env.getRequiredProperty("driver"));
 
-            this.webDriver = new ChromeDriver(chromeOptions);
+            //If gridURL is set create a remote webdriver instance
+            if (env.containsProperty("gridURL")) {
+                try {
+                    this.webDriver = new RemoteWebDriver(new URL(env.getProperty("gridURL")), capabilities);
+                } catch (MalformedURLException malformedUrlException) {
+                    logger.error("Error while creating remote driver: " + malformedUrlException.getMessage());
+                }
+            } else {
+                this.webDriver = new ChromeDriver(chromeOptions);
+            }
         } else {
             String message = "Unsupported browser: " + browser;
             logger.error(message);
