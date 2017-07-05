@@ -335,46 +335,9 @@ public class TesterDoesStepDefinitions implements En {
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
 
-        // And I click the "Edit" link for the specified defect
-        driverWrapper.clickLink("h4", defect, "../../ul/", "Edit");
-
-        // Note: page title is blank
-        // And I enter <comment> into the "Add any further comments if required" field
-        driverWrapper.enterIntoField(updatedComment, "Add any further comments if required");
-
-        switch (defectType) {
-            case "Failure":
-                if (isDangerous) {
-                    // And I select the dangerous radio button (by id as label badly formed)
-                    driverWrapper.selectRadioById("failureDangerous");
-                }
-                // And I press the "Edit failure" button
-                driverWrapper.pressButton("Edit failure");
-                break;
-
-            case "PRS":
-                if (isDangerous) {
-                    // And I select the dangerous radio button (by id as label badly formed)
-                    driverWrapper.selectRadioById("prsDangerous");
-                }
-                // And I press the "Edit PRS" button
-                driverWrapper.pressButton("Edit PRS");
-                break;
-
-            case "Advisory":
-                if (isDangerous) {
-                    // And I select the dangerous radio button (by id as label badly formed)
-                    driverWrapper.selectRadioById("advisoryDangerous");
-                }
-                // And I press the "Edit advisory" button
-                driverWrapper.pressButton("Edit advisory");
-                break;
-
-            default:
-                String message = "Unknown defect type: " + defectType;
-                logger.error(message);
-                throw new IllegalArgumentException(message);
-        }
+        // edit the defect
+        handleDefect(DefectJourney.EditFromSummary, defect, DefectType.fromString(defectType), updatedComment,
+                isDangerous);
 
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
@@ -394,27 +357,8 @@ public class TesterDoesStepDefinitions implements En {
 
         // Note: page title is blank
 
-        switch (defectType) {
-            case "Failure":
-                // And I press the "Remove failure" button
-                driverWrapper.pressButton("Remove failure");
-                break;
-
-            case "PRS":
-                // And I press the "Remove PRS" button
-                driverWrapper.pressButton("Remove PRS");
-                break;
-
-            case "Advisory":
-                // And I press the "Remove advisory" button
-                driverWrapper.pressButton("Remove advisory");
-                break;
-
-            default:
-                String message = "Unknown defect type: " + defectType;
-                logger.error(message);
-                throw new IllegalArgumentException(message);
-        }
+        // And I press the "Remove <failure/PRS/advisory>" button
+        driverWrapper.pressButton("Remove " + DefectType.fromString(defectType).description);
 
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
@@ -442,45 +386,9 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.clickLink(category);
         // And I click the <subcategory> link
         driverWrapper.clickLink(subcategory);
-        switch (defectType) {
-            case "Failure":
-                // And I click the Failure button for the specified defect
-                driverWrapper.clickLink("strong", defect, "../../ul/", "Failure");
-                // And The page title contains "Add a failure"
-                driverWrapper.checkCurrentPageTitle("Add a failure");
-                // And I enter <comment> into the "Add any further comments if required" field
-                driverWrapper.enterIntoField(comment, "Add any further comments if required");
-                // And I press the "Add failure" button
-                driverWrapper.pressButton("Add failure");
-                break;
 
-            case "PRS":
-                // And I click the PRS button for the specified defect
-                driverWrapper.clickLink("strong", defect, "../../ul/", "PRS");
-                // And The page title contains "Add a PRS"
-                driverWrapper.checkCurrentPageTitle("Add a PRS");
-                // And I enter <comment> into the "Add any further comments if required" field
-                driverWrapper.enterIntoField(comment, "Add any further comments if required");
-                // And I press the "Add PRS" button
-                driverWrapper.pressButton("Add PRS");
-                break;
-
-            case "Advisory":
-                // And I click the Advisory button for the specified defect
-                driverWrapper.clickLink("strong", defect, "../../ul/", "Advisory");
-                // And The page title contains "Add an advisory"
-                driverWrapper.checkCurrentPageTitle("Add an advisory");
-                // And I enter <comment> into the "Add any further comments if required" field
-                driverWrapper.enterIntoField(comment, "Add any further comments if required");
-                // And I press the "Add advisory" button
-                driverWrapper.pressButton("Add advisory");
-                break;
-
-            default:
-                String message = "Unknown defect type: " + defectType;
-                logger.error(message);
-                throw new IllegalArgumentException(message);
-        }
+        // add the defect
+        handleDefect(DefectJourney.AddFromBrowse, defect, DefectType.fromString(defectType), comment, false);
 
         // And The page title contains "Defects"
         driverWrapper.checkCurrentPageTitle("Defects");
@@ -541,45 +449,9 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.enterIntoFieldWithId(defect, "search-main");
         // And I press the "Search" button
         driverWrapper.pressButton("Search");
-        switch (defectType) {
-            case "Failure":
-                // And I click the Failure button for the specified defect
-                driverWrapper.clickLink("div/strong", defect, "../../ul/", "Failure");
-                // And The page title contains "Add a failure"
-                driverWrapper.checkCurrentPageTitle("Add a failure");
-                // And I enter <comment> into the "Add any further comments if required" field
-                driverWrapper.enterIntoField(comment, "Add any further comments if required");
-                // And I press the "Add failure" button
-                driverWrapper.pressButton("Add failure");
-                break;
 
-            case "PRS":
-                // And I click the PRS button for the specified defect
-                driverWrapper.clickLink("div/strong", defect, "../../ul/", "PRS");
-                // And The page title contains "Add a PRS"
-                driverWrapper.checkCurrentPageTitle("Add a PRS");
-                // And I enter <comment> into the "Add any further comments if required" field
-                driverWrapper.enterIntoField(comment, "Add any further comments if required");
-                // And I press the "Add PRS" button
-                driverWrapper.pressButton("Add PRS");
-                break;
-
-            case "Advisory":
-                // And I click the Advisory button for the specified defect
-                driverWrapper.clickLink("div/strong", defect, "../../ul/", "Advisory");
-                // And The page title contains "Add an advisory"
-                driverWrapper.checkCurrentPageTitle("Add an advisory");
-                // And I enter <comment> into the "Add any further comments if required" field
-                driverWrapper.enterIntoField(comment, "Add any further comments if required");
-                // And I press the "Add advisory" button
-                driverWrapper.pressButton("Add advisory");
-                break;
-
-            default:
-                String message = "Unknown defect type: " + defectType;
-                logger.error(message);
-                throw new IllegalArgumentException(message);
-        }
+        // add the defect
+        handleDefect(DefectJourney.AddFromSearch, defect, DefectType.fromString(defectType), comment, false);
 
         // And The page title contains "Search for a defect"
         driverWrapper.checkCurrentPageTitle("Search for a defect");
@@ -588,5 +460,111 @@ public class TesterDoesStepDefinitions implements En {
 
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
+    }
+
+    /**
+     * Handles adding and editing defects of all types, from defect browse or search.
+     * @param journey                   The user journey being followed
+     * @param defect                    The defect description
+     * @param defectType                The defect type
+     * @param comment                   The comment to add/update
+     * @param isDangerous               Whether to mark this defect as dangerous
+     */
+    private void handleDefect(DefectJourney journey, String defect, DefectType defectType, String comment,
+                              boolean isDangerous) {
+        switch (journey) {
+            case AddFromSearch:
+                // And I click the <Advisory> button for the specified defect
+                // (note - need to ignore the defect listed as "You searched for...")
+                driverWrapper.clickLink("div/strong", defect, "../../ul/", defectType.type);
+                break;
+
+            case AddFromBrowse:
+                // And I click the Advisory button for the specified defect
+                driverWrapper.clickLink("strong", defect, "../../ul/", defectType.type);
+                break;
+
+            case EditFromSummary:
+                // And I click the "Edit" link for the specified defect
+                driverWrapper.clickLink("h4", defect, "../../ul/", "Edit");
+                break;
+
+            default:
+                break;
+        }
+
+        // Note: new page title at this point is not always populated
+
+        // And I enter <comment> into the "Add any further comments if required" field
+        driverWrapper.enterIntoField(comment, "Add any further comments if required");
+
+        if (isDangerous) {
+            // And I select the dangerous radio button (by id as label badly formed)
+            driverWrapper.selectRadioById(defectType.type.toLowerCase() + "Dangerous");
+        }
+
+        // And I press the "<Add/Edit> <advisory>" button
+        driverWrapper.pressButton(journey.action + " " + defectType.description);
+    }
+
+    /** Encapsulates the user journey being followed. */
+    private enum DefectJourney {
+        AddFromSearch("Add"), AddFromBrowse("Add"), EditFromSummary("Edit");
+
+        /** The action being applied to the defect. */
+        private final String action;
+
+        /**
+         * Creates a new instance.
+         * @param action    The defect action
+         */
+        DefectJourney(String action) {
+            this.action = action;
+        }
+    }
+
+    /** Encapsulates the type of defect. */
+    private enum DefectType {
+        Failure("Failure", "failure"), PRS("PRS", "PRS"), Advisory("Advisory", "advisory");
+
+        /** Capitalised defect type. */
+        private final String type;
+
+        /** Lower case (unless abbreviated) defect type. */
+        private final String description;
+
+        /**
+         * Creates a new instance.
+         * @param type              The Capitalised defect type.
+         * @param description       The Lower case (unless abbreviated) defect type.
+         */
+        DefectType(String type, String description) {
+            this.type = type;
+            this.description = description;
+        }
+
+        /**
+         * Converts a <code>String</code> to a <code>DefectType</code>.
+         * @param type      The string
+         * @return The defect type
+         * @throws IllegalArgumentException If the string is invalid
+         */
+        public static DefectType fromString(String type) {
+            switch (type) {
+                case "Failure":
+                    return Failure;
+
+                case "PRS":
+                    return PRS;
+
+                case "Advisory":
+                    return Advisory;
+
+                default:
+                    String message = "Unknown defect type: " + type;
+                    logger.error(message);
+                    throw new IllegalArgumentException(message);
+            }
+        }
     }
 }
