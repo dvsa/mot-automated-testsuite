@@ -113,7 +113,7 @@ Feature: 7 - Tester does...
     And I search for a "Advisory" defect of "Body or chassis has excessive corrosion, seriously affecting its strength within 30cm of the body mountings" with comment "Test advisory 3"
     And I search for a "Advisory" defect of "Electrical wiring damaged, likely to cause a short" with comment "Test advisory 4"
     And I add a manual advisory of "Test manual advisory"
-    # after release 3.11 - use roller brake tests
+    # after release 3.11 - use roller brake tests instead of decelerometer
     And I enter decelerometer results of service brake 60 and parking brake 60
     And I press the "Review test" button
 
@@ -299,13 +299,27 @@ Feature: 7 - Tester does...
     # Repair all failures
     # Brake test reentry required as not previously entered (review test button disabled)
 
-  # Scenario: Tester enters a class 1 MOT test pass
-    # Select vehicle start test
-    # Check inspection sheet - Class 1 and 2 version
-    # Enter odometer (check for odometer warnings)
-    # Add roller brake test (roughly check calculations)
-    # Check summary and complete
-    # Check Certificate (dates and details)
+  Scenario: Tester enters a class 1 MOT test pass
+    Given I load "VEHICLE_CLASS_1" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_1" as {username1}, {site}
+
+    When I start an MOT test for {registration1}, {vin1}
+    And The page title contains "Your home"
+    And I click the "Enter test results" link
+
+    And I enter an odometer reading of {mileage1} plus 5000
+    # after release 3.11 - use roller brake tests instead of decelerometer
+    And I enter decelerometer results of efficiency 60
+    And I press the "Review test" button
+
+    Then The page title contains "MOT test summary"
+    And I check the test information section of the test summary is "Pass"
+    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
+    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the brake results section of the test summary is "Pass"
+    And I check the fails section of the test summary has "None recorded"
+    And I press the "Save test result" button
+    And The page title contains "MOT test complete"
 
   # Scenario: Tester enters a class 2 MOT test fail, with colour change
     # Search for vehicle

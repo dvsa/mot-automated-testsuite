@@ -68,8 +68,12 @@ public class TesterDoesStepDefinitions implements En {
 
         And("^I remove the \"([^\"]+)\" defect of \"([^\"]+)\"$", this::removeDefect);
 
+        And("^I enter decelerometer results of efficiency (\\d+)$", (Integer efficiency) ->
+                enterDecelerometerBrakeResults(efficiency));
+
         And("^I enter decelerometer results of service brake (\\d+) and parking brake (\\d+)$",
-                this::enterDecelerometerBrakeResults);
+                (Integer serviceBrake, Integer parkingBrake) ->
+                        enterDecelerometerBrakeResults(serviceBrake, parkingBrake));
 
         And("^I enter decelerometer service brake result of (\\d+) and gradient parking brake result "
                 + "of \"([^\"]+)\"$", this::enterDecelerometerAndGradientBrakeResults);
@@ -222,6 +226,39 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.selectRadioById("noOdometer");
         // And I press the "Update reading" button
         driverWrapper.pressButton("Update reading");
+    }
+
+    /**
+     * Enter a Decelerometer brake test result (class 1). Refactored repeated cucumber steps, the original steps are
+     * detailed below.
+     * @param brakeResult    The brake result
+     */
+    private void enterDecelerometerBrakeResults(Integer brakeResult) {
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
+        // And I click the "Add brake test" link
+        driverWrapper.clickLink("Add brake test");
+
+        // And The page title contains "Brake test configuration"
+        //defect in release 3.10, title missing - driverWrapper.checkCurrentPageTitle("Brake test configuration");
+        // And I select "Decelerometer" in the "Brake test type" field
+        driverWrapper.selectOptionInField("Decelerometer", "Brake test type");
+        // And I press the "Next" button
+        driverWrapper.pressButton("Next");
+
+        // And The page title contains "Add brake test results"
+        driverWrapper.checkCurrentPageTitle("Add brake test results");
+        // And I enter <n> in the "Control one" field
+        driverWrapper.enterIntoField(String.valueOf(brakeResult), "Control one");
+        // And I enter <n> in the "Control two" field
+        driverWrapper.enterIntoField(String.valueOf(brakeResult), "Control two");
+        // And I press the "Submit" button
+        driverWrapper.pressButton("Submit");
+
+        // And The page title contains "Brake test summary"
+        driverWrapper.checkCurrentPageTitle("Brake test summary");
+        // And I click the "Done" link
+        driverWrapper.clickLink("Done");
     }
 
     /**
