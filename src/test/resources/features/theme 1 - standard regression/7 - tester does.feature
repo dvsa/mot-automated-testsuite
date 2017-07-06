@@ -10,7 +10,7 @@ Feature: 7 - Tester does...
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
-    And I enter an odometer reading of {mileage1} plus 5000
+    And I enter an odometer reading in miles of {mileage1} plus 5000
     And I enter decelerometer results of service brake 60 and parking brake 60
     And I press the "Review test" button
 
@@ -32,7 +32,7 @@ Feature: 7 - Tester does...
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
-    And I enter an odometer reading of {mileage1} plus 5000
+    And I enter an odometer reading in miles of {mileage1} plus 5000
     And I enter decelerometer results of service brake 20 and parking brake 20
     And I press the "Review test" button
 
@@ -54,7 +54,7 @@ Feature: 7 - Tester does...
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
-    And I enter an odometer reading of {mileage1} plus 5000
+    And I enter an odometer reading in miles of {mileage1} plus 5000
     And I browse for a "Failure" defect of ("Steering", "Steering operation", "Steering system excessively tight") with comment "Test defect 1"
     And I browse for a "Failure" defect of ("Exhaust, fuel and emissions", "Exhaust system", "Exhaust has a major leak of exhaust gases") with comment "Test defect 2"
     And I browse for a "Failure" defect of ("Lamps, reflectors and electrical equipment", "Battery", "Battery leaking electrolyte") with comment "Test defect 3"
@@ -107,7 +107,7 @@ Feature: 7 - Tester does...
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
-    And I enter an odometer reading of {mileage1} plus 5000
+    And I enter an odometer reading in miles of {mileage1} plus 5000
     And I browse for a "Advisory" defect of ("Drivers view of the road", "Mirrors", "Obligatory mirror seriously obscured affecting the rear view") with comment "Test advisory 1"
     And I browse for a "Advisory" defect of ("Towbars", "Adjustable towbar", "Adjustable towbar bracket excessively worn") with comment "Test advisory 2"
     And I search for a "Advisory" defect of "Body or chassis has excessive corrosion, seriously affecting its strength within 30cm of the body mountings" with comment "Test advisory 3"
@@ -143,7 +143,7 @@ Feature: 7 - Tester does...
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
-    And I enter an odometer reading of {mileage1} plus 5000
+    And I enter an odometer reading in miles of {mileage1} plus 5000
     And I browse for a "PRS" defect of ("Towbars", "Adjustable towbar", "Adjustable towbar bracket excessively worn") with comment "Test prs 1"
     And I search for a "PRS" defect of "Electrical wiring damaged, likely to cause a short" with comment "Test prs 2"
     And I browse for a "Advisory" defect of ("Drivers view of the road", "Mirrors", "Obligatory mirror seriously obscured affecting the rear view") with comment "Test advisory 1"
@@ -177,7 +177,7 @@ Feature: 7 - Tester does...
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
-    And I enter an odometer reading of {mileage1} plus 5000
+    And I enter an odometer reading in miles of {mileage1} plus 5000
 
     And I browse for a "Advisory" defect of ("Drivers view of the road", "Mirrors", "Obligatory mirror seriously obscured affecting the rear view") with comment "Test advisory 1"
     And I search for a "Advisory" defect of "Body or chassis has excessive corrosion, seriously affecting its strength within 30cm of the body mountings" with comment "Test advisory 2"
@@ -249,7 +249,7 @@ Feature: 7 - Tester does...
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
-    And I enter an odometer reading of {mileage1} plus 5000
+    And I enter an odometer reading in miles of {mileage1} plus 5000
     And I browse for a "Failure" defect of ("Body, structure and general items", "Engine mountings", "Engine mounting missing") with comment "Test defect 1"
     And I browse for a "Failure" defect of ("Brakes", "ABS", "Anti-lock braking system component missing") with comment "Test defect 2"
     And I browse for a "Failure" defect of ("Road wheels", "Attachment", "Wheel insecure") with comment "Test defect 3"
@@ -272,7 +272,7 @@ Feature: 7 - Tester does...
     And The page title contains "Your home"
     And I click the "Enter retest results" link
 
-    And I enter an odometer reading of {mileage1} plus 5000
+    And I enter an odometer reading in miles of {mileage1} plus 5000
     And I mark the defect "engine mounting missing" as repaired
     And I mark the defect "Anti-lock braking system component missing" as repaired
     And I mark the defect "Wheel insecure" as repaired
@@ -307,7 +307,7 @@ Feature: 7 - Tester does...
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
-    And I enter an odometer reading of {mileage1} plus 5000
+    And I enter an odometer reading in miles of {mileage1} plus 5000
     # after release 3.11 - use roller brake tests instead of decelerometer
     And I enter decelerometer results of efficiency 60
     And I press the "Review test" button
@@ -371,14 +371,41 @@ Feature: 7 - Tester does...
     # Check summary and complete
     # Check Certificate (dates and details)
 
-  # Scenario: Tester enters a class 4 MOT test pass, for a new vehicle
-    # Search for vehicle that does not exist ANDY1 / 111111
-    # Enter required fields then confirm for test
-    # Check inspection sheet
-    # Enter odometer in KM
-    # Add failure
-    # Add Decelerometer brake test
-    # Check summary and complete
-    # Check Certificate (dates and details)
+  Scenario: Tester enters a class 4 MOT test pass, for a new vehicle
+    Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+    And I search for a vehicle with " ", " "
+    And I click the "create a new vehicle record" link
+
+    And The page title contains "Make a new vehicle record"
+    And I click the "Start now" link
+    And I enter reg "ANDY1" and vin "111111"
+    And I select make "AUDI" and model "A1"
+    And I select fuel type "Petrol" and cylinder capacity 1200
+    And I select Vehicle Class 4
+    And I select primary colour "Blue" and secondary colour "No other colour"
+    And I select country of registration "GB, UK, ENG, CYM, SCO (UK) - Great Britain"
+    And I enter the date of first use as today minus 4 years
+
+    And The page title contains "Confirm new record and start test"
+    And I press the "Confirm and start test" button
+    And The page title contains "MOT test started"
+    And I click the "Continue to home" link
+
+    And The page title contains "Your home"
+    When I click the "Enter test results" link
+    And I enter an odometer reading in kilometres of 12345
+    And I enter decelerometer results of service brake 60 and parking brake 60
+    And I press the "Review test" button
+
+    Then The page title contains "MOT test summary"
+    And I check the test information section of the test summary is "Pass"
+    And I check the vehicle summary section of the test summary has "Registration number" of "ANDY1"
+    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of "111111"
+    And I check the vehicle summary section of the test summary has "Colour" of "Blue"
+    And I check the brake results section of the test summary is "Pass"
+    And I check the fails section of the test summary has "None recorded"
+    And I press the "Save test result" button
+    And The page title contains "MOT test complete"
+
 
   # TODO: group common passes/fails into scenario examples

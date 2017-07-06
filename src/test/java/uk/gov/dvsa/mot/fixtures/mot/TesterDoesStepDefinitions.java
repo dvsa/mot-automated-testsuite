@@ -31,10 +31,17 @@ public class TesterDoesStepDefinitions implements En {
         logger.debug("Creating TesterDoesStepDefinitions...");
         this.driverWrapper = driverWrapper;
 
-        And("^I enter an odometer reading of \\{([^\\}]+)\\} plus (\\d+)$", (String dataKey, Integer amount) ->
-                enterOdometerReading(driverWrapper.getData(dataKey), amount));
+        And("^I enter an odometer reading in miles of \\{([^\\}]+)\\} plus (\\d+)$",
+                (String dataKey, Integer amount) -> {
+                    int startingMileage = Integer.parseInt(driverWrapper.getData(dataKey));
+                    enterOdometerReading(OdometerJourney.EnterInMiles, startingMileage + amount);
+            });
 
-        And("^I enter odometer not present$", this::enterOdometerNotPresent);
+        And("^I enter an odometer reading in kilometres of (\\d+)$", (Integer amount) ->
+                enterOdometerReading(OdometerJourney.EnterInKilometres, amount));
+
+        And("^I enter odometer not present$", () ->
+                enterOdometerReading(OdometerJourney.NotPresent, 0));
 
         And("^I click the \"Aborted by VE\" radio button$", () ->
                 // unfortunately given no proper formed label etc we have to use the id
@@ -88,6 +95,10 @@ public class TesterDoesStepDefinitions implements En {
         And("^I check the vehicle summary section of the test summary has \"([^\"]+)\" of \\{([^\\}]+)\\}$",
                 (String field, String key) ->
                     assertEquals(driverWrapper.getData(key), driverWrapper.getTextFromDefinitionList(field)));
+
+        And("^I check the vehicle summary section of the test summary has \"([^\"]+)\" of \"([^\"]+)\"$",
+                (String field, String value) ->
+                        assertEquals(value, driverWrapper.getTextFromDefinitionList(field)));
 
         And("^I check the test information section of the test summary is \"([^\"]+)\"$", (String text) ->
                 assertTrue(driverWrapper.getTextFromHeading("Test information").contains(text)));
@@ -190,31 +201,18 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.checkCurrentPageTitle("Find a vehicle");
     }
 
-    /**
-     * Enter an odometer reading of mileage plus the specified amount. Refactored repeated cucumber steps, the
-     * original steps are detailed below.
-     * @param mileage   The mileage
-     * @param amount    The additional amount
-     */
-    private void enterOdometerReading(String mileage, int amount) {
-        // And The page title contains "MOT test results"
-        driverWrapper.checkCurrentPageTitle("MOT test results");
-        // And I click the "Add reading" link
-        driverWrapper.clickLink("Add reading");
-
-        // And The page title contains "Odometer reading"
-        driverWrapper.checkCurrentPageTitle("Odometer reading");
-        // And I enter {mileage1} plus <n> in the odometer field
-        int newMileage = Integer.parseInt(mileage) + amount;
-        driverWrapper.enterIntoFieldWithId(String.valueOf(newMileage), "odometer");
-        // And I press the "Update reading" button
-        driverWrapper.pressButton("Update reading");
+    /** Encapsulates the user journey for the Odometer screen. */
+    private enum OdometerJourney {
+        EnterInMiles, EnterInKilometres, NotPresent;
     }
 
     /**
-     * Enter odometer not present. Refactored repeated cucumber steps, the original steps are detailed below.
+     * Enter an odometer reading of the specified amount/type. Refactored repeated cucumber steps, the original steps
+     * are detailed below.
+     * @param journey   The user journey being taken
+     * @param amount    The new odometer reading amount
      */
-    private void enterOdometerNotPresent() {
+    private void enterOdometerReading(OdometerJourney journey, int amount) {
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
         // And I click the "Add reading" link
@@ -222,8 +220,35 @@ public class TesterDoesStepDefinitions implements En {
 
         // And The page title contains "Odometer reading"
         driverWrapper.checkCurrentPageTitle("Odometer reading");
-        // And I select the "Odometer is not present" radio button (using id as has badly formed label)
-        driverWrapper.selectRadioById("noOdometer");
+
+        switch (journey) {
+            case EnterInMiles:
+                // And I enter <n> in the odometer field
+                driverWrapper.enterIntoFieldWithId(String.valueOf(amount), "odometer");
+
+                // And I select "Miles" in the "Measurement units" field
+                driverWrapper.selectOptionInField("Miles", "Measurement units");
+                break;
+
+            case EnterInKilometres:
+                // And I enter <n> in the odometer field
+                driverWrapper.enterIntoFieldWithId(String.valueOf(amount), "odometer");
+
+                // And I select "Kilometres" in the "Measurement units" field
+                driverWrapper.selectOptionInField("Kilometres", "Measurement units");
+                break;
+
+            case NotPresent:
+                // And I select the "Odometer is not present" radio button (using id as has badly formed label)
+                driverWrapper.selectRadioById("noOdometer");
+                break;
+
+            default:
+                String message = "Unknown Odometer journey: " + journey;
+                logger.error(message);
+                throw new IllegalArgumentException(message);
+        }
+
         // And I press the "Update reading" button
         driverWrapper.pressButton("Update reading");
     }
