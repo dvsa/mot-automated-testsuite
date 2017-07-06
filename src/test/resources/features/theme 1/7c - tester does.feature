@@ -42,14 +42,27 @@ Feature: 7 - Tester does... (part C)
     # Check certificate
     # (Admin check abandoned)
 
-  # Scenario: Tester enters a class 4 MOT test pass, for a DVLA vehicle
-    # Search for DVLA vehicle
-    # Set MOT test class 4 and confirm
-    # Check inspection sheet
-    # Enter odometer
-    # Add roller brake test (roughly check calculations)
-    # Check summary and complete
-    # Check Certificate (dates and details)
+  Scenario: Tester enters a class 4 MOT test pass, for a DVLA vehicle
+    Given I load "DVLA_VEHICLE" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+
+    When I start an MOT test for DVLA vehicle {registration1}, {vin1} as class 4
+    And The page title contains "Your home"
+    And I click the "Enter test results" link
+
+    And I enter an odometer reading in miles of {mileage1} plus 5000
+    And I enter decelerometer results of service brake 60 and parking brake 60
+    And I press the "Review test" button
+
+    Then The page title contains "MOT test summary"
+    And I check the test information section of the test summary is "Pass"
+    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
+    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the brake results section of the test summary is "Pass"
+    And I check the fails section of the test summary has "None recorded"
+    And I press the "Save test result" button
+    And The page title contains "MOT test complete"
+
 
   Scenario: Tester enters a class 4 MOT test pass, for a new vehicle
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}

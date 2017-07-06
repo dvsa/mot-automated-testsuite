@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
+import java.util.Optional;
 import javax.inject.Inject;
 
 /**
@@ -52,10 +53,17 @@ public class TesterDoesStepDefinitions implements En {
                 assertTrue("Wrong MOT status", driverWrapper.getElementText("testStatus").contains(status)));
 
         When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", (String regKey, String vinKey) ->
-                startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey), false));
+                startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
+                        false, Optional.empty()));
 
         When("^I start an MOT retest for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", (String regKey, String vinKey) ->
-                startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey), true));
+                startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
+                        true, Optional.empty()));
+
+        When("^I start an MOT test for DVLA vehicle \\{([^\\}]+)\\}, \\{([^\\}]+)\\} as class (\\d+)$",
+                (String regKey, String vinKey, Integer vehicleClass) ->
+                startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
+                        false, Optional.of(vehicleClass)));
 
         And("^I browse for a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"\\) "
                 + "with comment \"([^\"]+)\"$", this::browseForDefect);
@@ -131,8 +139,9 @@ public class TesterDoesStepDefinitions implements En {
      * @param registration  The registration number to use
      * @param vin           The VIN to use
      * @param isRetest      Whether this is a retest
+     * @param vehicleClass  The vehicle class to nominate (if any)
      */
-    private void startMotTest(String registration, String vin, boolean isRetest) {
+    private void startMotTest(String registration, String vin, boolean isRetest, Optional<Integer> vehicleClass) {
         //And I Search for a vehicle
         searchForVehicle(registration, vin);
 
@@ -159,6 +168,17 @@ public class TesterDoesStepDefinitions implements En {
 
             //And The page title contains "Confirm vehicle and start test"
             driverWrapper.checkCurrentPageTitle("Confirm vehicle and start test");
+
+            if (vehicleClass.isPresent()) {
+                //And I click the "Change" link for the MOT test class
+                driverWrapper.clickLink("th", "MOT test class", "../td/", "Change");
+
+                //And I select the Class <n> radio button (by id as badly formed label)
+                driverWrapper.selectRadioById("class" + vehicleClass.get());
+
+                //And I press the "Continue" button
+                driverWrapper.pressButton("Continue");
+            }
 
             //And I press the "Confirm and start test" button
             driverWrapper.pressButton("Confirm and start test");
