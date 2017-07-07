@@ -65,5 +65,9 @@ public class WebStepDefinitions implements En {
         And("^I check there is no \"([^\"]+)\" link$", (String link) -> {
             assertFalse(driverWrapper.hasLink(link));
         });
+
+        And("^I click the first \"([^\"]+)\" link$", (String linkText) -> {
+            driverWrapper.clickFirstLink(linkText);
+        });
     }
 }

@@ -48,6 +48,12 @@ public class AuthenticationStepDefinitions implements En {
                             env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
                                 env.getRequiredProperty("maxLoginRetries", Integer.class));
             });
+
+        Given("^I login without 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}$",
+                (String dataSetName, String usernameKey) -> {
+                    loginWithout2fa(dataSetName, usernameKey, env.getRequiredProperty("password"),
+                            env.getRequiredProperty("maxLoginRetries", Integer.class));
+            });
     }
 
     /**
@@ -102,13 +108,8 @@ public class AuthenticationStepDefinitions implements En {
      * @return Whether the login was successful (any errors will have been logged)
      */
     private boolean login2fa(String username, String password, String seed) {
-        logger.debug("Logging in as username {} and password {}", username, password);
-        driverWrapper.browseTo("/login");
-
-        // the visible versions of the username and password fields have dynamic ids ending in _tid1 or _tid2
-        driverWrapper.enterIntoFieldWithIdSuffix(username, "_tid1");
-        driverWrapper.enterIntoFieldWithIdSuffix(password, "_tid2");
-        driverWrapper.pressButton("Sign in");
+        //Enter username and password
+        login(username, password);
 
         // check we got to the 2FA PIN screen
         try {
@@ -136,6 +137,54 @@ public class AuthenticationStepDefinitions implements En {
             // 2FA PIN authentication failed
             String message = "2FA PIN authentication failed for user: " + username;
             logger.error(message);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Enters the user name and password and submits the form.
+     * @param username  The username to use
+     * @param password  The password to use
+     */
+    private void login(String username, String password) {
+        logger.debug("Logging in as username {} and password {}", username, password);
+        driverWrapper.browseTo("/login");
+
+        // the visible versions of the username and password fields have dynamic ids ending in _tid1 or _tid2
+        driverWrapper.enterIntoFieldWithIdSuffix(username, "_tid1");
+        driverWrapper.enterIntoFieldWithIdSuffix(password, "_tid2");
+        driverWrapper.pressButton("Sign in");
+    }
+
+    /**
+     * Logins in as a user that does not require 2FA authentication.
+     * @param dataSetName       The name of the data set to use
+     * @param usernameKey       The key that the username is stored under
+     * @param password          The password to use
+     * @param maxLoginRetries   The max number of login retries
+     */
+    private void loginWithout2fa(String dataSetName, String usernameKey, String password, int maxLoginRetries)  {
+        loadData(dataSetName, new String[]{usernameKey});
+        non2FaLogin(driverWrapper.getData(usernameKey), password);
+    }
+
+    /**
+     * Tries to login without 2FA and returns true or false based on login.
+     * @param username  The username to use
+     * @param password  The password to use
+     * @return          return whether the login is successful or failed
+     */
+    private boolean non2FaLogin(String username, String password) {
+        //Enter username and password
+        login(username, password);
+
+        //Check the user has logged in successfully and can see the home page
+        try {
+            driverWrapper.checkCurrentPageTitle("Your home");
+        } catch (WrongPageException ex) {
+            logger.error("Login failed for user: " + username);
             return false;
         }
 
