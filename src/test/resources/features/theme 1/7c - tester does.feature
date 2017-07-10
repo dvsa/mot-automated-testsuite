@@ -26,15 +26,30 @@ Feature: 7 - Tester does... (part C)
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
 
-  # Scenario: Tester enters a class 5 MOT test pass, with engine capacity change
-    # Search for vehicle
-    # Change engine capacity and confirm for test
-    # Check inspection sheet including engine update
-    # Enter odometer
-    # Add non component Advisory (should only have advisory as option)
-    # Add decelerometer brake test
-    # Check summary and complete
-    # Check Certificate (dates and details)
+
+  Scenario: Tester enters a class 5 MOT test pass, with engine capacity change
+    Given I load "VEHICLE_CLASS_5_DIESEL" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_5" as {username1}, {site}
+
+    When I start an MOT test for {registration1}, {vin1} with engine changed to "Petrol" with capacity 2700
+    And The page title contains "Your home"
+    And I click the "Enter test results" link
+
+    And I enter an odometer reading in miles of {mileage1} plus 5000
+    And I browse for a "Advisory" defect of ("Non-component advisories", "Nail in tyre") with comment "Test advisory 1"
+    And I enter decelerometer results of service brake 60 and parking brake 60
+    And I press the "Review test" button
+
+    Then The page title contains "MOT test summary"
+    And I check the test information section of the test summary is "Pass"
+    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
+    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the vehicle summary section of the test summary has "Fuel type" of "Petrol"
+    And I check the brake results section of the test summary is "Pass"
+    And I check the advisory section of the test summary has "Nail in tyre"
+    And I check the advisory section of the test summary has "Test advisory 1"
+    And I press the "Save test result" button
+    And The page title contains "MOT test complete"
 
   # Scenario: Tester enters a class 7 MOT test fail
     # Select vehicle start test

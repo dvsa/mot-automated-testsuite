@@ -54,24 +54,35 @@ public class TesterDoesStepDefinitions implements En {
 
         When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", (String regKey, String vinKey) ->
                 startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
-                        false, Optional.empty(), Optional.empty()));
+                        false, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
 
         When("^I start an MOT retest for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", (String regKey, String vinKey) ->
                 startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
-                        true, Optional.empty(), Optional.empty()));
+                        true, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
 
         When("^I start an MOT test for DVLA vehicle \\{([^\\}]+)\\}, \\{([^\\}]+)\\} as class (\\d+)$",
                 (String regKey, String vinKey, Integer vehicleClass) ->
-                startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
-                        false, Optional.of(vehicleClass), Optional.empty()));
+                startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey), false,
+                        Optional.of(vehicleClass), Optional.empty(), Optional.empty(), Optional.empty()));
 
         When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\} with colour changed to \"([^\"]+)\"$",
                 (String regKey, String vinKey, String colour) ->
-                        startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
-                                false, Optional.empty(), Optional.of(colour)));
+                        startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey), false,
+                                Optional.empty(), Optional.of(colour), Optional.empty(), Optional.empty()));
+
+        When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\} with engine changed to \"([^\"]+)\""
+                + " with capacity (\\d+)$", (String regKey, String vinKey, String fuelType, Integer capacity) ->
+                        startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey), false,
+                                Optional.empty(), Optional.empty(), Optional.of(fuelType), Optional.of(capacity)));
+
+        And("^I browse for a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\"\\) "
+                + "with comment \"([^\"]+)\"$", (String defectType, String category, String defect, String comment) ->
+                    browseForDefect(defectType, category, Optional.empty(), defect, comment));
 
         And("^I browse for a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"\\) "
-                + "with comment \"([^\"]+)\"$", this::browseForDefect);
+                + "with comment \"([^\"]+)\"$", (String defectType, String category, String subcategory, String defect,
+                    String comment) -> browseForDefect(defectType, category, Optional.of(subcategory), defect,
+                        comment));
 
         And("^I search for a \"([^\"]+)\" defect of \"([^\"]+)\" with comment \"([^\"]+)\"$",
                 this::searchForDefect);
@@ -146,9 +157,11 @@ public class TesterDoesStepDefinitions implements En {
      * @param isRetest      Whether this is a retest
      * @param vehicleClass  The vehicle class to nominate (if any)
      * @param colour        The new primary colour to change to (if any)
+     * @param fuelType      The new engine fuel type to change to (if any)
+     * @param capacity      The new engine capacity to change to (if any)
      */
     private void startMotTest(String registration, String vin, boolean isRetest, Optional<Integer> vehicleClass,
-                              Optional<String> colour) {
+                              Optional<String> colour, Optional<String> fuelType, Optional<Integer> capacity) {
         //And I Search for a vehicle
         searchForVehicle(registration, vin);
 
@@ -196,6 +209,24 @@ public class TesterDoesStepDefinitions implements En {
 
                 //And I select "Not stated" in the "Secondary Colour" field
                 driverWrapper.selectOptionInField("Not stated", "Secondary colour");
+
+                //And I press the "Continue" button
+                driverWrapper.pressButton("Continue");
+            }
+
+            if (fuelType.isPresent() || capacity.isPresent()) {
+                //And I click the "Change" link for the engine
+                driverWrapper.clickLink("th", "Engine", "../td/", "Change");
+
+                if (fuelType.isPresent()) {
+                    //And I select <fuel type> in the "Fuel type" field
+                    driverWrapper.selectOptionInField(fuelType.get(), "Fuel type");
+                }
+
+                if (capacity.isPresent()) {
+                    //And I enter <capacity> in the "Cylinder capacity" field
+                    driverWrapper.enterIntoField(String.valueOf(capacity.get()), "Cylinder capacity");
+                }
 
                 //And I press the "Continue" button
                 driverWrapper.pressButton("Continue");
@@ -468,15 +499,15 @@ public class TesterDoesStepDefinitions implements En {
     }
 
     /**
-     * Adds a defect to the current MOT test, by browsing through the specified category and sub-category. Refactored
-     * repeated cucumber steps, the original steps are detailed below.
+     * Adds a defect to the current MOT test, by browsing through the specified category and optional sub-category.
+     * Refactored repeated cucumber steps, the original steps are detailed below.
      * @param defectType    The defect type, must be "Advisory", "PRS" or "Failure"
      * @param category      The defect category
-     * @param subcategory   The defect sub-category
+     * @param subcategory   The defect sub-category (if any)
      * @param defect        The defect
      * @param comment       The comment to use
      */
-    private void browseForDefect(String defectType, String category, String subcategory, String defect,
+    private void browseForDefect(String defectType, String category, Optional<String> subcategory, String defect,
                                  String comment) {
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
@@ -487,8 +518,11 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.checkCurrentPageTitle("Defect categories");
         // And I click the <category> link
         driverWrapper.clickLink(category);
-        // And I click the <subcategory> link
-        driverWrapper.clickLink(subcategory);
+
+        if (subcategory.isPresent()) {
+            // And I click the <subcategory> link
+            driverWrapper.clickLink(subcategory.get());
+        }
 
         // add the defect
         handleDefect(DefectJourney.AddFromBrowse, defect, DefectType.fromString(defectType), comment, false);
