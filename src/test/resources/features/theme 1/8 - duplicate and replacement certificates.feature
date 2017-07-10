@@ -1,6 +1,23 @@
 @regression
 Feature: 8 - duplicate and replacement certificates
 
+  Scenario: AO1 edits non-vehicle details on certificate
+    Given I login without 2FA using "AO1_USER" as {AO1}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
+    And I load "SITE" as {siteName}, {siteNumber}
+    And I search for certificates with reg {reg}
+    And I click the first "View certificate" link
+    And I press the "Edit this MOT test result" button
+    And I update the odometer reading by 3000
+    And I update the testing location to {siteNumber}, {siteName}
+    And I update the expiry date by adding 5 days
+    And I submit the certificate changes
+    And I check the odometer reading on the confirmation page is correct
+    And I check the expiry date of the confirmation page is correct
+#    And I check the vts information appears on the confirmation page - commented out due to a known bug ticket 4513
+    And I press the "Finish changes and print certificate" button
+    Then The page title contains "Test Results Updated Successfully"
+
   #Scenario Outline: Tester / DVLA Manager / AO1 user issues duplicate certificate
     #Given I login as <user>
     #And I click the "Replacement / Duplicate certificate" link
@@ -29,22 +46,6 @@ Feature: 8 - duplicate and replacement certificates
     #And I search for certificates with {reg}
     #And I select the last "View certificate" link
     #Then I should not see the edit certificate button
-
-  #Scenario: AO1 edits non-vehicle details on certificate
-    #Given I login as {AO1}
-    #And I click the "Replacement / Duplicate certificate" link
-    #And I search for certificates with {reg}
-    #And I click the first "View certificate" link
-    #And I click the "Edit this MOT test result" button
-    #And I edit the odometer reading
-    #And I edit the testing location {newLocation}
-    #And I edit the Expiry date {newDate}
-    #And I edit the Country of Registration {countryOfRegistration}
-    #And I enter a reason for replacement "Reason"
-    #When I submit the changes
-    #And I check a new vehicle version is created
-    #Then a replacement certificate should be created
-    #And I check the pdf details are correct
 
   #Scenario: AO1 edits vehicle details on latest certificate
     #Given I login as {AO1}

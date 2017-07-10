@@ -191,6 +191,28 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Click a button rather than submit it.
+     * @param buttonText    The text on the button to be clicked
+     */
+    public void clickButton(String buttonText) {
+        List<WebElement> buttons = findButtons(buttonText);
+        if (buttons.size() == 0) {
+            String message = "No buttons found with text: " + buttonText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else if (buttons.size() > 1) {
+            String message = "Several buttons found with text: " + buttonText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            buttons.get(0).click();
+            waitForPageLoad();
+        }
+    }
+
+    /**
      * Press the first of the specified buttons.
      * @param buttonText  The button text
      */
@@ -264,6 +286,14 @@ public class WebDriverWrapper {
     private List<WebElement> findLinks(String linkText) {
         // find any "a" elements with text containing the link text (can be partial match)
         return webDriver.findElements(By.xpath("//a[contains(text(),'" + linkText + "')]"));
+    }
+
+    /**
+     * Clicks the first link that matches the text.
+     * @param linkText  The link text used to find the link
+     */
+    public void clickFirstLink(String linkText) {
+        findLinks(linkText).get(0).click();
     }
 
     /**
@@ -459,6 +489,7 @@ public class WebDriverWrapper {
      */
     public void enterIntoFieldWithId(String text, String id) {
         WebElement textElement = webDriver.findElement(By.id(id));
+        textElement.clear();
         textElement.sendKeys(text);
     }
 
