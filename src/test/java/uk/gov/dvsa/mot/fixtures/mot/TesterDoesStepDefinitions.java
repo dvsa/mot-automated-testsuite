@@ -48,6 +48,10 @@ public class TesterDoesStepDefinitions implements En {
                 // unfortunately given no proper formed label etc we have to use the id
                 driverWrapper.clickElement("reasonForCancel25"));
 
+        And("^I click the \"Inspection may be dangerous or cause damage\" radio button$", () ->
+                // unfortunately given no proper formed label etc we have to use the id
+                driverWrapper.clickElement("reasonForCancel21"));
+
         And("^The MOT status is \"([^\"]+)\"$", (String status) ->
                 // unfortunately given no proper formed label etc we have to use the id
                 assertTrue("Wrong MOT status", driverWrapper.getElementText("testStatus").contains(status)));

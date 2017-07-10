@@ -63,7 +63,7 @@ Feature: 7 - Tester does... (part C)
     And I search for a "Failure" defect of "Steering system excessively tight" with comment "Test failure 1"
     And I edit the "Failure" defect of "Steering system excessively tight" with comment "Edited failure 1" and is dangerous
     And I remove the "Failure" defect of "Steering system excessively tight"
-    # after release 3.11 - Plate/Gradient brake test - fail imbalance
+    # after release 3.11 - change to Plate/Gradient brake test - fail imbalance
     And I enter decelerometer results of service brake 30 and parking brake 10
     And I press the "Review test" button
 
@@ -77,14 +77,25 @@ Feature: 7 - Tester does... (part C)
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
 
-  # Scenario: Tester abandons an MOT test
-    # Select vehicle start test
-    # Check inspection sheet
-    # Enter odometer
-    # Add advisory
-    # Cancel test - Inspection may be dangerous or cause damage (enter reason)
-    # Check certificate
-    # (Admin check abandoned)
+  Scenario: Tester abandons an MOT test, for a class 3 vehicle
+    Given I load "VEHICLE_CLASS_3" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_3" as {username1}, {site}
+
+    When I start an MOT test for {registration1}, {vin1}
+    And The page title contains "Your home"
+    And I click the "Enter test results" link
+
+    And The page title contains "MOT test results"
+    And I enter an odometer reading in miles of {mileage1} plus 5000
+    And I browse for a "Advisory" defect of ("Non-component advisories", "Spare tyre defective") with comment "Test advisory 1"
+    And I click the "Cancel test" link
+
+    And The page title contains "Cancel MOT test"
+    And I click the "Inspection may be dangerous or cause damage" radio button
+    And I enter "Test reason" in the "How might this be dangerous or cause damage?" field
+    And I press the "Confirm and cancel test" button
+    Then The page title contains "MOT test abandoned"
+    # Awaiting Andy Lai to confirm (Admin check abandoned) step
 
   Scenario: Tester enters a class 4 MOT test pass, for a DVLA vehicle
     Given I load "DVLA_VEHICLE" as {registration1}, {vin1}, {mileage1}
