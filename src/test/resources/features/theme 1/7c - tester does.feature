@@ -51,17 +51,31 @@ Feature: 7 - Tester does... (part C)
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
 
-  # Scenario: Tester enters a class 7 MOT test fail
-    # Select vehicle start test
-    # Check inspection sheet
-    # Enter odometer in KM
-    # Add Failure (using search)
-    # Add Failure
-    # Edit first failure
-    # Remove first failure
-    # Add Plate/Gradient brake test - fail imbalance
-    # Check summary and complete
-    # Check Certificate (dates and details)
+  Scenario: Tester enters a class 7 MOT test fail
+    Given I load "VEHICLE_CLASS_7" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_7" as {username1}, {site}
+
+    When I start an MOT test for {registration1}, {vin1}
+    And The page title contains "Your home"
+    And I click the "Enter test results" link
+
+    And I enter an odometer reading in kilometres of 30000
+    And I search for a "Failure" defect of "Steering system excessively tight" with comment "Test failure 1"
+    And I edit the "Failure" defect of "Steering system excessively tight" with comment "Edited failure 1" and is dangerous
+    And I remove the "Failure" defect of "Steering system excessively tight"
+    # after release 3.11 - Plate/Gradient brake test - fail imbalance
+    And I enter decelerometer results of service brake 30 and parking brake 10
+    And I press the "Review test" button
+
+    Then The page title contains "MOT test summary"
+    And I check the test information section of the test summary is "Fail"
+    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
+    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the brake results section of the test summary is "Fail"
+    And I check the fails section of the test summary does not have "Steering system excessively tight"
+    And I check the fails section of the test summary does not have "Test failure 1"
+    And I press the "Save test result" button
+    And The page title contains "MOT test complete"
 
   # Scenario: Tester abandons an MOT test
     # Select vehicle start test
