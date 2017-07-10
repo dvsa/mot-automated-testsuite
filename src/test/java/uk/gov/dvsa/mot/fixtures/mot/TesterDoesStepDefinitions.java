@@ -54,16 +54,21 @@ public class TesterDoesStepDefinitions implements En {
 
         When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", (String regKey, String vinKey) ->
                 startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
-                        false, Optional.empty()));
+                        false, Optional.empty(), Optional.empty()));
 
         When("^I start an MOT retest for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", (String regKey, String vinKey) ->
                 startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
-                        true, Optional.empty()));
+                        true, Optional.empty(), Optional.empty()));
 
         When("^I start an MOT test for DVLA vehicle \\{([^\\}]+)\\}, \\{([^\\}]+)\\} as class (\\d+)$",
                 (String regKey, String vinKey, Integer vehicleClass) ->
                 startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
-                        false, Optional.of(vehicleClass)));
+                        false, Optional.of(vehicleClass), Optional.empty()));
+
+        When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\} with colour changed to \"([^\"]+)\"$",
+                (String regKey, String vinKey, String colour) ->
+                        startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
+                                false, Optional.empty(), Optional.of(colour)));
 
         And("^I browse for a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"\\) "
                 + "with comment \"([^\"]+)\"$", this::browseForDefect);
@@ -140,8 +145,10 @@ public class TesterDoesStepDefinitions implements En {
      * @param vin           The VIN to use
      * @param isRetest      Whether this is a retest
      * @param vehicleClass  The vehicle class to nominate (if any)
+     * @param colour        The new primary colour to change to (if any)
      */
-    private void startMotTest(String registration, String vin, boolean isRetest, Optional<Integer> vehicleClass) {
+    private void startMotTest(String registration, String vin, boolean isRetest, Optional<Integer> vehicleClass,
+                              Optional<String> colour) {
         //And I Search for a vehicle
         searchForVehicle(registration, vin);
 
@@ -175,6 +182,20 @@ public class TesterDoesStepDefinitions implements En {
 
                 //And I select the Class <n> radio button (by id as badly formed label)
                 driverWrapper.selectRadioById("class" + vehicleClass.get());
+
+                //And I press the "Continue" button
+                driverWrapper.pressButton("Continue");
+            }
+
+            if (colour.isPresent()) {
+                //And I click the "Change" link for the colour
+                driverWrapper.clickLink("th", "Colour", "../td/", "Change");
+
+                //And I select <colour> in the "Primary Colour" field
+                driverWrapper.selectOptionInField(colour.get(), "Primary colour");
+
+                //And I select "Not stated" in the "Secondary Colour" field
+                driverWrapper.selectOptionInField("Not stated", "Secondary colour");
 
                 //And I press the "Continue" button
                 driverWrapper.pressButton("Continue");

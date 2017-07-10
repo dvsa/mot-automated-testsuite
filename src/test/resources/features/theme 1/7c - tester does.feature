@@ -1,15 +1,30 @@
 @regression
 Feature: 7 - Tester does... (part C)
 
-    # Scenario: Tester enters a class 2 MOT test fail, with colour change
-    # Search for vehicle
-    # Change colour and confirm for test
-    # Check inspection sheet - Class 1 and 2 version
-    # Enter odometer
-    # Add Failure
-    # Add decelerometer brake test (fail)
-    # Check summary and complete
-    # Check Certificate (dates and details - including colour update)
+  Scenario: Tester enters a class 2 MOT test fail, with colour change
+    Given I load "VEHICLE_CLASS_2_RED" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_2" as {username1}, {site}
+
+    When I start an MOT test for {registration1}, {vin1} with colour changed to "Blue"
+    And The page title contains "Your home"
+    And I click the "Enter test results" link
+
+    And I enter an odometer reading in miles of {mileage1} plus 5000
+    And I browse for a "Failure" defect of ("Motorcycle driving controls", "Throttle", "Throttle operating incorrectly") with comment "Test defect 1"
+    And I enter decelerometer results of efficiency 15
+    And I press the "Review test" button
+
+    Then The page title contains "MOT test summary"
+    And I check the test information section of the test summary is "Fail"
+    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
+    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the vehicle summary section of the test summary has "Colour" of "Blue"
+    And I check the brake results section of the test summary is "Fail"
+    And I check the fails section of the test summary has "Throttle operating incorrectly"
+    And I check the fails section of the test summary has "Test defect 1"
+    And I check the fails section of the test summary has "Decelerometer brake test neither brake control achieves an efficiency of 25%"
+    And I press the "Save test result" button
+    And The page title contains "MOT test complete"
 
   # Scenario: Tester enters a class 5 MOT test pass, with engine capacity change
     # Search for vehicle
