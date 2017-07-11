@@ -22,14 +22,16 @@ and o.slots_balance > 0 -- ae's with slots available
 and p.id = pscm.person_id
 and sc.id = pscm.security_card_id
 and sc.security_card_status_lookup_id = 1 -- only assigned cards
-and sc.id not in ( -- not all security_card have a corresponding security_card_drift
-  select security_card_id from security_card_drift
-  where last_observed_drift <= 60 -- no cards drifted forward
+and not exists ( -- not all security_card have a corresponding security_card_drift
+  select 1 from security_card_drift scd
+  where sc.id = scd.security_card_id
+  and last_observed_drift <= 60 -- no cards drifted forward
   and last_observed_drift >= -60 -- or back beyond 1 hour
 )
-and p.id not in (
-  select last_updated_by from mot_test_current
-  where status_id = 4 -- exclude any testers with active tests
+and not exists (
+  select 1 from mot_test_current mtc
+  where p.id = mtc.last_updated_by
+  and mtc.status_id = 4 -- exclude any testers with active tests
 )
 and p.username is not null -- exclude dodgy test data
 limit 50
