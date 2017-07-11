@@ -103,15 +103,23 @@ public class TesterDoesStepDefinitions implements En {
 
         And("^I remove the \"([^\"]+)\" defect of \"([^\"]+)\"$", this::removeDefect);
 
-        And("^I enter decelerometer results of efficiency (\\d+)$", (Integer efficiency) ->
-                enterDecelerometerBrakeResults(efficiency));
+        And("^I enter decelerometer results of efficiency (\\d+)$", (String efficiency) ->
+                handleBrakeResults(BrakeTestJourney.AddSingleDecelerometerResult, efficiency, Optional.empty()));
 
         And("^I enter decelerometer results of service brake (\\d+) and parking brake (\\d+)$",
-                (Integer serviceBrake, Integer parkingBrake) ->
-                        enterDecelerometerBrakeResults(serviceBrake, parkingBrake));
+                (String serviceBrake, String parkingBrake) ->
+                        handleBrakeResults(BrakeTestJourney.AddServiceAndParkingDecelerometerResult,
+                                serviceBrake, Optional.of(parkingBrake)));
+
+        And("^I edit decelerometer results of service brake (\\d+) and parking brake (\\d+)$",
+                (String serviceBrake, String parkingBrake) ->
+                        handleBrakeResults(BrakeTestJourney.EditServiceAndParkingDecelerometerResult,
+                                serviceBrake, Optional.of(parkingBrake)));
 
         And("^I enter decelerometer service brake result of (\\d+) and gradient parking brake result "
-                + "of \"([^\"]+)\"$", this::enterDecelerometerAndGradientBrakeResults);
+                + "of \"([^\"]+)\"$", (String serviceBrake, String parkingBrake) ->
+                    handleBrakeResults(BrakeTestJourney.AddDecelerometerServiceAndGradientParkingResult,
+                            serviceBrake, Optional.of(parkingBrake)));
 
         And("^I mark the defect \"([^\"]+)\" as repaired$", this::markAsRepaired);
 
@@ -222,15 +230,15 @@ public class TesterDoesStepDefinitions implements En {
                 //And I click the "Change" link for the engine
                 driverWrapper.clickLink("th", "Engine", "../td/", "Change");
 
-                if (fuelType.isPresent()) {
+                fuelType.ifPresent(value -> {
                     //And I select <fuel type> in the "Fuel type" field
-                    driverWrapper.selectOptionInField(fuelType.get(), "Fuel type");
-                }
+                    driverWrapper.selectOptionInField(value, "Fuel type");
+                });
 
-                if (capacity.isPresent()) {
+                capacity.ifPresent(value -> {
                     //And I enter <capacity> in the "Cylinder capacity" field
-                    driverWrapper.enterIntoField(String.valueOf(capacity.get()), "Cylinder capacity");
-                }
+                    driverWrapper.enterIntoField(String.valueOf(value), "Cylinder capacity");
+                });
 
                 //And I press the "Continue" button
                 driverWrapper.pressButton("Continue");
@@ -279,7 +287,7 @@ public class TesterDoesStepDefinitions implements En {
 
     /** Encapsulates the user journey for the Odometer screen. */
     private enum OdometerJourney {
-        EnterInMiles, EnterInKilometres, NotPresent;
+        EnterInMiles, EnterInKilometres, NotPresent
     }
 
     /**
@@ -329,117 +337,115 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.pressButton("Update reading");
     }
 
-    /**
-     * Enter a Decelerometer brake test result (class 1). Refactored repeated cucumber steps, the original steps are
-     * detailed below.
-     * @param brakeResult    The brake result
-     */
-    private void enterDecelerometerBrakeResults(Integer brakeResult) {
-        // And The page title contains "MOT test results"
-        driverWrapper.checkCurrentPageTitle("MOT test results");
-        // And I click the "Add brake test" link
-        driverWrapper.clickLink("Add brake test");
-
-        // And The page title contains "Brake test configuration"
-        //defect in release 3.10, title missing - driverWrapper.checkCurrentPageTitle("Brake test configuration");
-        // And I select "Decelerometer" in the "Brake test type" field
-        driverWrapper.selectOptionInField("Decelerometer", "Brake test type");
-        // And I press the "Next" button
-        driverWrapper.pressButton("Next");
-
-        // And The page title contains "Add brake test results"
-        driverWrapper.checkCurrentPageTitle("Add brake test results");
-        // And I enter <n> in the "Control one" field
-        driverWrapper.enterIntoField(String.valueOf(brakeResult), "Control one");
-        // And I enter <n> in the "Control two" field
-        driverWrapper.enterIntoField(String.valueOf(brakeResult), "Control two");
-        // And I press the "Submit" button
-        driverWrapper.pressButton("Submit");
-
-        // And The page title contains "Brake test summary"
-        driverWrapper.checkCurrentPageTitle("Brake test summary");
-        // And I click the "Done" link
-        driverWrapper.clickLink("Done");
+    /** Encapsulates the user journey for the Brake test screens. */
+    private enum BrakeTestJourney {
+        AddSingleDecelerometerResult, AddServiceAndParkingDecelerometerResult,
+        AddDecelerometerServiceAndGradientParkingResult, EditServiceAndParkingDecelerometerResult
     }
 
     /**
-     * Enter a Decelerometer brake test result. Refactored repeated cucumber steps, the original steps are detailed
-     * below.
-     * @param serviceBrakeResult    The service brake result
-     * @param parkingBrakeResult    The parking brake result
+     * Handles various types of brake tests.
+     * @param journey   The user journey being taken
+     * @param result1   The service/single brake result
+     * @param result2   The parking brake result (if any)
      */
-    private void enterDecelerometerBrakeResults(Integer serviceBrakeResult, Integer parkingBrakeResult) {
+    private void handleBrakeResults(BrakeTestJourney journey, String result1, Optional<String> result2) {
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
-        // And I click the "Add brake test" link
-        driverWrapper.clickLink("Add brake test");
+
+        if (journey == BrakeTestJourney.EditServiceAndParkingDecelerometerResult) {
+            // And I click the "Edit brake test" link
+            driverWrapper.clickLink("Edit brake test");
+        } else {
+            // And I click the "Add brake test" link
+            driverWrapper.clickLink("Add brake test");
+        }
 
         // And The page title contains "Brake test configuration"
-        //defect in release 3.10, title missing - driverWrapper.checkCurrentPageTitle("Brake test configuration");
-        // And I select "Decelerometer" in the "Service brake test type" field
-        driverWrapper.selectOptionInField("Decelerometer", "Service brake test type");
-        // And I select "Decelerometer" in the "Parking brake test type" field
-        driverWrapper.selectOptionInField("Decelerometer", "Parking brake test type");
-        // And I press the "Next" button
-        driverWrapper.pressButton("Next");
+        driverWrapper.checkCurrentPageTitle("Brake test configuration");
 
-        // And The page title contains "Add brake test results"
-        driverWrapper.checkCurrentPageTitle("Add brake test results");
-        // And I enter <n> in the "Service brake" field
-        driverWrapper.enterIntoField(String.valueOf(serviceBrakeResult), "Service brake");
-        // And I enter <n> in the "Parking brake" field
-        driverWrapper.enterIntoField(String.valueOf(parkingBrakeResult), "Parking brake");
-        // And I press the "Submit" button
-        driverWrapper.pressButton("Submit");
+        switch (journey) {
+            case AddSingleDecelerometerResult:
+                // And I select "Decelerometer" in the "Brake test type" field
+                driverWrapper.selectOptionInField("Decelerometer", "Brake test type");
+                // And I press the "Next" button
+                driverWrapper.pressButton("Next");
 
-        // And The page title contains "Brake test summary"
-        driverWrapper.checkCurrentPageTitle("Brake test summary");
-        // And I click the "Done" link
-        driverWrapper.clickLink("Done");
-    }
-
-    /**
-     * Enter a Decelerometer brake test result (service brake) and Gradient (parking brake). Refactored repeated
-     * cucumber steps, the original steps are detailed below.
-     * @param serviceBrakeResult    The service brake result
-     * @param parkingBrakeResult    The parking brake result ("Pass" or "Fail")
-     */
-    private void enterDecelerometerAndGradientBrakeResults(Integer serviceBrakeResult, String parkingBrakeResult) {
-        // And The page title contains "MOT test results"
-        driverWrapper.checkCurrentPageTitle("MOT test results");
-        // And I click the "Add brake test" link
-        driverWrapper.clickLink("Add brake test");
-
-        // And The page title contains "Brake test configuration"
-        //defect in release 3.10, title missing - driverWrapper.checkCurrentPageTitle("Brake test configuration");
-        // And I select "Decelerometer" in the "Service brake test type" field
-        driverWrapper.selectOptionInField("Decelerometer", "Service brake test type");
-        // And I select "Gradient" in the "Parking brake test type" field
-        driverWrapper.selectOptionInField("Gradient", "Parking brake test type");
-        // And I press the "Next" button
-        driverWrapper.pressButton("Next");
-
-        // And The page title contains "Add brake test results"
-        driverWrapper.checkCurrentPageTitle("Add brake test results");
-        // And I enter <n> in the "Service brake" field
-        driverWrapper.enterIntoField(String.valueOf(serviceBrakeResult), "Service brake");
-        switch (parkingBrakeResult) {
-            case "Pass":
-                // And I select the pass parking brake radio button (by id as label badly formed)
-                driverWrapper.selectRadioById("parkingBrakeEfficiencyPassPass");
+                // And The page title contains "Add brake test results"
+                driverWrapper.checkCurrentPageTitle("Add brake test results");
+                // And I enter <n> in the "Control one" field
+                driverWrapper.enterIntoField(result1, "Control one");
+                // And I enter <n> in the "Control two" field
+                driverWrapper.enterIntoField(result1, "Control two");
                 break;
 
-            case "Fail":
-                // And I select the fail parking brake radio button (by id as label badly formed)
-                driverWrapper.selectRadioById("parkingBrakeEfficiencyPassFail");
+            case AddServiceAndParkingDecelerometerResult:
+            case EditServiceAndParkingDecelerometerResult:
+                // And I select "Decelerometer" in the "Service brake test type" field
+                driverWrapper.selectOptionInField("Decelerometer", "Service brake test type");
+                // And I select "Decelerometer" in the "Parking brake test type" field
+                driverWrapper.selectOptionInField("Decelerometer", "Parking brake test type");
+                // And I press the "Next" button
+                driverWrapper.pressButton("Next");
+
+                // And The page title contains "Add brake test results"
+                driverWrapper.checkCurrentPageTitle("Add brake test results");
+                // And I enter <n> in the "Service brake" field
+                driverWrapper.enterIntoField(result1, "Service brake");
+
+                if (result2.isPresent()) {
+                    // And I enter <n> in the "Parking brake" field
+                    driverWrapper.enterIntoField(result2.get(), "Parking brake");
+                } else {
+                    String message = "Missing decelerometer parking brake result";
+                    logger.error(message);
+                    throw new IllegalArgumentException(message);
+                }
+                break;
+
+            case AddDecelerometerServiceAndGradientParkingResult:
+                // And I select "Decelerometer" in the "Service brake test type" field
+                driverWrapper.selectOptionInField("Decelerometer", "Service brake test type");
+                // And I select "Gradient" in the "Parking brake test type" field
+                driverWrapper.selectOptionInField("Gradient", "Parking brake test type");
+                // And I press the "Next" button
+                driverWrapper.pressButton("Next");
+
+                // And The page title contains "Add brake test results"
+                driverWrapper.checkCurrentPageTitle("Add brake test results");
+                // And I enter <n> in the "Service brake" field
+                driverWrapper.enterIntoField(result1, "Service brake");
+
+                if (result2.isPresent()) {
+                    switch (result2.get()) {
+                        case "Pass":
+                            // And I select the pass parking brake radio button (by id as label badly formed)
+                            driverWrapper.selectRadioById("parkingBrakeEfficiencyPassPass");
+                            break;
+
+                        case "Fail":
+                            // And I select the fail parking brake radio button (by id as label badly formed)
+                            driverWrapper.selectRadioById("parkingBrakeEfficiencyPassFail");
+                            break;
+
+                        default:
+                            String message = "Unknown Gradient parking brake result: " + result2;
+                            logger.error(message);
+                            throw new IllegalArgumentException(message);
+                    }
+                } else {
+                    String message = "Missing Gradient parking brake result";
+                    logger.error(message);
+                    throw new IllegalArgumentException(message);
+                }
                 break;
 
             default:
-                String message = "Unknown Gradient parking brake result: " + parkingBrakeResult;
+                String message = "Unknown brake results journey: " + journey;
                 logger.error(message);
                 throw new IllegalArgumentException(message);
-        }
 
+        }
         // And I press the "Submit" button
         driverWrapper.pressButton("Submit");
 
@@ -523,10 +529,10 @@ public class TesterDoesStepDefinitions implements En {
         // And I click the <category> link
         driverWrapper.clickLink(category);
 
-        if (subcategory.isPresent()) {
+        subcategory.ifPresent(value -> {
             // And I click the <subcategory> link
-            driverWrapper.clickLink(subcategory.get());
-        }
+            driverWrapper.clickLink(value);
+        });
 
         // add the defect
         handleDefect(DefectJourney.AddFromBrowse, defect, DefectType.fromString(defectType), comment, false);

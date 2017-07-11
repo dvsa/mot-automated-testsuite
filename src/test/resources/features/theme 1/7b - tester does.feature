@@ -119,11 +119,55 @@ Feature: 7 - Tester does... (part B)
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
 
-  # Scenario: Tester enters a class 4 MOT retest fail, with brake test re-entry
-    # ..enter fail with several failure defects
-    # Enter odometer
-    # Repair all but 1 failure
-    # Brake test reentry required due to previous failure (review test button disabled) - test brake lock
+
+  Scenario: Tester enters a class 4 MOT retest fail, with brake test re-entry
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+
+    And I start an MOT test for {registration1}, {vin1}
+    And The page title contains "Your home"
+    And I click the "Enter test results" link
+
+    And I enter an odometer reading in miles of {mileage1} plus 5000
+    And I browse for a "Failure" defect of ("Body, structure and general items", "Engine mountings", "Engine mounting missing") with comment "Test defect 1"
+    And I browse for a "Failure" defect of ("Brakes", "ABS", "Anti-lock braking system component missing") with comment "Test defect 2"
+    And I browse for a "Failure" defect of ("Road wheels", "Attachment", "Wheel insecure") with comment "Test defect 3"
+    And I enter decelerometer results of service brake 30 and parking brake 10
+    And I press the "Review test" button
+
+    And The page title contains "MOT test summary"
+    And I check the test information section of the test summary is "Fail"
+    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
+    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the brake results section of the test summary is "Fail"
+    And I check the fails section of the test summary has "engine mounting missing"
+    And I check the fails section of the test summary has "Anti-lock braking system component missing"
+    And I check the fails section of the test summary has "Wheel insecure"
+    And I press the "Save test result" button
+    And The page title contains "MOT test complete"
+
+    When I click the "Back to user home" link
+    And I start an MOT retest for {registration1}, {vin1}
+    And The page title contains "Your home"
+    And I click the "Enter retest results" link
+
+    And I enter an odometer reading in miles of {mileage1} plus 5000
+    And I mark the defect "engine mounting missing" as repaired
+    And I mark the defect "Anti-lock braking system component missing" as repaired
+
+    And I check the "Review test" button is disabled
+    And I edit decelerometer results of service brake 60 and parking brake 30
+    And I press the "Review test" button
+
+    Then The page title contains "MOT re-test summary"
+    And I check the test information section of the test summary is "Fail"
+    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
+    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the brake results section of the test summary is "Pass"
+    And I check the fails section of the test summary has "Wheel insecure"
+    And I press the "Save test result" button
+    And The page title contains "MOT re-test complete"
+
 
   # Scenario: Tester enters a class 4 MOT retest pass, with brake test re-entry
     # ..enter fail with several failure defects and no brake test

@@ -213,6 +213,28 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Determine whether the specified button is disabled.
+     * @param buttonText  The button text
+     * @return <code>true</code> if disabled
+     */
+    public boolean isButtonDisabled(String buttonText) {
+        List<WebElement> buttons = findButtons(buttonText);
+        if (buttons.size() == 0) {
+            String message = "No buttons found with text: " + buttons;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else if (buttons.size() > 1) {
+            String message = "Several buttons found with text: " + buttons;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            return buttons.get(0).getAttribute("disabled") != null;
+        }
+    }
+
+    /**
      * Press the first of the specified buttons.
      * @param buttonText  The button text
      */
@@ -315,6 +337,28 @@ public class WebDriverWrapper {
 
         } else {
             return links.get(0).getAttribute("class");
+        }
+    }
+
+    /**
+     * Determine whether the specified link is disabled.
+     * @param linkText  The link text
+     * @return <code>true</code> if disabled
+     */
+    public boolean isLinkDisabled(String linkText) {
+        List<WebElement> links = findLinks(linkText);
+        if (links.size() == 0) {
+            String message = "No links found with text: " + linkText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else if (links.size() > 1) {
+            String message = "Several links found with text: " + linkText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            return links.get(0).getAttribute("disabled") != null;
         }
     }
 
