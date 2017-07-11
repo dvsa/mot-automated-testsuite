@@ -11,16 +11,16 @@ and mtc.id = latest_mot.id
 and mtc.status_id not in (4,5) -- exclude vehicles whose latest status is under test or failed
 and odometer_result_type = 'OK'
 and veh.registration not like "%-%" -- exclude dodgy test data on ACPT
-and veh.registration not in (
-  select registration
-  from vehicle
-  group by registration
-  having count(registration) > 1 -- exclude where same registration has been entered as different vehicles
+and not exists (
+    select 1 from vehicle v
+    where v.registration = veh.registration
+    group by v.registration
+    having count(v.registration) > 1 -- exclude where same registration has been entered as different vehicles
 )
-and veh.vin not in (
-  select vin
-  from vehicle
-  group by vin
-  having count(vin) > 1 -- exclude where same vin has been entered as different vehicles
+and not exists (
+    select 1 from vehicle v
+    where v.vin = veh.vin
+    group by v.vin
+    having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
 limit 100
