@@ -518,6 +518,7 @@ public class WebDriverWrapper {
      */
     public void enterIntoField(String text, String label) {
         // find the input associated with the specified label...
+
         WebElement labelElement = webDriver.findElement(By.xpath("//label[contains(text(),'" + label + "')]"));
         WebElement textElement = webDriver.findElement(By.id(labelElement.getAttribute("for")));
         textElement.sendKeys(text);
@@ -724,18 +725,31 @@ public class WebDriverWrapper {
         int pageWait = Integer.parseInt(env.getRequiredProperty("pageWait"));
 
         // wait until page loaded, ready and JQuery processing completed...
-        new WebDriverWait(webDriver, pageWait).pollingEvery(200, TimeUnit.MILLISECONDS).until(
-                (ExpectedCondition<Boolean>) wd ->
-                    ((JavascriptExecutor) wd).executeScript("return jQuery.active").equals(0L));
+        if ((Boolean) ((JavascriptExecutor)webDriver).executeScript("return window.jQuery != undefined")) {
+            new WebDriverWait(webDriver, pageWait).pollingEvery(200, TimeUnit.MILLISECONDS).until(
+                    (ExpectedCondition<Boolean>) wd ->
+                            ((JavascriptExecutor) wd).executeScript("return jQuery.active").equals(0L));
 
-        logger.debug("Page loaded, ready and JQuery activity complete, waiting for footer image...");
+            logger.debug("Page loaded, ready and JQuery activity complete, waiting for footer image...");
+        }
 
         // then for good measure wait for the footer to be available
-        (new WebDriverWait(webDriver, pageWait)).pollingEvery(200, TimeUnit.MILLISECONDS)
-            .until(ExpectedConditions.presenceOfElementLocated(By.id("footer")));
+        if (!webDriver.getTitle().contains("Customer Payment Management System")) {
+            (new WebDriverWait(webDriver, pageWait)).pollingEvery(200, TimeUnit.MILLISECONDS)
+                    .until(ExpectedConditions.presenceOfElementLocated(By.id("footer")));
+            logger.debug("Footer image available");
+        }
 
-        logger.debug("Footer image available");
         debugCurrentPage();
+    }
+
+    /**
+     * Switch the webdriver context to a frame, required in CPMS pages.
+     * @param frameIdOrName the name or id of the frame
+     */
+    public void switchToFrame(String frameIdOrName) {
+        //Switch to the fram by id or name
+        webDriver.switchTo().frame(frameIdOrName);
     }
 
     /**

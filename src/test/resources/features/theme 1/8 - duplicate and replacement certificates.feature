@@ -1,6 +1,7 @@
 @regression
 Feature: 8 - duplicate and replacement certificates
 
+  @smoke
   Scenario: AO1 edits non-vehicle details on certificate
     Given I login without 2FA using "AO1_USER" as {AO1}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}

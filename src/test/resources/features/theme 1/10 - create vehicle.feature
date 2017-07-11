@@ -1,3 +1,4 @@
+@regression
 Feature: Create Vehicle
 
   Scenario Outline: Tester Creates a new vehicle with class <class>

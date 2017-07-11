@@ -1,6 +1,16 @@
 @regression
 Feature: 11 - AEDM and AED
 
+  @smoke
+  Scenario: AEDM Buys slots
+    Given I login with 2FA using "AEDM_USER" as {AEDM}, {ORGANISATION}
+    And I click the organisation link {ORGANISATION}
+    And I order 25 slots
+    And I enter the card details "4462030000000000", "12/18", "654"
+    And I enter the card holders name as "Jimi Hendrix"
+    And I make the payment for card "4462030000000000"
+    And I check that 25 slots were bought successfully
+
   # Scenario: AEDM assigns AED role
     # AO example: ZOLINAS SERVICE STATION, Authorised Examiner number: AE080126
     # Sign in as a AEDM (2FA active)
