@@ -283,6 +283,13 @@ public class TesterDoesStepDefinitions implements En {
 
         //And The page title contains "Find a vehicle"
         driverWrapper.checkCurrentPageTitle("Find a vehicle");
+
+        //Check added because this is an area of previous defects - e.g. DVSA and DVLA vehicle ids being mixed up
+        //And I check that the search results has Registration that was searched for
+        assertEquals(registration, driverWrapper.getTextFromTableColumn("Registration mark"));
+
+        //And I check that the search results has VIN that was searched for
+        assertEquals(vin, driverWrapper.getTextFromTableColumn("VIN"));
     }
 
     /** Encapsulates the user journey for the Odometer screen. */

@@ -594,6 +594,26 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Fetches the data in the column of the first row identified by table header text.
+     * @param headerText - The text that will find the first row
+     * @return The text found in the column
+     */
+    public String getTextFromTableColumn(String headerText) {
+        List<WebElement> tableHeaders =
+                webDriver.findElements(By.xpath("//thead/tr/th"));
+        int columnIndex = 1;
+        for (WebElement header : tableHeaders) {
+            if (header.getText().contains(headerText)) {
+                break;
+            } else {
+                columnIndex++;
+            }
+        }
+
+        return webDriver.findElement(By.xpath("//tbody/tr/td[" + columnIndex + "]")).getText();
+    }
+
+    /**
      * Fetches the text in any list items in a div following the h2 element (also in a div).
      * @param headingText   The heading text
      * @return The list item text (concatenated together)
