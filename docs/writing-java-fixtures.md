@@ -72,11 +72,15 @@ Identify web page elements as generically as possible, so that tests are not bri
 
 Keep step definition lambdas short and simple, if more than a couple of lines of code then extract to a private method.
 
+When refactoring common Gherkin steps into Java methods with a new step definition, keep the original steps as comments followed by the single line of code (or short block of code) that implements that original step.
+
 Use JUnit assertions to test logic, and keep all JUnit use to the java fixture classes.
 
 Keep all Selenium API usage inside the ```DriverWrapper``` class.
 
-Refactor and parameterise any common code just as you would with production code, but a few techniques can be used to help retain maintainability:
+Keep any behaviour that needs to happen before or after all scenarios inside the ```LifecycleHooks``` class. 
+
+Extract and refactor any common code inside your fixture classes, but a few techniques can be used to help retain maintainability:
 
 * Use ```enum``` with descriptive names to capture concepts such as the user journey being followed, or options being taken
-* Use ```Optional<T>``` to handle parameters only needed in certain circumstances, rather than ```null``` or special values like ```0``` or ```-1```
+* Use ```Optional<T>``` to handle parameters only needed in certain circumstances (rather than ```null``` or special values like ```0``` or ```-1```)
