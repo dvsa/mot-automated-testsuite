@@ -11,15 +11,22 @@ Each fixture class must implement ```cucumber.api.java8.En``` and includes a pub
 ```
 public MyStepDefinitions() {
     
-    And("^I check the vehicle summary section of the test summary has \"([^\"]+)\" of \"([^\"]+)\"$", (String field, String value) -> {
-        ..the code..
-    });    
+    And("^I check the vehicle summary section of the test summary has \"([^\"]+)\" of \"([^\"]+)\"$", 
+        (String field, String value) -> {
+            ..the code..
+        });    
 }
 ``` 
 
 There are methods corresponding to each of the Gherkin keywords (```Given```, ```When```, ```Then```, ```And```, ```But```) but in practice it does not matter which keyword is actually used with the step.
  
 Each regular expression should start with ```^``` and end with ```$``` so the whole step is matched. Each parameter to extract is a regular expression surrounded with brackets. Primitive parameters have to be matched using wrapper classes. 
+
+Because the regular expressions characters need to be escaped in Java Strings, they can easily get pretty complex. Here are some common regular expressions to use:
+
+* ```(\\d+)``` - matches a number of any length
+* ```\"([^\"]+)\"``` - matches text within a ".." block
+* ```\{([^\}]+)\}``` - matches text within a {..} block
 
 ## Logging
 
@@ -61,10 +68,15 @@ public MyStepDefinitions(WebDriverWrapper driverWrapper) {
    
 ## General Advice
 
-Identify web page elements as generically as possible, so that tests are not brittle and break with minor HTML changes. For example, identify links and buttons using the link/button text, and identify fields using the label (if properly formed). Only use ids, names, or XPath expressions if really needed.
+Identify web page elements as generically as possible, so that tests are not brittle and won't break if minor changes are made to the page. For example, identify links and buttons using the link/button text, and identify fields using the label text. Only use ids, names, or XPath expressions ias a last resort.
 
 Keep step definition lambdas short and simple, if more than a couple of lines of code then extract to a private method.
 
-Use JUnit assertions to test logic. Keep all JUnit use to the java fixture classes.
+Use JUnit assertions to test logic, and keep all JUnit use to the java fixture classes.
 
-Keep all Selenium API use inside the ```DriverWrapper``` class.
+Keep all Selenium API usage inside the ```DriverWrapper``` class.
+
+Refactor and parameterise any common code just as you would with production code, but a few techniques can be used to help retain maintainability:
+
+* Use enumerations with descriptive names to capture concepts such as the user journey being followed, or options being taken
+* Use Optional<T> to handle parameters only needed in certain circumstances, rather than ```null``` or special values like ```0``` or ```-1```
