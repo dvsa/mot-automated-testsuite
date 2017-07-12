@@ -8,7 +8,7 @@ The gradle build script is set to enforce a coding standard, based upon the Goog
 
 Each fixture class must implement ```cucumber.api.java8.En``` and includes a public constructor with nested lambda functions as follows:
  
-```
+```java
 public MyStepDefinitions() {
     
     And("^I check the vehicle summary section of the test summary has \"([^\"]+)\" of \"([^\"]+)\"$", 
@@ -32,7 +32,7 @@ Because the regular expressions characters need to be escaped in Java Strings, t
 
 The test suite uses `slf4j` for logging. Add a logger to your fixture class as follows:
 
-```
+```java
 /** The logger to use. */
 private static final Logger logger = LoggerFactory.getLogger(MyStepDefinitions.class);
 ```
@@ -59,7 +59,7 @@ Each java fixture class can be stateful, if required, and any maintained state w
    
 To access common global objects from within a java fixture class, use dependency injection - for example use constructor injection with ```@javax.inject.Inject``` as follows:
    
-```
+```java
 @Inject
 public MyStepDefinitions(WebDriverWrapper driverWrapper) {
   ..use driverWrapper as needed..
