@@ -68,7 +68,7 @@ public MyStepDefinitions(WebDriverWrapper driverWrapper) {
    
 ## General Advice
 
-Identify web page elements as generically as possible, so that tests are not brittle and won't break if minor changes are made to the page. For example, identify links and buttons using the link/button text, and identify fields using the label text. Only use ids, names, or XPath expressions ias a last resort.
+Identify web page elements as generically as possible, so that tests are not brittle and won't break if minor changes are made to the page. For example, identify links and buttons using the link/button text, and identify fields using the label text. Only use ids, names, or XPath expressions as a last resort.
 
 Keep step definition lambdas short and simple, if more than a couple of lines of code then extract to a private method.
 
@@ -78,5 +78,5 @@ Keep all Selenium API usage inside the ```DriverWrapper``` class.
 
 Refactor and parameterise any common code just as you would with production code, but a few techniques can be used to help retain maintainability:
 
-* Use enumerations with descriptive names to capture concepts such as the user journey being followed, or options being taken
-* Use Optional<T> to handle parameters only needed in certain circumstances, rather than ```null``` or special values like ```0``` or ```-1```
+* Use ```enum``` with descriptive names to capture concepts such as the user journey being followed, or options being taken
+* Use ```Optional<T>``` to handle parameters only needed in certain circumstances, rather than ```null``` or special values like ```0``` or ```-1```
