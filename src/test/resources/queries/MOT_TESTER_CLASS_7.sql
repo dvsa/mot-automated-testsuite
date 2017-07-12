@@ -25,8 +25,8 @@ and sc.security_card_status_lookup_id = 1 -- only assigned cards
 and not exists ( -- not all security_card have a corresponding security_card_drift
   select 1 from security_card_drift scd
   where sc.id = scd.security_card_id
-  and last_observed_drift <= 60 -- no cards drifted forward
-  and last_observed_drift >= -60 -- or back beyond 1 hour
+  and scd.last_observed_drift >= 60 -- no cards drifted forward
+  or scd.last_observed_drift <= -60 -- or back beyond 1 hour
 )
 and not exists (
   select 1 from mot_test_current mtc
