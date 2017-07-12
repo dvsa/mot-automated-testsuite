@@ -54,6 +54,7 @@ The testsuite uses Spring (v4) to manage object lifecycles and inject dependenci
       1. In ```uk.gov.dvsa.mot.framework.LifecycleHooks```, the ```teardown``` method takes a screenshot, resets data keys, and clears any browser cookies 
 1. Then upon shutdown any methods in Spring beans annotated with ```@javax.annotation.PreDestroy``` are run
    1. In ```uk.gov.dvsa.mot.framework.WebDriverWrapper```, the ```preDestroy``` method shuts down the Chrome web browser
+1. Then ```uk.gov.dvsa.mot.reporting.CucumberReporting``` is invoked to process the ```build/reports/selenium/selenium.json``` file and produce reports in ```target``` folder
     
 Each java fixture class can be stateful, if required, and any maintained state will be kept for a single test scenario.
    
