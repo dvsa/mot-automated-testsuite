@@ -2,7 +2,7 @@
 Feature: 7 - Tester does... (part A)
 
   @smoke
-  Scenario: Tester enters a class 4 MOT test pass, with no defects
+  Scenario: Tester enters a class 4 MOT test pass, with no defects and slot is consumed
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     And I get the slot count from the homepage for site {site}
