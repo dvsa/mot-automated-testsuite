@@ -32,4 +32,4 @@ All dataset queries are run before the first test scenario runs, and the results
 
 When writing new SQL queries try to consider whether matching data exists in all test environments, and whether adding some extra functionality to your steps would greatly increase data available for testing (e.g. automatically clearing down special notices greatly increases the number of testers that can be used). 
 
-Please also consider how SQL queries perform, and test your queries both on environments with small volumes of anonymised data and full-size production copies.  You may also find some invalid data needs to be specifically excluded (e.g. ```null``-ed out fields, invalid registration numbers).
+Please also consider how SQL queries perform, and test your queries both on environments with small volumes of anonymised data and full-size production copies.  You may also find some invalid data needs to be specifically excluded (e.g. ```null```-ed out fields, invalid registration numbers).
