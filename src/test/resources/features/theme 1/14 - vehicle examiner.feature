@@ -108,13 +108,3 @@ Feature: 14 - Vehicle Examiner
     # Select MOT tests
     # Provide an invalid Site number / Username / VRM / VIN
     # Ensure that correct validation message is in place
-
-  # Scenario: Record re-inspection + comparison
-    # Select Vehicle information
-    # Provide a valid VRM (ensure that vehicle has at least on test in the past)
-    # Select View MOT history on a Vehicle information page
-    # Select View for one of the tests on the Vehicle MOT test history page
-    # Start re-inspection
-    # Complete re-inspection with the valid data
-    # Start comparison
-    # Complete comparison with the valid data
