@@ -31,11 +31,11 @@ public class PurchaseSlotsStepDefinitions implements En {
         logger.debug("Creating PurchaseSlotsStepDefinitions");
         this.driverWrapper = driverWrapper;
 
-        And("^I order (\\d+) slots", (Integer slots) -> {
+        And("^I order (\\d+) slots$", (Integer slots) -> {
             orderSlots(slots);
         });
 
-        And("^I enter the card details \"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"",
+        And("^I enter the card details \"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"$",
                 (String cardNumber, String expiryDate, String securityCode) -> {
                     String [] expiryDates = expiryDate.split("/");
                     enterCardInformation(cardNumber, expiryDates[0], expiryDates[1], securityCode);
@@ -49,7 +49,7 @@ public class PurchaseSlotsStepDefinitions implements En {
             makePayment(cardNumber);
         });
 
-        And("^I check that (\\d+) slots were bought successfully", (Integer slots) -> {
+        And("^I check that (\\d+) slots were bought successfully$", (Integer slots) -> {
             checkTheSummaryInformation(slots);
         });
     }
