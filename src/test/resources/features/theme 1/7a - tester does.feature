@@ -3,7 +3,7 @@ Feature: 7 - Tester does... (part A)
 
   @smoke
   Scenario: Tester enters a class 4 MOT test pass, with no defects and slot is consumed
-    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
+    Given I load "VEHICLE_CLASS_4_MORE_THAN_4_YEARS" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     And I get the slot count from the homepage for site {site}
 
@@ -12,7 +12,7 @@ Feature: 7 - Tester does... (part A)
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I enter decelerometer results of service brake 60 and parking brake 60
+    And I enter decelerometer results of service brake 51 and parking brake 16
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
@@ -28,7 +28,7 @@ Feature: 7 - Tester does... (part A)
 
 
   Scenario: Tester enters a class 4 MOT test fail, with brake test failure
-    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
+    Given I load "VEHICLE_CLASS_4_MORE_THAN_4_YEARS" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
     When I start an MOT test for {registration1}, {vin1}
@@ -36,7 +36,7 @@ Feature: 7 - Tester does... (part A)
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I enter decelerometer results of service brake 20 and parking brake 20
+    And I enter decelerometer results of service brake 50 and parking brake 15
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
