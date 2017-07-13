@@ -95,7 +95,7 @@ Feature: 7 - Tester does... (part C)
     And I enter "Test reason" in the "How might this be dangerous or cause damage?" field
     And I press the "Confirm and cancel test" button
     Then The page title contains "MOT test abandoned"
-    # Awaiting Andy Lai to confirm (Admin check abandoned) step
+
 
   Scenario: Tester enters a class 4 MOT test pass, for a DVLA vehicle
     Given I load "DVLA_VEHICLE" as {registration1}, {vin1}, {mileage1}
