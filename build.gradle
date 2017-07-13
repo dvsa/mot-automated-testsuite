@@ -123,7 +123,10 @@ task('cucumber-reporting') {
 dependencies {
     testCompile "info.cukes:cucumber-java8:$cucumberVersion"
     testCompile "info.cukes:cucumber-spring:$cucumberVersion"
-    testCompile "com.github.mkolisnyk:cucumber-runner:1.0.8"
+    testCompile ("com.github.mkolisnyk:cucumber-runner:1.0.8") {
+        // not using testng, clashes with junit
+        exclude group: 'info.cukes', module: 'cucumber-testng'
+    }
     testCompile ("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
         // exclude the unused drivers (HTMLUnit, IE, Edge, Safari, Firefox, Opera)
         exclude group: 'org.seleniumhq.selenium', module: 'htmlunit-driver'
