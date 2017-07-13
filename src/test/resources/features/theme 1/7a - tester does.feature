@@ -24,7 +24,7 @@ Feature: 7 - Tester does... (part A)
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click the "Back to user home" link
-    And I check a slot was succesfully used for site {site}
+    And I check a slot was successfully used for site {site}
 
 
   Scenario: Tester enters a class 4 MOT test fail, with brake test failure

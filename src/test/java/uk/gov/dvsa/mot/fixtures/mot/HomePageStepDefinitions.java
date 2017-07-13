@@ -37,7 +37,7 @@ public class HomePageStepDefinitions implements En {
             getSlotsCountFromHomePage(siteKey);
         });
 
-        And("^I check a slot was succesfully used for site \\{([^\\}]+)\\}$", (String siteKey) -> {
+        And("^I check a slot was successfully used for site \\{([^\\}]+)\\}$", (String siteKey) -> {
             checkSlotsBalanceDecreased(siteKey);
         });
     }

@@ -6,7 +6,7 @@ In general the following syntax is used:
 
 * Hard-coded test data is surrounded with ".."
 * Test data loaded from the database is surrounded with {..}
- 
+
 ## Generic
 
 These steps are completely generic to any web application.
@@ -55,7 +55,47 @@ These steps are specific to the DVSA MOT application screens.
 
 ### CreateVehicleStepDefinitions
 
+* I enter the date of first use as today minus ```..amount..``` years
+* I select Vehicle Class ```..class..```
+* I enter reg ```"..reg.."``` and vin ```"..vin..""```
+* I select make ```"..make.."``` and model ```"..model.."```
+* I select primary colour ```"..colour1.."``` and secondary colour ```"..colour2.."```
+* I select fuel type ```"..fuel.."``` and cylinder capacity ```..capacity..```
+* I select country of registration ```"..country.."```
+* I cancel the mot test after creating the vehicle
+* I check the registration ```"..reg.."``` and vin ```"..vin.."``` is correct
+* I check the make ```"..make.."``` and model ```"..model.."``` is correct
+* I check the fuel type ```"..fuel.."``` and cylinder capacity ```..capacity..``` is correct
+* I check the vehicle class ```"..class.."``` is correct
+* I check the primary colour ```"..colour1.."``` and secondary colour ```"..colour2.."``` is correct
+* I check the date of first use from ```..years..``` years ago is correct
+* I check the country of registration ```"..country.."``` is correct
+
 ### DuplicateAndReplacementStepDefinitions
+
+* I search for certificates with reg ```{..regKey..}```
+* I search for certificates with vin ```{..vinKey..}```
+* I update the odometer reading by ```..reading..```
+* I update the testing location to ```{..locationKey..}```, ```{..nameKey..}```
+* I update the expiry date by adding ```..days..``` days
+* I submit the certificate changes
+* I check the odometer reading on the confirmation page is correct
+* I check the expiry date of the confirmation page is correct
+* I check the vts information appears on the confirmation page
+
+### HomePageStepDefinitions
+
+* I click the organisation link ```{..organisationKey..}```
+* I get the slot count from the homepage for site ```{..siteKey..}```
+* I check a slot was successfully used for site ```{..siteKey..}```
+
+### PurchaseSlotsStepDefinitions
+
+* I order ```..amount..``` slots
+* I enter the card details ```"..cardNumber.."```, ```"..expiryDate.."```, ```"..securityCode.."```
+* I enter the card holders name as ```"..name.."```
+* I make the payment for card ```"..cardNumber.."```
+* I check that ```..amount..``` slots were bought successfully
 
 ### TesterDoesStepDefinitions
 

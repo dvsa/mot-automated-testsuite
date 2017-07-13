@@ -41,7 +41,7 @@ public class DuplicateAndReplacementStepDefinitions implements En {
             searchForCertificateWithVin(driverWrapper.getData(vinKey));
         });
 
-        And("^I update the odometer reading by (\\d+)", (Integer addToOdometer) -> {
+        And("^I update the odometer reading by (\\d+)$", (Integer addToOdometer) -> {
             updateOdometerReading(addToOdometer);
         });
 
@@ -79,9 +79,6 @@ public class DuplicateAndReplacementStepDefinitions implements En {
     private void searchForCertificateWithReg(String reg) {
         //Click the Duplicate/replacement certificate link
         driverWrapper.clickLink("Replacement/duplicate certificate");
-
-        //Check that we are on the replacement / duplicate certificate page
-        //driverWrapper.checkCurrentPageTitle("Search by registration mark");
 
         //Enter the registration into the input
         driverWrapper.enterIntoField(reg, "Registration mark");
