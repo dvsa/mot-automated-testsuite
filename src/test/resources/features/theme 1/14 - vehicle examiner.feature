@@ -1,6 +1,28 @@
 @regression
 Feature: 14 - Vehicle Examiner
 
+  Scenario: VE records re-inspection
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
+    And I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
+    And I click the "vehicle information" link
+    And I search for vehicle information by "Registration (VRM)" with {registration1}
+    And I click the "View MOT history" link
+    And I click the first "View" link
+    When I start a "Targeted Reinspection" test
+    And I enter an odometer reading in miles of {mileage1} plus 1000
+    And I enter decelerometer results of service brake 60 and parking brake 60
+    Then I press the "Review test" button
+    And I check the test information section of the test summary is "Pass"
+    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
+    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the brake results section of the test summary is "Pass"
+    And I check the fails section of the test summary has "None recorded"
+    And I press the "Finish reinspection" button
+    And The page title contains "MOT reinspection complete"
+    And I click the "Compare test results" link
+    And I perform a test comparison with outcome "No further action" and justification "Test was satisfactory"
+    And I check the case outcome "No further action" is saved
+
   # Scenario: AE search positive
     # Select AE information
     # Provide a valid AE number

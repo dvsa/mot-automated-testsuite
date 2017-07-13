@@ -315,7 +315,8 @@ public class WebDriverWrapper {
      * @param linkText  The link text used to find the link
      */
     public void clickFirstLink(String linkText) {
-        findLinks(linkText).get(0).click();
+        WebElement link = findLinks(linkText).get(0);
+        link.click();
     }
 
     /**
@@ -448,6 +449,7 @@ public class WebDriverWrapper {
     public void clickElement(String id) {
         WebElement element = webDriver.findElement(By.id(id));
         element.click();
+        waitForPageLoad();
     }
 
     /**
