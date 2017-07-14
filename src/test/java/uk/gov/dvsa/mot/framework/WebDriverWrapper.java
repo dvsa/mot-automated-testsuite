@@ -42,7 +42,7 @@ public class WebDriverWrapper {
     private static final Logger logger = LoggerFactory.getLogger(WebDriverWrapper.class);
 
     /** The web driver to use. */
-    private WebDriver webDriver;
+    private final WebDriver webDriver;
 
     /** The environment configuration to use. */
     private final Environment env;
@@ -58,7 +58,20 @@ public class WebDriverWrapper {
         logger.debug("Creating WebDriverWrapper...");
         this.env = env;
         this.data = new HashMap<>();
+        this.webDriver = createWebDriver();
 
+        // ensure all previous sessions are invalidated
+        this.webDriver.manage().deleteAllCookies();
+    }
+
+    /**
+     * Creates the web driver being wrapped.
+     *
+     * This can be overridden by subclasses wanting to use alternative test web drivers.
+     *
+     * @return The web driver instance
+     */
+    protected WebDriver createWebDriver() {
         logger.debug("Creating new chrome driver");
         String browser = env.getRequiredProperty("browser");
         if ("chrome".equals(browser)) {
@@ -89,21 +102,21 @@ public class WebDriverWrapper {
             //If gridURL is set create a remote webdriver instance
             if (env.containsProperty("gridURL")) {
                 try {
-                    this.webDriver = new RemoteWebDriver(new URL(env.getProperty("gridURL")), capabilities);
+                    return new RemoteWebDriver(new URL(env.getProperty("gridURL")), capabilities);
+
                 } catch (MalformedURLException malformedUrlException) {
-                    logger.error("Error while creating remote driver: " + malformedUrlException.getMessage());
+                    String message = "Error while creating remote driver: " + malformedUrlException.getMessage();
+                    logger.error(message);
+                    throw new IllegalArgumentException(message);
                 }
             } else {
-                this.webDriver = new ChromeDriver(chromeOptions);
+                return new ChromeDriver(chromeOptions);
             }
         } else {
             String message = "Unsupported browser: " + browser;
             logger.error(message);
             throw new IllegalArgumentException(message);
         }
-
-        // ensure all previous sessions are invalidated
-        this.webDriver.manage().deleteAllCookies();
     }
 
     /**
@@ -721,7 +734,7 @@ public class WebDriverWrapper {
      * Failure to do this between page transitions can result in intermittent failures, such as
      * Selenium still being on the previous page, or failure to find page element in the new page.
      */
-    private void waitForPageLoad() {
+    protected void waitForPageLoad() {
         logger.debug("Waiting for page reload...");
 
         // initial wait (in milliseconds) to give the selenium web driver time to tell the web browser to
