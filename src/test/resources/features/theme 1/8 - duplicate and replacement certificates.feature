@@ -24,7 +24,7 @@ Feature: 8 - duplicate and replacement certificates
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
-    And I check the "Print certificate" link is enabled
+    And I check there is a "Print certificate" link
 
   Examples:
   |user        |dataScript       |
@@ -36,7 +36,7 @@ Feature: 8 - duplicate and replacement certificates
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
-    And I check the "Print certificate" link is enabled
+    And I check there is a "Print certificate" link
 
   #Scenario: Tester changes odometer and vehicle colour on latest certificate
     #Given I login as {tester1}
