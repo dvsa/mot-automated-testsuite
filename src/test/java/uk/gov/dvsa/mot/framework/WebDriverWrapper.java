@@ -66,9 +66,7 @@ public class WebDriverWrapper {
 
     /**
      * Creates the web driver being wrapped.
-     *
-     * This can be overridden by subclasses wanting to use alternative test web drivers.
-     *
+     * <p>This can be overridden by subclasses wanting to use alternative test web drivers.</p>
      * @return The web driver instance
      */
     protected WebDriver createWebDriver() {
@@ -367,7 +365,7 @@ public class WebDriverWrapper {
      * following the relative XPath expression.
      * @param startTag          The tag containing the starting text
      * @param startText         The starting text
-     * @param relativeXPath     The relative XPath expression
+     * @param relativeXPath     The relative XPath expression, must end in "/"
      */
     public boolean hasLink(String startTag, String startText, String relativeXPath) {
         try {

@@ -2,17 +2,20 @@ package uk.gov.dvsa.mot.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.springframework.core.env.Environment;
 import org.springframework.mock.env.MockEnvironment;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
+import uk.gov.dvsa.mot.framework.WrongPageException;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -196,6 +199,53 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>getLinkClass()</code>, when classes have been populated.
+     */
+    @Test
+    public void getLinkClassPopulated() {
+        browseTo("/hasLink-1.html", "hasLink - 1");
+        assertEquals("Wrong classes returned",
+                "class1 class2 class3", driverWrapper.getLinkClass("test 1"));
+    }
+
+    /**
+     * Tests <code>getLinkClass()</code>, when classes have been populated, matching by partial link text.
+     */
+    @Test
+    public void getLinkClassPopulatedPartialLinkText() {
+        browseTo("/hasLink-1.html", "hasLink - 1");
+        assertEquals("Wrong classes returned",
+                "class1 class2 class3", driverWrapper.getLinkClass("1"));
+    }
+
+    /**
+     * Tests <code>getLinkClass()</code>, when no classes have been populated.
+     */
+    @Test
+    public void getLinkClassNotPopulated() {
+        browseTo("/hasLink-1.html", "hasLink - 1");
+        assertNull("Wrong classes returned", driverWrapper.getLinkClass("test 2"));
+    }
+
+    /**
+     * Tests <code>getLinkClass()</code>, when no link exists.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void getLinkClassMissing() {
+        browseTo("/hasLink-1.html", "hasLink - 1");
+        driverWrapper.getLinkClass("test 4");
+    }
+
+    /**
+     * Tests <code>getLinkClass()</code>, when multiple links exists.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void getLinkClassMultiple() {
+        browseTo("/hasLink-2.html", "hasLink - 2");
+        driverWrapper.getLinkClass("test 1");
+    }
+
+    /**
      * Tests <code>hasLink()</code> matches by full link text.
      */
     @Test
@@ -220,6 +270,212 @@ public class WebDriverWrapperTest {
     public void hasLinkNotPresent() {
         browseTo("/hasLink-1.html", "hasLink - 1");
         assertFalse("Shouldn't find link not present", driverWrapper.hasLink("test 4"));
+    }
+
+    /**
+     * Tests <code>hasLink()</code> with multiple matching links.
+     */
+    @Test
+    public void hasLinkMultiple() {
+        browseTo("/hasLink-2.html", "hasLink - 2");
+        assertTrue("Shouldn't find link not present", driverWrapper.hasLink("test 1"));
+    }
+
+    /**
+     * Tests <code>hasLink(String startTag, String startText, String relativeXPath)</code> with a matching example.
+     */
+    @Test
+    public void hasLinkComplexMatching() {
+        browseTo("/hasLinkComplex-1.html", "hasLink complex - 1");
+        assertTrue("Should find link present",
+                driverWrapper.hasLink("span", "Span Text", "../../../div/table/"));
+    }
+
+    /**
+     * Tests <code>hasLink(String startTag, String startText, String relativeXPath)</code> with an example that does
+     * not match.
+     */
+    @Test
+    public void hasLinkComplexNotMatching() {
+        browseTo("/hasLinkComplex-1.html", "hasLink complex - 1");
+        assertFalse("Should find link not present",
+                driverWrapper.hasLink("span", "Span Text", "../h3/"));
+    }
+
+    /**
+     * Tests <code>getElementText(String id)</code> with a matching example.
+     */
+    @Test
+    public void getElementTextByIdMatching() {
+        browseTo("/getElementText-1.html", "getElementText - 1");
+        assertEquals("Should find element",
+                "Other section.", driverWrapper.getElementText("other123"));
+    }
+
+    /**
+     * Tests <code>getElementText(String id)</code> with a non matching example.
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void getElementTextByIdNotMatching() {
+        browseTo("/getElementText-1.html", "getElementText - 1");
+        driverWrapper.getElementText("wibble321");
+    }
+
+    /**
+     * Tests <code>getElementText(String startTag, String startText, String relativeXPath)</code> with a
+     * matching example.
+     */
+    @Test
+    public void getElementTextComplexMatching() {
+        browseTo("/getElementText-1.html", "getElementText - 1");
+        assertEquals("Should find text present", "Paragraph Text.",
+                driverWrapper.getElementText(
+                        "span", "Span Text", "../../../div/table/.//p"));
+    }
+
+    /**
+     * Tests <code>getElementText(String startTag, String startText, String relativeXPath)</code> with an
+     * example that does not match.
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void getElementTextComplexNotMatching() {
+        browseTo("/getElementText-1.html", "getElementText - 1");
+        driverWrapper.getElementText("span", "Span Text", "../h3/a");
+    }
+
+    /**
+     * Tests <code>getTextFromTableRow()</code> with a matching example.
+     */
+    @Test
+    public void getTextFromTableRowMatching() {
+        browseTo("/getTextFromTableRow-1.html", "getTextFromTableRow - 1");
+        assertEquals("Should find matching text",
+                "Data Text 2.", driverWrapper.getTextFromTableRow("Header Text 2."));
+    }
+
+    /**
+     * Tests <code>getTextFromTableRow()</code> with a non matching example.
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void getTextFromTableRowNotMatching() {
+        browseTo("/getTextFromTableRow-1.html", "getTextFromTableRow - 1");
+        driverWrapper.getTextFromTableRow("Header Text 4.");
+    }
+
+    /**
+     * Tests <code>getTextFromTableColumn()</code> with a matching example.
+     */
+    @Test
+    public void getTextFromTableColumnMatching() {
+        browseTo("/getTextFromTableColumn-1.html", "getTextFromTableColumn - 1");
+        assertEquals("Should find matching text",
+                "Body3", driverWrapper.getTextFromTableColumn("Header3"));
+    }
+
+    /**
+     * Tests <code>getTextFromTableColumn()</code> with a non matching example.
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void getTextFromTableColumnNotMatching() {
+        browseTo("/getTextFromTableColumn-1.html", "getTextFromTableColumn - 1");
+        driverWrapper.getTextFromTableColumn("Header5");
+    }
+
+    /**
+     * Tests <code>getTextFromUnorderedList()</code> with a matching example.
+     */
+    @Test
+    public void getTextFromUnorderedListMatching() {
+        browseTo("/getTextFromUnorderedList-1.html", "getTextFromUnorderedList - 1");
+
+        // note that element text gets trimmed
+        assertEquals("Should find matching text",
+                "Item 1Item 2Item 3", driverWrapper.getTextFromUnorderedList("Heading"));
+    }
+
+    /**
+     * Tests <code>getTextFromUnorderedList()</code> with a non matching example.
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void getTextFromUnorderedListNotMatching() {
+        browseTo("/getTextFromUnorderedList-1.html", "getTextFromUnorderedList - 1");
+        driverWrapper.getTextFromUnorderedList("Wibble");
+    }
+
+    /**
+     * Tests <code>getTextFromDefinitionList()</code> with a matching example.
+     */
+    @Test
+    public void getTextFromDefinitionListMatching() {
+        browseTo("/getTextFromDefinitionList-1.html", "getTextFromDefinitionList - 1");
+        assertEquals("Should find matching text",
+                "Value 2", driverWrapper.getTextFromDefinitionList("Item 2"));
+    }
+
+    /**
+     * Tests <code>getTextFromDefinitionList()</code> with a non matching example.
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void getTextFromDefinitionListNotMatching() {
+        browseTo("/getTextFromDefinitionList-1.html", "getTextFromDefinitionList - 1");
+        driverWrapper.getTextFromDefinitionList("Item 4");
+    }
+
+    /**
+     * Tests <code>getTextFromHeading()</code> with a matching example.
+     */
+    @Test
+    public void getTextFromHeadingMatching() {
+        browseTo("/getTextFromHeading-1.html", "getTextFromHeading - 1");
+        assertEquals("Should find matching text",
+                "Span 1Span 2Span 3", driverWrapper.getTextFromHeading("Heading Text"));
+    }
+
+    /**
+     * Tests <code>getTextFromHeading()</code> with a non matching example.
+     */
+    @Test
+    public void getTextFromHeadingNotMatching() {
+        browseTo("/getTextFromHeading-1.html", "getTextFromHeading - 1");
+        assertEquals("Should not find matching text", "",
+                driverWrapper.getTextFromHeading("Other Text"));
+    }
+
+    /**
+     * Tests <code>getRelativeTextFromHeading()</code> with a matching example.
+     */
+    @Test
+    public void getRelativeTextFromHeadingMatching() {
+        browseTo("/getRelativeTextFromHeading-1.html", "getRelativeTextFromHeading - 1");
+        assertEquals("Should find matching text", "Following text.",
+                driverWrapper.getRelativeTextFromHeading("Heading Text"));
+    }
+
+    /**
+     * Tests <code>getRelativeTextFromHeading()</code> with a non matching example.
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void getRelativeTextFromHeadingNotMatching() {
+        browseTo("/getRelativeTextFromHeading-1.html", "getRelativeTextFromHeading - 1");
+        driverWrapper.getRelativeTextFromHeading("Wibble");
+    }
+
+    /**
+     * Tests <code>checkCurrentPageTitle()</code> with a matching example.
+     */
+    @Test
+    public void checkCurrentPageTitleMatching() {
+        driverWrapper.browseTo("/getRelativeTextFromHeading-1.html");
+        driverWrapper.checkCurrentPageTitle("getRelativeTextFromHeading - 1");
+    }
+
+    /**
+     * Tests <code>checkCurrentPageTitle()</code> with a non matching example.
+     */
+    @Test(expected = WrongPageException.class)
+    public void checkCurrentPageTitleNotMatching() {
+        driverWrapper.browseTo("/getRelativeTextFromHeading-1.html");
+        driverWrapper.checkCurrentPageTitle("wibble");
     }
 
     /**
