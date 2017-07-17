@@ -44,14 +44,6 @@ public class TesterDoesStepDefinitions implements En {
         And("^I enter odometer not present$", () ->
                 enterOdometerReading(OdometerJourney.NotPresent, 0));
 
-        And("^I click the \"Aborted by VE\" radio button$", () ->
-                // unfortunately given no proper formed label etc we have to use the id
-                driverWrapper.clickElement("reasonForCancel25"));
-
-        And("^I click the \"Inspection may be dangerous or cause damage\" radio button$", () ->
-                // unfortunately given no proper formed label etc we have to use the id
-                driverWrapper.clickElement("reasonForCancel21"));
-
         And("^The MOT status is \"([^\"]+)\"$", (String status) ->
                 // unfortunately given no proper formed label etc we have to use the id
                 assertTrue("Wrong MOT status", driverWrapper.getElementText("testStatus").contains(status)));
@@ -205,8 +197,8 @@ public class TesterDoesStepDefinitions implements En {
                 //And I click the "Change" link for the MOT test class
                 driverWrapper.clickLink("th", "MOT test class", "../td/", "Change");
 
-                //And I select the Class <n> radio button (by id as badly formed label)
-                driverWrapper.selectRadioById("class" + vehicleClass.get());
+                //And I select the "Class <n>" radio button
+                driverWrapper.selectRadio("Class " + vehicleClass.get());
 
                 //And I press the "Continue" button
                 driverWrapper.pressButton("Continue");
@@ -266,7 +258,7 @@ public class TesterDoesStepDefinitions implements En {
 
         // if page title Select your current site
         if (driverWrapper.getCurrentPageTitle().contains("Select your current site")) {
-            // select the first site (radios of name vtsId)
+            // select the first site
             driverWrapper.clickRadioButtonByText(driverWrapper.getData("site"));
             // press "Confirm" button
             driverWrapper.pressButton("Confirm");
@@ -334,8 +326,8 @@ public class TesterDoesStepDefinitions implements En {
                 break;
 
             case NotPresent:
-                // And I select the "Odometer is not present" radio button (using id as has badly formed label)
-                driverWrapper.selectRadioById("noOdometer");
+                // And I select the "Odometer is not present" radio button
+                driverWrapper.selectRadio("Odometer is not present");
                 break;
 
             default:
@@ -430,13 +422,13 @@ public class TesterDoesStepDefinitions implements En {
                 if (result2.isPresent()) {
                     switch (result2.get()) {
                         case "Pass":
-                            // And I select the pass parking brake radio button (by id as label badly formed)
-                            driverWrapper.selectRadioById("parkingBrakeEfficiencyPassPass");
+                            // And I select the "Pass" parking brake radio button
+                            driverWrapper.selectRadio("Pass");
                             break;
 
                         case "Fail":
-                            // And I select the fail parking brake radio button (by id as label badly formed)
-                            driverWrapper.selectRadioById("parkingBrakeEfficiencyPassFail");
+                            // And I select the "Fail" parking brake radio button
+                            driverWrapper.selectRadio("Fail");
                             break;
 
                         default:
@@ -657,8 +649,8 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.enterIntoField(comment, "Add any further comments if required");
 
         if (isDangerous) {
-            // And I select the dangerous radio button (by id as label badly formed)
-            driverWrapper.selectRadioById(defectType.type.toLowerCase() + "Dangerous");
+            // And I select the "This defect is dangerous" checkbox
+            driverWrapper.selectCheckbox("This defect is dangerous");
         }
 
         // And I press the "<Add/Edit> <advisory>" button

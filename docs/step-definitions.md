@@ -18,6 +18,10 @@ High level:
 * I browse to ```URL```
 * I press the ```"..buton text.."``` button
 * I click the ```"..link text.."``` link
+* I click the ```..label...``` radio button
+   * Note: handles labels with ```for``` and radio inputs nested inside the label 
+* I click the ```..label...``` checkbox   
+   * Note: handles labels with ```for``` and checkbox inputs nested inside the label 
 * I enter ```"..text.."``` in the ```"..label.."``` field
 * I enter ```{key}``` in the ```"..label.."``` field
 * I select ```"..item.."``` in the ```"..label.."``` field
@@ -100,8 +104,6 @@ These steps are specific to the DVSA MOT application screens.
 * I enter an odometer reading in miles of ```{..key..}``` plus ```..amount..```
 * I enter an odometer reading in kilometres of ```..amount..```
 * I enter odometer not present
-* I click the "Aborted by VE" radio button
-* I click the "Inspection may be dangerous or cause damage" radio button
 * The MOT status is ```"..Pass or Fail.."```
 * I start an MOT test for ```{..reg key..}```, ```{..vin key..}```
 * I start an MOT retest for ```{..reg key..}```, ```{..vin key..}```

@@ -9,6 +9,7 @@ import com.gargoylesoftware.htmlunit.BrowserVersion;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
@@ -29,7 +30,7 @@ public class WebDriverWrapperTest {
     /**
      * The class under test.
      */
-    private WebDriverWrapper driverWrapper;
+    private HtmlUnitWebDriverWrapper driverWrapper;
 
     /**
      * Test initialisation.
@@ -479,6 +480,88 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>selectRadio()</code> with a matching example.
+     */
+    @Test
+    public void selectRadioMatching() {
+        browseTo("/selectRadio-1.html", "selectRadio - 1");
+        driverWrapper.selectRadio("Test Radio Button 1");
+        assertTrue("Radio button should have been selected", driverWrapper.isElementChecked("my_radio"));
+
+    }
+
+    /**
+     * Tests <code>selectRadio()</code> with a non matching example.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void selectRadioNotMatching() {
+        browseTo("/selectRadio-1.html", "selectRadio - 1");
+        driverWrapper.selectRadio("Test Radio Button 3");
+    }
+
+    /**
+     * Tests <code>selectRadio()</code> with a matching example (radio nested inside the label).
+     */
+    @Test
+    public void selectRadioNestedMatching() {
+        browseTo("/selectRadio-2.html", "selectRadio - 2");
+        driverWrapper.selectRadio("Test Radio Button 1");
+        assertTrue("Radio button should have been selected", driverWrapper.isElementChecked("my_radio"));
+
+    }
+
+    /**
+     * Tests <code>selectRadio()</code> with a non matching example.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void selectRadioNestedNotMatching() {
+        browseTo("/selectRadio-2.html", "selectRadio - 2");
+        driverWrapper.selectRadio("Test Radio Button 3");
+    }
+
+    /**
+     * Tests <code>selectCheckbox()</code> with a matching example.
+     */
+    @Test
+    public void selectCheckboxMatching() {
+        browseTo("/selectCheckbox-1.html", "selectCheckbox - 1");
+        driverWrapper.selectCheckbox("Test Checkbox Button");
+        assertTrue("Checkbox button should have been selected",
+                driverWrapper.isElementChecked("my_input"));
+
+    }
+
+    /**
+     * Tests <code>selectCheckbox()</code> with a non matching example.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void selectCheckboxNotMatching() {
+        browseTo("/selectCheckbox-1.html", "selectCheckbox - 1");
+        driverWrapper.selectCheckbox("Other Checkbox Button");
+    }
+
+    /**
+     * Tests <code>selectCheckbox()</code> with a matching example (input nested inside the label).
+     */
+    @Test
+    public void selectCheckboxNestedMatching() {
+        browseTo("/selectCheckbox-2.html", "selectCheckbox - 2");
+        driverWrapper.selectCheckbox("Test Checkbox Button");
+        assertTrue("Checkbox button should have been selected",
+                driverWrapper.isElementChecked("my_input"));
+
+    }
+
+    /**
+     * Tests <code>selectCheckbox()</code> with a non matching example.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void selectCheckboxNestedNotMatching() {
+        browseTo("/selectCheckbox-2.html", "selectCheckbox - 2");
+        driverWrapper.selectCheckbox("Other Checkbox Button");
+    }
+
+    /**
      * Browses to the specified test page, and check the page title is correct.
      *
      * @param testPage      The test page, must start with "/"
@@ -494,12 +577,15 @@ public class WebDriverWrapperTest {
      */
     private class HtmlUnitWebDriverWrapper extends WebDriverWrapper {
 
+        /** Used in checks below. */
+        private WebDriver webDriver;
+
         /**
          * Creates a new instance.
          *
          * @param env The mocked testsuite.properties
          */
-        public HtmlUnitWebDriverWrapper(Environment env) {
+        HtmlUnitWebDriverWrapper(Environment env) {
             super(env);
         }
 
@@ -510,7 +596,8 @@ public class WebDriverWrapperTest {
          */
         @Override
         protected WebDriver createWebDriver() {
-            return new HtmlUnitDriver(BrowserVersion.CHROME);
+            this.webDriver = new HtmlUnitDriver(BrowserVersion.CHROME);
+            return webDriver;
         }
 
         /**
@@ -519,6 +606,14 @@ public class WebDriverWrapperTest {
         @Override
         protected void waitForPageLoad() {
             // does nothing
+        }
+
+        /**
+         * Used to check the outcome of tests on radio and checkbox buttons.
+         * @return <code>true</code> if button was checked.
+         */
+        boolean isElementChecked(String id) {
+            return webDriver.findElement(By.id(id)).isSelected();
         }
     }
 }

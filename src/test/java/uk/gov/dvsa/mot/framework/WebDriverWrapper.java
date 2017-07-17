@@ -543,13 +543,29 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Selects the specified radio button.
-     * @param label  The radio button label
+     * Selects the specified radio button. Supports well-formed labels and radio buttons nested inside the label.
+     * @param labelText  The radio button label
      */
-    public void selectRadio(String label) {
-        // find the input associated with the specified label...
-        WebElement labelElement = webDriver.findElement(By.xpath("//label[contains(text(),'" + label + "')]"));
-        webDriver.findElement(By.id(labelElement.getAttribute("for"))).click();
+    public void selectRadio(String labelText) {
+        try {
+            // find the input associated with the specified (well-formed) label...
+            WebElement labelElement = webDriver.findElement(By.xpath("//label[contains(text(),'" + labelText + "')]"));
+            webDriver.findElement(By.id(labelElement.getAttribute("for"))).click();
+
+        } catch (NoSuchElementException ex) {
+            // find the input nested within the label element...
+            List<WebElement> labels = webDriver.findElements(By.tagName("label"));
+            for (WebElement label : labels) {
+                if (label.getText().contains(labelText)) {
+                    label.findElement(By.xpath("./input[@type = 'radio']")).click();
+                    return;
+                }
+            }
+
+            String message = "No radio button found with label (well-formed or nested): " + labelText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+        }
     }
 
     /**
@@ -561,6 +577,32 @@ public class WebDriverWrapper {
      */
     public void selectRadioById(String id) {
         webDriver.findElement(By.id(id)).click();
+    }
+
+    /**
+     * Selects the specified checkbox button. Supports well-formed labels and inputs nested inside the label.
+     * @param labelText  The checkbox button label
+     */
+    public void selectCheckbox(String labelText) {
+        try {
+            // find the input associated with the specified (well-formed) label...
+            WebElement labelElement = webDriver.findElement(By.xpath("//label[contains(text(),'" + labelText + "')]"));
+            webDriver.findElement(By.id(labelElement.getAttribute("for"))).click();
+
+        } catch (NoSuchElementException ex) {
+            // find the input nested within the label element...
+            List<WebElement> labels = webDriver.findElements(By.tagName("label"));
+            for (WebElement label : labels) {
+                if (label.getText().contains(labelText)) {
+                    label.findElement(By.xpath("./input[@type = 'checkbox']")).click();
+                    return;
+                }
+            }
+
+            String message = "No checkbox button found with label (well-formed or nested): " + labelText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+        }
     }
 
     /**

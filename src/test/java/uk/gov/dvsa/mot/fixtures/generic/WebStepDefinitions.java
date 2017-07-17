@@ -38,6 +38,14 @@ public class WebStepDefinitions implements En {
             driverWrapper.clickLink(linkText);
         });
 
+        When("^I click the \"([^\"]+)\" radio button$", (String labelText) -> {
+            driverWrapper.selectRadio(labelText);
+        });
+
+        When("^I click the \"([^\"]+)\" checkbox$", (String labelText) -> {
+            driverWrapper.selectCheckbox(labelText);
+        });
+
         When("^I enter \"([^\"]+)\" in the \"([^\"]+)\" field$", (String text, String label) -> {
             driverWrapper.enterIntoField(text, label);
         });
