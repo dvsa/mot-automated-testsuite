@@ -66,14 +66,6 @@ public class WebStepDefinitions implements En {
             assertFalse(driverWrapper.hasLink(link));
         });
 
-        And("^I check the \"([^\"]+)\" link is disabled$", (String link) -> {
-            assertTrue(driverWrapper.isLinkDisabled(link));
-        });
-
-        And("^I check the \"([^\"]+)\" link is enabled$", (String link) -> {
-            assertFalse(driverWrapper.isLinkDisabled(link));
-        });
-
         And("^I check the \"([^\"]+)\" button is disabled$", (String buttonText) -> {
             assertTrue(driverWrapper.isButtonDisabled(buttonText));
         });

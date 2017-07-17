@@ -355,28 +355,6 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Determine whether the specified link is disabled.
-     * @param linkText  The link text
-     * @return <code>true</code> if disabled
-     */
-    public boolean isLinkDisabled(String linkText) {
-        List<WebElement> links = findLinks(linkText);
-        if (links.size() == 0) {
-            String message = "No links found with text: " + linkText;
-            logger.error(message);
-            throw new IllegalArgumentException(message);
-
-        } else if (links.size() > 1) {
-            String message = "Several links found with text: " + linkText;
-            logger.error(message);
-            throw new IllegalArgumentException(message);
-
-        } else {
-            return links.get(0).getAttribute("disabled") != null;
-        }
-    }
-
-    /**
      * Determines whether the current page contains the specified link.
      * @param linkText  The link text
      */

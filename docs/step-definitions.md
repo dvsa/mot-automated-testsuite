@@ -24,8 +24,6 @@ High level:
 * The page title contains ```"..text.."```
 * I check there is a ```"..link text.."``` link
 * I check there is no ```"..link text.."```
-* I check the ```"..link text.."``` link is disabled
-* I check the ```"..link text.."``` link is enabled
 * I check the ```"..button text.."``` button is disabled
 * I check the ```"..button text.."``` button is enabled
 * I click the first ```"..link text.."``` link
