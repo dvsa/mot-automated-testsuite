@@ -19,13 +19,24 @@ Feature: 8 - duplicate and replacement certificates
     And I press the "Finish changes and print certificate" button
     Then The page title contains "Test Results Updated Successfully"
 
-  #Scenario Outline: Tester / DVLA Manager / AO1 user issues duplicate certificate
-    #Given I login as <user>
-    #And I click the "Replacement / Duplicate certificate" link
-    #And I search for certificates with {reg}
-    #And I click the first "view certificate" link
-    #Then I should see the "Print certificate" button
-    #And I check the pdf details are correct
+  Scenario Outline: <user> user issues duplicate certificate
+    Given I login without 2FA using "<dataScript>" as {<user>}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
+    And I search for certificates with reg {reg}
+    And I click the first "View certificate" link
+    And I check the "Print certificate" link is enabled
+
+  Examples:
+  |user        |dataScript       |
+  |AO1         |AO1_USER         |
+  |DVLA Manager|DVLA_MANAGER_USER|
+
+  Scenario: Tester issues duplicate certificate
+    Given I login with 2FA using "MOT_TESTER_CLASS_4" as {tester}, {site}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
+    And I search for certificates with reg {reg}
+    And I click the first "View certificate" link
+    And I check the "Print certificate" link is enabled
 
   #Scenario: Tester changes odometer and vehicle colour on latest certificate
     #Given I login as {tester1}
