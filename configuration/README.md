@@ -37,6 +37,14 @@ Supported values are:
 * onErrorOnly
 * never
 
+## outputHtml
+When to save the raw HTML of the page reached at the end of each test scenario.
+Supported values are: 
+
+* always
+* onErrorOnly
+* never
+
 ## password
 The password that all user accounts are set to in the test environment being used
 

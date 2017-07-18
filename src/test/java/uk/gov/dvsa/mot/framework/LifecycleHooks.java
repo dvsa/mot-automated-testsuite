@@ -8,6 +8,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.data.DatabaseDataProvider;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -65,6 +74,7 @@ public class LifecycleHooks {
         // add to the test report
         outputDataUse(scenario);
         outputFinalScreenshot(scenario);
+        outputFinalHtml(scenario);
 
         // test cleanup
         driverWrapper.reset();
@@ -116,6 +126,35 @@ public class LifecycleHooks {
     }
 
     /**
+     * Output the raw HTML of the final web page reached in this test scenario, useful for investigating test
+     * failures and as a record of what exactly was tested. The files are output to the same directory as the reports.
+     * <p>Uses the <i>outputHtml</i> configuration setting.</p>
+     * @param scenario  The scenario just completed
+     */
+    private void outputFinalHtml(Scenario scenario) {
+        String outputHtml = env.getRequiredProperty("outputHtml");
+        switch (outputHtml) {
+            case "onErrorOnly":
+                if (scenario.isFailed()) {
+                    writeHtml(scenario);
+                }
+                break;
+
+            case "always":
+                writeHtml(scenario);
+                break;
+
+            case "never":
+                break;
+
+            default:
+                String message = "Unknown outputHtml setting: " + outputHtml;
+                logger.error(message);
+                throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
      * Take a screenshot of the current browser window, and outputs it to the report, which gets picked up by the
      * Cucumber default reports and reporting plugins.
      * <p>Note: most Selenium web drivers, especially Chrome, only output the visible portion of the screen.</p>
@@ -125,6 +164,41 @@ public class LifecycleHooks {
         byte[] screenshot = driverWrapper.takeScreenshot();
         if (screenshot != null ) {
             scenario.embed(screenshot, "image/png");
+        }
+    }
+
+    /**
+     * Writes the raw HTML to a file.
+     * @param scenario  The current scenario
+     */
+    private void writeHtml(Scenario scenario) {
+        String html = driverWrapper.getHtml();
+
+        File dir = new File("target/html");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        File file = null;
+        try {
+            file = new File(dir + File.separator + scenario.getName() + ".html");
+            file.createNewFile();
+
+        } catch (IOException ex) {
+            String message = "Error creating HTML file: " + ex.getMessage();
+            logger.error(message, ex);
+            // swallow error, abort the write
+            return;
+        }
+
+        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file), "UTF-8"))) {
+            out.write(html);
+
+        } catch (IOException ex) {
+            String message = "Error writing HTML file: " + ex.getMessage();
+            logger.error(message, ex);
+            // swallow error and continue
         }
     }
 }

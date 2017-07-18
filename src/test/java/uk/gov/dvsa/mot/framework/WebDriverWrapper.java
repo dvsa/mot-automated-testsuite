@@ -739,6 +739,14 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Returns the raw HTML for the current page.
+     * @return The raw HTML
+     */
+    public String getHtml() {
+        return webDriver.getPageSource();
+    }
+
+    /**
      * Wait for the web page to fully re-load, and any onload javascript events to complete.
      * Failure to do this between page transitions can result in intermittent failures, such as
      * Selenium still being on the previous page, or failure to find page element in the new page.
