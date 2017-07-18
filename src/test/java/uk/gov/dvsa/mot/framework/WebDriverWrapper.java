@@ -553,18 +553,14 @@ public class WebDriverWrapper {
             webDriver.findElement(By.id(labelElement.getAttribute("for"))).click();
 
         } catch (NoSuchElementException ex) {
-            // find the input nested within the label element...
-            List<WebElement> labels = webDriver.findElements(By.tagName("label"));
-            for (WebElement label : labels) {
-                if (label.getText().contains(labelText)) {
-                    label.findElement(By.xpath("./input[@type = 'radio']")).click();
-                    return;
-                }
-            }
-
-            String message = "No radio button found with label (well-formed or nested): " + labelText;
-            logger.error(message);
-            throw new IllegalArgumentException(message);
+            webDriver.findElements(By.tagName("label")).stream()
+                .filter((l) -> l.getText().contains(labelText)) // label with text
+                .map((l) -> l.findElement(By.xpath("./input[@type = 'radio']"))) // nested radio
+                .findFirst().orElseThrow(() -> {
+                    String message = "No radio button found with label (well-formed or nested): " + labelText;
+                    logger.error(message);
+                    return new IllegalArgumentException(message);
+                }).click();
         }
     }
 
@@ -590,18 +586,14 @@ public class WebDriverWrapper {
             webDriver.findElement(By.id(labelElement.getAttribute("for"))).click();
 
         } catch (NoSuchElementException ex) {
-            // find the input nested within the label element...
-            List<WebElement> labels = webDriver.findElements(By.tagName("label"));
-            for (WebElement label : labels) {
-                if (label.getText().contains(labelText)) {
-                    label.findElement(By.xpath("./input[@type = 'checkbox']")).click();
-                    return;
-                }
-            }
-
-            String message = "No checkbox button found with label (well-formed or nested): " + labelText;
-            logger.error(message);
-            throw new IllegalArgumentException(message);
+            webDriver.findElements(By.tagName("label")).stream()
+                .filter((label) -> label.getText().contains(labelText)) // label with text
+                .map((label) -> label.findElement(By.xpath("./input[@type = 'checkbox']"))) // nested checkbox
+                .findFirst().orElseThrow(() -> {
+                    String message = "No checkbox button found with label (well-formed or nested): " + labelText;
+                    logger.error(message);
+                    return new IllegalArgumentException(message);
+                }).click();
         }
     }
 
@@ -654,9 +646,8 @@ public class WebDriverWrapper {
     public String getTextFromUnorderedList(String headingText) {
         WebElement heading = webDriver.findElement(By.xpath("//h2[contains(text(),'" + headingText + "')]"));
         StringBuilder builder = new StringBuilder();
-        for (WebElement listItem : heading.findElements(By.xpath("../following-sibling::div[1]/ul/li"))) {
-            builder.append(listItem.getText());
-        }
+        heading.findElements(By.xpath("../following-sibling::div[1]/ul/li"))
+            .forEach((i) -> builder.append(i.getText()));
         return builder.toString();
     }
 
@@ -677,11 +668,9 @@ public class WebDriverWrapper {
      * @return The span text found
      */
     public String getTextFromHeading(String headingText) {
-        List<WebElement> spans = webDriver.findElements(By.xpath("//h2[contains(text(),'" + headingText + "')]/span"));
         StringBuilder builder = new StringBuilder();
-        for (WebElement span : spans) {
-            builder.append(span.getText());
-        }
+        webDriver.findElements(By.xpath("//h2[contains(text(),'" + headingText + "')]/span"))
+            .forEach((s) -> builder.append(s.getText()));
         return builder.toString();
     }
 
