@@ -70,6 +70,51 @@ public class DuplicateAndReplacementStepDefinitions implements En {
         And("^I check the vts information appears on the confirmation page$", () -> {
             checkTheTestingLocation();
         });
+
+        And("^I edit the make \"([^\"]+)\" and model \"([^\"]+)\"", (String make, String model) -> {
+            editCertificateMakeAndModel(make, model);
+        });
+
+        And("^I edit the primary colour \"([^\"]+)\" and secondary colour \"([^\"]+)\"$",
+                (String primaryColour, String secondaryColour) -> {
+                    editCertificateColours(primaryColour, secondaryColour);
+                });
+
+        And("^I edit the vehicle vin with \"([^\"]+)\"$", (String vin) -> {
+            editCertificateVin(vin);
+        });
+
+        And("^I edit the vehicle registration with \"([^\"]+)\"$", (String registration) -> {
+            editCertificateRegistration(registration);
+        });
+
+        And("^I edit the country of registration with \"([^\"]+)\"$", (String countryOfRegistration) -> {
+            editCountryOfRegistration(countryOfRegistration);
+        });
+
+        And("^I check the registration on the confirmation page is \"([^\"]+)\"$", (String registration) -> {
+            assertTrue("The registration is not as expected",
+                    driverWrapper.getElementText("registrationNumber").contains(registration));
+        });
+
+        And("^I check the vin on the confirmation page is \"([^\"]+)\"$", (String vin) -> {
+            assertTrue("The vin is not as expected",
+                    driverWrapper.getElementText("vinChassisNumber").contains(vin));
+        });
+
+        And("^I check the make on the confirmation page is \"([^\"]+)\"$", (String make) -> {
+            assertTrue("The make is not as expected", driverWrapper.getElementText("make").contains(make));
+        });
+
+        And("^I check the model on the confirmation page is \"([^\"]+)\"$", (String model) -> {
+            assertTrue("The model is not as expected",
+                    driverWrapper.getElementText("model").contains(model));
+        });
+
+        And("^I check the colours are correct \"([^\"]+)\" and \"([^\"]+)\"$",
+                (String primaryColour, String secondaryColour) -> {
+                    checkColoursOnConfirmationPage(primaryColour, secondaryColour);
+                });
     }
 
     /**
@@ -237,5 +282,136 @@ public class DuplicateAndReplacementStepDefinitions implements En {
         //And I check the testing location name is on the confirmation page
         assertTrue("Testing Location name does not appear on the confirmation page",
                 driverWrapper.getElementText("testInformation").contains(driverWrapper.getData("siteName")));
+    }
+
+    /**
+     * This will edit the make and model of a vehicle on a certificate replacement.
+     * @param make  The make to be used
+     * @param model The model to be used
+     */
+    private void editCertificateMakeAndModel(String make, String model) {
+        //Check if make or model is other
+        if (make.equals("Other") || model.equals("Other")) {
+            //And I press the edit button
+            driverWrapper.clickElement("dashboard-section-toggler-make");
+
+            //And i enter the make as other
+            driverWrapper.selectOptionInFieldByName("Other", "make");
+
+            //And I submit the new make
+            driverWrapper.clickElement("section-make-submit");
+
+            //And I enter a custom make
+            driverWrapper.enterIntoFieldWithId("CUSTOM MAKE", "input-make");
+
+            //And I enter a custom model
+            driverWrapper.enterIntoFieldWithId("CUSTOM MODEL", "input-model");
+
+            //And I press the Change make and model button
+            driverWrapper.pressButton("Change make and model");
+        } else {
+            //And I press the edit button
+            driverWrapper.clickElement("dashboard-section-toggler-make");
+
+            //And I enter the make
+            driverWrapper.selectOptionInFieldByName(make, "make");
+
+            //And I submit the new make
+            driverWrapper.clickElement("section-make-submit");
+
+            //And I press the edit button
+            driverWrapper.clickElement("dashboard-section-toggler-model");
+
+            //And I enter the model
+            driverWrapper.selectOptionInFieldByName(model, "model");
+
+            //And I submit the new model
+            driverWrapper.clickElement("section-model-submit");
+        }
+    }
+
+    /**
+     * Edits the primary and secondary colour on the replacement certificate.
+     * @param primaryColour     The primary colour to be used
+     * @param secondaryColour   The secondary colour to be used
+     */
+    private void editCertificateColours(String primaryColour, String secondaryColour) {
+        //And I click the edit button for colours
+        driverWrapper.clickElement("dashboard-section-toggler-vehicle-colour");
+
+        //And I select the primary colour
+        driverWrapper.selectOptionInFieldByName(primaryColour, "primaryColour");
+
+        //And I select the secondary colour
+        driverWrapper.selectOptionInFieldByName(secondaryColour, "secondaryColour");
+
+        //And I click the submit button
+        driverWrapper.clickElement("section-vehicle-colour-submit");
+    }
+
+    /**
+     * Edits the vehicle vin on replacement certificate.
+     * @param vin   The vin to be used
+     */
+    private void editCertificateVin(String vin) {
+        //And I click the edit button for vin
+        driverWrapper.clickElement("dashboard-section-toggler-vin");
+
+        //And I enter the vin
+        driverWrapper.enterIntoFieldWithId(vin, "input-vin");
+
+        //And I submit the new vin
+        driverWrapper.clickElement("section-vin-submit");
+    }
+
+    /**
+     * Edits the vehicle registration on replacement certificate.
+     * @param registration  The registration to be used
+     */
+    private void editCertificateRegistration(String registration) {
+        //And I click the edit button for registration
+        driverWrapper.clickElement("dashboard-section-toggler-vrm");
+
+        //And I enter the registration
+        driverWrapper.enterIntoFieldWithId(registration, "input-vrm");
+
+        //And I submit the new registration
+        driverWrapper.clickElement("section-vrm-submit");
+    }
+
+    /**
+     * Edits the country of registration on replacement certificate.
+     * @param countryOfRegistration The country of registration to be used
+     */
+    private void editCountryOfRegistration(String countryOfRegistration) {
+        //And I click the edit button for country of registration
+        driverWrapper.clickElement("dashboard-section-toggler-cor");
+
+        //And I select the country of registration
+        driverWrapper.selectOptionInFieldByName(countryOfRegistration, "cor");
+
+        //And I submit the new country of registration
+        driverWrapper.clickElement("section-cor-submit");
+    }
+
+    /**
+     * Checks the colour is correct on the confirmation page.
+     * @param primaryColour     The primary colour to check
+     * @param secondaryColour   The secondary colour to check
+     */
+    private void checkColoursOnConfirmationPage(String primaryColour, String secondaryColour) {
+        String colourString;
+        //Check if either colour is "No other colour"
+        if (primaryColour.equals("No other colour")) {
+            colourString = secondaryColour;
+        } else if (secondaryColour.equals("No other colour")) {
+            colourString = primaryColour;
+        } else {
+            colourString = primaryColour + " and " + secondaryColour;
+        }
+
+        //Check the colours appear correctly
+        assertTrue("The vehicle colours are not as expected",
+                driverWrapper.getElementText("colour").contains(colourString));
     }
 }
