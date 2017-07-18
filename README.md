@@ -48,4 +48,4 @@ The following tags are used:
 * **@smoke** = Smoke tests
 
 ## Reports
-Reporting is done via the [Extender Cucumber Runner](http://mkolisnyk.github.io/cucumber-reports/extended-cucumber-runner) library. The results are placed in the `target` directory along with screenshots of failing tests.
+Reporting is done via the [Extender Cucumber Runner](http://mkolisnyk.github.io/cucumber-reports/extended-cucumber-runner) library. The results are placed in the `target` directory along with screenshots of failing tests, the HTML of the last page reached (if configured).
