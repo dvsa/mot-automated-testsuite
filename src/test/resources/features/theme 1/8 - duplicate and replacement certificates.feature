@@ -41,7 +41,7 @@ Feature: 8 - duplicate and replacement certificates
     And I check there is a "Print certificate" link
 
   @smoke
-  Scenario: AO1 user edits vehicle details on certificate
+  Scenario: AO1 user edits vehicle details on latest certificate
     Given I login without 2FA using "AO1_USER" as {AO1}
     And I load "VEHICLE_CLASS_4_NOT_UPDATED_TODAY" as {reg}, {vin}, {mileage}
     And I search for certificates with reg {reg}
@@ -58,6 +58,21 @@ Feature: 8 - duplicate and replacement certificates
     And I check the make on the confirmation page is "FORD"
     And I check the model on the confirmation page is "FOCUS"
   #  And I check the colours are correct "Red" and "White" - commented out due to a known bug ticket 4513
+    Then I press the "Finish changes and print certificate" button
+    And The page title contains "Test Results Updated Successfully"
+    And I check there is a "Print" link
+
+  Scenario: DVLA Manager edits VRM / VIN on latest certificate
+    Given I login without 2FA using "DVLA_MANAGER_USER" as {DVLAManger}
+    And I load "VEHICLE_CLASS_4_NOT_UPDATED_TODAY" as {reg}, {vin}, {mileage}
+    And I search for certificates with reg {reg}
+    And I click the first "View certificate" link
+    And I press the "Edit this MOT test result" button
+    And I edit the vehicle vin with "DVLA304050921020"
+    And I edit the vehicle registration with "DVLA903"
+    When I submit the certificate changes
+    And I check the registration on the confirmation page is "DVLA903"
+    And I check the vin on the confirmation page is "DVLA304050921020"
     Then I press the "Finish changes and print certificate" button
     And The page title contains "Test Results Updated Successfully"
     And I check there is a "Print" link
