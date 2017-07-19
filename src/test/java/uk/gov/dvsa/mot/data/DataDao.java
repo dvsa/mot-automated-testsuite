@@ -73,7 +73,9 @@ public class DataDao {
             String query = loadQuery(resource);
 
             // execute the SQL query to load the dataset
+            long start = System.currentTimeMillis();
             List<List<String>> dataset = loadDataset(query);
+            long end = System.currentTimeMillis();
 
             // check dataset is not empty
             if (dataset.size() == 0) {
@@ -81,7 +83,14 @@ public class DataDao {
                 logger.error(message);
                 throw new IllegalStateException(message);
             }
-            logger.debug("loaded {} entries for dataset {}", dataset.size(), datasetName);
+            double timingInSeconds = (end - start) / 1000.0D;
+            String formattedTiming = String.format("%.3f", timingInSeconds);
+            logger.debug("loaded {} entries for dataset {} in {} secs", dataset.size(), datasetName, formattedTiming);
+
+            if (timingInSeconds > 10.0D) {
+                logger.warn("slow dataset: {} took {} seconds, please check the SQL query performance!",
+                        datasetName, formattedTiming);
+            }
 
             // add the dataset to the map
             datasets.put(datasetName, dataset);
