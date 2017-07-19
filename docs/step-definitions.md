@@ -25,6 +25,7 @@ High level:
 * I enter ```"..text.."``` in the ```"..label.."``` field
 * I enter ```{key}``` in the ```"..label.."``` field
 * I select ```"..item.."``` in the ```"..label.."``` field
+* The page contains ```"..ltext.."```
 * The page title contains ```"..text.."```
 * I check there is a ```"..link text.."``` link
 * I check there is no ```"..link text.."```

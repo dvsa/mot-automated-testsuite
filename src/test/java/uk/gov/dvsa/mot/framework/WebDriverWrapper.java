@@ -674,6 +674,22 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Checks whether the current page contains the specified message, anywhere within the page. Use only with long
+     * unique messages!
+     * @param message   The message
+     * @return <code>true</code> if found
+     */
+    public boolean containsMessage(String message) {
+        try {
+            webDriver.findElement(By.xpath("//*[contains(text(),'" + message + "')]"));
+            return true;
+
+        } catch (NoSuchElementException ex) {
+            return false;
+        }
+    }
+
+    /**
      * Selects a specified option in a dropdown field using the name to identify it, temporary fix for incorrect label.
      * @param optionText    The text of the option to select
      * @param name          The field name

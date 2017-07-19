@@ -26,11 +26,11 @@ Feature: 12 - Site Manager and Site Admin
     And I press the "Choose role" button
 
     And The page title contains "Review role"
-    ## I check "New role" is "Site admin"
+    And I check the role summary has a new role of "Site admin"
     And I press the "Assign role" button
 
     Then The page title contains "Vehicle Testing Station"
-    ## I check there is an assignment confirmation message
+    And I check there is a role assignment confirmation message for {nonAdminUsername1}
     ## I check Roles has user as "Site admin"
 
 

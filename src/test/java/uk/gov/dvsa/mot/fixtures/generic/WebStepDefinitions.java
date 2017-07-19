@@ -66,6 +66,10 @@ public class WebStepDefinitions implements En {
             driverWrapper.selectOptionInField(optionText, label);
         });
 
+        Then("^The page contains \"([^\"]+)\"$", (String expected) -> {
+            driverWrapper.containsMessage(expected);
+        });
+
         Then("^The page title contains \"([^\"]+)\"$", (String expected) -> {
             driverWrapper.checkCurrentPageTitle(expected);
         });

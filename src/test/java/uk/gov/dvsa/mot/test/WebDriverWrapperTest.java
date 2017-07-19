@@ -571,6 +571,26 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>containsMessage()</code> with a matching example.
+     */
+    @Test
+    public void containsMessageMatching() {
+        browseTo("/containsMessage-1.html", "containsMessage - 1");
+        assertTrue("Message should be found",
+                driverWrapper.containsMessage("This is a really long and unique message that something happened."));
+    }
+
+    /**
+     * Tests <code>containsMessage()</code> with a non matching example.
+     */
+    @Test
+    public void containsMessageNotMatching() {
+        browseTo("/selectCheckbox-2.html", "selectCheckbox - 2");
+        assertFalse("Message should not be found",
+                driverWrapper.containsMessage("This is a really long and unique message that something happened."));
+    }
+
+    /**
      * Browses to the specified test page, and check the page title is correct.
      *
      * @param testPage      The test page, must start with "/"
