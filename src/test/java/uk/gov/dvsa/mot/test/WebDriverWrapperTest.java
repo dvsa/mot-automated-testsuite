@@ -7,7 +7,8 @@ import static org.junit.Assert.assertTrue;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -30,13 +31,14 @@ public class WebDriverWrapperTest {
     /**
      * The class under test.
      */
-    private HtmlUnitWebDriverWrapper driverWrapper;
+    private static HtmlUnitWebDriverWrapper driverWrapper;
 
     /**
-     * Test initialisation.
+     * Global Test initialisation.
+     * <p>Done once for the whole test class rather than per test, as this is expensive and time consuming.</p>
      */
-    @Before
-    public void setup() {
+    @BeforeClass
+    public static void setupAll() {
         // the current working directory as a full path
         String projectHome = Paths.get(".").toAbsolutePath().normalize().toString();
 
@@ -48,12 +50,19 @@ public class WebDriverWrapperTest {
     }
 
     /**
-     * Test clean up.
+     * Per-test clean up.
      */
     @After
     public void tearDown() {
+        driverWrapper.reset();
+    }
+
+    /**
+     * Global Test clean up.
+     */
+    @AfterClass
+    public static void tearDownAll() {
         driverWrapper.preDestroy();
-        driverWrapper = null; // trigger GC
     }
 
     /**
@@ -575,7 +584,7 @@ public class WebDriverWrapperTest {
     /**
      * Test version of the <code>WebDriverWrapper</code> class, that uses HtmlUnit in Chrome emulation mode.
      */
-    private class HtmlUnitWebDriverWrapper extends WebDriverWrapper {
+    private static class HtmlUnitWebDriverWrapper extends WebDriverWrapper {
 
         /** Used in checks below. */
         private WebDriver webDriver;
