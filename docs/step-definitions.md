@@ -35,6 +35,7 @@ High level:
 Lower level, only use if higher level steps can't be used:
 
 * I enter ```"..text.."``` in the field with id ```"..id.."```
+* I enter ```{key}``` in the field with id ```"..id.."```
 
 
 ### DataStepDefinitions
@@ -50,9 +51,11 @@ These steps are specific to the DVSA MOT application screens.
 
 ### AuthenticationStepDefinitions
 
-* I login with 2FA using ```"..dataset name.."``` as ```{..username key..}```, ```{..site key..}```
-   * Note: this step will use the [configuration settings](../configuration/README.md) and actually try up to ```maxLoginRetries``` different users, if the password isn't ```password``` (e.g. for users that have had passwords manually changed)
-   * Note: this step will also acknowledge any special notices (so the user can undertake tests, if needed)
+* I login with 2FA using ```"..dataset name.."``` as ```{..username key..}```, ```{key2}```
+* I login with 2FA using ```"..dataset name.."``` as ```{..username key..}```, ```{key2}```, ```{key3}```
+* I login with 2FA using ```"..dataset name.."``` as ```{..username key..}```, ```{key2}```, ```{key3}```, ```{key4}```
+   * Note: these steps will use the [configuration settings](../configuration/README.md) and actually try up to ```maxLoginRetries``` different users, if the password isn't ```password``` (e.g. for users that have had passwords manually changed)
+   * Note: these steps will also acknowledge any special notices (so the user can undertake tests, if needed)
 * I login without 2FA using ```"..dataset name.."``` as ```{..username key..}```
 
 ### CreateVehicleStepDefinitions

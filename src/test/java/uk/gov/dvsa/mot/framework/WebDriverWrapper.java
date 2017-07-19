@@ -552,7 +552,7 @@ public class WebDriverWrapper {
             WebElement labelElement = webDriver.findElement(By.xpath("//label[contains(text(),'" + labelText + "')]"));
             webDriver.findElement(By.id(labelElement.getAttribute("for"))).click();
 
-        } catch (NoSuchElementException ex) {
+        } catch (NoSuchElementException | IllegalArgumentException ex) {
             webDriver.findElements(By.tagName("label")).stream()
                 .filter((l) -> l.getText().contains(labelText)) // label with text
                 .map((l) -> l.findElement(By.xpath("./input[@type = 'radio']"))) // nested radio
@@ -562,17 +562,6 @@ public class WebDriverWrapper {
                     return new IllegalArgumentException(message);
                 }).click();
         }
-    }
-
-    /**
-     * Selects the specified radio button, located by id.
-     * <p>Note: This is a low-level way to locate the field. Please only use this method if the radio button doesn't
-     * have a well-formed label, otherwise use the <code>selectRadio(String)</code> method using the label text to
-     * identify the radio button.</p>
-     * @param id  The radio button id
-     */
-    public void selectRadioById(String id) {
-        webDriver.findElement(By.id(id)).click();
     }
 
     /**

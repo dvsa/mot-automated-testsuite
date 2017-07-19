@@ -1,7 +1,7 @@
 @regression
 Feature: 12 - Site Manager and Site Admin
 
-  # Scenario: Site Manager assigns Site Admin role
+  Scenario: Site Manager assigns Site Admin role
     # Pre-req: Require a user to nominate without a site admin role
     # Sign in as a Site Manager (2FA active)
     # Select VTS via the home page
@@ -12,6 +12,27 @@ Feature: 12 - Site Manager and Site Admin
     #   - User is directed /vehicle-testing-station/<VTS> page
     #   - Message displayed: You have assigned a role to <full name>, <username>. They have been sent a notification.
     #   - User nominated listed as Site Admin with Pending role status
+    Given I login with 2FA using "SITE_MGR_AND_NON_ADMIN" as {managerUsername1}, {sitename1}, {sitenumber1}, {nonAdminUsername1}
+    And I click on the {sitename1}, {sitenumber1} site
+    And The page title contains "Vehicle Testing Station"
+
+    When I click the "Assign a role" link
+    And The page title contains "Assign a role"
+    And I enter {nonAdminUsername1} in the field with id "userSearchBox"
+    And I press the "Search" button
+
+    And The page title contains "Choose a role"
+    And I click the "Site admin" radio button
+    And I press the "Choose role" button
+
+    And The page title contains "Review role"
+    ## I check "New role" is "Site admin"
+    And I press the "Assign role" button
+
+    Then The page title contains "Vehicle Testing Station"
+    ## I check there is an assignment confirmation message
+    ## I check Roles has user as "Site admin"
+
 
   # Scenario: Site Admin assigns Tester role
     # Pre-req: Require a user to nominate without a tester role

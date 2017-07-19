@@ -12,6 +12,8 @@ import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 import uk.gov.dvsa.mot.framework.WrongPageException;
 import uk.gov.dvsa.mot.otp.Generator;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -44,10 +46,25 @@ public class AuthenticationStepDefinitions implements En {
 
         Given("^I login with 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String dataSetName, String usernameKey, String key2) -> {
-                    loginWith2fa(dataSetName, usernameKey, key2,
+                    loginWith2fa(dataSetName, usernameKey,
                             env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
-                                env.getRequiredProperty("maxLoginRetries", Integer.class));
+                                env.getRequiredProperty("maxLoginRetries", Integer.class), key2);
             });
+
+        Given("^I login with 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String dataSetName, String usernameKey, String key2, String key3) -> {
+                    loginWith2fa(dataSetName, usernameKey,
+                            env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
+                            env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3);
+                });
+
+        Given("^I login with 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\},"
+                + " \\{([^\\}]+)\\}$",
+                (String dataSetName, String usernameKey, String key2, String key3, String key4) -> {
+                    loginWith2fa(dataSetName, usernameKey,
+                            env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
+                            env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3, key4);
+                });
 
         Given("^I login without 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}$",
                 (String dataSetName, String usernameKey) -> {
@@ -62,19 +79,22 @@ public class AuthenticationStepDefinitions implements En {
      * user.</p>
      * @param dataSetName       The data set to get users from
      * @param usernameKey       The username data key to set
-     * @param key2              The extra data key to set
      * @param password          The password to use
      * @param seed              The OTP seed to use
      * @param maxLoginRetries   The number of times to retry login with a different user before failing the test
+     * @param keys              The extra data keys to set
      */
-    private void loginWith2fa(String dataSetName, String usernameKey, String key2, String password, String seed,
-                              int maxLoginRetries) {
+    private void loginWith2fa(String dataSetName, String usernameKey, String password, String seed,
+                              int maxLoginRetries, String... keys) {
         int loginAttempts = 0;
         while (loginAttempts < maxLoginRetries) {
             loginAttempts++;
 
             // load username from the dataset, populate the data keys and values
-            loadData(dataSetName, new String[]{usernameKey, key2});
+            List<String> dataKeys = new ArrayList<>();
+            dataKeys.add(usernameKey);
+            Collections.addAll(dataKeys, keys);
+            loadData(dataSetName, dataKeys);
 
             // get the loaded username
             String username = driverWrapper.getData(usernameKey);
@@ -166,7 +186,10 @@ public class AuthenticationStepDefinitions implements En {
      * @param maxLoginRetries   The max number of login retries
      */
     private void loginWithout2fa(String dataSetName, String usernameKey, String password, int maxLoginRetries)  {
-        loadData(dataSetName, new String[]{usernameKey});
+        List<String> datakeys = new ArrayList<>();
+        datakeys.add(usernameKey);
+
+        loadData(dataSetName, datakeys);
         non2FaLogin(driverWrapper.getData(usernameKey), password);
     }
 
@@ -196,16 +219,16 @@ public class AuthenticationStepDefinitions implements En {
      * @param dataSetName       The name of the data set
      * @param keys              The keys to populate
      */
-    private void loadData(String dataSetName, String[] keys) {
+    private void loadData(String dataSetName, List<String> keys) {
         List<String> dataSet = dataProvider.getDatasetEntry(dataSetName);
 
         // check the number of items in the data set matches the number of keys in the test step
-        assertEquals("Expected data set " + dataSetName + " to contain " + keys.length + " data items, "
+        assertEquals("Expected data set " + dataSetName + " to contain " + keys.size() + " data items, "
                         + "but it contained " + dataSet.size() + " data items. Please check your scenario",
-                keys.length, dataSet.size());
+                keys.size(), dataSet.size());
 
-        for (int i = 0; i < keys.length; i++) {
-            driverWrapper.setData(keys[i], dataSet.get(i));
+        for (int i = 0; i < keys.size(); i++) {
+            driverWrapper.setData(keys.get(i), dataSet.get(i));
         }
     }
 

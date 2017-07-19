@@ -58,6 +58,10 @@ public class WebStepDefinitions implements En {
             driverWrapper.enterIntoFieldWithId(text, id);
         });
 
+        When("^I enter \\{([^\\}]+)\\} in the field with id \"([^\"]+)\"$", (String dataKey, String id) -> {
+            driverWrapper.enterIntoFieldWithId(driverWrapper.getData(dataKey), id);
+        });
+
         When("^I select \"([^\"]+)\" in the \"([^\"]+)\" field$", (String optionText, String label) -> {
             driverWrapper.selectOptionInField(optionText, label);
         });
