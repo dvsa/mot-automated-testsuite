@@ -33,12 +33,14 @@ Feature: 08 - duplicate and replacement certificates
   |AO1         |AO1_USER         |
   |DVLA Manager|DVLA_MANAGER_USER|
 
-  Scenario: Tester issues duplicate certificate
+  Scenario: Tester issues duplicate certificate and cannot edit historic
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {tester}, {site}
-    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
+    And I load "VEHICLE_CLASS_4_HISTORIC_10_DAYS" as {reg}, {vin}, {mileage}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
     And I check there is a "Print certificate" link
+    And I check there is no "Edit this MOT test result" button
+
 
   @smoke
   Scenario: AO1 user edits vehicle details on latest certificate
@@ -90,13 +92,6 @@ Feature: 08 - duplicate and replacement certificates
     #And I check a new vehicle version is created
     #Then a replacement certificate should be created
     #And I check the pdf details are correct
-
-  #Scenario: Tester cannot change details of historic test
-    #Given I login as {tester1}
-    #And I click the "Replacement / Duplicate certificate" link
-    #And I search for certificates with {reg}
-    #And I select the last "View certificate" link
-    #Then I should not see the edit certificate button
 
   #Scenario: AO1 edits vehicle details on history certificate
     #Given I login as {AO1}

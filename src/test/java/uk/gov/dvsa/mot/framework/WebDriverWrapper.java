@@ -827,4 +827,13 @@ public class WebDriverWrapper {
             field.sendKeys(text);
         }
     }
+
+    /**
+     * Checks if there is a button present by text.
+     * @param buttonText    The text on the button to look for
+     * @return  return whether the button exists or not
+     */
+    public boolean checkButtonExists(String buttonText) {
+        return findButtons(buttonText).size() > 0;
+    }
 }

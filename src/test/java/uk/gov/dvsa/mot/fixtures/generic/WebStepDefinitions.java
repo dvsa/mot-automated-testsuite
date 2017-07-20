@@ -98,5 +98,9 @@ public class WebStepDefinitions implements En {
                 (String text, String idPrefix) -> {
                     driverWrapper.enterIntoAllFieldsWithIdPrefix(idPrefix, text);
                 });
+
+        And("^I check there is no \"([^\"]+)\" button$", (String buttonText) -> {
+            assertFalse("Button found with text: " + buttonText, driverWrapper.checkButtonExists(buttonText));
+        });
     }
 }
