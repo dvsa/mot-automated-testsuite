@@ -1,6 +1,8 @@
 select person_mgr.username as mgr_username,
    s.name as site_name, s.site_number as site_number,
-   person_non_admin.username as non_admin_username
+   person_non_admin.username as non_admin_username,
+   concat_ws(' ', person_non_admin.first_name,
+     person_non_admin.middle_name, person_non_admin.family_name) as non_admin_name
 from site s, person person_mgr,
   site_business_role_map sbrm_mgr,
   person person_non_admin

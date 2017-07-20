@@ -66,6 +66,14 @@ public class AuthenticationStepDefinitions implements En {
                             env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3, key4);
                 });
 
+        Given("^I login with 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\},"
+                        + " \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String dataSetName, String usernameKey, String key2, String key3, String key4, String key5) -> {
+                    loginWith2fa(dataSetName, usernameKey,
+                            env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
+                            env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3, key4, key5);
+                });
+
         Given("^I login without 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}$",
                 (String dataSetName, String usernameKey) -> {
                     loginWithout2fa(dataSetName, usernameKey, env.getRequiredProperty("password"),

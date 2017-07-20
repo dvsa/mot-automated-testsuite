@@ -373,6 +373,16 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>getTextFromTableRow()</code> with a matching nested example.
+     */
+    @Test
+    public void getTextFromTableRowNestedMatching() {
+        browseTo("/getTextFromTableRow-2.html", "getTextFromTableRow - 2");
+        assertEquals("Should find matching and nested text", "Data Text 2. \nSpan Text 2.",
+                driverWrapper.getTextFromTableRow("Heading Text 2."));
+    }
+
+    /**
      * Tests <code>getTextFromTableColumn()</code> with a matching example.
      */
     @Test

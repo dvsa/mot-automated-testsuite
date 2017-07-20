@@ -33,10 +33,15 @@ public class SiteAdminStepDefinitions implements En {
                 assertTrue("Wrong new role listed",
                     driverWrapper.getTextFromTableRow("New role").contains(newRole)));
 
-        And("^I check there is a role assignment confirmation message for \\{([^\\}]+)\\}$",
-                (String usernameKey) -> assertTrue("Wrong new role listed",
-                        driverWrapper.containsMessage("You have assigned a role to ")
-                            && driverWrapper.containsMessage(", " + driverWrapper.getData(usernameKey)
-                                + ". They have been sent a notification.")));
+        And("^I check there is a role assignment confirmation message for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String usernameKey, String nameKey) -> assertTrue("Wrong new role listed",
+                        driverWrapper.containsMessage(
+                            "You have assigned a role to " + driverWrapper.getData(nameKey) + ", "
+                                + driverWrapper.getData(usernameKey) + ". They have been sent a notification.")));
+
+        And("^I check there is pending \"([^\"]+)\" role listed for \\{([^\\}]+)\\}$",
+                (String pendingRole, String nameKey) -> assertTrue("Pending role not listed",
+                        driverWrapper.getTextFromTableRow(driverWrapper.getData(nameKey))
+                                .contains(pendingRole + "\nPending")));
     }
 }

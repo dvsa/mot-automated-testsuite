@@ -147,7 +147,7 @@ public class WebDriverWrapper {
      * @return A List of key names, possibly empty but never <code>null</code>
      */
     public List<String> getAllDataKeys() {
-        return new ArrayList<String>(data.keySet());
+        return new ArrayList<>(data.keySet());
     }
 
     /**
