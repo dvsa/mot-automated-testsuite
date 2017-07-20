@@ -1,5 +1,5 @@
 @regression
-Feature: 1 - new user registration
+Feature: 01 - new user registration
 
   #Scenario: Create new user with unique details
     #Given I am a new user in the MOT system

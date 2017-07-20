@@ -31,7 +31,6 @@ Feature: 12 - Site Manager and Site Admin
 
     Then The page title contains "Vehicle Testing Station"
     And I check there is a role assignment confirmation message for {nonAdminUsername1}
-    ## I check Roles has user as "Site admin"
 
 
   # Scenario: Site Admin assigns Tester role

@@ -1,5 +1,5 @@
 @regression
-Feature: 2 - reclaim account via csco
+Feature: 02 - reclaim account via csco
 
   #Scenario: CSCO reclaiming a users account
     #Given I am logged in as a CSCO user

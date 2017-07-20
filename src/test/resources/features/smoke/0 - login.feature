@@ -1,5 +1,5 @@
 @smoke
-Feature: Login
+Feature: 00 - Login
 
   Scenario: Redirect to login page from home page
     When I browse to /

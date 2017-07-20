@@ -1,5 +1,5 @@
 @regression
-Feature: Create Vehicle
+Feature: 10 - Create Vehicle
 
   Scenario Outline: Tester Creates a new vehicle with class <class>
     Given I login with 2FA using "<User>" as {username1}, {site}
