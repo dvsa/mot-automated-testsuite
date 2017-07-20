@@ -4,8 +4,8 @@ A manually maintained summary of the steps defined in the fixture Java classes i
 
 In general the following syntax is used:
 
-* Hard-coded test data is surrounded with ".."
-* Test data loaded from the database is surrounded with {..}
+* Hard-coded test data is surrounded with ```".."```
+* Test data loaded from the database is surrounded with ```{..}```
 
 ## Generic
 
@@ -18,6 +18,7 @@ High level:
 * I browse to ```URL```
 * I press the ```"..buton text.."``` button
 * I click the ```"..link text.."``` link
+* I click the first ```"..link text.."``` link
 * I click the ```..label...``` radio button
    * Note: handles labels with ```for``` and radio inputs nested inside the label 
 * I click the ```..label...``` checkbox   
@@ -25,13 +26,12 @@ High level:
 * I enter ```"..text.."``` in the ```"..label.."``` field
 * I enter ```{key}``` in the ```"..label.."``` field
 * I select ```"..item.."``` in the ```"..label.."``` field
-* The page contains ```"..ltext.."```
+* The page contains ```"..text.."```
 * The page title contains ```"..text.."```
 * I check there is a ```"..link text.."``` link
 * I check there is no ```"..link text.."```
 * I check the ```"..button text.."``` button is disabled
 * I check the ```"..button text.."``` button is enabled
-* I click the first ```"..link text.."``` link
 
 Lower level, only use if higher level steps can't be used:
 
@@ -118,8 +118,8 @@ These steps are specific to the DVSA MOT application screens.
 * I browse for a ```"Failure or PRS or Advisory"``` defect of (```"..category.."```, ```"..sub-category.."```, ```"..defect.."```) with comment ```"..comment.."```
 * I search for a ```"Failure or PRS or Advisory"``` defect of ```"..category.."``` with comment ```"..comment.."```
 * I add a manual advisory of ```"..defect.."```
-* I edit the ```"Failure or PRS or Advisory"``` defect of ```"..defect.."``` with comment ``"..comment.."``` and not dangerous
-* I edit the ```"Failure or PRS or Advisory"``` defect of ```"..defect.."``` with comment ``"..comment.."``` and is dangerous
+* I edit the ```"Failure or PRS or Advisory"``` defect of ```"..defect.."``` with comment ```"..comment.."``` and not dangerous
+* I edit the ```"Failure or PRS or Advisory"``` defect of ```"..defect.."``` with comment ```"..comment.."``` and is dangerous
 * I remove the ```"Failure or PRS or Advisory"``` defect of ```"..defect.."```
 * I enter decelerometer results of efficiency ```..amount..```
 * I enter decelerometer results of service brake ```..amount..``` and parking brake ```..amount..```
