@@ -1,6 +1,7 @@
 @smoke
 Feature: 00 - Login
 
+  # Note: if run on CI Green, the user is actually redirected to CI Blue
   Scenario: Redirect to login page from home page
     When I browse to /
     Then The page title contains "Sign in"
