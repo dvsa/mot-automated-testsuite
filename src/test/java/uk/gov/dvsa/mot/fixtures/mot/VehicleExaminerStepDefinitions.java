@@ -99,6 +99,9 @@ public class VehicleExaminerStepDefinitions implements En {
      * @param justification The justification text to be entered
      */
     private void compareTestResults(String caseOutcome, String justification) {
+        //And I fill out any other justification fields on the page
+        driverWrapper.enterIntoAllFieldsWithIdPrefix("-justification", justification);
+
         //And Select the caseOutcome
         driverWrapper.selectOptionInFieldByName(caseOutcome, "caseOutcome");
 
