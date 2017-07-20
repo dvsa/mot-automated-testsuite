@@ -47,6 +47,11 @@ public class VehicleExaminerStepDefinitions implements En {
         And("^I check the case outcome \"([^\"]+)\" is saved$", (String expectedOutcome) -> {
             checkCaseOutcome(expectedOutcome);
         });
+
+        And("^I click the view certificate link for test number \\{([^\\}]+)\\}$",
+                (String testNumberKey) -> {
+                    clickViewCertificateForTestNumber(testNumberKey);
+                });
     }
 
     /**
@@ -120,5 +125,14 @@ public class VehicleExaminerStepDefinitions implements En {
         //And I check the case outcome is as expected
         assertTrue("The case outcome is different than expected",
                 driverWrapper.getTextFromTableRow("Outcome").contains(expectedOutcome));
+    }
+
+    /**
+     * Clicks a view certificate link for a particular mot test number.
+     * @param testNumberKey The browser key for the mot test number
+     */
+    private void clickViewCertificateForTestNumber(String testNumberKey) {
+        //And I click the link for mot test
+        driverWrapper.clickLinkContainingHrefValue(driverWrapper.getData(testNumberKey));
     }
 }

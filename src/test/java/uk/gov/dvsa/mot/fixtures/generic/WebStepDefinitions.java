@@ -102,5 +102,9 @@ public class WebStepDefinitions implements En {
         And("^I check there is no \"([^\"]+)\" button$", (String buttonText) -> {
             assertFalse("Button found with text: " + buttonText, driverWrapper.checkButtonExists(buttonText));
         });
+
+        And("^I click the last \"([^\"]+)\" link$", (String linkText) -> {
+            driverWrapper.clickLastLink(linkText);
+        });
     }
 }

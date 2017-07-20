@@ -331,6 +331,15 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Clicks the last link that matches the text.
+     * @param linkText  the link text used to find the link
+     */
+    public void clickLastLink(String linkText) {
+        List<WebElement> links = findLinks(linkText);
+        links.get(links.size() - 1).click();
+    }
+
+    /**
      * Get the class(es) for the specified link.
      * @param linkText  The link text
      * @return The class(es)
@@ -835,5 +844,14 @@ public class WebDriverWrapper {
      */
     public boolean checkButtonExists(String buttonText) {
         return findButtons(buttonText).size() > 0;
+    }
+
+    /**
+     * Clicks a link with href containing value.
+     * @param hrefContains  The value the href has to contain
+     */
+    public void clickLinkContainingHrefValue(String hrefContains) {
+        WebElement link = webDriver.findElement(By.xpath("//*[contains(@href,'" + hrefContains + "')]"));
+        link.click();
     }
 }
