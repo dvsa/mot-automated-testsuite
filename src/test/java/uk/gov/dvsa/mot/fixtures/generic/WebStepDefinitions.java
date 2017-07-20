@@ -93,5 +93,10 @@ public class WebStepDefinitions implements En {
         And("^I click the first \"([^\"]+)\" link$", (String linkText) -> {
             driverWrapper.clickFirstLink(linkText);
         });
+
+        And("^I enter \"([^\"]+)\" into all fields with id prefix \"([^\"]+)\"$",
+                (String text, String idPrefix) -> {
+                    driverWrapper.enterIntoAllFieldsWithIdPrefix(idPrefix, text);
+                });
     }
 }

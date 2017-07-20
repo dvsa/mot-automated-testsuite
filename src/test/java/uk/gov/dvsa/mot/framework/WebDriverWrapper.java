@@ -813,4 +813,18 @@ public class WebDriverWrapper {
     private void debugCurrentPage() {
         logger.debug("** At page {} - \"{}\" **", webDriver.getCurrentUrl(), webDriver.getTitle());
     }
+
+    /**
+     * Fills in all the fields with an id prefix.
+     * @param idPrefix  the id prefix used to find the fields
+     * @param text      the text to be entered into the fields
+     */
+    public void enterIntoAllFieldsWithIdPrefix(String idPrefix, String text) {
+        List<WebElement> fields = webDriver.findElements(By.xpath("//*[contains(@id,'" + idPrefix + "')]"));
+
+        for (WebElement field : fields) {
+            field.clear();
+            field.sendKeys(text);
+        }
+    }
 }
