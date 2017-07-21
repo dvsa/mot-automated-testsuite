@@ -116,16 +116,16 @@ Feature: 08 - duplicate and replacement certificates
     And The page title contains "Test Results Updated Successfully"
     And I check there is a "Print" link
 
-  #Scenario: Tester changes odometer and vehicle colour on latest certificate
-    #Given I login as {tester1}
-    #And I click the "Replacement / Duplicate certificate" link
-    #And I search for certificates with {reg}
-    #And I select the first "View certificate" link
-    #And I click the "Edit this MOT test result" button
-    #And I edit the odometer reading 5000
-    #And I edit the vehicle colour "Colour1", "Colour2"
-    #And I enter a reason for replacement "differences in tests"
-    #When I submit the changes
-    #And I check a new vehicle version is created
-    #Then a replacement certificate should be created
-    #And I check the pdf details are correct
+  Scenario: Tester edits odometer and vehicle colour on certificate
+    Given I login with 2FA using "TESTER_AND_VEHICLE_EDITABLE_CERTIFICATE" as {tester}, {reg}
+    And I search for certificates with reg {reg}
+    And I click the first "View certificate" link
+    And I press the "Edit this MOT test result" button
+    And I update the odometer reading by 3000
+    And I edit the primary colour "Red" and secondary colour "White"
+    When I press the "Review changes" button
+    And I check the odometer reading on the confirmation page is correct
+  #  And I check the colours are correct "Red" and "White" - commented out due to a known bug ticket 4513
+    Then I press the "Finish changes and print certificate" button
+    And The page title contains "Test Results Updated Successfully"
+    And I check there is a "Print" link
