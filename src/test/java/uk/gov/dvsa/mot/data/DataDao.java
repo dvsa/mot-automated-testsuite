@@ -80,9 +80,9 @@ public class DataDao {
             // check dataset is not empty
             if (dataset.size() == 0) {
                 String message = "No test data found matching data set name: '" + datasetName + "'";
-                logger.error(message);
-                throw new IllegalStateException(message);
+                logger.warn(message);
             }
+
             double timingInSeconds = (end - start) / 1000.0D;
             String formattedTiming = String.format("%.3f", timingInSeconds);
             logger.debug("loaded {} entries for dataset {} in {} secs", dataset.size(), datasetName, formattedTiming);
