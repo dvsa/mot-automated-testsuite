@@ -117,13 +117,32 @@ Feature: 08 - duplicate and replacement certificates
     And I check there is a "Print" link
 
   Scenario: Tester edits odometer and vehicle colour on certificate
-    Given I login with 2FA using "TESTER_AND_VEHICLE_EDITABLE_CERTIFICATE" as {tester}, {reg}
-    And I search for certificates with reg {reg}
+    Given I login with 2FA using "MOT_TESTER_CLASS_4" as {tester}, {site}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
+    And I start an MOT test for {reg}, {vin}
+    And The page title contains "Your home"
+    And I click the "Enter test results" link
+
+    And I enter an odometer reading in miles of {mileage} plus 5000
+    And I enter decelerometer results of service brake 51 and parking brake 16
+    And I press the "Review test" button
+
+    And The page title contains "MOT test summary"
+    And I check the test information section of the test summary is "Pass"
+    And I check the vehicle summary section of the test summary has "Registration number" of {reg}
+    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin}
+    And I check the brake results section of the test summary is "Pass"
+    And I check the fails section of the test summary has "None recorded"
+    And I press the "Save test result" button
+    And The page title contains "MOT test complete"
+    And I click the "Back to user home" link
+
+    When I search for certificates with reg {reg}
     And I click the first "View certificate" link
     And I press the "Edit this MOT test result" button
     And I update the odometer reading by 3000
     And I edit the primary colour "Red" and secondary colour "White"
-    When I press the "Review changes" button
+    And I press the "Review changes" button
     And I check the odometer reading on the confirmation page is correct
   #  And I check the colours are correct "Red" and "White" - commented out due to a known bug ticket 4513
     Then I press the "Finish changes and print certificate" button
