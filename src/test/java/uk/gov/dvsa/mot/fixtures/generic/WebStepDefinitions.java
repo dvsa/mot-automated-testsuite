@@ -26,85 +26,68 @@ public class WebStepDefinitions implements En {
     public WebStepDefinitions(WebDriverWrapper driverWrapper) {
         logger.debug("Creating WebStepDefinitions...");
 
-        When("^I browse to (\\S+)$", (String relativePath) -> {
-            driverWrapper.browseTo(relativePath);
-        });
+        When("^I browse to (\\S+)$", (String relativePath) ->
+                driverWrapper.browseTo(relativePath));
 
-        When("^I press the \"([^\"]+)\" button$", (String buttonText) -> {
-            driverWrapper.pressButton(buttonText);
-        });
+        When("^I press the \"([^\"]+)\" button$", (String buttonText) ->
+                driverWrapper.pressButton(buttonText));
 
-        When("^I click the \"([^\"]+)\" link$", (String linkText) -> {
-            driverWrapper.clickLink(linkText);
-        });
+        When("^I click the \"([^\"]+)\" link$", (String linkText) ->
+                driverWrapper.clickLink(linkText));
 
-        When("^I click the \"([^\"]+)\" radio button$", (String labelText) -> {
-            driverWrapper.selectRadio(labelText);
-        });
+        When("^I click the \\{([^\\}]+)\\} link$", (String linkKey) ->
+                driverWrapper.clickLink(driverWrapper.getData(linkKey)));
 
-        When("^I click the \"([^\"]+)\" checkbox$", (String labelText) -> {
-            driverWrapper.selectCheckbox(labelText);
-        });
+        When("^I click the \"([^\"]+)\" radio button$", (String labelText) ->
+                driverWrapper.selectRadio(labelText));
 
-        When("^I enter \"([^\"]+)\" in the \"([^\"]+)\" field$", (String text, String label) -> {
-            driverWrapper.enterIntoField(text, label);
-        });
+        When("^I click the \"([^\"]+)\" checkbox$", (String labelText) ->
+                driverWrapper.selectCheckbox(labelText));
 
-        When("^I enter \\{([^\\}]+)\\} in the \"([^\"]+)\" field$", (String dataKey, String label) -> {
-            driverWrapper.enterIntoField(driverWrapper.getData(dataKey), label);
-        });
+        When("^I enter \"([^\"]+)\" in the \"([^\"]+)\" field$", (String text, String label) ->
+                driverWrapper.enterIntoField(text, label));
 
-        When("^I enter \"([^\"]+)\" in the field with id \"([^\"]+)\"$", (String text, String id) -> {
-            driverWrapper.enterIntoFieldWithId(text, id);
-        });
+        When("^I enter \\{([^\\}]+)\\} in the \"([^\"]+)\" field$", (String dataKey, String label) ->
+                driverWrapper.enterIntoField(driverWrapper.getData(dataKey), label));
 
-        When("^I enter \\{([^\\}]+)\\} in the field with id \"([^\"]+)\"$", (String dataKey, String id) -> {
-            driverWrapper.enterIntoFieldWithId(driverWrapper.getData(dataKey), id);
-        });
+        When("^I enter \"([^\"]+)\" in the field with id \"([^\"]+)\"$", (String text, String id) ->
+                driverWrapper.enterIntoFieldWithId(text, id));
 
-        When("^I select \"([^\"]+)\" in the \"([^\"]+)\" field$", (String optionText, String label) -> {
-            driverWrapper.selectOptionInField(optionText, label);
-        });
+        When("^I enter \\{([^\\}]+)\\} in the field with id \"([^\"]+)\"$", (String dataKey, String id) ->
+                driverWrapper.enterIntoFieldWithId(driverWrapper.getData(dataKey), id));
 
-        Then("^The page contains \"([^\"]+)\"$", (String expected) -> {
-            driverWrapper.containsMessage(expected);
-        });
+        When("^I select \"([^\"]+)\" in the \"([^\"]+)\" field$", (String optionText, String label) ->
+                driverWrapper.selectOptionInField(optionText, label));
 
-        Then("^The page title contains \"([^\"]+)\"$", (String expected) -> {
-            driverWrapper.checkCurrentPageTitle(expected);
-        });
+        Then("^The page contains \"([^\"]+)\"$", (String expected) ->
+                driverWrapper.containsMessage(expected));
 
-        And("^I check there is a \"([^\"]+)\" link$", (String link) -> {
-            assertTrue(driverWrapper.hasLink(link));
-        });
+        Then("^The page title contains \"([^\"]+)\"$", (String expected) ->
+                driverWrapper.checkCurrentPageTitle(expected));
 
-        And("^I check there is no \"([^\"]+)\" link$", (String link) -> {
-            assertFalse(driverWrapper.hasLink(link));
-        });
+        And("^I check there is a \"([^\"]+)\" link$", (String link) ->
+                assertTrue(driverWrapper.hasLink(link)));
 
-        And("^I check the \"([^\"]+)\" button is disabled$", (String buttonText) -> {
-            assertTrue(driverWrapper.isButtonDisabled(buttonText));
-        });
+        And("^I check there is no \"([^\"]+)\" link$", (String link) ->
+                assertFalse(driverWrapper.hasLink(link)));
 
-        And("^I check the \"([^\"]+)\" button is enabled$", (String buttonText) -> {
-            assertFalse(driverWrapper.isButtonDisabled(buttonText));
-        });
+        And("^I check the \"([^\"]+)\" button is disabled$", (String buttonText) ->
+                assertTrue(driverWrapper.isButtonDisabled(buttonText)));
 
-        And("^I click the first \"([^\"]+)\" link$", (String linkText) -> {
-            driverWrapper.clickFirstLink(linkText);
-        });
+        And("^I check the \"([^\"]+)\" button is enabled$", (String buttonText) ->
+                assertFalse(driverWrapper.isButtonDisabled(buttonText)));
+
+        And("^I click the first \"([^\"]+)\" link$", (String linkText) ->
+                driverWrapper.clickFirstLink(linkText));
 
         And("^I enter \"([^\"]+)\" into all fields with id prefix \"([^\"]+)\"$",
-                (String text, String idPrefix) -> {
-                    driverWrapper.enterIntoAllFieldsWithIdPrefix(idPrefix, text);
-                });
+                (String text, String idPrefix) -> driverWrapper.enterIntoAllFieldsWithIdPrefix(idPrefix, text));
 
-        And("^I check there is no \"([^\"]+)\" button$", (String buttonText) -> {
-            assertFalse("Button found with text: " + buttonText, driverWrapper.checkButtonExists(buttonText));
-        });
+        And("^I check there is no \"([^\"]+)\" button$", (String buttonText) ->
+                assertFalse("Button found with text: " + buttonText,
+                        driverWrapper.checkButtonExists(buttonText)));
 
-        And("^I click the last \"([^\"]+)\" link$", (String linkText) -> {
-            driverWrapper.clickLastLink(linkText);
-        });
+        And("^I click the last \"([^\"]+)\" link$", (String linkText) ->
+                driverWrapper.clickLastLink(linkText));
     }
 }

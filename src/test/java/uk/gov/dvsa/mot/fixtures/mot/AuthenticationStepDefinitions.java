@@ -45,40 +45,59 @@ public class AuthenticationStepDefinitions implements En {
         this.dataProvider = dataProvider;
 
         Given("^I login with 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
-                (String dataSetName, String usernameKey, String key2) -> {
+                (String dataSetName, String usernameKey, String key2) ->
                     loginWith2fa(dataSetName, usernameKey,
                             env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
-                                env.getRequiredProperty("maxLoginRetries", Integer.class), key2);
-            });
+                            env.getRequiredProperty("maxLoginRetries", Integer.class), key2));
 
         Given("^I login with 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
-                (String dataSetName, String usernameKey, String key2, String key3) -> {
+                (String dataSetName, String usernameKey, String key2, String key3) ->
                     loginWith2fa(dataSetName, usernameKey,
                             env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
-                            env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3);
-                });
+                            env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3));
 
         Given("^I login with 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\},"
                 + " \\{([^\\}]+)\\}$",
-                (String dataSetName, String usernameKey, String key2, String key3, String key4) -> {
+                (String dataSetName, String usernameKey, String key2, String key3, String key4) ->
                     loginWith2fa(dataSetName, usernameKey,
                             env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
-                            env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3, key4);
-                });
+                            env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3, key4));
 
         Given("^I login with 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\},"
                         + " \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
-                (String dataSetName, String usernameKey, String key2, String key3, String key4, String key5) -> {
+                (String dataSetName, String usernameKey, String key2, String key3, String key4, String key5) ->
                     loginWith2fa(dataSetName, usernameKey,
                             env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
-                            env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3, key4, key5);
-                });
+                            env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3, key4, key5));
+
+        Given("^I login with 2FA as \\{([^\\}]+)\\}$", (String usernameKey) ->
+                loginWith2fa(usernameKey, env.getRequiredProperty("password"),
+                    env.getRequiredProperty("seed")));
 
         Given("^I login without 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}$",
-                (String dataSetName, String usernameKey) -> {
+                (String dataSetName, String usernameKey) ->
                     loginWithout2fa(dataSetName, usernameKey, env.getRequiredProperty("password"),
-                            env.getRequiredProperty("maxLoginRetries", Integer.class));
-            });
+                            env.getRequiredProperty("maxLoginRetries", Integer.class)));
+    }
+
+    /**
+     * Logs a user into the application, using 2FA (password and pin).
+     * <p>Note: doesn't tolerate failed logins caused by a user password being manually changed.</p>
+     * @param usernameKey       The username data key to set
+     * @param password          The password to use
+     * @param seed              The OTP seed to use
+     */
+    private void loginWith2fa(String usernameKey, String password, String seed) {
+        if (login2fa(driverWrapper.getData(usernameKey), password, seed)) {
+            // check if any special notices need clearing down
+            if (driverWrapper.hasLink("Read and acknowledge")) {
+                clearDownSpecialNotices();
+            }
+        } else {
+            String message = "Login failed";
+            logger.error(message);
+            throw new IllegalStateException(message);
+        }
     }
 
     /**

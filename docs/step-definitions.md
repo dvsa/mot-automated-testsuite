@@ -18,6 +18,7 @@ High level:
 * I browse to ```URL```
 * I press the ```"..buton text.."``` button
 * I click the ```"..link text.."``` link
+* I click the ```{key}``` link
 * I click the first ```"..link text.."``` link
 * I click the ```..label...``` radio button
    * Note: handles labels with ```for``` and radio inputs nested inside the label 
@@ -58,6 +59,7 @@ These steps are specific to the DVSA MOT application screens.
 * I login with 2FA using ```"..dataset name.."``` as ```{..username key..}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```
    * Note: these steps will use the [configuration settings](../configuration/README.md) and actually try up to ```maxLoginRetries``` different users, if the password isn't ```password``` (e.g. for users that have had passwords manually changed)
    * Note: these steps will also acknowledge any special notices (so the user can undertake tests, if needed)
+* I login with 2FA as ```{..username key..}```
 * I login without 2FA using ```"..dataset name.."``` as ```{..username key..}```
 
 ### CreateVehicleStepDefinitions

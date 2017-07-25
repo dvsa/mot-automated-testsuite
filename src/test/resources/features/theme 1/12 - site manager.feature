@@ -47,15 +47,27 @@ Feature: 12 - Site Manager and Site Admin
     And I check there is pending "Tester" role listed for {nonTesterName1}
 
 
-  # Scenario: Site Manager views and aborts an active MOT
-    # Pre-req: <Pre-Req: Associated VTS must have a test in progress>
-    # Sign in as a Site Manager (2FA active)
-    # Select VTS via the home page
-    # Select active test
-    # Select abort test
-    # Select abort reason
-    # Select abort test
-    # Expected results: You have successfully aborted MOT test 809277497964 with a reason of Vehicle registered in error.
+  Scenario: Site Manager views and aborts an active MOT
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
+
+    And I login with 2FA using "SITE_MGR_AND_TESTER_CLASS_4" as {testerUsername1}, {managerUsername1}, {sitename1}, {sitenumber1}
+    And I start an MOT test for {registration1}, {vin1}
+    And The page title contains "Your home"
+    And I click the "Sign out" link
+
+    When I login with 2FA as {managerUsername1}
+    And I click on the {sitename1}, {sitenumber1} site
+    And The page title contains "Vehicle Testing Station"
+    And I click the {registration1} link
+    And The page title contains "Vehicle Testing Station"
+    And I click the "Abort MOT Test" link
+    And The page title contains "Abort MOT test"
+    And I click the "Vehicle registered in error" radio button
+    And I press the "Abort MOT test" button
+
+    Then The page contains "You have successfully aborted MOT test"
+    And The page contains "with a reason of Vehicle registered in error."
+
 
   # Scenario: Site Admin updates VTS details
     # Pre-req: Test can be repeated for 'Change test hours'
