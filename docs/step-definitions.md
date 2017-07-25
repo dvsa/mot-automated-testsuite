@@ -60,6 +60,7 @@ These steps are specific to the DVSA MOT application screens.
    * Note: these steps will use the [configuration settings](../configuration/README.md) and actually try up to ```maxLoginRetries``` different users, if the password isn't ```password``` (e.g. for users that have had passwords manually changed)
    * Note: these steps will also acknowledge any special notices (so the user can undertake tests, if needed)
 * I login with 2FA as ```{..username key..}```
+   * Note: this step will also acknowledge any special notices (so the user can undertake tests, if needed)
 * I login without 2FA using ```"..dataset name.."``` as ```{..username key..}```
 
 ### CreateVehicleStepDefinitions
@@ -141,3 +142,11 @@ These steps are specific to the DVSA MOT application screens.
 * I check the fails section of the test summary does not have ```"..text.."```
 * I check the prs section of the test summary does not have ```"..text.."```
 * I check the advisory section of the test summary does not have ```"..text.."```
+
+
+### SiteAdminStepDefinitions
+
+* I click on the ```{..site name key..}```, ```{..site number key..}``` site
+* I check the role summary has a new role of ```"..text.."```
+* I check there is a role assignment confirmation message for ```{..username key..}```, ```{..name key..}```
+* I check there is pending ```"..text.."``` role listed for ```{..name key..}```
