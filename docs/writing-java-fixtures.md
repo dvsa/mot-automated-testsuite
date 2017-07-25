@@ -66,6 +66,16 @@ public MyStepDefinitions(WebDriverWrapper driverWrapper) {
   ..use driverWrapper as needed..
 }  
 ```   
+
+## WebDriverWrapper
+
+This class wraps the web browser state and Selenium API use in a generic (i.e. no MOT application-specifics) set of methods that can be used to manipulate and test web pages. 
+
+Some of these methods have the complexity of coping with a number of situations (for example buttons implemented using either ```input``` or ```button``` tags, or form fields with labels associated in various different ways).
+Because of this, a simple JUnit test framework has been setup so you can update/extend these methods safely, without breaking existing functionality. These tests are run automatically as part of any Gradle build, and must pass for the testsuite to be used.
+
+The ```WebDriverWrapperTest``` is the JUnit test class, and it tests using HtmlUnit, set to emulate Chrome. Web page examples can be added to the ```exampleHtml``` folder.
+
    
 ## General Advice
 
@@ -77,7 +87,7 @@ When refactoring common Gherkin steps into Java methods with a new step definiti
 
 Use JUnit assertions to test logic, and keep all JUnit use to the java fixture classes.
 
-Keep all Selenium API usage inside the ```DriverWrapper``` class.
+Keep all Selenium API usage inside the ```WebDriverWrapper``` class (see above), keep all MOT-specific logic in fixture classes.
 
 Keep any behaviour that needs to happen before or after all scenarios inside the ```LifecycleHooks``` class. 
 
