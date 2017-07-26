@@ -36,15 +36,14 @@ Feature: 08 - duplicate and replacement certificates
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {tester}, {site}
     And I load "VEHICLE_CLASS_4_HISTORIC_10_DAYS" as {reg}, {vin}, {mileage}, {testNumber}
     And I search for certificates with reg {reg}
-    And I click the "Show older tests" link
-    And I click the last "View certificate" link
+    And I click the first "View certificate" link
     And I check there is a "Print certificate" link
     And I check there is no "Edit this MOT test result" button
 
   @smoke
   Scenario: AO1 user edits vehicle details on latest certificate
     Given I login without 2FA using "AO1_USER" as {AO1}
-    And I load "VEHICLE_CLASS_4_NOT_UPDATED_TODAY" as {reg}, {vin}, {mileage}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
     And I press the "Edit this MOT test result" button
