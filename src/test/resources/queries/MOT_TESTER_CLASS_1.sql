@@ -16,6 +16,7 @@ and afts.status_id = 2 -- only valid site authorisations
 and sbrm.site_id = s.id
 and sbrm.person_id = p.id
 and sbrm.site_business_role_id = 1 -- only testers
+and sbrm.status_id = 1 -- Only Active tester roles
 and afa.organisation_id = o.id
 and afa.status_id = 2 -- only valid ae authorisations
 and o.slots_balance > 0 -- ae's with slots available

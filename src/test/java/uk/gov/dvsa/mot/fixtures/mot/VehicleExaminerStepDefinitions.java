@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
+import java.time.LocalDate;
+
 import javax.inject.Inject;
 
 public class VehicleExaminerStepDefinitions implements En {
@@ -51,6 +53,32 @@ public class VehicleExaminerStepDefinitions implements En {
         And("^I click the view certificate link for test number \\{([^\\}]+)\\}$",
                 (String testNumberKey) -> {
                     clickViewCertificateForTestNumber(testNumberKey);
+                });
+        And("^I search for AE information with \\{([^\\}]+)\\}$", (String aeRefKey) -> {
+            searchForAeInformation(aeRefKey);
+        });
+
+        And("^I check the AE name is \\{([^\\}]+)\\}$", (String aeNameKey) -> {
+            assertTrue("AE Name is incorrect", driverWrapper.getTextFromTableRow("Name")
+                    .contains(driverWrapper.getData(aeNameKey)));
+        });
+
+        And("^I search for Site information by site number with \\{([^\\}]+)\\}$", (String siteNumberKey) -> {
+            searchForSiteInformationByNumber(siteNumberKey);
+        });
+
+        And("^I check the site name is \\{([^\\}]+)\\}$", (String siteNameKey) -> {
+            assertTrue("The site name is incorrect", driverWrapper.getTextFromTableRow("Name")
+                    .contains(driverWrapper.getData(siteNameKey)));
+        });
+
+        And("^I search for user with username \\{([^\\}]+)\\}$", (String usernameKey) -> {
+            searchForUserByUsername(usernameKey);
+        });
+
+        And("^I check the slot usage for the past (\\d+) days is \\{([^\\}]+)\\}$",
+                (Integer days, String slotUsageKey) -> {
+                    checkSlotUsageForCustomDateRange(days, slotUsageKey);
                 });
     }
 
@@ -134,5 +162,96 @@ public class VehicleExaminerStepDefinitions implements En {
     private void clickViewCertificateForTestNumber(String testNumberKey) {
         //And I click the link for mot test
         driverWrapper.clickLinkContainingHrefValue(driverWrapper.getData(testNumberKey));
+    }
+
+    /**
+     * Searches for AE information from the registered company number.
+     * @param aeRefKey  The data key for the registered company number
+     */
+    private void searchForAeInformation(String aeRefKey) {
+        //And I click the AE information link
+        driverWrapper.clickLink("AE information");
+
+        //And I enter the AE number into the field
+        driverWrapper.enterIntoField(driverWrapper.getData(aeRefKey), "AE Number");
+
+        //And I press the Search button
+        driverWrapper.pressButton("Search");
+
+        //And I check the page title contains Authorised Examiner
+        driverWrapper.checkCurrentPageTitle("Authorised Examiner");
+    }
+
+    /**
+     * Searches for site information using the site's number.
+     * @param siteNumberKey The key for the site number to search with
+     */
+    private void searchForSiteInformationByNumber(String siteNumberKey) {
+        //And I click the Site information link
+        driverWrapper.clickLink("Site information");
+
+        //And I enter the site number
+        String siteNumber = driverWrapper.getData(siteNumberKey);
+        driverWrapper.enterIntoField(siteNumber, "Site ID");
+
+        //And I press the search button
+        driverWrapper.pressButton("Search");
+
+        //Check if multiple records were returned
+        if (driverWrapper.hasLink(siteNumber)) {
+            driverWrapper.clickFirstLink(siteNumber);
+        }
+    }
+
+    /**
+     * Search for a user by their username.
+     * @param usernameKey   The key for the username data to be used
+     */
+    private void searchForUserByUsername(String usernameKey) {
+        //And I click the User Search link
+        driverWrapper.clickLink("User search");
+
+        //And I enter the username into the field
+        driverWrapper.enterIntoField(driverWrapper.getData(usernameKey), "Username");
+
+        //And i press the search button
+        driverWrapper.pressButton("Search");
+    }
+
+    /**
+     * Enters a custom date range from a specified number of days ago.
+     * @param days        The number of days to check back
+     * @param slotUsageKey  The date key for slot usage
+     */
+    private void checkSlotUsageForCustomDateRange(int days, String slotUsageKey) {
+        //And I enter the from date
+        LocalDate today = LocalDate.now();
+        LocalDate fromDate = LocalDate.now().minusDays(days);
+
+        driverWrapper.enterTextInFieldWithName("dateFrom[day]", String.valueOf(fromDate.getDayOfMonth()));
+        driverWrapper.enterTextInFieldWithName("dateFrom[month]", String.valueOf(fromDate.getMonthValue()));
+        driverWrapper.enterTextInFieldWithName("dateFrom[year]",String.valueOf(fromDate.getYear()));
+
+        //And I enter the to date
+        driverWrapper.enterTextInFieldWithName("dateTo[day]", String.valueOf(today.getDayOfMonth()));
+        driverWrapper.enterTextInFieldWithName("dateTo[month]", String.valueOf(today.getMonthValue()));
+        driverWrapper.enterTextInFieldWithName("dateTo[year]", String.valueOf(today.getYear()));
+
+        //And i press the update results button
+        driverWrapper.clickButton("Update results");
+
+        //Create the message if plural or not
+        String message;
+
+        if (Integer.valueOf(driverWrapper.getData(slotUsageKey)) == 1) {
+            message = " slot used";
+        } else {
+            message = " slots used";
+        }
+
+        //And I check the slot usage is correct
+        assertTrue("The slot usage is not correct",
+                driverWrapper.getElementText("summaryLine")
+                        .contains(driverWrapper.getData(slotUsageKey) + message));
     }
 }

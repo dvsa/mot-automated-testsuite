@@ -149,7 +149,7 @@ public class PurchaseSlotsStepDefinitions implements En {
         driverWrapper.clickButton("Continue");
 
         //And I click the save button
-        driverWrapper.clickButton("Save");
+        driverWrapper.clickButton("Cancel");
     }
 
     private void checkTheSummaryInformation(int slots) {

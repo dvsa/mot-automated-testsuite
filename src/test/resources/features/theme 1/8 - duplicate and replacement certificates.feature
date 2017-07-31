@@ -81,8 +81,7 @@ Feature: 08 - duplicate and replacement certificates
     Given I login without 2FA using "DVLA_MANAGER_USER" as {DVLAManager}
     And I load "VEHICLE_CLASS_4_HISTORIC_10_DAYS" as {reg}, {vin}, {mileage}, {testNumber}
     And I search for certificates with reg {reg}
-    And I click the "Show older tests" link
-    And I click the view certificate link for test number {testNumber}
+    And I click the first "View certificate" link
     And I press the "Edit this MOT test result" button
     And I edit the vehicle vin with "DVLA304050921020"
     And I edit the vehicle registration with "DVLA903"
@@ -98,7 +97,7 @@ Feature: 08 - duplicate and replacement certificates
     And I load "VEHICLE_CLASS_4_HISTORIC_10_DAYS" as {reg}, {vin}, {mileage}, {testNumber}
     And I search for certificates with reg {reg}
     And I click the "Show older tests" link
-    And I click the view certificate link for test number {testNumber}
+    And I click the first "View certificate" link
     And I press the "Edit this MOT test result" button
     And I edit the make "FORD" and model "FOCUS"
     And I edit the primary colour "Red" and secondary colour "White"

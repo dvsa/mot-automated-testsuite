@@ -4,7 +4,7 @@ Feature: 14 - Vehicle Examiner
   Scenario: VE records re-inspection
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
-    And I click the "vehicle information" link
+    And I click the "Vehicle information" link
     And I search for vehicle information by "Registration (VRM)" with {registration1}
     And I click the "View MOT history" link
     And I click the first "View" link
@@ -23,10 +23,14 @@ Feature: 14 - Vehicle Examiner
     And I perform a test comparison with outcome "No further action" and justification "Test was satisfactory"
     And I check the case outcome "No further action" is saved
 
-  # Scenario: AE search positive
-    # Select AE information
-    # Provide a valid AE number
-    # Ensure that home page for AE displays correct information
+  Scenario: Authorised Examiner Search
+    Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
+    And I load "AUTHORISED_EXAMINER" as {aeNumber}, {aeName}, {slotUsage}
+    When I search for AE information with {aeNumber}
+    Then I check the AE name is {aeName}
+    And I click the "Slot usage" link
+    And The page contains "Test logs of Authorised Examiner"
+    And I check the slot usage for the past 30 days is {slotUsage}
 
   # Scenario: AE search negative
     # Select AE information
@@ -39,10 +43,11 @@ Feature: 14 - Vehicle Examiner
     # Select Test logs
     # Ensure that logs are present / that filters are doing what they suppose to do / that Custom date range works / that Total tests numbers are correct / that pagination works on page / that user can download logs / that sorting is working in the results table / that backward navigation to AE home page is working
 
-  # Scenario: Site information search positive
-    # Select Site information
-    # Provide Site ID / Trading name / City or town / Postcode
-    # Ensure that needed site is in the list of results and Site home page can be accessed from that list
+  Scenario: Site information search and view slot usage
+    Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
+    And I load "SITE" as {siteName}, {siteNumber}
+    When I search for Site information by site number with {siteNumber}
+    Then I check the site name is {siteName}
 
   # Scenario: Site information search negative
     # Select Site information
@@ -61,6 +66,11 @@ Feature: 14 - Vehicle Examiner
     # Select MOT test
     # Abort MOT test
     # Ensure that user can't abort test without providing a reason (validation in place - Reason for cancelling test is required) / that information about MOT test is correct on Abort MOT test page / that user can navigate back to view active MOT test page / that user can abort test and print VT30 certificate
+
+  Scenario: Vehicle examiner searches for user by username
+    Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
+    And I load "AEDM_USER" as {searchUser}, {organisation}
+    And I search for user with username {searchUser}
 
   # Scenario: User search + change tester group status
     # Select User search

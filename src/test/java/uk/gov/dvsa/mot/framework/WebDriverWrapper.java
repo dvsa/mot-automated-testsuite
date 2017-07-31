@@ -466,6 +466,7 @@ public class WebDriverWrapper {
      */
     public void enterTextInFieldWithName(String name, String text) {
         WebElement element = webDriver.findElement(By.name(name));
+        element.clear();
         element.sendKeys(text);
     }
 
