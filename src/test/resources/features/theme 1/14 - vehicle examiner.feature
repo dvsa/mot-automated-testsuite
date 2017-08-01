@@ -84,13 +84,6 @@ Feature: 14 - Vehicle Examiner
     And The page contains "MOT test summary"
     And I check there is a "Print certificate" link
 
-  # Scenario: Vehicle information search + test details
-    # Select Vehicle information
-    # Provide a valid VRM (ensure that vehicle has at least on test in the past)
-    # Select View MOT history on a Vehicle information page
-    # Select View for one of the tests on the Vehicle MOT test history page
-    # Ensure that MOT test summary page is present / that user can print certificate from this page
-
   # Scenario: Vehicle information search negative
     # Select Vehicle information
     # Provide an invalid VRM / VIN
