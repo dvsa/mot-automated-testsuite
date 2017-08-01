@@ -7,6 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.inject.Inject;
 
 /**
@@ -40,6 +43,11 @@ public class HomePageStepDefinitions implements En {
         And("^I check a slot was successfully used for site \\{([^\\}]+)\\}$", (String siteKey) -> {
             checkSlotsBalanceDecreased(siteKey);
         });
+
+        And("^I get the site number \\{([^\\}]+)\\} by name \\{([^\\}]+)\\}$",
+                (String siteNumberKey, String siteNameKey) -> {
+                    getSiteNumberByName(siteNumberKey, siteNameKey);
+                });
     }
 
     /**
@@ -77,5 +85,21 @@ public class HomePageStepDefinitions implements En {
                 "../../../../div[2]/span");
         int decreeasedSlots = Integer.valueOf(driverWrapper.getData("slotCount")) - 1;
         assertTrue("The slot balance did not decrease", slots.contains(String.valueOf(decreeasedSlots)));
+    }
+
+    /**
+     * Gets the site number from the homepage by using the site name.
+     * @param siteNumberKey Site number key to store the value
+     * @param siteNameKey   The site name key to be used
+     */
+    private void getSiteNumberByName(String siteNumberKey, String siteNameKey) {
+        String siteName = driverWrapper.getData(siteNameKey);
+        String siteString = driverWrapper.getElementText("a", siteName, ".");
+        Pattern pattern = Pattern.compile("\\((.*?)\\)");
+        Matcher matcher = pattern.matcher(siteString);
+
+        if (matcher.find()) {
+            driverWrapper.setData(siteNumberKey, matcher.group(1));
+        }
     }
 }

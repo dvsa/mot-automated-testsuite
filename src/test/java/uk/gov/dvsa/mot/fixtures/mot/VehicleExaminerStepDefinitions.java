@@ -80,6 +80,11 @@ public class VehicleExaminerStepDefinitions implements En {
                 (Integer days, String slotUsageKey) -> {
                     checkSlotUsageForCustomDateRange(days, slotUsageKey);
                 });
+
+        And("^I abort the active mot test at site for reg \\{([^\\}]+)\\}, vin \\{([^\\}]+)\\}$",
+                (String regKey, String vinKey) -> {
+                    abortActiveMotTestOnSite(regKey, vinKey);
+                });
     }
 
     /**
@@ -253,5 +258,35 @@ public class VehicleExaminerStepDefinitions implements En {
         assertTrue("The slot usage is not correct",
                 driverWrapper.getElementText("summaryLine")
                         .contains(driverWrapper.getData(slotUsageKey) + message));
+    }
+
+    /**
+     * Aborts an mot test on the site information page.
+     * @param regKey    The reg key for the link
+     * @param vinKey    The vin key for checking the page
+     */
+    private void abortActiveMotTestOnSite(String regKey, String vinKey) {
+        //And I click the reg link
+        driverWrapper.clickLink(driverWrapper.getData(regKey));
+
+        //Check the vin number
+        String vin = driverWrapper.getTextFromDefinitionList("Vehicle Identification Number");
+        assertTrue("The vin is incorrect on view active mot",
+                vin.contains(driverWrapper.getData(vinKey)));
+
+        //And I click the abort mot test link
+        driverWrapper.clickLink("Abort MOT Test");
+
+        //And I select the aborted by ve reason
+        driverWrapper.selectRadio("Aborted by VE");
+
+        //And I press the abort mot test button
+        driverWrapper.pressButton("Abort MOT test");
+
+        //And the page title contains mot test aborted
+        driverWrapper.checkCurrentPageTitle("MOT test aborted");
+
+        //And I check the print VT40 button is present
+        assertTrue("The print VT30 button is missing", driverWrapper.hasLink("Print VT30"));
     }
 }

@@ -43,29 +43,20 @@ Feature: 14 - Vehicle Examiner
     # Select Test logs
     # Ensure that logs are present / that filters are doing what they suppose to do / that Custom date range works / that Total tests numbers are correct / that pagination works on page / that user can download logs / that sorting is working in the results table / that backward navigation to AE home page is working
 
-  Scenario: Site information search and view slot usage
-    Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
-    And I load "SITE" as {siteName}, {siteNumber}
+  Scenario: Site information search and abort active test
+    Given I login with 2FA using "MOT_TESTER_CLASS_4" as {tester}, {site}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
+    And I get the site number {siteNumber} by name {site}
+    And I start an MOT test for {reg}, {vin}
+    And I click the "Sign out" link
+    And I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
     When I search for Site information by site number with {siteNumber}
-    Then I check the site name is {siteName}
+    And I abort the active mot test at site for reg {reg}, vin {vin}
 
   # Scenario: Site information search negative
     # Select Site information
     # Provide incorrect data / leave all fields blank
     # Ensure that validation is in place - You need to enter some search criteria or Unable to find any matches. Try expanding your search criteria / that Help with Site Search section is expandable
-
-  # Scenario: Site information - View active test
-    # Select Site information
-    # Search for a Site which has a MOT test in progress
-    # Select MOT test
-    # Ensure that MOT Test page displayed / that information about vehicle is correct / that information about test is correct / that user can navigate back to Site home page
-
-  # Scenario: Site information - Abort active test
-    # Select Site information
-    # Search for a Site which has a MOT test in progress
-    # Select MOT test
-    # Abort MOT test
-    # Ensure that user can't abort test without providing a reason (validation in place - Reason for cancelling test is required) / that information about MOT test is correct on Abort MOT test page / that user can navigate back to view active MOT test page / that user can abort test and print VT30 certificate
 
   Scenario: Vehicle examiner searches for user by username
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
