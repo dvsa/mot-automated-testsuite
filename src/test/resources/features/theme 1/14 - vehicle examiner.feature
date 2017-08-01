@@ -56,16 +56,9 @@ Feature: 14 - Vehicle Examiner
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
     And I load "AEDM_USER" as {searchUser}, {organisation}
     And I search for user with username {searchUser}
-
-  # Scenario: User search + change tester group status
-    # Select User search
-    # Provide a valid username
-    # Select user from the results list
-    # Select Change Group A / B qualification status
-    # Select Qualification status
-    # Select Change status button
-    # Select Confirm qualification status on a Summary and confirmation page
-    # Ensure that confirmation message is displayed on a User profile page / that status was actually updated
+    And I click the first name in the list
+    And I check the user profile contains username {searchUser}
+    And I change the testers group "A" status to "Qualified"
 
   # Scenario: User search negative
     # Select User search

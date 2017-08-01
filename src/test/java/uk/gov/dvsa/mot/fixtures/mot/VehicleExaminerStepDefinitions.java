@@ -90,6 +90,21 @@ public class VehicleExaminerStepDefinitions implements En {
                 (String regKey, String vinKey) -> {
                     checkRegAndVinForVehicleInformation(regKey, vinKey);
                 });
+
+        And("^I click the first name in the list", () -> {
+            driverWrapper.clickFirstLink(driverWrapper.getTextFromTableColumn("Name"));
+        });
+
+        And("^I check the user profile contains username \\{([^\\}]+)\\}$", (String usernameKey) -> {
+            assertTrue("The username is not correct",
+                    driverWrapper.getTextFromTableRow("User ID")
+                            .contains(driverWrapper.getData(usernameKey)));
+        });
+
+        And("^I change the testers group \"([^\"]+)\" status to \"([^\"]+)\"$",
+                (String group, String status) -> {
+                    changeTesterGroupStatus(group, status);
+                });
     }
 
     /**
@@ -309,5 +324,38 @@ public class VehicleExaminerStepDefinitions implements En {
         //And I check the vehicle vin on the site information page
         assertTrue("The vin is not correct", driverWrapper.getTextFromTableRow("VIN")
                 .contains(driverWrapper.getData(vinKey)));
+    }
+
+    /**
+     * Changes the tester status for a specified group to a specified status.
+     * @param group     The group to change
+     * @param status    The status to be changed to
+     */
+    private void changeTesterGroupStatus(String group, String status) {
+        //And i click the change group status link
+        driverWrapper.clickLink(String.format("Change Group %s qualification status", group));
+
+        //And i select the new status radio button
+        driverWrapper.selectRadio(status);
+
+        //And I press the change status button
+        driverWrapper.pressButton("Change status");
+
+        //And I check i am changing the correct group
+        assertTrue("The group is not correct",
+                driverWrapper.getTextFromTableRow("Testing group").contains("Group " + group));
+
+        //And I check the status is correct
+        assertTrue("The status is not correct",
+                driverWrapper.getTextFromTableRow("Qualification status").contains(status));
+
+        //And I press the confirm qualification status button
+        driverWrapper.pressButton("Confirm qualification status");
+
+        //And i check that the status change was successful
+        String successMessage = String.format("Group %s tester qualification status has been changed to %s",
+                group, status);
+        assertTrue("The validation message is not correct",
+                driverWrapper.getElementText("validation-message--success").contains(successMessage));
     }
 }
