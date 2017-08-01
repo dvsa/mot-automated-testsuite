@@ -37,12 +37,6 @@ Feature: 14 - Vehicle Examiner
     # Provide incorrect AE number / leave field empty
     # Ensure that validation is in place - AE Number was not found
 
-  # Scenario: AE test logs
-    # Select AE information
-    # Search for valid AE with test history
-    # Select Test logs
-    # Ensure that logs are present / that filters are doing what they suppose to do / that Custom date range works / that Total tests numbers are correct / that pagination works on page / that user can download logs / that sorting is working in the results table / that backward navigation to AE home page is working
-
   Scenario: Site information search and abort active test
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {tester}, {site}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
@@ -77,6 +71,18 @@ Feature: 14 - Vehicle Examiner
     # Select User search
     # Provide incorrect information to any of the fields
     # Ensure that user still on User search page / that information message is displayed - Your search for fff returned no results. Check what you have entered or add more details and try again.
+
+  Scenario: Vehicle information search
+    Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
+    And I click the "Vehicle information" link
+    When I search for vehicle information by "Registration (VRM)" with {reg}
+    Then I check the reg {reg}, vin {vin} on vehicle information
+    And I click the "View MOT history" link
+    And The page contains "Vehicle MOT test history"
+    And I click the first "View" link
+    And The page contains "MOT test summary"
+    And I check there is a "Print certificate" link
 
   # Scenario: Vehicle information search + test details
     # Select Vehicle information

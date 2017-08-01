@@ -85,6 +85,11 @@ public class VehicleExaminerStepDefinitions implements En {
                 (String regKey, String vinKey) -> {
                     abortActiveMotTestOnSite(regKey, vinKey);
                 });
+
+        And("^I check the reg \\{([^\\}]+)\\}, vin \\{([^\\}]+)\\} on vehicle information",
+                (String regKey, String vinKey) -> {
+                    checkRegAndVinForVehicleInformation(regKey, vinKey);
+                });
     }
 
     /**
@@ -286,7 +291,23 @@ public class VehicleExaminerStepDefinitions implements En {
         //And the page title contains mot test aborted
         driverWrapper.checkCurrentPageTitle("MOT test aborted");
 
-        //And I check the print VT40 button is present
+        //And I check the print VT30 button is present
         assertTrue("The print VT30 button is missing", driverWrapper.hasLink("Print VT30"));
+    }
+
+    /**
+     * Checks the vin and reg on the vehicle information page.
+     * @param regKey    The data key for the reg to check
+     * @param vinKey    The data key for the vin to check
+     */
+    private void checkRegAndVinForVehicleInformation(String regKey, String vinKey) {
+        //And I check the vehicle reg on the site information page
+        assertTrue("The registration is not correct",
+                driverWrapper.getTextFromTableRow("Registration mark")
+                        .contains(driverWrapper.getData(regKey)));
+
+        //And I check the vehicle vin on the site information page
+        assertTrue("The vin is not correct", driverWrapper.getTextFromTableRow("VIN")
+                .contains(driverWrapper.getData(vinKey)));
     }
 }
