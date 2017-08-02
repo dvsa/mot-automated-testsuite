@@ -32,11 +32,6 @@ Feature: 14 - Vehicle Examiner
     And The page contains "Test logs of Authorised Examiner"
     And I check the slot usage for the past 30 days is {slotUsage}
 
-  # Scenario: AE search negative
-    # Select AE information
-    # Provide incorrect AE number / leave field empty
-    # Ensure that validation is in place - AE Number was not found
-
   Scenario: Site information search and abort active test
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {tester}, {site}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
@@ -47,11 +42,6 @@ Feature: 14 - Vehicle Examiner
     When I search for Site information by site number with {siteNumber}
     And I abort the active mot test at site for reg {reg}, vin {vin}
 
-  # Scenario: Site information search negative
-    # Select Site information
-    # Provide incorrect data / leave all fields blank
-    # Ensure that validation is in place - You need to enter some search criteria or Unable to find any matches. Try expanding your search criteria / that Help with Site Search section is expandable
-
   Scenario: Vehicle examiner searches for user by username
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
     And I load "AEDM_USER" as {searchUser}, {organisation}
@@ -59,11 +49,6 @@ Feature: 14 - Vehicle Examiner
     And I click the first name in the list
     And I check the user profile contains username {searchUser}
     And I change the testers group "A" status to "Qualified"
-
-  # Scenario: User search negative
-    # Select User search
-    # Provide incorrect information to any of the fields
-    # Ensure that user still on User search page / that information message is displayed - Your search for fff returned no results. Check what you have entered or add more details and try again.
 
   Scenario: Vehicle information search
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
@@ -76,11 +61,6 @@ Feature: 14 - Vehicle Examiner
     And I click the first "View" link
     And The page contains "MOT test summary"
     And I check there is a "Print certificate" link
-
-  # Scenario: Vehicle information search negative
-    # Select Vehicle information
-    # Provide an invalid VRM / VIN
-    # Ensure that validation message is in place - 1. Search term(s) not found...
 
   Scenario: MOT test search by vin
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
@@ -117,8 +97,3 @@ Feature: 14 - Vehicle Examiner
     And I click the first "View" link
     Then The page contains "MOT test summary"
     And I check there is a "Print certificate" link
-
-  # Scenario: MOT tests negative
-    # Select MOT tests
-    # Provide an invalid Site number / Username / VRM / VIN
-    # Ensure that correct validation message is in place
