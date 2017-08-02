@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
@@ -327,7 +328,9 @@ public class WebDriverWrapper {
      */
     public void clickFirstLink(String linkText) {
         WebElement link = findLinks(linkText).get(0);
-        link.click();
+        Actions actions = new Actions(webDriver);
+        actions.moveToElement(link).click().perform();
+        waitForPageLoad();
     }
 
     /**

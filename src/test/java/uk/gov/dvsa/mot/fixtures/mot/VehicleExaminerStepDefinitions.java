@@ -121,6 +121,9 @@ public class VehicleExaminerStepDefinitions implements En {
 
         //And I press the search button
         driverWrapper.clickElement("item-selector-btn-search");
+
+        //And the page contains mot test history
+        driverWrapper.containsMessage("MOT Test History");
     }
 
     /**

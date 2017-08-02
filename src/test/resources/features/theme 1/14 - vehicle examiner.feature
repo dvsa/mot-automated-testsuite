@@ -82,20 +82,41 @@ Feature: 14 - Vehicle Examiner
     # Provide an invalid VRM / VIN
     # Ensure that validation message is in place - 1. Search term(s) not found...
 
-  # Scenario: MOT tests Site
-    # Select MOT tests
-    # Provide a valid Site number (with existing MOT history)
-    # Ensure that list of tests is displaying in the results table / that after clicking on one of the links in summary column user is being redirected to MOT test summary page
+  Scenario: MOT test search by vin
+    Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
+    And I click the "MOT tests" link
+    When I search for an mot by "VIN/Chassis (comparison available)" with {vin}
+    And I click the first "View" link
+    Then The page contains "MOT test summary"
+    And I check there is a "Print certificate" link
 
-  # Scenario: MOT tests Tester
-    # Select MOT tests
-    # Provide a valid Username (with existing MOT history for that user)
-    # Ensure that list of tests is displaying in the results table / that after clicking on one of the links in summary column user is being redirected to MOT test summary page
+  Scenario: MOT test search by VRM
+    Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
+    And I click the "MOT tests" link
+    When I search for an mot by "Registration (comparison available)" with {reg}
+    And I click the first "View" link
+    Then The page contains "MOT test summary"
+    And I check there is a "Print certificate" link
 
-  # Scenario: MOT tests VRM / VIN
-    # Select MOT tests
-    # Provide a valid VRM / VIN (with existing MOT history for the vehicle)
-    # Ensure that list of tests is displaying in the results table / that after clicking on one of the links in summary column user is being redirected to MOT test summary page
+  Scenario: MOT test search by site
+    Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
+    And I load "SITE" as {siteName}, {siteNumber}
+    And I click the "MOT tests" link
+    When I search for an mot by "Site (recent tests)" with {siteNumber}
+    And I click the first "View" link
+    Then The page contains "MOT test summary"
+    And I check there is a "Print certificate" link
+
+  Scenario: MOT test search by tester
+    Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
+    And I load "MOT_TESTER_CLASS_4" as {tester}, {site}
+    And I click the "MOT tests" link
+    When I search for an mot by "Tester (by date range)" with {tester}
+    And I click the first "View" link
+    Then The page contains "MOT test summary"
+    And I check there is a "Print certificate" link
 
   # Scenario: MOT tests negative
     # Select MOT tests
