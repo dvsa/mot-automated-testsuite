@@ -7,6 +7,7 @@ from person person_mgr, person person_tester, auth_for_testing_mot aftm, organis
 where s.id = sbrm_mgr.site_id
 and sbrm_mgr.person_id = person_mgr.id
 and sbrm_mgr.site_business_role_id = 2 -- site manager
+and sbrm_mgr.status_id = 1 -- site manager role accepted
 and not exists (
   select 1 from site_business_role_map sbrm
   where s.id = sbrm.site_id
@@ -26,6 +27,7 @@ and afts.status_id = 2 -- only valid site authorisations
 and sbrm_tester.site_id = s.id
 and sbrm_tester.person_id = person_tester.id
 and sbrm_tester.site_business_role_id = 1 -- only testers
+and sbrm_tester.status_id = 1 -- tester role accepted
 and afa.organisation_id = o.id
 and afa.status_id = 2 -- only valid ae authorisations
 and o.slots_balance > 0 -- ae's with slots available
