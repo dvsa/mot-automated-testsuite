@@ -2,7 +2,7 @@ select veh.registration, veh.vin, mtc.odometer_value
 from vehicle veh, model_detail md,
   (select max(id) as id, vehicle_id  from mot_test_current
    group by vehicle_id
-   limit 10000) as latest_mot,
+   limit 100000) as latest_mot,
    mot_test_current mtc
 where veh.model_detail_id = md.id
 and md.vehicle_class_id = 4 -- cars only
