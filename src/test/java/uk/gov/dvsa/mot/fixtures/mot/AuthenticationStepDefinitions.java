@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.data.DatabaseDataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
-import uk.gov.dvsa.mot.framework.WrongPageException;
 import uk.gov.dvsa.mot.otp.Generator;
 
 import java.util.ArrayList;
@@ -155,39 +154,31 @@ public class AuthenticationStepDefinitions implements En {
      * @return Whether the login was successful (any errors will have been logged)
      */
     private boolean login2fa(String username, String password, String seed) {
-        //Enter username and password
-        login(username, password);
-
-        // check we got to the 2FA PIN screen
         try {
+            // enter username and password
+            login(username, password);
+
+            // check we got to the 2FA PIN screen
             driverWrapper.checkCurrentPageTitle("Your security card PIN");
 
-        } catch (WrongPageException ex) {
-            // password authentication must have failed
-            String message = "password authentication failed for user: " + username;
-            logger.error(message);
-            return false;
-        }
+            // seed taken from the test OTP generator, used on all test systems
+            String pin = Generator.generatePin(seed);
+            logger.debug("Using PIN {}", pin);
 
-        // seed taken from the test OTP generator, used on all test systems
-        String pin = Generator.generatePin(seed);
-        logger.debug("Using PIN {}", pin);
+            driverWrapper.enterIntoField(pin, "Security card PIN");
+            driverWrapper.pressButton("Sign in");
 
-        driverWrapper.enterIntoField(pin, "Security card PIN");
-        driverWrapper.pressButton("Sign in");
-
-        // check we got to the home page
-        try {
+            // check we got to the home page
             driverWrapper.checkCurrentPageTitle("Your home");
 
-        } catch (WrongPageException ex) {
-            // 2FA PIN authentication failed
-            String message = "2FA PIN authentication failed for user: " + username;
+            return true;
+
+        } catch (Throwable ex) {
+            // login failed (wrong password, wrong PIN, password needs resetting, etc)
+            String message = "login failed for user: " + username;
             logger.error(message);
             return false;
         }
-
-        return true;
     }
 
     /**
@@ -213,11 +204,37 @@ public class AuthenticationStepDefinitions implements En {
      * @param maxLoginRetries   The max number of login retries
      */
     private void loginWithout2fa(String dataSetName, String usernameKey, String password, int maxLoginRetries)  {
-        List<String> datakeys = new ArrayList<>();
-        datakeys.add(usernameKey);
+        int loginAttempts = 0;
+        while (loginAttempts < maxLoginRetries) {
+            loginAttempts++;
 
-        loadData(dataSetName, datakeys);
-        non2FaLogin(driverWrapper.getData(usernameKey), password);
+            // load username from the dataset, populate the data keys and values
+            List<String> dataKeys = new ArrayList<>();
+            dataKeys.add(usernameKey);
+            loadData(dataSetName, dataKeys);
+
+            // get the loaded username
+            String username = driverWrapper.getData(usernameKey);
+
+            // try to login
+            boolean loginSuccessful = non2FaLogin(username, password);
+
+            if (loginSuccessful) {
+                // check if any special notices need clearing down
+                if (driverWrapper.hasLink("Read and acknowledge")) {
+                    clearDownSpecialNotices();
+                }
+
+                // all successful
+                return;
+            }
+
+            // login failed, loop around to try again
+        }
+
+        String message = "Login failed after trying " + loginAttempts + " users";
+        logger.error(message);
+        throw new IllegalStateException(message);
     }
 
     /**
@@ -227,18 +244,20 @@ public class AuthenticationStepDefinitions implements En {
      * @return          return whether the login is successful or failed
      */
     private boolean non2FaLogin(String username, String password) {
-        //Enter username and password
-        login(username, password);
-
-        //Check the user has logged in successfully and can see the home page
         try {
+            // enter username and password
+            login(username, password);
+
+            // check the user has logged in successfully and can see the home page
             driverWrapper.checkCurrentPageTitle("Your home");
-        } catch (WrongPageException ex) {
+
+            return true;
+
+        } catch (Throwable ex) {
+            // login failed (wrong password, password needs resetting, etc)
             logger.error("Login failed for user: " + username);
             return false;
         }
-
-        return true;
     }
 
     /**
