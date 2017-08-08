@@ -11,17 +11,24 @@ Feature: 11 - AEDM and AED
     And I make the payment for card "4462030000000000"
     And I check that 25 slots were bought successfully
 
-  # Scenario: AEDM assigns AED role
-    # AO example: ZOLINAS SERVICE STATION, Authorised Examiner number: AE080126
-    # Sign in as a AEDM (2FA active)
-    # Select AO via the home page
-    # Select 'assign a role'
-    # Enter valid username (user without AEDM role) and search
-    # Select AED role and confirm
-    # Expected results:
-    #   - User is directed /authorised-examiner/<AO number> page
-    #   - Message displayed: A role notification has been sent to Dori Penney Ames 'AMES5885'.
-    #   - Authorised examiner delegate nominated is listed with Pending role status
+  Scenario: AEDM assigns AED role
+    Given I login with 2FA using "AEDM_AND_NON_AED_USER" as {aedmUsername}, {otherUsername}, {organisationName}, {otherName}
+    And I click the {organisationName} link
+    And The page title contains "Authorised Examiner"
+
+    When I click the "Assign a role" link
+    And I enter {otherUsername} in the field with id "userSearchBox"
+    And I press the "Search" button
+
+    And The page contains "Choose a role"
+    And I click the "Authorised Examiner Delegate" radio button
+    And I press the "Choose role" button
+
+    And I check the role summary has a new role of "Authorised Examiner Delegate"
+    And I press the "Confirm" button
+
+    Then I check the organisation role assignment confirmation message for {otherUsername}, {otherName}
+    And I check there is pending "Authorised examiner delegate" role listed for {otherName}
 
   # Scenario: AED assigns tester role
     # Sign in as a AED (2FA active)
