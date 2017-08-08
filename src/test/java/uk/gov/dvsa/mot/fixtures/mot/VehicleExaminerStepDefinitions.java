@@ -33,6 +33,11 @@ public class VehicleExaminerStepDefinitions implements En {
                     searchForMotTests(searchType, driverWrapper.getData(searchTextKey));
                 });
 
+        And("^I search for an mot by \"([^\"]+)\" with \\{([^\\}]+)\\} from (\\d+) months ago$",
+                (String searchType, String searchTextKey, Integer months) -> {
+                    searchForMotTestsWithDateRange(searchType, driverWrapper.getData(searchTextKey), months);
+                });
+
         And("^I start a \"([^\"]+)\" test$", (String testType) -> {
             startTestTypeOnMot(testType);
         });
@@ -115,6 +120,34 @@ public class VehicleExaminerStepDefinitions implements En {
     private void searchForMotTests(String searchType, String searchText) {
         //And I select the search type from the dropdown
         driverWrapper.selectOptionInFieldByName(searchType, "type");
+
+        //And I enter the search text into the field
+        driverWrapper.enterIntoFieldWithId(searchText, "vts-search");
+
+        //And I press the search button
+        driverWrapper.clickElement("item-selector-btn-search");
+
+        //And the page contains mot test history
+        driverWrapper.containsMessage("MOT Test History");
+    }
+
+    /**
+     * Searches for an mot test but gives the option to set the from date range.
+     * @param searchType    The type of search to perform
+     * @param searchText    The search text to be used
+     * @param months        The number of months to check from
+     */
+    private void searchForMotTestsWithDateRange(String searchType, String searchText, int months) {
+        LocalDate date = LocalDate.now().minusMonths(months);
+
+        //And I select the search type from the dropdown
+        driverWrapper.selectOptionInFieldByName(searchType, "type");
+
+        //And I set the from month
+        driverWrapper.enterIntoFieldWithId(String.valueOf(date.getMonthValue()), "month1");
+
+        //And I set the from year
+        driverWrapper.enterIntoFieldWithId(String.valueOf(date.getYear()), "year1");
 
         //And I enter the search text into the field
         driverWrapper.enterIntoFieldWithId(searchText, "vts-search");

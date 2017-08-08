@@ -712,6 +712,7 @@ public class WebDriverWrapper {
     public void selectOptionInFieldByName(String optionText, String name) {
         Select selectElement = new Select(webDriver.findElement(By.name(name)));
         selectElement.selectByVisibleText(optionText);
+        waitForPageLoad();
     }
 
     /**

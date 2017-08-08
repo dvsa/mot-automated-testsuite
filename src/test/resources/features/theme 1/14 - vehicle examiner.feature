@@ -84,7 +84,7 @@ Feature: 14 - Vehicle Examiner
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
     And I load "SITE" as {siteName}, {siteNumber}
     And I click the "MOT tests" link
-    When I search for an mot by "Site (recent tests)" with {siteNumber}
+    When I search for an mot by "Site (by date range)" with {siteNumber} from 2 months ago
     And I click the first "View" link
     Then The page contains "MOT test summary"
     And I check there is a "Print certificate" link
