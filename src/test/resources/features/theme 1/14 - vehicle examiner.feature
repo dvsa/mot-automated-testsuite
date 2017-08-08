@@ -91,9 +91,9 @@ Feature: 14 - Vehicle Examiner
 
   Scenario: MOT test search by tester
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
-    And I load "MOT_TESTER_CLASS_4" as {tester}, {site}
+    And I load "TESTER_WITH_2_MONTH_HISTORY" as {tester}
     And I click the "MOT tests" link
-    When I search for an mot by "Tester (by date range)" with {tester}
+    When I search for an mot by "Tester (by date range)" with {tester} from 2 months ago
     And I click the first "View" link
     Then The page contains "MOT test summary"
     And I check there is a "Print certificate" link
