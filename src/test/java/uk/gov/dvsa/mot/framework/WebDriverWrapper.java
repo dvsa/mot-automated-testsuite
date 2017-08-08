@@ -580,6 +580,47 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Selects the specified radio button, within the specified fieldset. Supports well-formed labels and radio buttons
+     * nested inside the label.
+     * @param fieldset   The fieldset legend
+     * @param labelText  The radio button label
+     */
+    public void selectRadioInFieldset(String fieldset, String labelText) {
+        try {
+            // find the fieldset with the legend...
+            WebElement fieldsetElement = webDriver.findElement(
+                    By.xpath("//legend[contains(text(),'" + fieldset + "')]/ancestor::fieldset"));
+
+            // find the input associated with the specified (well-formed) label...
+            WebElement labelElement = fieldsetElement.findElement(
+                    By.xpath(".//label[contains(text(),'" + labelText + "')]"));
+            webDriver.findElement(By.id(labelElement.getAttribute("for"))).click();
+
+        } catch (NoSuchElementException | IllegalArgumentException ex) {
+            // find the fieldset with the legend...
+            WebElement fieldsetElement = null;
+            try {
+                fieldsetElement = webDriver.findElement(
+                        By.xpath("//legend[contains(text(),'" + fieldset + "')]/ancestor::fieldset"));
+            } catch (NoSuchElementException ex2) {
+                String message = "Fieldset " + fieldset + " not found";
+                logger.error(message);
+                throw new IllegalArgumentException(message);
+            }
+
+            fieldsetElement.findElements(By.tagName("label")).stream()
+                .filter((l) -> l.getText().contains(labelText)) // label with text
+                .map((l) -> l.findElement(By.xpath("./input[@type = 'radio']"))) // nested radio
+                .findFirst().orElseThrow(() -> {
+                    String message = "No radio button found in fieldset " + fieldset
+                            + "with label (well-formed or nested): " + labelText;
+                    logger.error(message);
+                    return new IllegalArgumentException(message);
+                }).click();
+        }
+    }
+
+    /**
      * Selects the specified checkbox button. Supports well-formed labels and inputs nested inside the label.
      * @param labelText  The checkbox button label
      */

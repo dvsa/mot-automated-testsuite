@@ -41,6 +41,10 @@ public class WebStepDefinitions implements En {
         When("^I click the \"([^\"]+)\" radio button$", (String labelText) ->
                 driverWrapper.selectRadio(labelText));
 
+        When("^I click the \"([^\"]+)\" radio button in fieldset \"([^\"]+)\"$",
+                (String labelText, String fieldsetLegend) ->
+                driverWrapper.selectRadioInFieldset(fieldsetLegend, labelText));
+
         When("^I click the \"([^\"]+)\" checkbox$", (String labelText) ->
                 driverWrapper.selectCheckbox(labelText));
 

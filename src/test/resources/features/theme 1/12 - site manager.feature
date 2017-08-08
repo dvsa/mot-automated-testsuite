@@ -69,12 +69,19 @@ Feature: 12 - Site Manager and Site Admin
     And The page contains "with a reason of Vehicle registered in error."
 
 
-  # Scenario: Site Admin/Mgr updates VTS details
-    # Pre-req: Test can be repeated for 'Change test hours'
-    # Sign in as a Site Manager/Admin (2FA active)
-    # Select VTS via the home page
-    # Select 'Change default test settings'
-    # Select service and brake options and confirm
+  Scenario: Site Admin updates VTS details
+    Given I login with 2FA using "SITE_ADMIN" as {username1}, {sitename1}, {sitenumber1}
+    And I click on the {sitename1}, {sitenumber1} site
+    And The page title contains "Vehicle Testing Station"
+
+    When I click the "Change default test settings" link
+    And The page title contains "Change default test settings"
+    And I click the "Plate" radio button in fieldset "Default brake test type"
+    And I click the "Plate" radio button in fieldset "Default service brake test type"
+    And I click the "Plate" radio button in fieldset "Default parking brake test type"
+    And I press the "Change defaults" button
+
+    Then The page title contains "Vehicle Testing Station"
     # Expected results: Selected service and brake options displayed
 
   # Scenario: Site Manager can view TQI statistics for testers associated with VTS

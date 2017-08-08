@@ -526,7 +526,6 @@ public class WebDriverWrapperTest {
         browseTo("/selectRadio-2.html", "selectRadio - 2");
         driverWrapper.selectRadio("Test Radio Button 1");
         assertTrue("Radio button should have been selected", driverWrapper.isElementChecked("my_radio"));
-
     }
 
     /**
@@ -536,6 +535,84 @@ public class WebDriverWrapperTest {
     public void selectRadioNestedNotMatching() {
         browseTo("/selectRadio-2.html", "selectRadio - 2");
         driverWrapper.selectRadio("Test Radio Button 3");
+    }
+
+    /**
+     * Tests <code>selectRadioInFieldset()</code> with a matching example.
+     */
+    @Test
+    public void selectRadioMatchingInFieldset1() {
+        browseTo("/selectRadioInFieldset-1.html", "selectRadioInFieldset - 1");
+        driverWrapper.selectRadioInFieldset("First Fieldset", "Test Radio Button 1");
+        assertTrue("Radio button should have been selected", driverWrapper.isElementChecked("my_radio1"));
+    }
+
+    /**
+     * Tests <code>selectRadioInFieldset()</code> with another matching example.
+     */
+    @Test
+    public void selectRadioMatchingInFieldset2() {
+        browseTo("/selectRadioInFieldset-1.html", "selectRadioInFieldset - 1");
+        driverWrapper.selectRadioInFieldset("Second Fieldset", "Test Radio Button 1");
+        assertTrue("Radio button should have been selected", driverWrapper.isElementChecked("my_radio2"));
+    }
+
+    /**
+     * Tests <code>selectRadioInFieldset()</code> with a non matching example (no fieldset).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void selectRadioInFieldsetNotMatching1() {
+        browseTo("/selectRadioInFieldset-1.html", "selectRadioInFieldset - 1");
+        driverWrapper.selectRadioInFieldset("Third Fieldset", "Test Radio Button 1");
+    }
+
+    /**
+     * Tests <code>selectRadioInFieldset()</code> with a non matching example (no radio).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void selectRadioInFieldsetNotMatching2() {
+        browseTo("/selectRadioInFieldset-1.html", "selectRadioInFieldset - 1");
+        driverWrapper.selectRadioInFieldset("Second Fieldset", "Test Radio Button 3");
+    }
+
+    /**
+     * Tests <code>selectRadioInFieldset()</code> with a matching example (radio nested inside the label).
+     */
+    @Test
+    public void selectRadioInFieldsetNestedMatching1() {
+        browseTo("/selectRadioInFieldset-2.html", "selectRadioInFieldset - 2");
+        driverWrapper.selectRadioInFieldset("First Fieldset", "Test Radio Button 1");
+        assertTrue("Radio button should have been selected", driverWrapper.isElementChecked("my_radio1"));
+    }
+
+    /**
+     * Tests <code>selectRadioInFieldset()</code> with a matching example (radio nested inside the label).
+     */
+    @Test
+    public void selectRadioInFieldsetNestedMatching2() {
+        browseTo("/selectRadioInFieldset-2.html", "selectRadioInFieldset - 2");
+        driverWrapper.selectRadioInFieldset("Second Fieldset", "Test Radio Button 1");
+        assertTrue("Radio button should have been selected", driverWrapper.isElementChecked("my_radio2"));
+    }
+
+    /**
+     * Tests <code>selectRadioInFieldset()</code> with a non matching example (no such fieldset for radio nested
+     * inside the label).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void selectRadioInFieldsetNestedNotMatching1() {
+        browseTo("/selectRadioInFieldset-2.html", "selectRadioInFieldset - 2");
+        driverWrapper.selectRadioInFieldset("Third Fieldset", "Test Radio Button 1");
+    }
+
+    /**
+     * Tests <code>selectRadioInFieldset()</code> with a non matching example (no such radio nested
+     * inside the label).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void selectRadioInFieldsetNestedNotMatching2() {
+        browseTo("/selectRadioInFieldset-2.html", "selectRadioInFieldset - 2");
+        driverWrapper.selectRadioInFieldset("Second Fieldset", "Test Radio Button 3");
     }
 
     /**
