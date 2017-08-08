@@ -174,6 +174,10 @@ public class WebDriverWrapper {
      * @param relativePath  The relative path, must start with "/"
      */
     public void browseTo(String relativePath) {
+        // to handle retrying logins, clear the browser cookies between retries
+        webDriver.manage().deleteAllCookies();
+
+        // browse to the specified web page
         String url = env.getRequiredProperty("startingUrl") + relativePath;
         logger.debug("Browsing to {}", url);
         webDriver.get(url);
