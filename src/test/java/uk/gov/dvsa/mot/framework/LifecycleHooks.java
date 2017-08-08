@@ -181,7 +181,9 @@ public class LifecycleHooks {
 
         File file = null;
         try {
-            file = new File(dir + File.separator + scenario.getName() + ".html");
+            // Convert to a safe filename
+            String safeScenarioName = scenario.getName().replaceAll("/", "-");
+            file = new File(dir + File.separator + safeScenarioName + ".html");
             file.createNewFile();
 
         } catch (IOException ex) {
