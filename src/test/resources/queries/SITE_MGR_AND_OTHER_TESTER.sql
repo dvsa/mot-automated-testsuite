@@ -1,4 +1,4 @@
-select person_mgr.username as mgr_username,
+select distinct(person_mgr.username) as mgr_username,
    s.name as site_name, s.site_number as site_number,
    person_other.username as other_username,
    concat_ws(' ', person_other.first_name,
