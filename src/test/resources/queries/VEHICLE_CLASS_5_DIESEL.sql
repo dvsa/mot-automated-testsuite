@@ -11,6 +11,8 @@ and mtc.id = latest_mot.id
 and mtc.status_id not in (4,5) -- exclude vehicles whose latest status is under test or failed
 and odometer_result_type = 'OK'
 and veh.registration not like "%-%" -- exclude dodgy test data on ACPT
+and veh.registration is not null -- nullable in PP/Prod
+and veh.vin is not null -- nullable in PP/Prod
 and not exists (
     select 1 from vehicle v
     where v.registration = veh.registration
