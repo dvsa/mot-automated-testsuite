@@ -30,18 +30,6 @@ Feature: 11 - AEDM and AED
     Then I check the organisation role assignment confirmation message for {otherUsername}, {otherName}
     And I check there is pending "Authorised examiner delegate" role listed for {otherName}
 
-  # Scenario: AEDM assigns AED role
-    # AO example: ZOLINAS SERVICE STATION, Authorised Examiner number: AE080126
-    # Sign in as a AEDM (2FA active)
-    # Select AO via the home page
-    # Select 'assign a role'
-    # Enter valid username (user without AEDM role) and search
-    # Select AED role and confirm
-    # Expected results:
-    #   - User is directed /authorised-examiner/<AO number> page
-    #   - Message displayed: A role notification has been sent to Dori Penney Ames 'AMES5885'.
-    #   - Authorised examiner delegate nominated is listed with Pending role status
-
   # Scenario: AED assigns tester role
     # Sign in as a AED (2FA active)
     # Select VTS via the home page
