@@ -76,13 +76,16 @@ Feature: 12 - Site Manager and Site Admin
 
     When I click the "Change default test settings" link
     And The page title contains "Change default test settings"
-    And I click the "Plate" radio button in fieldset "Default brake test type"
-    And I click the "Plate" radio button in fieldset "Default service brake test type"
-    And I click the "Plate" radio button in fieldset "Default parking brake test type"
+    And I click the "Roller" radio button in fieldset "Default brake test type" in fieldset "Options for Class 1 and 2"
+    And I click the "Plate" radio button in fieldset "Default service brake test type" in fieldset "Options for Class 3, 4, 5 and 7"
+    And I click the "Decelerometer" radio button in fieldset "Default parking brake test type" in fieldset "Options for Class 3, 4, 5 and 7"
     And I press the "Change defaults" button
 
     Then The page title contains "Vehicle Testing Station"
-    # Expected results: Selected service and brake options displayed
+    And I check the VTS default for "Brake" is "Roller"
+    And I check the VTS default for "Service brake" is "Plate"
+    And I check the VTS default for "Parking brake" is "Decelerometer"
+
 
   # Scenario: Site Manager can view TQI statistics for testers associated with VTS
     # Pre-req: VTS must have MOT's completed for selected month

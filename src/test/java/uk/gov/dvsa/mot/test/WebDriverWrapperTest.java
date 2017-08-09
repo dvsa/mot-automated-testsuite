@@ -616,6 +616,92 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>selectRadioInNestedFieldset()</code> with a matching example.
+     */
+    @Test
+    public void selectRadioMatchingInNestedFieldset1() {
+        browseTo("/selectRadioInNestedFieldset-1.html", "selectRadioInNestedFieldset - 1");
+        driverWrapper.selectRadioInNestedFieldset(
+                "Fieldset 1", "Nested Fieldset A", "Test Radio Button 1");
+        assertTrue("Radio button should have been selected", driverWrapper.isElementChecked("my_radio1"));
+    }
+
+    /**
+     * Tests <code>selectRadioInNestedFieldset()</code> with another matching example.
+     */
+    @Test
+    public void selectRadioMatchingInNestedFieldset2() {
+        browseTo("/selectRadioInNestedFieldset-1.html", "selectRadioInNestedFieldset - 1");
+        driverWrapper.selectRadioInNestedFieldset(
+                "Fieldset 2", "Nested Fieldset B", "Test Radio Button 1");
+        assertTrue("Radio button should have been selected", driverWrapper.isElementChecked("my_radio7"));
+    }
+
+    /**
+     * Tests <code>selectRadioInNestedFieldset()</code> with a non matching example (no fieldset).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void selectRadioInNestedFieldsetNotMatching1() {
+        browseTo("/selectRadioInNestedFieldset-1.html", "selectRadioInNestedFieldset - 1");
+        driverWrapper.selectRadioInNestedFieldset(
+                "Fieldset 1", "Nested Fieldset C", "Test Radio Button 1");
+    }
+
+    /**
+     * Tests <code>selectRadioInNestedFieldset()</code> with a non matching example (no radio).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void selectRadioInNestedFieldsetNotMatching2() {
+        browseTo("/selectRadioInNestedFieldset-1.html", "selectRadioInNestedFieldset - 1");
+        driverWrapper.selectRadioInNestedFieldset(
+                "Fieldset 1","Nested Fieldset A", "Test Radio Button 3");
+    }
+
+    /**
+     * Tests <code>selectRadioInNestedFieldset()</code> with a matching example (radio nested inside the label).
+     */
+    @Test
+    public void selectRadioInNestedFieldsetNestedMatching1() {
+        browseTo("/selectRadioInNestedFieldset-2.html", "selectRadioInNestedFieldset - 2");
+        driverWrapper.selectRadioInNestedFieldset(
+                "Fieldset 1","Nested Fieldset A", "Test Radio Button 1");
+        assertTrue("Radio button should have been selected", driverWrapper.isElementChecked("my_radio1"));
+    }
+
+    /**
+     * Tests <code>selectRadioInNestedFieldset()</code> with a matching example (radio nested inside the label).
+     */
+    @Test
+    public void selectRadioInNestedFieldsetNestedMatching2() {
+        browseTo("/selectRadioInNestedFieldset-2.html", "selectRadioInNestedFieldset - 2");
+        driverWrapper.selectRadioInNestedFieldset(
+                "Fieldset 2","Nested Fieldset B", "Test Radio Button 1");
+        assertTrue("Radio button should have been selected", driverWrapper.isElementChecked("my_radio7"));
+    }
+
+    /**
+     * Tests <code>selectRadioInNestedFieldset()</code> with a non matching example (no such fieldset for radio nested
+     * inside the label).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void selectRadioInNestedFieldsetNestedNotMatching1() {
+        browseTo("/selectRadioInNestedFieldset-2.html", "selectRadioInNestedFieldset - 2");
+        driverWrapper.selectRadioInNestedFieldset(
+                "Fieldset 3","Nested Fieldset A", "Test Radio Button 1");
+    }
+
+    /**
+     * Tests <code>selectRadioInNestedFieldset()</code> with a non matching example (no such radio nested
+     * inside the label).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void selectRadioInNestedFieldsetNestedNotMatching2() {
+        browseTo("/selectRadioInNestedFieldset-2.html", "selectRadioInNestedFieldset - 2");
+        driverWrapper.selectRadioInNestedFieldset(
+                "Fieldset 1","Nested Fieldset A", "Test Radio Button 3");
+    }
+
+    /**
      * Tests <code>selectCheckbox()</code> with a matching example.
      */
     @Test

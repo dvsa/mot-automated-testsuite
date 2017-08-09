@@ -587,9 +587,7 @@ public class WebDriverWrapper {
      */
     public void selectRadioInFieldset(String fieldset, String labelText) {
         try {
-            // find the fieldset with the legend...
-            WebElement fieldsetElement = webDriver.findElement(
-                    By.xpath("//legend[contains(text(),'" + fieldset + "')]/ancestor::fieldset"));
+            WebElement fieldsetElement = findFieldsetByLegend(fieldset);
 
             // find the input associated with the specified (well-formed) label...
             WebElement labelElement = fieldsetElement.findElement(
@@ -597,11 +595,10 @@ public class WebDriverWrapper {
             webDriver.findElement(By.id(labelElement.getAttribute("for"))).click();
 
         } catch (NoSuchElementException | IllegalArgumentException ex) {
-            // find the fieldset with the legend...
             WebElement fieldsetElement = null;
             try {
-                fieldsetElement = webDriver.findElement(
-                        By.xpath("//legend[contains(text(),'" + fieldset + "')]/ancestor::fieldset"));
+                fieldsetElement = findFieldsetByLegend(fieldset);
+
             } catch (NoSuchElementException ex2) {
                 String message = "Fieldset " + fieldset + " not found";
                 logger.error(message);
@@ -618,6 +615,67 @@ public class WebDriverWrapper {
                     return new IllegalArgumentException(message);
                 }).click();
         }
+    }
+
+    /**
+     * Selects the specified radio button, within the specified nested fieldset. Supports well-formed labels and radio
+     * buttons nested inside the label.
+     * @param outerFieldset     The outer fieldset legend
+     * @param nestedFieldset    The nested fieldset legend
+     * @param labelText         The radio button label
+     */
+    public void selectRadioInNestedFieldset(String outerFieldset, String nestedFieldset, String labelText) {
+        try {
+            WebElement nestedFieldsetElement = findNestedFieldsetByLegend(outerFieldset, nestedFieldset);
+
+            // find the input associated with the specified (well-formed) label...
+            WebElement labelElement = nestedFieldsetElement.findElement(
+                    By.xpath(".//label[contains(text(),'" + labelText + "')]"));
+
+            webDriver.findElement(By.id(labelElement.getAttribute("for"))).click();
+
+        } catch (NoSuchElementException | IllegalArgumentException ex) {
+            WebElement nestedFieldsetElement = null;
+            try {
+                nestedFieldsetElement = findNestedFieldsetByLegend(outerFieldset, nestedFieldset);
+
+            } catch (NoSuchElementException ex2) {
+                String message = "Fieldset " + nestedFieldset + " within fieldset " + outerFieldset + " not found";
+                logger.error(message);
+                throw new IllegalArgumentException(message);
+            }
+
+            nestedFieldsetElement.findElements(By.tagName("label")).stream()
+                .filter((l) -> l.getText().contains(labelText)) // label with text
+                .map((l) -> l.findElement(By.xpath("./input[@type = 'radio']"))) // nested radio
+                .findFirst().orElseThrow(() -> {
+                    String message = "No radio button found in fieldset " + nestedFieldset + " within fieldset "
+                            + outerFieldset + "with label (well-formed or nested): " + labelText;
+                    logger.error(message);
+                    return new IllegalArgumentException(message);
+                }).click();
+        }
+    }
+
+    /**
+     * Find a fieldset element, by the associated wrapped legend element text.
+     * @param legend    The legend text
+     * @return The fieldset element
+     */
+    private WebElement findFieldsetByLegend(String legend) {
+        return webDriver.findElement(
+            By.xpath("//legend[contains(text(),'" + legend + "')]/ancestor::fieldset[1]"));
+    }
+
+    /**
+     * Find a nested fieldset element, by the associated wrapped legend element text.
+     * @param outerLegend    The outer legend text
+     * @param nestedLegend   The nested legend text
+     * @return The nested fieldset element
+     */
+    private WebElement findNestedFieldsetByLegend(String outerLegend, String nestedLegend) {
+        return findFieldsetByLegend(outerLegend).findElement(
+                By.xpath(".//legend[contains(text(),'" + nestedLegend + "')]/ancestor::fieldset[1]"));
     }
 
     /**

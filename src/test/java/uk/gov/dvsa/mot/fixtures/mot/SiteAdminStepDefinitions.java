@@ -43,5 +43,9 @@ public class SiteAdminStepDefinitions implements En {
                 (String pendingRole, String nameKey) -> assertTrue("Pending role not listed",
                         driverWrapper.getTextFromTableRow(driverWrapper.getData(nameKey))
                                 .contains(pendingRole + "\nPending")));
+
+        And("^I check the VTS default for \"([^\"]+)\" is \"([^\"]+)\"$",
+                (String brakeType, String testType) -> assertTrue("VTS default not listed",
+                        driverWrapper.getTextFromTableRow(brakeType) .contains(testType)));
     }
 }
