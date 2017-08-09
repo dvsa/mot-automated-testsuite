@@ -30,6 +30,29 @@ Feature: 11 - AEDM and AED
     Then I check the organisation role assignment confirmation message for {otherUsername}, {otherName}
     And I check there is pending "Authorised examiner delegate" role listed for {otherName}
 
+  Scenario: AED assigns tester to role
+    Given I login with 2FA using "AED_AND_TESTER" as {aedmUsername}, {organisation}, {site}, {tester}, {testerName}
+    And I click the {organisation} link
+    And I click the {site} link
+    And The page title contains "Vehicle Testing Station"
+
+    And I click the "Assign a role" link
+    And The page title contains "Assign a role"
+    And I enter {tester} in the field with id "userSearchBox"
+    And I press the "Search" button
+
+    And The page title contains "Choose a role"
+    And I click the "Tester" radio button
+    And I press the "Choose role" button
+
+    And The page title contains "Review role"
+    And I check the role summary has a new role of "Tester"
+    And I press the "Assign role" button
+
+    Then The page title contains "Vehicle Testing Station"
+    And I check there is a role assignment confirmation message for {tester}, {testerName}
+    And I check there is pending "Tester" role listed for {testerName}
+
   # Scenario: AED assigns tester role
     # Sign in as a AED (2FA active)
     # Select VTS via the home page
