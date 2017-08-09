@@ -1,5 +1,6 @@
 package uk.gov.dvsa.mot.framework;
 
+import com.sun.glass.ui.View;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -10,6 +11,8 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
@@ -109,6 +112,17 @@ public class WebDriverWrapper {
                 }
             } else {
                 return new ChromeDriver(chromeOptions);
+            }
+        } else if ("firefox".equals(browser)) {
+            FirefoxProfile profile = new FirefoxProfile();
+            DesiredCapabilities desiredCapabilities = DesiredCapabilities.firefox();
+
+            try {
+                return new RemoteWebDriver(new URL(env.getProperty("gridURL")), desiredCapabilities);
+            } catch (MalformedURLException ex) {
+                String message = "Error while creating remote driver: " + ex.getMessage();
+                logger.error(message);
+                throw new IllegalArgumentException(message);
             }
         } else {
             String message = "Unsupported browser: " + browser;
