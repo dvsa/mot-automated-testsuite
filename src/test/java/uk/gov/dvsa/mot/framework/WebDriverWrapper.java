@@ -1,6 +1,5 @@
 package uk.gov.dvsa.mot.framework;
 
-import com.sun.glass.ui.View;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
