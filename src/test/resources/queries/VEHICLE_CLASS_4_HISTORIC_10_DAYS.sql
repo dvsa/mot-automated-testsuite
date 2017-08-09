@@ -26,7 +26,7 @@ and not exists (
     group by v.vin
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
-and mtc.issued_date < CURDATE() - 10 -- Oldest certificate older than 10 days
-and mtc.issued_date > date_sub(CURDATE(), INTERVAL 4 YEAR)
-and mtc.last_updated_on < CURDATE() -- Certificate has not been updated today
+and DATE(mtc.issued_date) < date_sub(CURDATE(), INTERVAL 14 DAY) -- Oldest certificate older than 10 days
+and DATE(mtc.issued_date) > date_sub(CURDATE(), INTERVAL 4 YEAR) -- Testers can only see 4 years worth
+AND DATE(mtc.issued_date) != CURDATE()
 limit 100
