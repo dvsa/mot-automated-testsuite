@@ -155,3 +155,5 @@ These steps are specific to the DVSA MOT application screens.
 * I check the role summary has a new role of ```"..text.."```
 * I check there is a role assignment confirmation message for ```{..username key..}```, ```{..name key..}```
 * I check there is pending ```"..text.."``` role listed for ```{..name key..}```
+* I check the VTS default for ```..brake type..``` is ```{..test type key..}```
+* I choose different brake defaults for ```{..starting Group A Brake Default..}```, ```{..starting Group B Service Brake Default..}```, ```{..starting Group B Parking Brake Default..}```, ```{..new Group A Brake Default..}```, ```{..new Group B Service Brake Default..}```, ```{..new Group B Parking Brake Default..}```
