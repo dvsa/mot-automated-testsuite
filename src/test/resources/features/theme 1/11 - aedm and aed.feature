@@ -53,6 +53,31 @@ Feature: 11 - AEDM and AED
     And I check there is a role assignment confirmation message for {tester}, {testerName}
     And I check there is pending "Tester" role listed for {testerName}
 
+  Scenario: Aedm checks todays test log at vts
+    Given I load "AEDM_AND_TESTER_AT_SITE" as {aedm}, {aeName}, {siteName}, {tester}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {odometer}
+    And I login with 2FA as {tester}
+
+    And I start an MOT test for {reg}, {vin}
+    And The page title contains "Your home"
+    And I click the "Enter test results" link
+    And I enter an odometer reading in miles of {odometer} plus 5000
+    And I enter decelerometer results of service brake 51 and parking brake 16
+    And I press the "Review test" button
+    And The page title contains "MOT test summary"
+    And I press the "Save test result" button
+    And The page title contains "MOT test complete"
+    And I click the "Sign out" link
+
+    When I login with 2FA as {aedm}
+    And I click the {aeName} link
+    And I click the {siteName} link
+    And I click the "Test logs" link
+    And I click the "Today" link
+
+    Then I check the site test log has the recent test {reg}, {tester}
+
+
   # Scenario: AED assigns tester role
     # Sign in as a AED (2FA active)
     # Select VTS via the home page
