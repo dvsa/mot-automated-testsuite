@@ -148,6 +148,28 @@ These steps are specific to the DVSA MOT application screens.
 * I check the prs section of the test summary does not have ```"..text.."```
 * I check the advisory section of the test summary does not have ```"..text.."```
 
+### VehicleExaminerStepDefinitions
+
+* I search for an mot by ```"..search type.."```` with ```{searchKey}```
+* I search for an mot by ```"..search type.."```` with ```{searchKey}``` from ```..amount..``` months ago
+* I start a ```"..testType.."```
+* I search for vehicle information by ```"..searchType.."``` with ```{searchKey}```
+* I perform a test comparison with outcome ````"..outcome.."``` and justification ```"..justification.."```
+* I check the case outcome ```"..expectedOutcome.."```` is saved
+* I click the view certificate link for test number ```{testNumberKey}```
+* I search for AE information with ```{aeReferenceKey}```
+* I check the AE name is ```{aeNameKey}```
+* I search for Site information by site number with ```{siteNumberKey}```
+* I check the site name is ```{siteNameKey}```
+* I search for user with username ```{usernameKey}```
+* I check the slot usage for the past ```..amount..``` days is ```{slotsKey}```
+* I abort the active mot test at site for reg ```{regKey}```, vin ```{vinKy}```
+* I check the reg ```{regKey}```, vin ```{vinKey}``` on vehicle information
+* I click the first name in the list
+* I check the user profile contains username ```{usernameKey}```
+* I change the testers group ```"..group.."``` status to ```"..status.."```
+
+
 
 ### SiteAdminStepDefinitions
 
