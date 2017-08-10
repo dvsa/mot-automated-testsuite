@@ -21,8 +21,11 @@ High level:
 * I click the ```{key}``` link
 * I click the first ```"..link text.."``` link
 * I click the ```..label..``` radio button
+* I click the ```{key}``` radio button
 * I click the ```..label..``` radio button in fieldset ```..legend..```
+* I click the ```{key}``` radio button in fieldset ```..legend..```
 * I click the ```..label..``` radio button in fieldset ```..nested legend..``` in fieldset ```..legend..```
+* I click the ```{key}``` radio button in fieldset ```..nested legend..``` in fieldset ```..legend..```
    * Note: all radio button steps handle labels with ```for``` and radio inputs nested inside the label 
 * I click the ```..label..``` checkbox   
    * Note: all checkbox steps handle labels with ```for``` and checkbox inputs nested inside the label 

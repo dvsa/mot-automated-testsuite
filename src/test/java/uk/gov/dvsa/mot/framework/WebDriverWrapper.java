@@ -26,6 +26,7 @@ import org.springframework.core.env.Environment;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,7 +148,9 @@ public class WebDriverWrapper {
      * @return A List of key names, possibly empty but never <code>null</code>
      */
     public List<String> getAllDataKeys() {
-        return new ArrayList<>(data.keySet());
+        List<String> keys = new ArrayList<>(data.keySet());
+        keys.sort(Comparator.naturalOrder());
+        return keys;
     }
 
     /**

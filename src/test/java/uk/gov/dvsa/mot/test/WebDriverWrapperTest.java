@@ -114,6 +114,23 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>getAllDataKeys()</code> sorts the key names alphabetically.
+     */
+    @Test
+    public void getAllDataKeysSorted() {
+        driverWrapper.setData("zzkey2", "aaa");
+        driverWrapper.setData("xxkey3", "bbb");
+        driverWrapper.setData("yykey1", "ccc");
+
+        List<String> expected = new ArrayList<>();
+        expected.add("xxkey3");
+        expected.add("yykey1");
+        expected.add("zzkey2");
+
+        assertEquals("Wrong value returned", expected, driverWrapper.getAllDataKeys());
+    }
+
+    /**
      * Tests <code>getAllDataKeys()</code> when data has not been populated.
      */
     @Test

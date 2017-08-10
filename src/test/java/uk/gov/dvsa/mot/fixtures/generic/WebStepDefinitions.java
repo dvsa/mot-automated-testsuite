@@ -41,13 +41,25 @@ public class WebStepDefinitions implements En {
         When("^I click the \"([^\"]+)\" radio button$", (String labelText) ->
                 driverWrapper.selectRadio(labelText));
 
+        When("^I click the \\{([^\\}]+)\\} radio button$", (String labelTextKey) ->
+                driverWrapper.selectRadio(driverWrapper.getData(labelTextKey)));
+
         When("^I click the \"([^\"]+)\" radio button in fieldset \"([^\"]+)\"$",
                 (String labelText, String fieldsetLegend) ->
                 driverWrapper.selectRadioInFieldset(fieldsetLegend, labelText));
 
+        When("^I click the \\{([^\\}]+)\\} radio button in fieldset \"([^\"]+)\"$",
+                (String labelTextKey, String fieldsetLegend) ->
+                        driverWrapper.selectRadioInFieldset(fieldsetLegend, driverWrapper.getData(labelTextKey)));
+
         When("^I click the \"([^\"]+)\" radio button in fieldset \"([^\"]+)\" in fieldset \"([^\"]+)\"$",
                 (String labelText, String nestedLegend, String outerLegend) ->
                         driverWrapper.selectRadioInNestedFieldset(outerLegend, nestedLegend, labelText));
+
+        When("^I click the \\{([^\\}]+)\\} radio button in fieldset \"([^\"]+)\" in fieldset \"([^\"]+)\"$",
+                (String labelTextKey, String nestedLegend, String outerLegend) ->
+                        driverWrapper.selectRadioInNestedFieldset(
+                                outerLegend, nestedLegend, driverWrapper.getData(labelTextKey)));
 
         When("^I click the \"([^\"]+)\" checkbox$", (String labelText) ->
                 driverWrapper.selectCheckbox(labelText));

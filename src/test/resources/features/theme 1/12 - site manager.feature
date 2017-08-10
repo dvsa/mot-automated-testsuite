@@ -70,21 +70,22 @@ Feature: 12 - Site Manager and Site Admin
 
 
   Scenario: Site Admin updates VTS details
-    Given I login with 2FA using "SITE_ADMIN" as {username1}, {sitename1}, {sitenumber1}
+    Given I login with 2FA using "SITE_ADMIN" as {username1}, {sitename1}, {sitenumber1}, {startingGroupABrakeDefault}, {startingGroupBServiceBrakeDefault}, {startingGroupBParkingBrakeDefault}
+    And I choose different brake defaults for {startingGroupABrakeDefault}, {startingGroupBServiceBrakeDefault}, {startingGroupBParkingBrakeDefault} as {newGroupABrakeDefault}, {newGroupBServiceBrakeDefault}, {newGroupBParkingBrakeDefault}
     And I click on the {sitename1}, {sitenumber1} site
     And The page title contains "Vehicle Testing Station"
 
     When I click the "Change default test settings" link
     And The page title contains "Change default test settings"
-    And I click the "Roller" radio button in fieldset "Default brake test type" in fieldset "Options for Class 1 and 2"
-    And I click the "Plate" radio button in fieldset "Default service brake test type" in fieldset "Options for Class 3, 4, 5 and 7"
-    And I click the "Decelerometer" radio button in fieldset "Default parking brake test type" in fieldset "Options for Class 3, 4, 5 and 7"
+    And I click the {newGroupABrakeDefault} radio button in fieldset "Default brake test type" in fieldset "Options for Class 1 and 2"
+    And I click the {newGroupBServiceBrakeDefault} radio button in fieldset "Default service brake test type" in fieldset "Options for Class 3, 4, 5 and 7"
+    And I click the {newGroupBParkingBrakeDefault} radio button in fieldset "Default parking brake test type" in fieldset "Options for Class 3, 4, 5 and 7"
     And I press the "Change defaults" button
 
     Then The page title contains "Vehicle Testing Station"
-    And I check the VTS default for "Brake" is "Roller"
-    And I check the VTS default for "Service brake" is "Plate"
-    And I check the VTS default for "Parking brake" is "Decelerometer"
+    And I check the VTS default for "Brake" is {newGroupABrakeDefault}
+    And I check the VTS default for "Service brake" is {newGroupBServiceBrakeDefault}
+    And I check the VTS default for "Parking brake" is {newGroupBParkingBrakeDefault}
 
 
   # Scenario: Site Manager can view TQI statistics for testers associated with VTS

@@ -17,12 +17,16 @@ public class SiteAdminStepDefinitions implements En {
     /** The logger to use. */
     private static final Logger logger = LoggerFactory.getLogger(SiteAdminStepDefinitions.class);
 
+    /** The driver wrapper to use. */
+    private final WebDriverWrapper driverWrapper;
+
     /**
      * Creates a new instance.
      * @param driverWrapper     The driver wrapper to use
      */
     @Inject
     public SiteAdminStepDefinitions(WebDriverWrapper driverWrapper) {
+        this.driverWrapper = driverWrapper;
 
         And("^I click on the \\{([^\\}]+)\\}, \\{([^\\}]+)\\} site$",
                 (String sitenameKey, String sitenumberKey) ->
@@ -44,8 +48,59 @@ public class SiteAdminStepDefinitions implements En {
                         driverWrapper.getTextFromTableRow(driverWrapper.getData(nameKey))
                                 .contains(pendingRole + "\nPending")));
 
-        And("^I check the VTS default for \"([^\"]+)\" is \"([^\"]+)\"$",
-                (String brakeType, String testType) -> assertTrue("VTS default not listed",
-                        driverWrapper.getTextFromTableRow(brakeType) .contains(testType)));
+        And("^I check the VTS default for \"([^\"]+)\" is \\{([^\\}]+)\\}$",
+                (String brakeType, String testTypeKey) -> assertTrue("VTS default not listed",
+                        driverWrapper.getTextFromTableRow(brakeType) .contains(driverWrapper.getData(testTypeKey))));
+
+        And("^I choose different brake defaults for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\} "
+                + "as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", this::chooseAllDifferentBrakeDefaults);
+    }
+
+    /**
+     * Choose different brake test defaults, to use in the test, and check for at the end.
+     * <p>This technique is used to cope with the very small amount of suitable test sites available, rather than
+     * using default brake test settings explicitly set in the Gherkin test steps.</p>
+     * @param startingGroupABrakeDefault            The data key name of the initial Group A brake default
+     * @param startingGroupBServiceBrakeDefault     The data key name of the initial Group B service brake default
+     * @param startingGroupBParkingBrakeDefault     The data key name of the initial Group B parking brake default
+     * @param newGroupABrakeDefault                 The data key name of the new Group A brake default
+     * @param newGroupBServiceBrakeDefault          The data key name of the new Group B service brake default
+     * @param newGroupBParkingBrakeDefault          The data key name of the new Group B parking brake default
+     */
+    private void chooseAllDifferentBrakeDefaults(String startingGroupABrakeDefault,
+            String startingGroupBServiceBrakeDefault, String startingGroupBParkingBrakeDefault,
+            String newGroupABrakeDefault, String newGroupBServiceBrakeDefault, String newGroupBParkingBrakeDefault) {
+
+        driverWrapper.setData(newGroupABrakeDefault,
+                chooseDifferentBrakeDefaults(driverWrapper.getData(startingGroupABrakeDefault)));
+
+        driverWrapper.setData(newGroupBServiceBrakeDefault,
+                chooseDifferentBrakeDefaults(driverWrapper.getData(startingGroupBServiceBrakeDefault)));
+
+        driverWrapper.setData(newGroupBParkingBrakeDefault,
+                chooseDifferentBrakeDefaults(driverWrapper.getData(startingGroupBParkingBrakeDefault)));
+    }
+
+    /**
+     * Chooses a different brake test default setting.
+     * @param startingBrakeDefault  The brake test default
+     * @return A different setting
+     */
+    private String chooseDifferentBrakeDefaults(String startingBrakeDefault) {
+        if (startingBrakeDefault == null || startingBrakeDefault.trim().length() == 0) {
+            return "Decelerometer";
+        } else {
+            switch (startingBrakeDefault) {
+                case "1": // 1 = Decelerometer
+                    return "Plate";
+
+                case "4": // 4 = Plate
+                    return "Roller";
+
+                case "5": // 5 = Roller
+                default:
+                    return "Decelerometer";
+            }
+        }
     }
 }
