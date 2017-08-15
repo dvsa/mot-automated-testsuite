@@ -1,4 +1,4 @@
-select person_tester.username as tester_username, person_mgr.username as mgr_username,
+select distinct(person_tester.username) as tester_username, person_mgr.username as mgr_username,
   s.name as site_name, s.site_number as site_number
 from person person_mgr, person person_tester, auth_for_testing_mot aftm, organisation o,
   organisation_site_map osm, site s, auth_for_testing_mot_at_site afts,

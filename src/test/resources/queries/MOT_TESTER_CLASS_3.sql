@@ -1,4 +1,4 @@
-select p.username as username, s.name as site
+select distinct(p.username) as username, s.name as site
 from person p, auth_for_testing_mot aftm, organisation o,
   organisation_site_map osm, site s, auth_for_testing_mot_at_site afts,
   site_business_role_map sbrm, auth_for_ae afa, security_card sc,
