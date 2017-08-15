@@ -479,22 +479,6 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Clicks the specified element.
-     * <p>Note: This is a low-level way to locate the element. Please only use this method if there is no better way to
-     * locate the element, e.g. using a label.</p>
-     * @param name  The element name
-     */
-    public void clickFirstElementByName(String name) {
-        List<WebElement> elements = webDriver.findElements(By.name(name));
-        if (elements == null || elements.size() == 0) {
-            String message = "Unable to find any elements with name: " + name;
-            logger.error(message);
-            throw new IllegalStateException(message);
-        }
-        elements.get(0).click();
-    }
-
-    /**
      * Get the text within the specified element.
      * <p>Note: This is a low-level way to locate the element. Please only use this method if there is no better way to
      * locate the element, e.g. using a label.</p>
@@ -527,9 +511,9 @@ public class WebDriverWrapper {
      */
     public void enterIntoField(String text, String label) {
         // find the input associated with the specified label...
-
         WebElement labelElement = webDriver.findElement(By.xpath("//label[contains(text(),'" + label + "')]"));
         WebElement textElement = webDriver.findElement(By.id(labelElement.getAttribute("for")));
+        textElement.clear();
         textElement.sendKeys(text);
     }
 
@@ -557,6 +541,7 @@ public class WebDriverWrapper {
      */
     public void enterIntoFieldWithIdSuffix(String text, String idSuffix) {
         WebElement textElement = webDriver.findElement(By.xpath("//*[contains(@id,'" + idSuffix + "')]"));
+        textElement.clear();
         textElement.sendKeys(text);
     }
 
