@@ -38,6 +38,11 @@ public class AedmStepDefintions implements En {
                 (String regKey, String testerUsernameKey) -> {
                     checkSiteTestLog(regKey, testerUsernameKey);
                 });
+
+        And("I click the \\{([^\\}]+)\\} site link with status \"([^\"]+)\" on the service reports$",
+                (String siteNameKey, String status) -> {
+                    findSiteInServiceReportAndCheckStatus(siteNameKey, status);
+                });
     }
 
     /**
@@ -55,5 +60,34 @@ public class AedmStepDefintions implements En {
         assertTrue("The tester username is incorrect",
                 driverWrapper.getTextFromTableColumn("User/Site Id")
                         .contains(driverWrapper.getData(testerUsernameKey)));
+    }
+
+    /**
+     * Finds the site within the service report list for the AE and checks the status is as expected.
+     * @param siteNameKey   The data key for the site name to find
+     * @param siteStatus    The status of the site
+     */
+    private void findSiteInServiceReportAndCheckStatus(String siteNameKey, String siteStatus) {
+        //Check for the site
+        boolean finished = false;
+
+        while (!finished) {
+            if (driverWrapper.hasLink(driverWrapper.getData(siteNameKey))) {
+                assertTrue("The site status is incorrect",
+                        driverWrapper.getElementText("a", driverWrapper.getData(siteNameKey),
+                                "../../td[4]").contains(siteStatus));
+                finished = true;
+                driverWrapper.clickLink("a", driverWrapper.getData(siteNameKey), "../",
+                        "Test quality information");
+                assertTrue("The site name is not correct on TQI page",
+                        driverWrapper.getElementText("h1", "", ".")
+                                .contains(driverWrapper.getData(siteNameKey)));
+            } else if (driverWrapper.hasLink("Next")) {
+                driverWrapper.clickLink("Next");
+            } else {
+                logger.error("Site not found in service report list");
+                finished = true;
+            }
+        }
     }
 }

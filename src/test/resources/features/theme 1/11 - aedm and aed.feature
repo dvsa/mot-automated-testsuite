@@ -77,30 +77,18 @@ Feature: 11 - AEDM and AED
 
     Then I check the site test log has the recent test {reg}, {tester}
 
+  Scenario Outline: AEDM can view tqi for site with <status> status
+    Given I login with 2FA using "<dataSource>" as {aedm}, {organisationName}, {siteName}
+    And I click the {organisationName} link
+    When I click the "Service reports" link
+    And I click the {siteName} site link with status "<status>" on the service reports
 
-  # Scenario: AED assigns tester role
-    # Sign in as a AED (2FA active)
-    # Select VTS via the home page
-    # Select 'assign a role'
-    # Enter valid username (user without tester role) and search
-    # Select tester role and confirm
-    # Expected results:
-    #   - User is directed /vehicle-testing-station/<VTS> page
-    #   - Message displayed: You have assigned a role to Evie Rubin Dykes, DYKE8547. They have been sent a notification.
-    #   - User nominated is listed as Tester with Pending role status
-    # Checks:
-    #   - User nominated cannot be assigned the nominated role for the VTS
-    #   - User search for a user who is not a tester
-
-  # Scenario: AEDM can view today's MOT Test Log information for associated VTS
-    # Sign in as a AEDM (2FA active)
-    # Select Your Profile
-    # Select Test Logs
-    # Select 'Today' date link (depending on test data)
-    # Expected results: Test results displayed within Test Log table
-    # Checks:
-    #   - AEDM associated VTS's must have conducted and completed  MOT's
-    #   - Could be too brittle as needs specific MOT conducted data (unless its created beforehand for this site)
+  Examples:
+  |status|dataSource         |
+  |Green |AEDM_AND_GREEN_SITE|
+  |Amber |AEDM_AND_AMBER_SITE|
+  |Red   |AEDM_AND_RED_SITE  |
+  
 
   # Scenario: AEDM can view TQI - VTS List with RAG status
     # Pre-req: Pre req: RAG available / calculated...?
