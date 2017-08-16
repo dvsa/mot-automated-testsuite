@@ -722,6 +722,21 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Checks whether the expected text is present within any of the td columns present in the same row with the
+     * row text, of which there may be several.
+     * @param rowText       The row text to look for
+     * @param expectedText  The text to check for in any matching row
+     * @return <code>true</code> if at least one match is found.
+     */
+    public boolean checkTextFromAnyTableRow(String rowText, String expectedText) {
+        return webDriver.findElements(By.xpath("//th[contains(text(),'" + rowText + "')]/../td")).stream()
+                .anyMatch((WebElement e) -> {
+                    String text = e.getText();
+                    return (text != null && text.contains(expectedText));
+                });
+    }
+
+    /**
      * Fetches the data in the td column in the same row as a tr element.
      * @param rowText - The text that will find the first row
      * @return          Return the text found in the table

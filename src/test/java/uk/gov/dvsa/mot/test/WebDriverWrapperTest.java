@@ -781,6 +781,36 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>checkTextFromAnyTableRow()</code> with a matching example.
+     */
+    @Test
+    public void checkTextFromAnyTableRowMatching() {
+        browseTo("/checkTextFromAnyTableRow-1.html", "checkTextFromAnyTableRow - 1");
+        assertTrue("Text should be found",
+                driverWrapper.checkTextFromAnyTableRow("AAA", "ccc \nsss"));
+    }
+
+    /**
+     * Tests <code>checkTextFromAnyTableRow()</code> with a non matching example (no text).
+     */
+    @Test
+    public void checkTextFromAnyTableRowNotMatchingText() {
+        browseTo("/checkTextFromAnyTableRow-1.html", "checkTextFromAnyTableRow - 1");
+        assertFalse("Text should not be found",
+                driverWrapper.checkTextFromAnyTableRow("BBB", "eee \nsss"));
+    }
+
+    /**
+     * Tests <code>checkTextFromAnyTableRow()</code> with a non matching example (no matching row).
+     */
+    @Test
+    public void checkTextFromAnyTableRowNotMatchingRow() {
+        browseTo("/checkTextFromAnyTableRow-1.html", "checkTextFromAnyTableRow - 1");
+        assertFalse("Text should not be found",
+                driverWrapper.checkTextFromAnyTableRow("CCC", "ccc \nsss"));
+    }
+
+    /**
      * Browses to the specified test page, and check the page title is correct.
      *
      * @param testPage      The test page, must start with "/"

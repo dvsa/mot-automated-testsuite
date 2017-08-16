@@ -45,12 +45,12 @@ public class SiteAdminStepDefinitions implements En {
 
         And("^I check there is pending \"([^\"]+)\" role listed for \\{([^\\}]+)\\}$",
                 (String pendingRole, String nameKey) -> assertTrue("Pending role not listed",
-                        driverWrapper.getTextFromTableRow(driverWrapper.getData(nameKey))
-                                .contains(pendingRole + "\nPending")));
+                        driverWrapper.checkTextFromAnyTableRow(
+                            driverWrapper.getData(nameKey), pendingRole + "\nPending")));
 
         And("^I check the VTS default for \"([^\"]+)\" is \\{([^\\}]+)\\}$",
                 (String brakeType, String testTypeKey) -> assertTrue("VTS default not listed",
-                        driverWrapper.getTextFromTableRow(brakeType) .contains(driverWrapper.getData(testTypeKey))));
+                        driverWrapper.getTextFromTableRow(brakeType).contains(driverWrapper.getData(testTypeKey))));
 
         And("^I choose different brake defaults for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\} "
                 + "as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", this::chooseAllDifferentBrakeDefaults);
