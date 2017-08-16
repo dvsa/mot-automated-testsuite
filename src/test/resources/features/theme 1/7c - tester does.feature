@@ -105,7 +105,7 @@ Feature: 07 - Tester does... (part C)
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I enter roller results for vehicle weight of 1000 as service brake 200,200,200,200 and parking brake 100,100
+    And I enter class 4 roller results for vehicle weight of 1000 as service brake 200,200,200,200 and parking brake 100,100
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
