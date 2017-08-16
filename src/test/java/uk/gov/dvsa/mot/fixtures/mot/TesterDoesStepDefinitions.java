@@ -95,23 +95,29 @@ public class TesterDoesStepDefinitions implements En {
 
         And("^I remove the \"([^\"]+)\" defect of \"([^\"]+)\"$", this::removeDefect);
 
-        And("^I enter decelerometer results of efficiency (\\d+)$", (String efficiency) ->
-                handleBrakeResults(BrakeTestJourney.AddSingleDecelerometerResult, efficiency, Optional.empty()));
+        And("^I enter decelerometer results of efficiency (\\d+)$", (Integer efficiency) ->
+                handleBrakeResults(BrakeTestJourney.addClassADecelerometerJourney(efficiency)));
 
         And("^I enter decelerometer results of service brake (\\d+) and parking brake (\\d+)$",
-                (String serviceBrake, String parkingBrake) ->
-                        handleBrakeResults(BrakeTestJourney.AddServiceAndParkingDecelerometerResult,
-                                serviceBrake, Optional.of(parkingBrake)));
+                (Integer serviceBrake, Integer parkingBrake) ->
+                    handleBrakeResults(BrakeTestJourney.addClassBDecelerometerJourney(serviceBrake, parkingBrake)));
 
         And("^I edit decelerometer results of service brake (\\d+) and parking brake (\\d+)$",
-                (String serviceBrake, String parkingBrake) ->
-                        handleBrakeResults(BrakeTestJourney.EditServiceAndParkingDecelerometerResult,
-                                serviceBrake, Optional.of(parkingBrake)));
+                (Integer serviceBrake, Integer parkingBrake) ->
+                    handleBrakeResults(BrakeTestJourney.editClassBDecelerometerJourney(serviceBrake, parkingBrake)));
 
         And("^I enter decelerometer service brake result of (\\d+) and gradient parking brake result "
-                + "of \"([^\"]+)\"$", (String serviceBrake, String parkingBrake) ->
-                    handleBrakeResults(BrakeTestJourney.AddDecelerometerServiceAndGradientParkingResult,
-                            serviceBrake, Optional.of(parkingBrake)));
+                + "of \"([^\"]+)\"$", (Integer serviceBrake, String parkingBrake) ->
+                    handleBrakeResults(BrakeTestJourney.addClassBDecelerometerServiceAndGradientParkingJourney(
+                        serviceBrake, parkingBrake)));
+
+        And("^I enter roller results for vehicle weight of (\\d+) as service brake (\\d+),(\\d+),(\\d+),(\\d+)"
+                + " and parking brake (\\d+),(\\d+)$", (Integer weight, Integer serviceBrakeNearsideAxle1,
+                    Integer serviceBrakeOffsideAxle1, Integer serviceBrakeNearsideAxle2,
+                    Integer serviceBrakeOffsideAxle2, Integer parkingBrakeNearside, Integer parkingBrakeOffside) ->
+                handleBrakeResults(BrakeTestJourney.addClassBRollerJourney(weight, serviceBrakeNearsideAxle1,
+                        serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2,serviceBrakeOffsideAxle2,
+                        parkingBrakeNearside, parkingBrakeOffside)));
 
         And("^I mark the defect \"([^\"]+)\" as repaired$", this::markAsRepaired);
 
@@ -340,23 +346,153 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.pressButton("Update reading");
     }
 
-    /** Encapsulates the user journey for the Brake test screens. */
-    private enum BrakeTestJourney {
-        AddSingleDecelerometerResult, AddServiceAndParkingDecelerometerResult,
-        AddDecelerometerServiceAndGradientParkingResult, EditServiceAndParkingDecelerometerResult
+    /**
+     * Inner class used to encapsulate the journey type and associated data for all the various brake test scenarios.
+     * <p>Each static factory method has a valid combination of data fields.</p>
+     */
+    private static class BrakeTestJourney {
+
+        /** Encapsulates the user journey for the Brake test screens. */
+        private enum BrakeTestJourneyType {
+            AddSingleDecelerometerResult, AddServiceAndParkingDecelerometerResult,
+            AddDecelerometerServiceAndGradientParkingResult, EditServiceAndParkingDecelerometerResult,
+            AddServiceAndParkingRollerResult
+        }
+
+        /** The brake test journey type. */
+        private BrakeTestJourneyType journeyType;
+
+        /** Efficiency result for class A brake test result. */
+        private int brakeTestEfficiency;
+
+        /** Efficiency result for class B service brake test result. */
+        private int serviceBrakeTestEfficiency;
+
+        /** Efficiency result for class B parking brake test result. */
+        private int parkingBrakeTestEfficiency;
+
+        /** Gradient test result for class B parking brake test result. */
+        private boolean parkingBrakeGradientTestResult;
+
+        /** Roller brake results for class B. */
+        private int weight;
+        private int serviceBrakeNearsideAxle1;
+        private int serviceBrakeOffsideAxle1;
+        private int serviceBrakeNearsideAxle2;
+        private int serviceBrakeOffsideAxle2;
+        private int parkingBrakeNearside;
+        private int parkingBrakeOffside;
+
+        /**
+         * Add class A brake test result - using decelerometer.
+         * @param brakeTestEfficiency The efficiency
+         * @return The journey
+         */
+        static BrakeTestJourney addClassADecelerometerJourney(int brakeTestEfficiency) {
+            BrakeTestJourney journey = new BrakeTestJourney(BrakeTestJourneyType.AddSingleDecelerometerResult);
+            journey.brakeTestEfficiency = brakeTestEfficiency;
+            return journey;
+        }
+
+        /**
+         * Add class B brake test result - both service and parking brake using decelerometer.
+         * @param serviceBrakeTestEfficiency Service brake efficiency
+         * @param parkingBrakeTestEfficiency Parking brake efficiency
+         * @return The journey
+         */
+        static BrakeTestJourney addClassBDecelerometerJourney(int serviceBrakeTestEfficiency,
+                int parkingBrakeTestEfficiency) {
+            BrakeTestJourney journey =
+                    new BrakeTestJourney(BrakeTestJourneyType.AddServiceAndParkingDecelerometerResult);
+            journey.serviceBrakeTestEfficiency = serviceBrakeTestEfficiency;
+            journey.parkingBrakeTestEfficiency = parkingBrakeTestEfficiency;
+            return journey;
+        }
+
+        /**
+         * Add class B brake test result - service brake using decelerometer, parking brake using gradient.
+         * @param serviceBrakeTestEfficiency        Service brake efficiency
+         * @param parkingBrakeGradientTestResult    Parking brake gradient result ("Pass<" or "Fail")
+         * @return The journey
+         */
+        static BrakeTestJourney addClassBDecelerometerServiceAndGradientParkingJourney(
+                int serviceBrakeTestEfficiency, String parkingBrakeGradientTestResult) {
+            BrakeTestJourney journey =
+                    new BrakeTestJourney(BrakeTestJourneyType.AddDecelerometerServiceAndGradientParkingResult);
+            journey.serviceBrakeTestEfficiency = serviceBrakeTestEfficiency;
+
+            if ("Pass".equals(parkingBrakeGradientTestResult)) {
+                journey.parkingBrakeGradientTestResult = true;
+            } else if ("Fail".equals(parkingBrakeGradientTestResult)) {
+                journey.parkingBrakeGradientTestResult = false;
+            } else {
+                String message = "Unknown Gradient parking brake result: " + parkingBrakeGradientTestResult;
+                logger.error(message);
+                throw new IllegalArgumentException(message);
+            }
+
+            return journey;
+        }
+
+        /**
+         * Edit class B brake test result - both service and parking brake using decelerometer.
+         * @param serviceBrakeTestEfficiency Service brake efficiency
+         * @param parkingBrakeTestEfficiency Parking brake efficiency
+         * @return The journey
+         */
+        static BrakeTestJourney editClassBDecelerometerJourney(int serviceBrakeTestEfficiency,
+                int parkingBrakeTestEfficiency) {
+            BrakeTestJourney journey =
+                    new BrakeTestJourney(BrakeTestJourneyType.EditServiceAndParkingDecelerometerResult);
+            journey.serviceBrakeTestEfficiency = serviceBrakeTestEfficiency;
+            journey.parkingBrakeTestEfficiency = parkingBrakeTestEfficiency;
+            return journey;
+        }
+
+        /**
+         * Add class B brake test result - both service and parking brake using roller.
+         * @param weight                        The vehicle weight
+         * @param serviceBrakeNearsideAxle1     Weight applied by service brake to nearside axle 1
+         * @param serviceBrakeOffsideAxle1      Weight applied by service brake to offside axle 1
+         * @param serviceBrakeNearsideAxle2     Weight applied by service brake to nearside axle 2
+         * @param serviceBrakeOffsideAxle2      Weight applied by service brake to offside axle 2
+         * @param parkingBrakeNearside          Weight applied by parking brake to nearside
+         * @param parkingBrakeOffside           Weight applied by parking brake to offside
+         * @return The journey
+         */
+        static BrakeTestJourney addClassBRollerJourney(int weight, int serviceBrakeNearsideAxle1,
+                int serviceBrakeOffsideAxle1, int serviceBrakeNearsideAxle2, int serviceBrakeOffsideAxle2,
+                int parkingBrakeNearside, int parkingBrakeOffside) {
+            BrakeTestJourney journey =
+                    new BrakeTestJourney(BrakeTestJourneyType.AddServiceAndParkingRollerResult);
+            journey.weight = weight;
+            journey.serviceBrakeNearsideAxle1 = serviceBrakeNearsideAxle1;
+            journey.serviceBrakeOffsideAxle1 = serviceBrakeOffsideAxle1;
+            journey.serviceBrakeNearsideAxle2 = serviceBrakeNearsideAxle2;
+            journey.serviceBrakeOffsideAxle2 = serviceBrakeOffsideAxle2;
+            journey.parkingBrakeNearside = parkingBrakeNearside;
+            journey.parkingBrakeOffside = parkingBrakeOffside;
+            return journey;
+        }
+
+        /**
+         * Creates a new instance.
+         * @param journeyType   The journey type
+         */
+        private BrakeTestJourney(BrakeTestJourneyType journeyType) {
+            this.journeyType = journeyType;
+        }
     }
 
     /**
      * Handles various types of brake tests.
      * @param journey   The user journey being taken
-     * @param result1   The service/single brake result
-     * @param result2   The parking brake result (if any)
      */
-    private void handleBrakeResults(BrakeTestJourney journey, String result1, Optional<String> result2) {
+    private void handleBrakeResults(BrakeTestJourney journey) {
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
 
-        if (journey == BrakeTestJourney.EditServiceAndParkingDecelerometerResult) {
+        if (journey.journeyType == BrakeTestJourney.BrakeTestJourneyType.EditServiceAndParkingDecelerometerResult) {
             // And I click the "Edit brake test" link
             driverWrapper.clickLink("Edit brake test");
         } else {
@@ -365,9 +501,9 @@ public class TesterDoesStepDefinitions implements En {
         }
 
         // And The page title contains "Brake test configuration"
-        //Defect in 3.10, title missing: driverWrapper.checkCurrentPageTitle("Brake test configuration");
+        driverWrapper.checkCurrentPageTitle("Brake test configuration");
 
-        switch (journey) {
+        switch (journey.journeyType) {
             case AddSingleDecelerometerResult:
                 // And I select "Decelerometer" in the "Brake test type" field
                 driverWrapper.selectOptionInField("Decelerometer", "Brake test type");
@@ -377,9 +513,9 @@ public class TesterDoesStepDefinitions implements En {
                 // And The page title contains "Add brake test results"
                 driverWrapper.checkCurrentPageTitle("Add brake test results");
                 // And I enter <n> in the "Control one" field
-                driverWrapper.enterIntoField(result1, "Control one");
+                driverWrapper.enterIntoField(journey.brakeTestEfficiency, "Control one");
                 // And I enter <n> in the "Control two" field
-                driverWrapper.enterIntoField(result1, "Control two");
+                driverWrapper.enterIntoField(journey.brakeTestEfficiency, "Control two");
                 break;
 
             case AddServiceAndParkingDecelerometerResult:
@@ -394,16 +530,9 @@ public class TesterDoesStepDefinitions implements En {
                 // And The page title contains "Add brake test results"
                 driverWrapper.checkCurrentPageTitle("Add brake test results");
                 // And I enter <n> in the "Service brake" field
-                driverWrapper.enterIntoField(result1, "Service brake");
-
-                if (result2.isPresent()) {
-                    // And I enter <n> in the "Parking brake" field
-                    driverWrapper.enterIntoField(result2.get(), "Parking brake");
-                } else {
-                    String message = "Missing decelerometer parking brake result";
-                    logger.error(message);
-                    throw new IllegalArgumentException(message);
-                }
+                driverWrapper.enterIntoField(journey.serviceBrakeTestEfficiency, "Service brake");
+                // And I enter <n> in the "Parking brake" field
+                driverWrapper.enterIntoField(journey.parkingBrakeTestEfficiency, "Parking brake");
                 break;
 
             case AddDecelerometerServiceAndGradientParkingResult:
@@ -417,30 +546,53 @@ public class TesterDoesStepDefinitions implements En {
                 // And The page title contains "Add brake test results"
                 driverWrapper.checkCurrentPageTitle("Add brake test results");
                 // And I enter <n> in the "Service brake" field
-                driverWrapper.enterIntoField(result1, "Service brake");
+                driverWrapper.enterIntoField(journey.serviceBrakeTestEfficiency, "Service brake");
 
-                if (result2.isPresent()) {
-                    switch (result2.get()) {
-                        case "Pass":
-                            // And I select the "Pass" parking brake radio button
-                            driverWrapper.selectRadio("Pass");
-                            break;
-
-                        case "Fail":
-                            // And I select the "Fail" parking brake radio button
-                            driverWrapper.selectRadio("Fail");
-                            break;
-
-                        default:
-                            String message = "Unknown Gradient parking brake result: " + result2;
-                            logger.error(message);
-                            throw new IllegalArgumentException(message);
-                    }
+                if (journey.parkingBrakeGradientTestResult) {
+                    // And I select the "Pass" parking brake radio button
+                    driverWrapper.selectRadio("Pass");
                 } else {
-                    String message = "Missing Gradient parking brake result";
-                    logger.error(message);
-                    throw new IllegalArgumentException(message);
+                    // And I select the "Fail" parking brake radio button
+                    driverWrapper.selectRadio("Fail");
                 }
+                break;
+
+            case AddServiceAndParkingRollerResult:
+                // And I select "Roller" in the "Service brake test type" field
+                driverWrapper.selectOptionInField("Roller", "Service brake test type");
+                // And I select "Roller" in the "Parking brake test type" field
+                driverWrapper.selectOptionInField("Roller", "Parking brake test type");
+                // And I click the "Brake test weight (from manufacturer or other reliable data)" radio button
+                driverWrapper.selectRadio("Brake test weight (from manufacturer or other reliable data)");
+                // And I enter <n> in the "Vehicle Weight in kilograms" field
+                driverWrapper.enterIntoField(journey.weight, "Vehicle Weight in kilograms");
+                // And I click the "Dual" radio button in fieldset "Brake line type"
+                driverWrapper.selectRadioInFieldset("Brake line type", "Dual");
+                // And I select "2 axles" in the "Number of axles" field
+                driverWrapper.selectOptionInField("2 axles", "Number of axles");
+                // And I press the "Next" button
+                driverWrapper.pressButton("Next");
+
+                // And The page title contains "Add brake test results"
+                driverWrapper.checkCurrentPageTitle("Add brake test results");
+                // And I enter <n> in the field with id "serviceBrakeEffortNearsideAxle1"
+                driverWrapper.enterIntoFieldWithId(
+                        journey.serviceBrakeNearsideAxle1, "serviceBrakeEffortNearsideAxle1");
+                // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle1"
+                driverWrapper.enterIntoFieldWithId(
+                        journey.serviceBrakeOffsideAxle1, "serviceBrakeEffortOffsideAxle1");
+                // And I enter <n> in the field with id "serviceBrakeEffortNearsideAxle2"
+                driverWrapper.enterIntoFieldWithId(
+                        journey.serviceBrakeNearsideAxle2, "serviceBrakeEffortNearsideAxle2");
+                // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle2"
+                driverWrapper.enterIntoFieldWithId(
+                        journey.serviceBrakeOffsideAxle2, "serviceBrakeEffortOffsideAxle2");
+                // And I enter <n> in the field with id "parkingBrakeEffortNearside"
+                driverWrapper.enterIntoFieldWithId(
+                        journey.parkingBrakeNearside, "parkingBrakeEffortNearside");
+                // And I enter <n> in the field with id "parkingBrakeEffortOffside"
+                driverWrapper.enterIntoFieldWithId(
+                        journey.parkingBrakeOffside, "parkingBrakeEffortOffside");
                 break;
 
             default:

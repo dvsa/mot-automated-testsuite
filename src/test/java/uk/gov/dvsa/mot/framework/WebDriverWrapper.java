@@ -506,6 +506,15 @@ public class WebDriverWrapper {
 
     /**
      * Enters the specified text into the field.
+     * @param value The value to enter
+     * @param label The field label
+     */
+    public void enterIntoField(int value, String label) {
+        enterIntoField(String.valueOf(value), label);
+    }
+
+    /**
+     * Enters the specified text into the field.
      * @param text  The text to enter
      * @param label The field label
      */
@@ -515,6 +524,18 @@ public class WebDriverWrapper {
         WebElement textElement = webDriver.findElement(By.id(labelElement.getAttribute("for")));
         textElement.clear();
         textElement.sendKeys(text);
+    }
+
+    /**
+     * Enters the specified text into the field.
+     * <p>Note: This is a low-level way to locate the field. Please only use this method if the text <code>input</code>
+     * doesn't have a corresponding label, otherwise use the <code>enterIntoField(String,String)</code> method using
+     * the label text to identify the field.</p>
+     * @param value The value to enter
+     * @param id    The field id
+     */
+    public void enterIntoFieldWithId(int value, String id) {
+        enterIntoFieldWithId(String.valueOf(value), id);
     }
 
     /**
