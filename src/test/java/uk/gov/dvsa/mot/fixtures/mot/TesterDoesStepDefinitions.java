@@ -96,26 +96,51 @@ public class TesterDoesStepDefinitions implements En {
         And("^I remove the \"([^\"]+)\" defect of \"([^\"]+)\"$", this::removeDefect);
 
         And("^I enter decelerometer results of efficiency (\\d+)$", (Integer efficiency) ->
-                handleBrakeResults(BrakeTestJourney.addClassADecelerometerJourney(efficiency)));
+                handleBrakeResults(BrakeTestJourney.addGroupADecelerometerJourney(efficiency)));
 
         And("^I enter decelerometer results of service brake (\\d+) and parking brake (\\d+)$",
                 (Integer serviceBrake, Integer parkingBrake) ->
-                    handleBrakeResults(BrakeTestJourney.addClassBDecelerometerJourney(serviceBrake, parkingBrake)));
+                    handleBrakeResults(BrakeTestJourney.addGroupBDecelerometerJourney(serviceBrake, parkingBrake)));
 
         And("^I edit decelerometer results of service brake (\\d+) and parking brake (\\d+)$",
                 (Integer serviceBrake, Integer parkingBrake) ->
-                    handleBrakeResults(BrakeTestJourney.editClassBDecelerometerJourney(serviceBrake, parkingBrake)));
+                    handleBrakeResults(BrakeTestJourney.editGroupBDecelerometerJourney(serviceBrake, parkingBrake)));
 
         And("^I enter decelerometer service brake result of (\\d+) and gradient parking brake result "
                 + "of \"([^\"]+)\"$", (Integer serviceBrake, String parkingBrake) ->
-                    handleBrakeResults(BrakeTestJourney.addClassBDecelerometerServiceAndGradientParkingJourney(
+                    handleBrakeResults(BrakeTestJourney.addGroupBDecelerometerServiceAndGradientParkingJourney(
                         serviceBrake, parkingBrake)));
 
-        And("^I enter roller results for vehicle weight of (\\d+) as service brake (\\d+),(\\d+),(\\d+),(\\d+)"
-                + " and parking brake (\\d+),(\\d+)$", (Integer weight, Integer serviceBrakeNearsideAxle1,
-                    Integer serviceBrakeOffsideAxle1, Integer serviceBrakeNearsideAxle2,
-                    Integer serviceBrakeOffsideAxle2, Integer parkingBrakeNearside, Integer parkingBrakeOffside) ->
-                handleBrakeResults(BrakeTestJourney.addClassBRollerJourney(weight, serviceBrakeNearsideAxle1,
+        And("^I enter group a plate results for weights of (\\d+),(\\d+),(\\d+) as (\\d+),(\\d+),(\\d+),(\\d+)$",
+                (Integer frontWeight, Integer rearWeight, Integer riderWeight, Integer control1EffortFront,
+                 Integer control1EffortRear, Integer control2EffortFront, Integer control2EffortRear) ->
+                handleBrakeResults(BrakeTestJourney.addGroupAPlateJourney(frontWeight, rearWeight, riderWeight,
+                    control1EffortFront, control1EffortRear, control2EffortFront, control2EffortRear)));
+
+        And("^I enter class 4 roller results for vehicle weight of (\\d+) as service brake "
+                + "(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$", (Integer weight,
+                    Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
+                    Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2,
+                    Integer parkingBrakeNearside, Integer parkingBrakeOffside) ->
+                handleBrakeResults(BrakeTestJourney.addClass4RollerJourney(weight, serviceBrakeNearsideAxle1,
+                        serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2,serviceBrakeOffsideAxle2,
+                        parkingBrakeNearside, parkingBrakeOffside)));
+
+        And("^I edit class 4 roller results for vehicle weight of (\\d+) as service brake "
+                + "(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$", (Integer weight,
+                    Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
+                    Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2,
+                    Integer parkingBrakeNearside, Integer parkingBrakeOffside) ->
+                handleBrakeResults(BrakeTestJourney.editClass4RollerJourney(weight, serviceBrakeNearsideAxle1,
+                        serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2,serviceBrakeOffsideAxle2,
+                        parkingBrakeNearside, parkingBrakeOffside)));
+
+        And("^I enter class 7 roller results for vehicle weight of (\\d+) as service brake "
+                + "(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$", (Integer weight,
+                    Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
+                    Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2,
+                    Integer parkingBrakeNearside, Integer parkingBrakeOffside) ->
+                handleBrakeResults(BrakeTestJourney.addClass7RollerJourney(weight, serviceBrakeNearsideAxle1,
                         serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2,serviceBrakeOffsideAxle2,
                         parkingBrakeNearside, parkingBrakeOffside)));
 
@@ -356,25 +381,35 @@ public class TesterDoesStepDefinitions implements En {
         private enum BrakeTestJourneyType {
             AddSingleDecelerometerResult, AddServiceAndParkingDecelerometerResult,
             AddDecelerometerServiceAndGradientParkingResult, EditServiceAndParkingDecelerometerResult,
-            AddServiceAndParkingRollerResult
+            AddSinglePlateResult, AddClass4ServiceAndParkingRollerResult, EditClass4ServiceAndParkingRollerResult,
+            AddClass7ServiceAndParkingRollerResult
         }
 
         /** The brake test journey type. */
         private BrakeTestJourneyType journeyType;
 
-        /** Efficiency result for class A brake test result. */
+        /** Efficiency result for group A brake test result. */
         private int brakeTestEfficiency;
 
-        /** Efficiency result for class B service brake test result. */
+        /** Efficiency result for group B service brake test result. */
         private int serviceBrakeTestEfficiency;
 
-        /** Efficiency result for class B parking brake test result. */
+        /** Efficiency result for group B parking brake test result. */
         private int parkingBrakeTestEfficiency;
 
-        /** Gradient test result for class B parking brake test result. */
+        /** Gradient test result for group B parking brake test result. */
         private boolean parkingBrakeGradientTestResult;
 
-        /** Roller brake results for class B. */
+        /** Plate brake results for group A. */
+        private int frontWeight;
+        private int rearWeight;
+        private int riderWeight;
+        private int control1EffortFront;
+        private int control1EffortRear;
+        private int control2EffortFront;
+        private int control2EffortRear;
+
+        /** Roller brake results for group B. */
         private int weight;
         private int serviceBrakeNearsideAxle1;
         private int serviceBrakeOffsideAxle1;
@@ -384,23 +419,23 @@ public class TesterDoesStepDefinitions implements En {
         private int parkingBrakeOffside;
 
         /**
-         * Add class A brake test result - using decelerometer.
+         * Add group A brake test result - using decelerometer.
          * @param brakeTestEfficiency The efficiency
          * @return The journey
          */
-        static BrakeTestJourney addClassADecelerometerJourney(int brakeTestEfficiency) {
+        static BrakeTestJourney addGroupADecelerometerJourney(int brakeTestEfficiency) {
             BrakeTestJourney journey = new BrakeTestJourney(BrakeTestJourneyType.AddSingleDecelerometerResult);
             journey.brakeTestEfficiency = brakeTestEfficiency;
             return journey;
         }
 
         /**
-         * Add class B brake test result - both service and parking brake using decelerometer.
+         * Add group B brake test result - both service and parking brake using decelerometer.
          * @param serviceBrakeTestEfficiency Service brake efficiency
          * @param parkingBrakeTestEfficiency Parking brake efficiency
          * @return The journey
          */
-        static BrakeTestJourney addClassBDecelerometerJourney(int serviceBrakeTestEfficiency,
+        static BrakeTestJourney addGroupBDecelerometerJourney(int serviceBrakeTestEfficiency,
                 int parkingBrakeTestEfficiency) {
             BrakeTestJourney journey =
                     new BrakeTestJourney(BrakeTestJourneyType.AddServiceAndParkingDecelerometerResult);
@@ -410,12 +445,12 @@ public class TesterDoesStepDefinitions implements En {
         }
 
         /**
-         * Add class B brake test result - service brake using decelerometer, parking brake using gradient.
+         * Add group B brake test result - service brake using decelerometer, parking brake using gradient.
          * @param serviceBrakeTestEfficiency        Service brake efficiency
          * @param parkingBrakeGradientTestResult    Parking brake gradient result ("Pass<" or "Fail")
          * @return The journey
          */
-        static BrakeTestJourney addClassBDecelerometerServiceAndGradientParkingJourney(
+        static BrakeTestJourney addGroupBDecelerometerServiceAndGradientParkingJourney(
                 int serviceBrakeTestEfficiency, String parkingBrakeGradientTestResult) {
             BrakeTestJourney journey =
                     new BrakeTestJourney(BrakeTestJourneyType.AddDecelerometerServiceAndGradientParkingResult);
@@ -435,12 +470,12 @@ public class TesterDoesStepDefinitions implements En {
         }
 
         /**
-         * Edit class B brake test result - both service and parking brake using decelerometer.
+         * Edit group B brake test result - both service and parking brake using decelerometer.
          * @param serviceBrakeTestEfficiency Service brake efficiency
          * @param parkingBrakeTestEfficiency Parking brake efficiency
          * @return The journey
          */
-        static BrakeTestJourney editClassBDecelerometerJourney(int serviceBrakeTestEfficiency,
+        static BrakeTestJourney editGroupBDecelerometerJourney(int serviceBrakeTestEfficiency,
                 int parkingBrakeTestEfficiency) {
             BrakeTestJourney journey =
                     new BrakeTestJourney(BrakeTestJourneyType.EditServiceAndParkingDecelerometerResult);
@@ -450,7 +485,31 @@ public class TesterDoesStepDefinitions implements En {
         }
 
         /**
-         * Add class B brake test result - both service and parking brake using roller.
+         * Add group A brake test result - using plate.
+         * @param frontWeight       Vehicle front weight
+         * @param rearWeight        Vehicle rear weight
+         * @param riderWeight       Rider weight
+         * @param control1EffortFront   Plate test result - control 1 - front
+         * @param control1EffortRear    Plate test result - control 1 - rear
+         * @param control2EffortFront   Plate test result - control 2 - front
+         * @param control2EffortRear    Plate test result - control 2 - rear
+         * @return The journey
+         */
+        static BrakeTestJourney addGroupAPlateJourney(int frontWeight, int rearWeight, int riderWeight,
+                int control1EffortFront, int control1EffortRear, int control2EffortFront, int control2EffortRear) {
+            BrakeTestJourney journey = new BrakeTestJourney(BrakeTestJourneyType.AddSinglePlateResult);
+            journey.frontWeight = frontWeight;
+            journey.rearWeight = rearWeight;
+            journey.riderWeight = riderWeight;
+            journey.control1EffortFront = control1EffortFront;
+            journey.control1EffortRear = control1EffortRear;
+            journey.control2EffortFront = control2EffortFront;
+            journey.control2EffortRear = control2EffortRear;
+            return journey;
+        }
+
+        /**
+         * Add class 4 brake test result - both service and parking brake using roller.
          * @param weight                        The vehicle weight
          * @param serviceBrakeNearsideAxle1     Weight applied by service brake to nearside axle 1
          * @param serviceBrakeOffsideAxle1      Weight applied by service brake to offside axle 1
@@ -460,11 +519,68 @@ public class TesterDoesStepDefinitions implements En {
          * @param parkingBrakeOffside           Weight applied by parking brake to offside
          * @return The journey
          */
-        static BrakeTestJourney addClassBRollerJourney(int weight, int serviceBrakeNearsideAxle1,
+        static BrakeTestJourney addClass4RollerJourney(int weight, int serviceBrakeNearsideAxle1,
                 int serviceBrakeOffsideAxle1, int serviceBrakeNearsideAxle2, int serviceBrakeOffsideAxle2,
                 int parkingBrakeNearside, int parkingBrakeOffside) {
-            BrakeTestJourney journey =
-                    new BrakeTestJourney(BrakeTestJourneyType.AddServiceAndParkingRollerResult);
+            return addRollerJourney(BrakeTestJourneyType.AddClass4ServiceAndParkingRollerResult, weight,
+                    serviceBrakeNearsideAxle1, serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2,
+                    serviceBrakeOffsideAxle2, parkingBrakeNearside, parkingBrakeOffside);
+        }
+
+        /**
+         * Edit class 4 brake test result - both service and parking brake using roller.
+         * @param weight                        The vehicle weight
+         * @param serviceBrakeNearsideAxle1     Weight applied by service brake to nearside axle 1
+         * @param serviceBrakeOffsideAxle1      Weight applied by service brake to offside axle 1
+         * @param serviceBrakeNearsideAxle2     Weight applied by service brake to nearside axle 2
+         * @param serviceBrakeOffsideAxle2      Weight applied by service brake to offside axle 2
+         * @param parkingBrakeNearside          Weight applied by parking brake to nearside
+         * @param parkingBrakeOffside           Weight applied by parking brake to offside
+         * @return The journey
+         */
+        static BrakeTestJourney editClass4RollerJourney(int weight, int serviceBrakeNearsideAxle1,
+                int serviceBrakeOffsideAxle1, int serviceBrakeNearsideAxle2, int serviceBrakeOffsideAxle2,
+                int parkingBrakeNearside, int parkingBrakeOffside) {
+            return addRollerJourney(BrakeTestJourneyType.EditClass4ServiceAndParkingRollerResult, weight,
+                    serviceBrakeNearsideAxle1, serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2,
+                    serviceBrakeOffsideAxle2, parkingBrakeNearside, parkingBrakeOffside);
+        }
+
+        /**
+         * Add class 7 brake test result - both service and parking brake using roller.
+         * @param weight                        The vehicle weight
+         * @param serviceBrakeNearsideAxle1     Weight applied by service brake to nearside axle 1
+         * @param serviceBrakeOffsideAxle1      Weight applied by service brake to offside axle 1
+         * @param serviceBrakeNearsideAxle2     Weight applied by service brake to nearside axle 2
+         * @param serviceBrakeOffsideAxle2      Weight applied by service brake to offside axle 2
+         * @param parkingBrakeNearside          Weight applied by parking brake to nearside
+         * @param parkingBrakeOffside           Weight applied by parking brake to offside
+         * @return The journey
+         */
+        static BrakeTestJourney addClass7RollerJourney(int weight, int serviceBrakeNearsideAxle1,
+                int serviceBrakeOffsideAxle1, int serviceBrakeNearsideAxle2, int serviceBrakeOffsideAxle2,
+                int parkingBrakeNearside, int parkingBrakeOffside) {
+            return addRollerJourney(BrakeTestJourneyType.AddClass7ServiceAndParkingRollerResult, weight,
+                    serviceBrakeNearsideAxle1, serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2,
+                    serviceBrakeOffsideAxle2, parkingBrakeNearside, parkingBrakeOffside);
+        }
+
+        /**
+         * Add brake test result - both service and parking brake using roller.
+         * @param journeyType                   The journey type
+         * @param weight                        The vehicle weight
+         * @param serviceBrakeNearsideAxle1     Weight applied by service brake to nearside axle 1
+         * @param serviceBrakeOffsideAxle1      Weight applied by service brake to offside axle 1
+         * @param serviceBrakeNearsideAxle2     Weight applied by service brake to nearside axle 2
+         * @param serviceBrakeOffsideAxle2      Weight applied by service brake to offside axle 2
+         * @param parkingBrakeNearside          Weight applied by parking brake to nearside
+         * @param parkingBrakeOffside           Weight applied by parking brake to offside
+         * @return The journey
+         */
+        private static BrakeTestJourney addRollerJourney(BrakeTestJourneyType journeyType, int weight,
+                int serviceBrakeNearsideAxle1, int serviceBrakeOffsideAxle1, int serviceBrakeNearsideAxle2,
+                int serviceBrakeOffsideAxle2, int parkingBrakeNearside, int parkingBrakeOffside) {
+            BrakeTestJourney journey = new BrakeTestJourney(journeyType);
             journey.weight = weight;
             journey.serviceBrakeNearsideAxle1 = serviceBrakeNearsideAxle1;
             journey.serviceBrakeOffsideAxle1 = serviceBrakeOffsideAxle1;
@@ -492,12 +608,17 @@ public class TesterDoesStepDefinitions implements En {
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
 
-        if (journey.journeyType == BrakeTestJourney.BrakeTestJourneyType.EditServiceAndParkingDecelerometerResult) {
-            // And I click the "Edit brake test" link
-            driverWrapper.clickLink("Edit brake test");
-        } else {
-            // And I click the "Add brake test" link
-            driverWrapper.clickLink("Add brake test");
+        switch (journey.journeyType) {
+            case EditServiceAndParkingDecelerometerResult:
+            case EditClass4ServiceAndParkingRollerResult:
+                // And I click the "Edit brake test" link
+                driverWrapper.clickLink("Edit brake test");
+                break;
+
+            default:
+                // And I click the "Add brake test" link
+                driverWrapper.clickLink("Add brake test");
+                break;
         }
 
         // And The page title contains "Brake test configuration"
@@ -516,6 +637,35 @@ public class TesterDoesStepDefinitions implements En {
                 driverWrapper.enterIntoField(journey.brakeTestEfficiency, "Control one");
                 // And I enter <n> in the "Control two" field
                 driverWrapper.enterIntoField(journey.brakeTestEfficiency, "Control two");
+                break;
+
+            case AddSinglePlateResult:
+                // And I select "Plate" in the "Brake test type" field
+                driverWrapper.selectOptionInField("Plate", "Brake test type");
+
+                // (note - all these vehicle weight textboxes have invalid labels, have to use id)
+
+                // And I enter <n> in the field with id "vehicleWeightFront"
+                driverWrapper.enterIntoFieldWithId(journey.frontWeight, "vehicleWeightFront");
+                // And I enter <n> in the field with id "vehicleWeightRear"
+                driverWrapper.enterIntoFieldWithId(journey.rearWeight, "vehicleWeightRear");
+                // And I enter <n> in the field with id "riderWeight"
+                driverWrapper.enterIntoFieldWithId(journey.riderWeight, "riderWeight");
+                // And I click the "No" radio button in fieldset "Is there a sidecar attached?"
+                driverWrapper.selectRadioInFieldset("Is there a sidecar attached?", "No");
+                // And I press the "Next" button
+                driverWrapper.pressButton("Next");
+
+                // And The page title contains "Add brake test results"
+                driverWrapper.checkCurrentPageTitle("Add brake test results");
+                // And I enter <n> in the field with id "control1EffortFront"
+                driverWrapper.enterIntoFieldWithId(journey.control1EffortFront, "control1EffortFront");
+                // And I enter <n> in the field with id "control1EffortRear"
+                driverWrapper.enterIntoFieldWithId(journey.control1EffortRear, "control1EffortRear");
+                // And I enter <n> in the field with id "control2EffortFront"
+                driverWrapper.enterIntoFieldWithId(journey.control2EffortFront, "control2EffortFront");
+                // And I enter <n> in the field with id "control2EffortRear"
+                driverWrapper.enterIntoFieldWithId(journey.control2EffortRear, "control2EffortRear");
                 break;
 
             case AddServiceAndParkingDecelerometerResult:
@@ -557,13 +707,22 @@ public class TesterDoesStepDefinitions implements En {
                 }
                 break;
 
-            case AddServiceAndParkingRollerResult:
+            case AddClass4ServiceAndParkingRollerResult:
+            case EditClass4ServiceAndParkingRollerResult:
+            case AddClass7ServiceAndParkingRollerResult:
                 // And I select "Roller" in the "Service brake test type" field
                 driverWrapper.selectOptionInField("Roller", "Service brake test type");
                 // And I select "Roller" in the "Parking brake test type" field
                 driverWrapper.selectOptionInField("Roller", "Parking brake test type");
-                // And I click the "Brake test weight (from manufacturer or other reliable data)" radio button
-                driverWrapper.selectRadio("Brake test weight (from manufacturer or other reliable data)");
+
+                if (journey.journeyType
+                        == BrakeTestJourney.BrakeTestJourneyType.AddClass7ServiceAndParkingRollerResult) {
+                    // And I click the "DGW (design gross weight from manufacturers plate)" radio button
+                    driverWrapper.selectRadio("DGW (design gross weight from manufacturers plate)");
+                } else {
+                    // And I click the "Brake test weight (from manufacturer or other reliable data)" radio button
+                    driverWrapper.selectRadio("Brake test weight (from manufacturer or other reliable data)");
+                }
                 // And I enter <n> in the "Vehicle Weight in kilograms" field
                 driverWrapper.enterIntoField(journey.weight, "Vehicle Weight in kilograms");
                 // And I click the "Dual" radio button in fieldset "Brake line type"

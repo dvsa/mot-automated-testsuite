@@ -132,7 +132,7 @@ Feature: 07 - Tester does... (part B)
     And I browse for a "Failure" defect of ("Body, structure and general items", "Engine mountings", "Engine mounting missing") with comment "Test defect 1"
     And I browse for a "Failure" defect of ("Brakes", "ABS", "Anti-lock braking system component missing") with comment "Test defect 2"
     And I browse for a "Failure" defect of ("Road wheels", "Attachment", "Wheel insecure") with comment "Test defect 3"
-    And I enter decelerometer results of service brake 60 and parking brake 15
+    And I enter class 4 roller results for vehicle weight of 1000 as service brake 100,50,100,50 and parking brake 60,50
     And I press the "Review test" button
 
     And The page title contains "MOT test summary"
@@ -156,7 +156,7 @@ Feature: 07 - Tester does... (part B)
     And I mark the defect "Anti-lock braking system component missing" as repaired
 
     And I check the "Review test" button is disabled
-    And I edit decelerometer results of service brake 60 and parking brake 30
+    And I edit class 4 roller results for vehicle weight of 1000 as service brake 160,160,160,160 and parking brake 80,80
     And I press the "Review test" button
 
     Then The page title contains "MOT re-test summary"
@@ -226,8 +226,7 @@ Feature: 07 - Tester does... (part B)
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    # after release 3.11 - use roller brake tests instead of decelerometer
-    And I enter decelerometer results of efficiency 60
+    And I enter group a plate results for weights of 100,120,80 as 120,120,120,120
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"

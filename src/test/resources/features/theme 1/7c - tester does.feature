@@ -63,8 +63,7 @@ Feature: 07 - Tester does... (part C)
     And I search for a "Failure" defect of "Steering system excessively tight" with comment "Test failure 1"
     And I edit the "Failure" defect of "Steering system excessively tight" with comment "Edited failure 1" and is dangerous
     And I remove the "Failure" defect of "Steering system excessively tight"
-    # after release 3.11 - change to Plate/Gradient brake test - fail imbalance
-    And I enter decelerometer results of service brake 30 and parking brake 10
+    And I enter class 7 roller results for vehicle weight of 1000 as service brake 350,50,50,350 and parking brake 350,50
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
@@ -106,7 +105,7 @@ Feature: 07 - Tester does... (part C)
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I enter decelerometer results of service brake 60 and parking brake 60
+    And I enter roller results for vehicle weight of 1000 as service brake 200,200,200,200 and parking brake 100,100
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"

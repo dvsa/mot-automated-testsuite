@@ -116,7 +116,7 @@ Feature: 07 - Tester does... (part A)
     And I search for a "Advisory" defect of "Body or chassis has excessive corrosion, seriously affecting its strength within 30cm of the body mountings" with comment "Test advisory 3"
     And I search for a "Advisory" defect of "Electrical wiring damaged, likely to cause a short" with comment "Test advisory 4"
     And I add a manual advisory of "Test manual advisory"
-    And I enter roller results for vehicle weight of 1000 as service brake 200,200,200,200 and parking brake 100,100
+    And I enter class 4 roller results for vehicle weight of 1000 as service brake 200,200,200,200 and parking brake 100,100
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
