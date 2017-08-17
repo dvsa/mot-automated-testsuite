@@ -1,5 +1,5 @@
 @regression
-Feature: 20 -  2FA: Logging in with 2FA card
+Feature: 18 -  2FA: Logging in with 2FA card
 
   # Scenario: User logs in with drift +2
     # Log in with user name and password

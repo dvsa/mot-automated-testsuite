@@ -1,5 +1,5 @@
 @regression
-Feature: 19 - Scheme user
+Feature: 17 - Scheme user
 
   # Scenario: Create Special Notice
     # Select Special Notices

@@ -1,5 +1,5 @@
 @regression
-Feature: 03 - forgotten password
+Feature: 02 - forgotten password
 
   #Scenario: User has forgotten password
     #Given I Have forgotten my password as

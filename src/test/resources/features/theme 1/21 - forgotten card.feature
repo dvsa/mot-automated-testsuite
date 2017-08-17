@@ -1,5 +1,5 @@
 @regression
-Feature: 23 - 2FA: Forgotten Card
+Feature: 21 - 2FA: Forgotten Card
 
   # Scenario: 2FA active user can login via security questions
     # Pre-req: 2FA user

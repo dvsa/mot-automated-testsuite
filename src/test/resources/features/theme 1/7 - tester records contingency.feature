@@ -1,5 +1,5 @@
 @regression
-Feature: 09 - Tester records Contingency Test
+Feature: 07 - Tester records Contingency Test
 
   # Scenario: Record contingency test (Pass)
     # Pre-req: Date in past/Contingency code specified correctly(select number from emergency_log eg. CC14862C)

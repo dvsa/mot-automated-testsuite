@@ -1,5 +1,5 @@
 @regression
-Feature: 16 - CSCO
+Feature: 14 - CSCO
 
   #Scenario: AE search
     #Selects the AE search

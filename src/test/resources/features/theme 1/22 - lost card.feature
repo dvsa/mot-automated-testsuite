@@ -1,5 +1,5 @@
 @regression
-Feature: 24 - 2FA: Lost Card
+Feature: 22 - 2FA: Lost Card
 
   # Scenario: User can order a new card via login screens (after logging on via sec. ques.)
   # User can order a new security card after logging in via lost and forgotten journey

@@ -1,5 +1,5 @@
 @regression
-Feature: 14 - Vehicle Examiner
+Feature: 12 - Vehicle Examiner
 
   Scenario: VE records re-inspection
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}

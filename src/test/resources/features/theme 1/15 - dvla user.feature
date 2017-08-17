@@ -1,5 +1,5 @@
 @regression
-Feature: 17 - DVLA user (DO)
+Feature: 15 - DVLA user (DO)
 
   # Scenario: Search for Site Information LAWI0028 / VTS082412
     # Select Site Information

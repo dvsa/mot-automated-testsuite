@@ -1,5 +1,5 @@
 @regression
-Feature: 07 - Tester does... (part C)
+Feature: 05 - Tester does... (part C)
 
   Scenario: Tester enters a class 2 MOT test fail, with colour change
     Given I load "VEHICLE_CLASS_2_RED" as {registration1}, {vin1}, {mileage1}

@@ -1,5 +1,5 @@
 @regression
-Feature: 07 - Tester does... (part A)
+Feature: 05 - Tester does... (part A)
 
   @smoke
   Scenario: Tester enters a class 4 MOT test pass, with no defects and slot is consumed

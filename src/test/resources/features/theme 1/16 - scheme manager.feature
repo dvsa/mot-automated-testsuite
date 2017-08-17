@@ -1,5 +1,5 @@
 @regression
-Feature: 18 - Scheme manager
+Feature: 16 - Scheme manager
 
   # Scenario: AE Search FREY9282 / AE019726
     # Select AE Information

@@ -1,5 +1,5 @@
 @regression
-Feature: 05 - forced reset password
+Feature: 04 - forced reset password
 
   #Scenario: User is forced to change their password
     #Given I load a user with password change required

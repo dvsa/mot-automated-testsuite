@@ -1,5 +1,5 @@
 @regression
-Feature: 13 - Finance
+Feature: 11 - Finance
 
   # Logged in as finance user HERA5734
 

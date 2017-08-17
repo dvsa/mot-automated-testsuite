@@ -1,5 +1,5 @@
 @regression
-Feature: 04 - reset password
+Feature: 03 - reset password
 
   #Scenario: I reset my password as a user
     #Given I am logged in as an existing user

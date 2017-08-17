@@ -1,5 +1,5 @@
 @regression
-Feature: 11 - AEDM and AED
+Feature: 09 - AEDM and AED
 
   @smoke
   Scenario: AEDM Buys slots

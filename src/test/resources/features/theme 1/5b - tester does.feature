@@ -1,5 +1,5 @@
 @regression
-Feature: 07 - Tester does... (part B)
+Feature: 05 - Tester does... (part B)
 
   Scenario: Tester enters a class 4 MOT test fail, add edit and remove advisory, PRS and failure defects
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}

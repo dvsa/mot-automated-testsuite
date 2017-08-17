@@ -1,5 +1,5 @@
 @regression
-Feature: 22 - New user orders and activates card
+Feature: 20 - New user orders and activates card
 
   # Scenario: New user assigned trade role orders and activates card
     # Log on as new user with no roles

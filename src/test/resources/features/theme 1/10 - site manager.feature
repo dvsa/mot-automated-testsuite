@@ -1,5 +1,5 @@
 @regression
-Feature: 12 - Site Manager and Site Admin
+Feature: 10 - Site Manager and Site Admin
 
   Scenario: Site Manager assigns Site Admin role
     Given I login with 2FA using "SITE_MGR_AND_OTHER_TESTER" as {managerUsername1}, {sitename1}, {sitenumber1}, {otherUsername1}, {otherName1}
