@@ -9,17 +9,18 @@ Feature: 14 - CSCO
     And I press the "Search" button
     And I check the Authorised Examiner Business details AE ID is {aeNumber}
 
+
   #Scenario: Site Information search - Path 1
     #Selects site information
     #Enters City or town
     #Selects search
     #Ensure the city matches the City/town entered
+  #Scenario: Site Information search - Path 1
+  #  Given I login with "CSCO_USER" as {csco}
+  #  And I load "SITE_INFORMATION" as {sid}, {sName}, {sNumber}, {atown}
+  #  When I search for city/town with {town}
+  #  And The page contains "city/postcode={town}"
 
-  Scenario: Site Information search - Path 1
-    Given I login without 2FA using "CSCO_USER" as {cscouser}
-    And I load "SITE_LOCATION_INFORMATION" as {sid}, {sName}, {sNumber}, {atown}
-    When I search for city/town with {town}
-    And The page contains "city/postcode={town}"
 
 
    #Scenario: Site Information search - Path 2
