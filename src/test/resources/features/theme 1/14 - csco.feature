@@ -1,10 +1,13 @@
 @regression
 Feature: 14 - CSCO
 
-  #Scenario: AE search
-    #Selects the AE search
-    #Enters AE Number
-    #Selects search
+  Scenario: AE Search
+    Given I login without 2FA using "CSCO_USER" as {cscouser}
+    And I load "AUTHORISED_EXAMINER" as {aeNumber}, {aeName}, {slotUsage}
+    And I click the "AE information" link
+    When I enter {aeNumber} in the "AE Number" field
+    And I press the "Search" button
+    And I check the Authorised Examiner Business details AE ID is {aeNumber}
 
   #Scenario: Site Information search - Path 1
     #Selects site information
@@ -12,7 +15,14 @@ Feature: 14 - CSCO
     #Selects search
     #Ensure the city matches the City/town entered
 
-  #Scenario: Site Information search - Path 2
+  Scenario: Site Information search - Path 1
+    Given I login without 2FA using "CSCO_USER" as {cscouser}
+    And I load "SITE_LOCATION_INFORMATION" as {sid}, {sName}, {sNumber}, {atown}
+    When I search for city/town with {town}
+    And The page contains "city/postcode={town}"
+
+
+   #Scenario: Site Information search - Path 2
     #Selects site information
     #Enters Postcode (full or part)
     #Selects search
