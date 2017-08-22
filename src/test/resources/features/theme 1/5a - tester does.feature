@@ -3,7 +3,7 @@ Feature: 05 - Tester does... (part A)
 
   @smoke
   Scenario: Tester enters a class 4 MOT test pass, with no defects and slot is consumed
-    Given I load "VEHICLE_CLASS_4_MORE_THAN_4_YEARS" as {registration1}, {vin1}, {mileage1}
+    Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     And I get the slot count from the homepage for site {site}
 
@@ -28,7 +28,7 @@ Feature: 05 - Tester does... (part A)
 
 
   Scenario: Tester enters a class 4 MOT test fail, with brake test failure
-    Given I load "VEHICLE_CLASS_4_MORE_THAN_4_YEARS" as {registration1}, {vin1}, {mileage1}
+    Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
     When I start an MOT test for {registration1}, {vin1}
