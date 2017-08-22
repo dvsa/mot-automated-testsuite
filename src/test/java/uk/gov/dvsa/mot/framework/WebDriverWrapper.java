@@ -901,7 +901,7 @@ public class WebDriverWrapper {
         // initial wait (in milliseconds) to give the selenium web driver time to tell the web browser to
         // submit the current page
         try {
-            Thread.sleep(500);
+            Thread.sleep(250);
 
         } catch (InterruptedException ex) {
             // called if trying to shutdown the test suite
@@ -913,6 +913,16 @@ public class WebDriverWrapper {
         }
 
         logger.debug("Initial wait completed...");
+
+        /**
+         * Selenium doesn't return HTTP status codes so we can't check for a 503 error, which happens when a test
+         * environment is down. This is a dodgy Chrome-specific work around...
+         */
+        if (CHROME_BLANK_SCREEN.equals(webDriver.getPageSource())) {
+            String message = "Environment is probably down?";
+            logger.error(message);
+            throw new RuntimeException(message);
+        }
 
         // maximum time (in seconds) to wait before timing out
         // as we poll much more frequently than this the actual delay should be much less
@@ -936,6 +946,14 @@ public class WebDriverWrapper {
 
         debugCurrentPage();
     }
+
+    /**
+     * What Chrome has been observed to return as the page source when encountering a 503 error
+     * and showing a "This page isn't working" screen.
+     */
+    private static final String CHROME_BLANK_SCREEN =
+            "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head></head>"
+                    + "<body><pre style=\"word-wrap: break-word; white-space: pre-wrap;\"></pre></body></html>";
 
     /**
      * Switch the webdriver context to a frame, required in CPMS pages.
