@@ -2,7 +2,7 @@
 Feature: 09 - AEDM and AED
 
   @smoke
-  Scenario: AEDM Buys slots
+  Scenario: AEDM buys slots
     Given I login with 2FA using "AEDM_USER" as {AEDM}, {ORGANISATION}
     And I click the organisation link {ORGANISATION}
     And I order 25 slots
@@ -53,7 +53,7 @@ Feature: 09 - AEDM and AED
     And I check there is a role assignment confirmation message for {tester}, {testerName}
     And I check there is pending "Tester" role listed for {testerName}
 
-  Scenario: Aedm checks todays test log at vts
+  Scenario: AEDM checks today's test log at VTS
     Given I load "AEDM_AND_TESTER_AT_SITE" as {aedm}, {aeName}, {siteName}, {tester}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {odometer}
     And I login with 2FA as {tester}
@@ -77,11 +77,13 @@ Feature: 09 - AEDM and AED
 
     Then I check the site test log has the recent test {reg}, {tester}
 
-  Scenario Outline: AEDM can view tqi for site with <status> status
+  # TQI: awaiting review after 3.15...
+  Scenario Outline: AEDM can view TQI for site with <status> status
     Given I login with 2FA using "<dataSource>" as {aedm}, {organisationName}, {siteName}
     And I click the {organisationName} link
     When I click the "Service reports" link
     And I click the {siteName} site link with status "<status>" on the service reports
+    Then I check the TQI report has the title {siteName}
 
   Examples:
   |status|dataSource         |

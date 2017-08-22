@@ -88,10 +88,17 @@ Feature: 10 - Site Manager and Site Admin
     And I check the VTS default for "Parking brake" is {newGroupBParkingBrakeDefault}
 
 
-  # Scenario: Site Manager can view TQI statistics for testers associated with VTS
+  Scenario: Site Manager can view TQI statistics for testers associated with VTS
+    # TQI: awaiting review after 3.15...
     # Pre-req: VTS must have MOT's completed for selected month
     # Sign in as a Site Manager (2FA active)
     # Select VTS via the home page
     # Select Test Quality Information
     # Select Month
     # Expected results: VTS TQI populated per tester
+    Given I login with 2FA using "SITE_MGR" as {username1}, {sitename1}, {sitenumber1}
+    And I click on the {sitename1}, {sitenumber1} site
+    And The page title contains "Vehicle Testing Station"
+
+    When I click the "Test quality information" link
+    Then I check the TQI report has the title {sitename1}
