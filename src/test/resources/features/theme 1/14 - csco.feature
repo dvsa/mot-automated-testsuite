@@ -15,18 +15,19 @@ Feature: 14 - CSCO
     #Enters City or town
     #Selects search
     #Ensure the city matches the City/town entered
-  #Scenario: Site Information search - Path 1
-  #  Given I login with "CSCO_USER" as {csco}
-  #  And I load "SITE_INFORMATION" as {sid}, {sName}, {sNumber}, {atown}
-  #  When I search for city/town with {town}
-  #  And The page contains "city/postcode={town}"
-
-
+  Scenario: Site Information search - Path 1
+    Given I login without 2FA using "CSCO_USER" as {cscouser}
+    And I load "SITE_LOCATION_INFORMATION" as {sid}, {sName}, {sNumber}, {aTown}, {aPostcode}
+    And I click the "Site information" link
+    When I enter {aTown} in the "town" field
+    And I press the "Search" button
+    And I check the Site city/town details city is {aTown}
 
    #Scenario: Site Information search - Path 2
     #Selects site information
     #Enters Postcode (full or part)
     #Selects search
+
 
   #Scenario: User Search - Update user's email
     #Selects user search
