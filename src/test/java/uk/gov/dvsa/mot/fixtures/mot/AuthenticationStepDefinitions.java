@@ -273,7 +273,7 @@ public class AuthenticationStepDefinitions implements En {
      * @param keys              The keys to populate
      */
     private void loadData(String dataSetName, List<String> keys) {
-        List<String> dataSet = dataProvider.getDatasetEntry(dataSetName);
+        List<String> dataSet = dataProvider.getCachedDatasetEntry(dataSetName);
 
         // check the number of items in the data set matches the number of keys in the test step
         assertEquals("Expected data set " + dataSetName + " to contain " + keys.size() + " data items, "

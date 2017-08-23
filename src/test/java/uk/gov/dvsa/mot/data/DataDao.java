@@ -73,24 +73,7 @@ public class DataDao {
             String query = loadQuery(resource);
 
             // execute the SQL query to load the dataset
-            long start = System.currentTimeMillis();
-            List<List<String>> dataset = loadDataset(query);
-            long end = System.currentTimeMillis();
-
-            // check dataset is not empty
-            if (dataset.size() == 0) {
-                String message = "No test data found matching data set name: '" + datasetName + "'";
-                logger.warn(message);
-            }
-
-            double timingInSeconds = (end - start) / 1000.0D;
-            String formattedTiming = String.format("%.3f", timingInSeconds);
-            logger.debug("loaded {} entries for dataset {} in {} secs", dataset.size(), datasetName, formattedTiming);
-
-            if (timingInSeconds > 10.0D) {
-                logger.warn("slow dataset: {} took {} seconds, please check the SQL query performance!",
-                        datasetName, formattedTiming);
-            }
+            List<List<String>> dataset = executeQuery(query, datasetName);
 
             // add the dataset to the map
             datasets.put(datasetName, dataset);
@@ -100,11 +83,47 @@ public class DataDao {
     }
 
     /**
-     * Loads a data set.
-     * @param query   The SQL query
+     * Loads the specified dataset.
+     * @param datasetName   The name of the dataset
      * @return The dataset
      */
-    private List<List<String>> loadDataset(String query) {
+    public List<List<String>> loadDataset(String datasetName) {
+        logger.debug("loading dataset {}", datasetName);
+
+        Resource[] resources;
+        try {
+            // scan the classpath for the query file
+            resources = classpathScanner.getResources("classpath*:queries/" + datasetName + ".sql");
+        } catch (IOException ex) {
+            String message = "Error scanning the classpath for query file: " + datasetName;
+            logger.error(message, ex);
+            throw new IllegalStateException(message, ex);
+        }
+
+        if (resources == null || resources.length == 0) {
+            String message = "No query file found for dataset: " + datasetName;
+            logger.error(message);
+            throw new IllegalStateException(message);
+
+        } else {
+            Resource resource = resources[0];
+
+            // load the SQL query contained in the file
+            String query = loadQuery(resource);
+
+            // execute the SQL query to load the dataset
+            return executeQuery(query, datasetName);
+        }
+    }
+
+    /**
+     * Loads a data set.
+     * @param query         The SQL query
+     * @param dataSetName   The name of the data set
+     * @return The dataset
+     */
+    public List<List<String>> executeQuery(String query, String dataSetName) {
+        long start = System.currentTimeMillis();
         List<List<String>> dataSet = jdbcTemplate.query(query, (ResultSet rs, int rowNum) -> {
             List<String> row = new ArrayList<>();
             ResultSetMetaData metaData = rs.getMetaData();
@@ -115,6 +134,23 @@ public class DataDao {
             }
             return row;
         });
+        long end = System.currentTimeMillis();
+
+        // check dataset is not empty
+        if (dataSet.size() == 0) {
+            String message = "No test data found matching data set name: '" + dataSetName + "'";
+            logger.warn(message);
+        }
+
+        double timingInSeconds = (end - start) / 1000.0D;
+        String formattedTiming = String.format("%.3f", timingInSeconds);
+        logger.debug("loaded {} entries for dataset {} in {} secs", dataSet.size(), dataSetName, formattedTiming);
+
+        if (timingInSeconds > 10.0D) {
+            logger.warn("slow dataset: {} took {} seconds, please check the SQL query performance!",
+                    dataSetName, formattedTiming);
+        }
+
         return dataSet;
     }
 

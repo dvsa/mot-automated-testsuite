@@ -53,8 +53,15 @@ Lower level, only use if higher level steps can't be used:
 * I load ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```
 * I load ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```
 * I load ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```, ```{key6}```
-    * Note: these steps will load and cache each dataset at the start of the testsuite execution
-
+    * Note: these steps will load the next entry from the cached dataset. Each dataset is read at the start of the testsuite execution
+* I load immediately ```"..dataset name.."``` as ```{key1}```
+* I load immediately ```"..dataset name.."``` as ```{key1}```, ```{key2}```
+* I load immediately ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```
+* I load immediately ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```
+* I load immediately ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```
+* I load immediately ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```, ```{key6}```
+    * Note: these steps will load the first entry in the dataset immediately without any caching
+    
 ## MOT
 
 These steps are specific to the DVSA MOT application screens.
