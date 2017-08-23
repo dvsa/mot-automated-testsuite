@@ -51,6 +51,9 @@ Lower level, only use if higher level steps can't be used:
 * I load ```"..dataset name.."``` as ```{key1}```, ```{key2}```
 * I load ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```
 * I load ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```
+* I load ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```
+* I load ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```, ```{key6}```
+    * Note: these steps will load and cache each dataset at the start of the testsuite execution
 
 ## MOT
 

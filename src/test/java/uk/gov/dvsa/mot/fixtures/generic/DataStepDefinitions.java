@@ -29,24 +29,31 @@ public class DataStepDefinitions implements En {
         logger.debug("Creating DataStepDefinitions...");
 
         When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}$",
-                (String dataSetName, String key1) -> {
-                    loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1});
-            });
+                (String dataSetName, String key1) ->
+                    loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1}));
 
         When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
-                (String dataSetName, String key1, String key2) -> {
-                    loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2});
-            });
+                (String dataSetName, String key1, String key2) ->
+                    loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2}));
 
         When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
-                (String dataSetName, String key1, String key2, String key3) -> {
-                    loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2, key3});
-            });
+                (String dataSetName, String key1, String key2, String key3) ->
+                    loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2, key3}));
 
         When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
-                (String dataSetName, String key1, String key2, String key3, String key4) -> {
-                    loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2, key3, key4});
-            });
+                (String dataSetName, String key1, String key2, String key3, String key4) ->
+                    loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2, key3, key4}));
+
+        When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, "
+                        + "\\{([^\\}]+)\\}$",
+                (String dataSetName, String key1, String key2, String key3, String key4, String key5) ->
+                    loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2, key3, key4, key5}));
+
+        When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, "
+                        + "\\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String dataSetName, String key1, String key2, String key3, String key4, String key5, String key6) ->
+                    loadData(driverWrapper, dataProvider, dataSetName,
+                            new String[] {key1, key2, key3, key4, key5, key6}));
     }
 
     /**
