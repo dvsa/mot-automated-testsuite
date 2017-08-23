@@ -22,5 +22,10 @@ public class CscoStepDefintions implements En {
                     driverWrapper.getTextFromTableRow("Authorised Examiner ID")
                             .contains(driverWrapper.getData(aeNumberKey));
             });
+        And("^I check the Site city/town details city is \\{([^\\}]+)\\}$",
+                (String aTownKey) -> {
+                    driverWrapper.getTextFromTableColumn("City/postcode")
+                            .contains(driverWrapper.getData(aTownKey));
+                });
     }
 }
