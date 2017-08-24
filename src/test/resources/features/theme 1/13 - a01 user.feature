@@ -149,11 +149,28 @@ Feature: 13 - A01 user
 
 
   # User Search - Remove Driver Licence no.
-    # can't do!
+    # Log on as Area Office 1 user (AO1) with USER ID “IRET3149”
+    # "User search"
+    # enter any tester username (any), Search
+    # click on first result
+    # Driving License => Change
+    # click on "Remove driving licence" link
+    # press "Remove driving license" button
+    # check for => Driving licence has been successfully removed.
+    # check for => Driving license table has "None recorded"
 
 
   # User Search - Add Driver Licence no.
-    # can't do!
+    # Log on as Area Office 1 user (AO1) with USER ID “IRET3149”
+    # "User search"
+    # enter any tester username (any), Search
+    # click on first result
+    # Driving License => Change
+    # enter "Driving license number" => HIELS607129SH9QG, "Issuing country" => "Great Britain (England, Scotland and Wales)"
+    # press "Review driving license" button
+    # Press "Change driving license" button
+    # check for => Driving licence has been changed successfully.
+    # check for => Driving license table has number above
 
 
   # View & record person event
