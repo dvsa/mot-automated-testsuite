@@ -20,6 +20,7 @@ High level:
 * I click the ```"..link text.."``` link
 * I click the ```{key}``` link
 * I click the first ```"..link text.."``` link
+* I click the last ```"..link text.."``` link
 * I click the ```..label..``` radio button
 * I click the ```{key}``` radio button
 * I click the ```..label..``` radio button in fieldset ```..legend..```
@@ -35,9 +36,10 @@ High level:
 * The page contains ```"..text.."```
 * The page title contains ```"..text.."```
 * I check there is a ```"..link text.."``` link
-* I check there is no ```"..link text.."```
+* I check there is no ```"..link text.."``` link
 * I check the ```"..button text.."``` button is disabled
 * I check the ```"..button text.."``` button is enabled
+* I check there is no ```"..button text.."``` button
 
 Lower level, only use if higher level steps can't be used:
 
@@ -65,6 +67,13 @@ Lower level, only use if higher level steps can't be used:
 ## MOT
 
 These steps are specific to the DVSA MOT application screens.
+
+### AedmStepDefinitions
+
+* I check the organisation role assignment confirmation message for ```{..username key..}```, ```{..name key..}```
+* I check the site test log has the recent test ```{..registration key..}```, ```{..username key..}```
+* I click the ```{..site name key..}``` site link with status ```"..status.."``` on the service reports$
+* I check the TQI report has the title ```{..site name key..}```
 
 ### AuthenticationStepDefinitions
 
@@ -122,6 +131,15 @@ These steps are specific to the DVSA MOT application screens.
 * I make the payment for card ```"..cardNumber.."```
 * I check that ```..amount..``` slots were bought successfully
 
+### SiteAdminStepDefinitions
+
+* I click on the ```{..site name key..}```, ```{..site number key..}``` site
+* I check the role summary has a new role of ```"..text.."```
+* I check there is a role assignment confirmation message for ```{..username key..}```, ```{..name key..}```
+* I check there is pending ```"..text.."``` role listed for ```{..name key..}```
+* I check the VTS default for ```..brake type..``` is ```{..test type key..}```
+* I choose different brake defaults for ```{..starting Group A Brake Default..}```, ```{..starting Group B Service Brake Default..}```, ```{..starting Group B Parking Brake Default..}```, ```{..new Group A Brake Default..}```, ```{..new Group B Service Brake Default..}```, ```{..new Group B Parking Brake Default..}```
+
 ### TesterDoesStepDefinitions
 
 * I enter an odometer reading in miles of ```{..key..}``` plus ```..amount..```
@@ -178,14 +196,3 @@ These steps are specific to the DVSA MOT application screens.
 * I click the first name in the list
 * I check the user profile contains username ```{usernameKey}```
 * I change the testers group ```"..group.."``` status to ```"..status.."```
-
-
-
-### SiteAdminStepDefinitions
-
-* I click on the ```{..site name key..}```, ```{..site number key..}``` site
-* I check the role summary has a new role of ```"..text.."```
-* I check there is a role assignment confirmation message for ```{..username key..}```, ```{..name key..}```
-* I check there is pending ```"..text.."``` role listed for ```{..name key..}```
-* I check the VTS default for ```..brake type..``` is ```{..test type key..}```
-* I choose different brake defaults for ```{..starting Group A Brake Default..}```, ```{..starting Group B Service Brake Default..}```, ```{..starting Group B Parking Brake Default..}```, ```{..new Group A Brake Default..}```, ```{..new Group B Service Brake Default..}```, ```{..new Group B Parking Brake Default..}```
