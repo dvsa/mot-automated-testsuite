@@ -1,22 +1,25 @@
 @regression
 Feature: 13 - A01 user
 
-  # Scenario: AE search - Change AE status & Area Office
-    # (re-use CSCO steps!)
-    # Log on as Area Office 1 with USER ID “NETO2855”.
-    # Ensure home page is displayed
-    # Click on “AE Information”
-    # Search for AE number as an exp. “AE077806”
-    #A new page is displayed with information’s.
-    # in business details section: Status -> Change
-    # change status to "Rejected", click "Change status"
-    # returns to AE Summary screen with message: Status has been successfully changed.
-    # check for Status row is Rejected
+  Scenario: AO1 user performs AE search, then changes AE status and Area Office
+    Given I load "AE_NOT_REJECTED" as {aeReference}, {aeName}
+    And I login without 2FA using "AO1_USER" as {ao1User}
 
-    # also: DVSA Area Office -> Change
-    # select new Area Office "08", and press "Change area office"
-    # returns to AE Summary screen with message: Area office has been successfully changed.
-    # check for DVSA Area Office row is "08"
+    When I click the "AE information" link
+    And I enter {aeReference} in the "AE Number" field
+    And I press the "Search" button
+    And I check the Authorised Examiner Business details AE ID is {aeReference}
+    And I click the "Change" link for the "Status" field row
+    And I select "Rejected" in the "Status" field
+    And I press the "Change status" button
+    Then The page contains "Status has been successfully changed"
+    And I check the "Status" field row has value "Rejected"
+
+    And I click the "Change" link for the "DVSA Area Office" field row
+    And I select "08" in the "Area office" field
+    And I press the "Change area office" button
+    And The page contains "Area office has been successfully changed"
+    And I check the "DVSA Area Office" field row has value "08"
 
 
   # AE search - View & record AE event
