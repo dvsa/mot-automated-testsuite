@@ -208,22 +208,28 @@ Feature: 13 - A01 user
     # get list of recent tests
 
 
-  # Create AE
-    # Log on as Area Office 1 user (AO1) with USER ID “IRET3149”
-    # "Create an Authorised Examiner"
-    # Business name: Chris AE
-    # Trading name: Chris AE Ltd
-    # Business type: Sole trader
-    # Address: Address line: 10 Test Street
-    # Town: Test City
-    # Postcode: AB1 2CD
-    # Phone number: 01234567890
-    # email: noone@nowhere.com
-    # Are they the same as the business contact details? Yes
-    # DVSA Area Office: 01
-    # Continue
-    # Create
-    # Check for => details entered above are on AE Summary page
+  Scenario: AO1 user creates a new Authorised Examiner
+    Given I login without 2FA using "AO1_USER" as {ao1User}
+    When I click the "Create an Authorised Examiner" link
+    And I enter "Example MOT Testers" in the "Business name" field
+    And I enter "Example MOT Testers Ltd" in the "Trading name" field
+    And I select "Sole trader" in the "Business type" field
+    And I enter "10 Example Street" in the "Address line" field
+    And I enter "Example Town" in the "Town or city" field
+    And I enter "AB1 2CD" in the "Postcode" field
+    And I enter "01234567890" in the "Phone number" field
+    And I enter "no_one@example.com" in the "Email address" field
+    And I enter "no_one@example.com" in the "Re-type email address" field
+    And I click the "Yes" radio button in fieldset "Are they the same as the business contact details?"
+    And I select "01" in the "DVSA Area Office" field
+    And I press the "Continue" button
+    And I press the "Create Authorised Examiner" button
+    Then The page title contains "Authorised Examiner"
+    And I check the "Name" field row has value "Example MOT Testers"
+    And I check the "Trading name" field row has value "Example MOT Testers Ltd"
+    And I check the "Business type" field row has value "Sole trader"
+    And I check the "DVSA Area Office" field row has value "01"
+    And I check the "Status" field row has value "Applied"
 
 
   # Create VTS
