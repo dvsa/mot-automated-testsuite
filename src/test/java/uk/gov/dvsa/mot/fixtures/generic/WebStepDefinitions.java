@@ -79,6 +79,9 @@ public class WebStepDefinitions implements En {
         When("^I select \"([^\"]+)\" in the \"([^\"]+)\" field$", (String optionText, String label) ->
                 driverWrapper.selectOptionInField(optionText, label));
 
+        When("^I select \"([^\"]+)\" in the field with id \"([^\"]+)\"$", (String optionText, String id) ->
+                driverWrapper.selectOptionInFieldById(optionText, id));
+
         Then("^The page contains \"([^\"]+)\"$", (String expected) ->
                 driverWrapper.containsMessage(expected));
 

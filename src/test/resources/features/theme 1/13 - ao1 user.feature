@@ -22,21 +22,33 @@ Feature: 13 - A01 user
     And I check the "DVSA Area Office" field row has value "08"
 
 
-  # AE search - View & record AE event
-    # Log on as Area Office 1 with USER ID “NETO2855”.
-    # Ensure home page is displayed
-    # Click on “AE Information”
-    # Search for AE number as an exp. “AE077806”
-    #A new page is displayed with information’s.
-    # Click on "Event history"
-    # Ensure View page is displayed
-    # Click link "Record an event"
-    # in "Record an event" page
-    # for Event field, select “Memo”
-    # set days (must be in past) and press Continue button
-    # On "Record an event outcome" page - Event outcome => "Closed" and typing notes, press Continue
-    # Next page is displayed "Event Summary" and press "Record event" button.
-    # returns to event history screen, check event on end of list is as entered above
+  Scenario: AO1 user performs AE search, then views and records an AE event
+    Given I load "AE_NOT_REJECTED" as {aeReference}, {aeName}
+    And I login without 2FA using "AO1_USER" as {ao1User}
+    When I click the "AE information" link
+    And I enter {aeReference} in the "AE Number" field
+    And I press the "Search" button
+    And I click the "Event history" link
+    And The page title contains "Events history"
+    And I click the "Record an event" link
+
+    And The page title contains "Record an event"
+    And I select "Memo" in the field with id "eventType"
+    And I enter "30" in the "Day" field
+    And I enter "06" in the "Month" field
+    And I enter "2017" in the "Year" field
+    And I press the "Continue" button
+
+    And The page title contains "Record an event outcome"
+    And I select "Closed" in the field with id "outcomeCode"
+    And I enter "Test event" in the field with id "notes"
+    And I press the "Continue" button
+
+    And The page title contains "Event summary"
+    And I press the "Record event" button
+
+    And The page title contains "Events history"
+    And The page contains "A new event has been recorded."
 
 
   # AE search - Assign role
@@ -210,6 +222,7 @@ Feature: 13 - A01 user
 
   Scenario: AO1 user creates a new AE
     Given I login without 2FA using "AO1_USER" as {ao1User}
+
     When I click the "Create an Authorised Examiner" link
     And I enter "Example MOT Testers" in the "Business name" field
     And I enter "Example MOT Testers Ltd" in the "Trading name" field
@@ -224,6 +237,7 @@ Feature: 13 - A01 user
     And I select "01" in the "DVSA Area Office" field
     And I press the "Continue" button
     And I press the "Create Authorised Examiner" button
+
     Then The page title contains "Authorised Examiner"
     And I check the "Name" field row has value "Example MOT Testers"
     And I check the "Trading name" field row has value "Example MOT Testers Ltd"
@@ -234,6 +248,7 @@ Feature: 13 - A01 user
 
   Scenario: AO1 user creates a new VTS
     Given I login without 2FA using "AO1_USER" as {ao1User}
+
     When I click the "Create a site" link
     And I enter "Example Site" in the "Site name" field
     And I select "Vehicle Testing Station" in the "Site type" field
@@ -252,6 +267,7 @@ Feature: 13 - A01 user
     And I click the "Class 4" checkbox
     And I press the "Continue" button
     And I press the "Create site" button
+
     Then The page title contains "Vehicle Testing Station"
     And I check the "Name" field row has value "Example Site"
     And I check the "Classes" field row has value "1,2,3,4"

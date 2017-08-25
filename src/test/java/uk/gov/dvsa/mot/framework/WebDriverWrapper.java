@@ -839,6 +839,17 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Selects a specified option in a dropdown field using the id to identify it, temporary fix for incorrect label.
+     * @param optionText    The text of the option to select
+     * @param id            The field id
+     */
+    public void selectOptionInFieldById(String optionText, String id) {
+        Select selectElement = new Select(webDriver.findElement(By.id(id)));
+        selectElement.selectByVisibleText(optionText);
+        waitForPageLoad();
+    }
+
+    /**
      * Checks the title of the current page contains the specified text.
      * @param expected  The title text to look for
      * @throws WrongPageException Expected title text not found
