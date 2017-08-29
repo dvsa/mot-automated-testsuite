@@ -20,14 +20,24 @@ public class Ao1StepDefinitions implements En {
                 (String linkText, String fieldName) ->
                     driverWrapper.clickLink("th", fieldName, "../td/", linkText));
 
+        And("^I click the remove role link for \\{([^\\}]+)\\}$", (String nameKey) ->
+                driverWrapper.clickLink("a", driverWrapper.getData(nameKey),
+                    "../../td/", "Remove"));
+
         And("^I check the \"([^\"]+)\" field row has value \"([^\"]+)\"$",
                 (String fieldName, String value) -> assertTrue("Wrong field value",
                     driverWrapper.getTextFromTableRow(fieldName).contains(value)));
 
-        And("^I check for role notification message for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+        And("^I check for assign role notification message for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String usernameKey, String nameKey) ->
                     assertTrue("Message not found",
                             driverWrapper.containsMessage("A role notification has been sent to "
                                 + driverWrapper.getData(nameKey) + " '" + driverWrapper.getData(usernameKey) + "'.")));
+
+        And("^I check for remove role notification message for \\{([^\\}]+)\\}$",
+                (String nameKey) ->
+                     assertTrue("Message not found",
+                         driverWrapper.containsMessage("You have removed the role of Authorised"
+                             + " examiner designated manager from " + driverWrapper.getData(nameKey))));
     }
 }

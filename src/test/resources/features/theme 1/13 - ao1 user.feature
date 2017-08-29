@@ -52,7 +52,7 @@ Feature: 13 - A01 user
 
 
   Scenario: AO1 user performs AE search, then assigns a role
-    Given I load "AE_WITH_NO_AEDM" as {aeReference}, {aeName}, {unassignedTesterUsername}, {unassignedTesterName}
+    Given I load immediately "AE_WITH_NO_AEDM" as {aeReference}, {aeName}, {unassignedTesterUsername}, {unassignedTesterName}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I click the "AE information" link
     And I enter {aeReference} in the "AE Number" field
@@ -63,20 +63,18 @@ Feature: 13 - A01 user
     And I click the "Authorised Examiner Designated Manager" radio button in fieldset "Select a role"
     And I press the "Choose role" button
     And I press the "Confirm" button
-    Then I check for role notification message for {unassignedTesterUsername}, {unassignedTesterName}
+    Then I check for assign role notification message for {unassignedTesterUsername}, {unassignedTesterName}
 
 
-  # AE search - remove role
-    # Log on as Area Office 1 with USER ID “NETO2855”.
-    # Ensure home page is displayed
-    # Click on “AE Information”
-    # Search for AE number as an exp. “AE077806” (AE with AEDM user already assigned)
-    #A new page is displayed with information’s.
-    # Click “Remove” link in Roles section
-    # Press “Remove Role” button
-    # Make sure selection has been removed.
-    # check for: You have removed the role of Authorised examiner designated manager from Katharyn Yuki Mellado
-    # check for: Roles table has no user with that role
+  Scenario: AO1 user performas AE search, then removes a role
+    Given I load immediately "AE_WITH_AEDM" as {aeReference}, {aeName}, {aedmUsername}, {aedmName}
+    And I login without 2FA using "AO1_USER" as {ao1User}
+    When I click the "AE information" link
+    And I enter {aeReference} in the "AE Number" field
+    And I press the "Search" button
+    And I click the remove role link for {aedmName}
+    And I press the "Remove role" button
+    Then I check for remove role notification message for {aedmName}
 
 
   # AE search - Add Site association
