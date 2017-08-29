@@ -813,13 +813,13 @@ public class WebDriverWrapper {
 
     /**
      * Checks whether the current page contains the specified message, anywhere within the page. Use only with long
-     * unique messages!
+     * unique messages - may contain single quotes, but not double quotes.
      * @param message   The message
      * @return <code>true</code> if found
      */
     public boolean containsMessage(String message) {
         try {
-            webDriver.findElement(By.xpath("//*[contains(text(),'" + message + "')]"));
+            webDriver.findElement(By.xpath("//*[contains(text(),\"" + message + "\")]"));
             return true;
 
         } catch (NoSuchElementException ex) {

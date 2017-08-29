@@ -771,6 +771,16 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>containsMessage()</code> with a matching example using escaping.
+     */
+    @Test
+    public void containsMessageMatchingEscaped() {
+        browseTo("/containsMessage-2.html", "containsMessage - 2");
+        assertTrue("Message should be found",
+                driverWrapper.containsMessage("This is a really 'long' and unique message that 'something' happened."));
+    }
+
+    /**
      * Tests <code>containsMessage()</code> with a non matching example.
      */
     @Test
