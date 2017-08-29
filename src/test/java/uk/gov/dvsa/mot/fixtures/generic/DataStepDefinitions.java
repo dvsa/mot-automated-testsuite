@@ -30,42 +30,97 @@ public class DataStepDefinitions implements En {
 
         When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}$",
                 (String dataSetName, String key1) ->
-                    loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1}));
+                    loadFromCachedData(driverWrapper, dataProvider, dataSetName, new String[] {key1}));
 
         When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String dataSetName, String key1, String key2) ->
-                    loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2}));
+                    loadFromCachedData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2}));
 
         When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String dataSetName, String key1, String key2, String key3) ->
-                    loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2, key3}));
+                    loadFromCachedData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2, key3}));
 
         When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String dataSetName, String key1, String key2, String key3, String key4) ->
-                    loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2, key3, key4}));
+                    loadFromCachedData(driverWrapper, dataProvider, dataSetName,
+                            new String[] {key1, key2, key3, key4}));
 
         When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, "
                         + "\\{([^\\}]+)\\}$",
                 (String dataSetName, String key1, String key2, String key3, String key4, String key5) ->
-                    loadData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2, key3, key4, key5}));
+                    loadFromCachedData(driverWrapper, dataProvider, dataSetName,
+                            new String[] {key1, key2, key3, key4, key5}));
 
         When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, "
                         + "\\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String dataSetName, String key1, String key2, String key3, String key4, String key5, String key6) ->
-                    loadData(driverWrapper, dataProvider, dataSetName,
+                    loadFromCachedData(driverWrapper, dataProvider, dataSetName,
                             new String[] {key1, key2, key3, key4, key5, key6}));
+
+        When("^I load immediately \"([^\"]+)\" as \\{([^\\}]+)\\}$",
+                (String dataSetName, String key1) ->
+                        loadFromUncachedData(driverWrapper, dataProvider, dataSetName, new String[] {key1}));
+
+        When("^I load immediately \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String dataSetName, String key1, String key2) ->
+                        loadFromUncachedData(driverWrapper, dataProvider, dataSetName, new String[] {key1, key2}));
+
+        When("^I load immediately \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String dataSetName, String key1, String key2, String key3) ->
+                        loadFromUncachedData(driverWrapper, dataProvider, dataSetName,
+                                new String[] {key1, key2, key3}));
+
+        When("^I load immediately \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, "
+                        + "\\{([^\\}]+)\\}$",
+                (String dataSetName, String key1, String key2, String key3, String key4) ->
+                        loadFromUncachedData(driverWrapper, dataProvider, dataSetName,
+                                new String[] {key1, key2, key3, key4}));
+
+        When("^I load immediately \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, "
+                        + "\\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String dataSetName, String key1, String key2, String key3, String key4, String key5) ->
+                        loadFromUncachedData(driverWrapper, dataProvider, dataSetName,
+                                new String[] {key1, key2, key3, key4, key5}));
+
+        When("^I load immediately \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, "
+                        + "\\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String dataSetName, String key1, String key2, String key3, String key4, String key5, String key6) ->
+                        loadFromUncachedData(driverWrapper, dataProvider, dataSetName,
+                                new String[] {key1, key2, key3, key4, key5, key6}));
     }
 
     /**
-     * Loads a data set, and populates the scenario test data, for the specified keys.
+     * Loads from a cached data set, and populates the scenario test data, for the specified keys.
      * @param driverWrapper     The driver wrapper to use
      * @param dataProvider      The data provider to use
      * @param dataSetName       The name of the data set
      * @param keys              The keys to populate
      */
-    private void loadData(WebDriverWrapper driverWrapper, DatabaseDataProvider dataProvider, String dataSetName,
-                          String[] keys) {
-        List<String> dataSet = dataProvider.getDatasetEntry(dataSetName);
+    private void loadFromCachedData(WebDriverWrapper driverWrapper, DatabaseDataProvider dataProvider,
+                          String dataSetName, String[] keys) {
+        List<String> dataSet = dataProvider.getCachedDatasetEntry(dataSetName);
+
+        // check the number of items in the data set matches the number of keys in the test step
+        assertEquals("Expected data set " + dataSetName + " to contain " + keys.length + " data items, "
+                        + "but it contained " + dataSet.size() + " data items. Please check your scenario",
+                keys.length, dataSet.size());
+
+        for (int i = 0; i < keys.length; i++) {
+            driverWrapper.setData(keys[i], dataSet.get(i));
+        }
+    }
+
+    /**
+     * Loads from a uncached data set (i.e. executes the database query immediately), and populates the scenario
+     * test data, for the specified keys.
+     * @param driverWrapper     The driver wrapper to use
+     * @param dataProvider      The data provider to use
+     * @param dataSetName       The name of the data set
+     * @param keys              The keys to populate
+     */
+    private void loadFromUncachedData(WebDriverWrapper driverWrapper, DatabaseDataProvider dataProvider,
+                                    String dataSetName, String[] keys) {
+        List<String> dataSet = dataProvider.getUncachedDatasetEntry(dataSetName);
 
         // check the number of items in the data set matches the number of keys in the test step
         assertEquals("Expected data set " + dataSetName + " to contain " + keys.length + " data items, "

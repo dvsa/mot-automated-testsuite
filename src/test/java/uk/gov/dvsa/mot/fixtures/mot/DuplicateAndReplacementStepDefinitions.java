@@ -213,7 +213,7 @@ public class DuplicateAndReplacementStepDefinitions implements En {
         LocalDate date = LocalDate.parse(dateText, df);
 
         //Add the number of days to the date
-        date.plusDays(daysToAdd);
+        date = date.plusDays(daysToAdd);
 
         //And I enter the new expiry date
         driverWrapper.enterIntoFieldWithId(String.valueOf(date.getDayOfMonth()), "expiryDateDay");
@@ -225,7 +225,7 @@ public class DuplicateAndReplacementStepDefinitions implements En {
 
         //And I check the new expiry date is correct
         String newDateText = driverWrapper.getElementText("dashboard-section-header-value-expiryDate");
-        assertTrue("The expiry date did not update correctly", newDateText.equals(date.format(df).toString()));
+        assertTrue("The expiry date did not update correctly", newDateText.equals(date.format(df)));
 
         //Add expiry date to the driver to check later
         driverWrapper.setData("expiryDate", date.format(df));

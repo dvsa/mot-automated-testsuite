@@ -45,11 +45,11 @@ public class DatabaseDataProvider {
     }
 
     /**
-     * Get an entry from the specified test data set, and removes it from the in-memory cache.
+     * Get a cached entry from the specified test data set, and removes it from the in-memory cache.
      * @param dataSetName   The data set name
      * @return The data entry
      */
-    public List<String> getDatasetEntry(String dataSetName) {
+    public List<String> getCachedDatasetEntry(String dataSetName) {
         if (datasets == null) {
             String message = "No datasets loaded, please call \"loadAllDatasets\" first";
             logger.error(message);
@@ -74,6 +74,26 @@ public class DatabaseDataProvider {
 
         List<String> entry = dataset.get(0);
         dataset.remove(entry);
+
+        logger.debug("Using {} from dataset {}", entry, dataSetName);
+        return entry;
+    }
+
+    /**
+     * Get the first entry from the specified test data set, by executing the query immediately, ignoring any caches.
+     * @param dataSetName   The data set name
+     * @return The data entry
+     */
+    public List<String> getUncachedDatasetEntry(String dataSetName) {
+        List<List<String>> dataset = dataDao.loadDataset(dataSetName);
+
+        if (dataset.size() < 1) {
+            String message = "No more data available for dataset: " + dataSetName;
+            logger.error(message);
+            throw new IllegalStateException(message);
+        }
+
+        List<String> entry = dataset.get(0);
 
         logger.debug("Using {} from dataset {}", entry, dataSetName);
         return entry;

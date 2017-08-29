@@ -383,10 +383,11 @@ public class WebDriverWrapperTest {
     /**
      * Tests <code>getTextFromTableRow()</code> with a non matching example.
      */
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void getTextFromTableRowNotMatching() {
         browseTo("/getTextFromTableRow-1.html", "getTextFromTableRow - 1");
-        driverWrapper.getTextFromTableRow("Header Text 4.");
+        assertEquals("Should not find any text",
+                "", driverWrapper.getTextFromTableRow("Header Text 4."));
     }
 
     /**
@@ -397,6 +398,26 @@ public class WebDriverWrapperTest {
         browseTo("/getTextFromTableRow-2.html", "getTextFromTableRow - 2");
         assertEquals("Should find matching and nested text", "Data Text 2. \nSpan Text 2.",
                 driverWrapper.getTextFromTableRow("Heading Text 2."));
+    }
+
+    /**
+     * Tests <code>getTextFromTableRowWithLink()</code> with a matching example.
+     */
+    @Test
+    public void getTextFromTableRowWithLinkMatching() {
+        browseTo("/getTextFromTableRowWithLink-1.html", "getTextFromTableRowWithLink - 1");
+        assertEquals("Should find matching text", "Data Text 2. Other Link 2.",
+                driverWrapper.getTextFromTableRowWithLink("Heading Text 2."));
+    }
+
+    /**
+     * Tests <code>getTextFromTableRowWithLink()</code> with a non-matching example.
+     */
+    @Test
+    public void getTextFromTableRowWithLinkNonMatching() {
+        browseTo("/getTextFromTableRowWithLink-1.html", "getTextFromTableRowWithLink - 1");
+        assertEquals("Should not find any matching text",
+                "", driverWrapper.getTextFromTableRowWithLink("Heading Text 4."));
     }
 
     /**
@@ -768,6 +789,16 @@ public class WebDriverWrapperTest {
         browseTo("/containsMessage-1.html", "containsMessage - 1");
         assertTrue("Message should be found",
                 driverWrapper.containsMessage("This is a really long and unique message that something happened."));
+    }
+
+    /**
+     * Tests <code>containsMessage()</code> with a matching example using escaping.
+     */
+    @Test
+    public void containsMessageMatchingEscaped() {
+        browseTo("/containsMessage-2.html", "containsMessage - 2");
+        assertTrue("Message should be found",
+                driverWrapper.containsMessage("This is a really 'long' and unique message that 'something' happened."));
     }
 
     /**

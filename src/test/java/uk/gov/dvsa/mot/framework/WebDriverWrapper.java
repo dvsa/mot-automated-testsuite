@@ -738,11 +738,30 @@ public class WebDriverWrapper {
 
     /**
      * Fetches the data in the td column in the same row as a tr element.
-     * @param rowText - The text that will find the first row
-     * @return          Return the text found in the table
+     * @param rowText       The text that will find the first row
+     * @return The text found in the table, or an empty string
      */
     public String getTextFromTableRow(String rowText) {
-        return webDriver.findElement(By.xpath("//th[contains(text(),'" + rowText + "')]/../td")).getText();
+        try {
+            return webDriver.findElement(By.xpath("//th[contains(text(),'" + rowText + "')]/../td")).getText();
+
+        } catch (NoSuchElementException ex) {
+            return "";
+        }
+    }
+
+    /**
+     * Fetches the data in the td column in the same row as a link within a th element.
+     * @param linkText      The link text to look for
+     * @return The text found in the table row, or an empty string
+     */
+    public String getTextFromTableRowWithLink(String linkText) {
+        try {
+            return webDriver.findElement(By.xpath("//th/a[contains(text(),'" + linkText + "')]/../../td")).getText();
+
+        } catch (NoSuchElementException ex) {
+            return "";
+        }
     }
 
     /**
@@ -813,13 +832,13 @@ public class WebDriverWrapper {
 
     /**
      * Checks whether the current page contains the specified message, anywhere within the page. Use only with long
-     * unique messages!
+     * unique messages - may contain single quotes, but not double quotes.
      * @param message   The message
      * @return <code>true</code> if found
      */
     public boolean containsMessage(String message) {
         try {
-            webDriver.findElement(By.xpath("//*[contains(text(),'" + message + "')]"));
+            webDriver.findElement(By.xpath("//*[contains(text(),\"" + message + "\")]"));
             return true;
 
         } catch (NoSuchElementException ex) {
@@ -834,6 +853,17 @@ public class WebDriverWrapper {
      */
     public void selectOptionInFieldByName(String optionText, String name) {
         Select selectElement = new Select(webDriver.findElement(By.name(name)));
+        selectElement.selectByVisibleText(optionText);
+        waitForPageLoad();
+    }
+
+    /**
+     * Selects a specified option in a dropdown field using the id to identify it, temporary fix for incorrect label.
+     * @param optionText    The text of the option to select
+     * @param id            The field id
+     */
+    public void selectOptionInFieldById(String optionText, String id) {
+        Select selectElement = new Select(webDriver.findElement(By.id(id)));
         selectElement.selectByVisibleText(optionText);
         waitForPageLoad();
     }
