@@ -746,6 +746,15 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Fetches the data in the td column in the same row as a link within a th element.
+     * @param linkText      The link text tto look for
+     * @return The text found in the table row
+     */
+    public String getTextFromTableRowWithLink(String linkText) {
+        return webDriver.findElement(By.xpath("//th/a[contains(text(),'" + linkText + "')]/../../td")).getText();
+    }
+
+    /**
      * Fetches the data in the column of the first row identified by table header text.
      * @param headerText - The text that will find the first row
      * @return The text found in the column

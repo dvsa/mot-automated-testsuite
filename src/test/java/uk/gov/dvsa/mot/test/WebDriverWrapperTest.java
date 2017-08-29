@@ -400,6 +400,25 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>getTextFromTableRowWithLink()</code> with a matching example.
+     */
+    @Test
+    public void getTextFromTableRowWithLinkMatching() {
+        browseTo("/getTextFromTableRowWithLink-1.html", "getTextFromTableRowWithLink - 1");
+        assertEquals("Should find matching text", "Data Text 2. Other Link 2.",
+                driverWrapper.getTextFromTableRowWithLink("Heading Text 2."));
+    }
+
+    /**
+     * Tests <code>getTextFromTableRowWithLink()</code> with a non-matching example.
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void getTextFromTableRowWithLinkNonMatching() {
+        browseTo("/getTextFromTableRowWithLink-1.html", "getTextFromTableRowWithLink - 1");
+        driverWrapper.getTextFromTableRowWithLink("Heading Text 4.");
+    }
+
+    /**
      * Tests <code>getTextFromTableColumn()</code> with a matching example.
      */
     @Test
