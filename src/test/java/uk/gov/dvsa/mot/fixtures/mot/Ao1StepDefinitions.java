@@ -31,13 +31,17 @@ public class Ao1StepDefinitions implements En {
         And("^I check for assign role notification message for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String usernameKey, String nameKey) ->
                     assertTrue("Message not found",
-                            driverWrapper.containsMessage("A role notification has been sent to "
-                                + driverWrapper.getData(nameKey) + " '" + driverWrapper.getData(usernameKey) + "'.")));
+                        driverWrapper.containsMessage("A role notification has been sent to "
+                            + driverWrapper.getData(nameKey) + " '" + driverWrapper.getData(usernameKey) + "'.")));
 
-        And("^I check for remove role notification message for \\{([^\\}]+)\\}$",
-                (String nameKey) ->
-                     assertTrue("Message not found",
-                         driverWrapper.containsMessage("You have removed the role of Authorised"
-                             + " examiner designated manager from " + driverWrapper.getData(nameKey))));
+        And("^I check for remove role notification message for \\{([^\\}]+)\\}$", (String nameKey) ->
+                 assertTrue("Message not found",
+                     driverWrapper.containsMessage("You have removed the role of Authorised"
+                         + " examiner designated manager from " + driverWrapper.getData(nameKey))));
+
+        And("^I check for site association for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String siteReferenceKey, String siteNameKey) -> assertTrue("Site association not found",
+                    driverWrapper.getTextFromTableRowWithLink(driverWrapper.getData(siteNameKey))
+                        .contains(driverWrapper.getData(siteReferenceKey))));
     }
 }
