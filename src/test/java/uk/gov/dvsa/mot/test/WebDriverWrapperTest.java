@@ -383,10 +383,11 @@ public class WebDriverWrapperTest {
     /**
      * Tests <code>getTextFromTableRow()</code> with a non matching example.
      */
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void getTextFromTableRowNotMatching() {
         browseTo("/getTextFromTableRow-1.html", "getTextFromTableRow - 1");
-        driverWrapper.getTextFromTableRow("Header Text 4.");
+        assertEquals("Should not find any text",
+                "", driverWrapper.getTextFromTableRow("Header Text 4."));
     }
 
     /**
@@ -412,10 +413,11 @@ public class WebDriverWrapperTest {
     /**
      * Tests <code>getTextFromTableRowWithLink()</code> with a non-matching example.
      */
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void getTextFromTableRowWithLinkNonMatching() {
         browseTo("/getTextFromTableRowWithLink-1.html", "getTextFromTableRowWithLink - 1");
-        driverWrapper.getTextFromTableRowWithLink("Heading Text 4.");
+        assertEquals("Should not find any matching text",
+                "", driverWrapper.getTextFromTableRowWithLink("Heading Text 4."));
     }
 
     /**

@@ -738,20 +738,30 @@ public class WebDriverWrapper {
 
     /**
      * Fetches the data in the td column in the same row as a tr element.
-     * @param rowText - The text that will find the first row
-     * @return          Return the text found in the table
+     * @param rowText       The text that will find the first row
+     * @return The text found in the table, or an empty string
      */
     public String getTextFromTableRow(String rowText) {
-        return webDriver.findElement(By.xpath("//th[contains(text(),'" + rowText + "')]/../td")).getText();
+        try {
+            return webDriver.findElement(By.xpath("//th[contains(text(),'" + rowText + "')]/../td")).getText();
+
+        } catch (NoSuchElementException ex) {
+            return "";
+        }
     }
 
     /**
      * Fetches the data in the td column in the same row as a link within a th element.
-     * @param linkText      The link text tto look for
-     * @return The text found in the table row
+     * @param linkText      The link text to look for
+     * @return The text found in the table row, or an empty string
      */
     public String getTextFromTableRowWithLink(String linkText) {
-        return webDriver.findElement(By.xpath("//th/a[contains(text(),'" + linkText + "')]/../../td")).getText();
+        try {
+            return webDriver.findElement(By.xpath("//th/a[contains(text(),'" + linkText + "')]/../../td")).getText();
+
+        } catch (NoSuchElementException ex) {
+            return "";
+        }
     }
 
     /**

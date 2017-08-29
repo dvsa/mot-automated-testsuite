@@ -89,14 +89,16 @@ Feature: 13 - A01 user
     Then I check for site association for {siteReference}, {siteName}
 
 
-  # AE search - remove Site association
-    # Log on as Area Office 1 with USER ID “NETO2855”.
-    # Ensure home page is displayed
-    # Click on “AE Information”
-    # Search for AE number as an exp. “AE077806”
-    # Section “Vehicle testing stations” and click on “Remove” link
-    # Choose a status such as “Surrendered” and press Remove association button
-    # check for: Vehicle testing stations => doesn't include VTS
+  Scenario: AO1 user performs AE search, then remove a site association
+    Given I load immediately "AE_WITH_ASSIGNED_SITE" as {aeReference}, {aeName}, {siteReference}, {siteName}
+    And I login without 2FA using "AO1_USER" as {ao1User}
+    When I click the "AE information" link
+    And I enter {aeReference} in the "AE Number" field
+    And I press the "Search" button
+    And I click the remove site association link for {siteName}
+    And I select "Surrendered" in the "Choose a status" field
+    And I press the "Remove association" button
+    Then I check there is no site association for {siteReference}, {siteName}
 
 
   # Site Information search - Change site details (name, status & class)
