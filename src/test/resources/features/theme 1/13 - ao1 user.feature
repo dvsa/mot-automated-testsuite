@@ -47,21 +47,23 @@ Feature: 13 - A01 user
     And The page title contains "Event summary"
     And I press the "Record event" button
 
-    And The page title contains "Events history"
+    Then The page title contains "Events history"
     And The page contains "A new event has been recorded."
 
 
-  # AE search - Assign role
-    # Log on as Area Office 1 with USER ID “NETO2855”.
-    # Ensure home page is displayed
-    # Click on “AE Information”
-    # Search for AE number as an exp. “AE077806” (AE with no AEDM user already assigned)
-    #A new page is displayed with information’s.
-    # Click on “Assign a role”
-    # enter Username such as “NIES1410” (any tester not already assigned to AE above), press "Search"
-    # Choose a role "Authorised Examiner Designated Manager", and press Choose role button and then confirm button
-    # check for: A role notification has been sent to Walker Judy Niess 'NIES1410'.
-    # check for: user listed in Roles table with role "Authorised examiner designated manager"
+  Scenario: AO1 user performs AE search, then assigns a role
+    Given I load "AE_WITH_NO_AEDM" as {aeReference}, {aeName}, {unassignedTesterUsername}, {unassignedTesterName}
+    And I login without 2FA using "AO1_USER" as {ao1User}
+    When I click the "AE information" link
+    And I enter {aeReference} in the "AE Number" field
+    And I press the "Search" button
+    And I click the "Assign a role" link
+    And I enter {unassignedTesterUsername} in the field with id "userSearchBox"
+    And I press the "Search" button
+    And I click the "Authorised Examiner Designated Manager" radio button in fieldset "Select a role"
+    And I press the "Choose role" button
+    And I press the "Confirm" button
+    Then I check for role notification message for {unassignedTesterUsername}, {unassignedTesterName}
 
 
   # AE search - remove role

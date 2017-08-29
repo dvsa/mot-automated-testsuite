@@ -23,5 +23,11 @@ public class Ao1StepDefinitions implements En {
         And("^I check the \"([^\"]+)\" field row has value \"([^\"]+)\"$",
                 (String fieldName, String value) -> assertTrue("Wrong field value",
                     driverWrapper.getTextFromTableRow(fieldName).contains(value)));
+
+        And("^I check for role notification message for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String usernameKey, String nameKey) ->
+                    assertTrue("Message not found",
+                            driverWrapper.containsMessage("A role notification has been sent to "
+                                + driverWrapper.getData(nameKey) + " '" + driverWrapper.getData(usernameKey) + "'.")));
     }
 }
