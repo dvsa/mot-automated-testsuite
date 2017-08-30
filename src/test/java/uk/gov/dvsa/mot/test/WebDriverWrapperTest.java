@@ -740,7 +740,7 @@ public class WebDriverWrapperTest {
     }
 
     /**
-     * Tests <code>selectCheckbox()</code> with a matching example.
+     * Tests <code>selectCheckbox()</code> with a matching example (checkbox not already selected).
      */
     @Test
     public void selectCheckboxMatching() {
@@ -748,11 +748,10 @@ public class WebDriverWrapperTest {
         driverWrapper.selectCheckbox("Test Checkbox Button");
         assertTrue("Checkbox button should have been selected",
                 driverWrapper.isElementChecked("my_input"));
-
     }
 
     /**
-     * Tests <code>selectCheckbox()</code> with a non matching example.
+     * Tests <code>selectCheckbox()</code> with a non matching example (checkbox not already selected).
      */
     @Test(expected = IllegalArgumentException.class)
     public void selectCheckboxNotMatching() {
@@ -761,7 +760,28 @@ public class WebDriverWrapperTest {
     }
 
     /**
-     * Tests <code>selectCheckbox()</code> with a matching example (input nested inside the label).
+     * Tests <code>selectCheckbox()</code> with a matching example (checkbox already selected).
+     */
+    @Test
+    public void selectCheckboxMatchingSelected() {
+        browseTo("/selectCheckbox-3.html", "selectCheckbox - 3");
+        driverWrapper.selectCheckbox("Test Checkbox Button");
+        assertTrue("Checkbox button should have been selected",
+                driverWrapper.isElementChecked("my_input"));
+    }
+
+    /**
+     * Tests <code>selectCheckbox()</code> with a non matching example (checkbox already selected).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void selectCheckboxNotMatchingSelected() {
+        browseTo("/selectCheckbox-3.html", "selectCheckbox - 3");
+        driverWrapper.selectCheckbox("Other Checkbox Button");
+    }
+
+    /**
+     * Tests <code>selectCheckbox()</code> with a matching example (input nested inside the label, checkbox not
+     * already selected).
      */
     @Test
     public void selectCheckboxNestedMatching() {
@@ -773,12 +793,115 @@ public class WebDriverWrapperTest {
     }
 
     /**
-     * Tests <code>selectCheckbox()</code> with a non matching example.
+     * Tests <code>selectCheckbox()</code> with a non matching example (checkbox not already selected).
      */
     @Test(expected = IllegalArgumentException.class)
     public void selectCheckboxNestedNotMatching() {
         browseTo("/selectCheckbox-2.html", "selectCheckbox - 2");
         driverWrapper.selectCheckbox("Other Checkbox Button");
+    }
+
+    /**
+     * Tests <code>selectCheckbox()</code> with a matching example (input nested inside the label, checkbox
+     * already selected).
+     */
+    @Test
+    public void selectCheckboxNestedMatchingSelected() {
+        browseTo("/selectCheckbox-4.html", "selectCheckbox - 4");
+        driverWrapper.selectCheckbox("Test Checkbox Button");
+        assertTrue("Checkbox button should have been selected",
+                driverWrapper.isElementChecked("my_input"));
+    }
+
+    /**
+     * Tests <code>selectCheckbox()</code> with a non matching example (checkbox already selected).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void selectCheckboxNestedNotMatchingSelected() {
+        browseTo("/selectCheckbox-4.html", "selectCheckbox - 4");
+        driverWrapper.selectCheckbox("Other Checkbox Button");
+    }
+
+    /**
+     * Tests <code>clearCheckbox()</code> with a matching example (checkbox not already selected).
+     */
+    @Test
+    public void clearCheckboxMatching() {
+        browseTo("/selectCheckbox-1.html", "selectCheckbox - 1");
+        driverWrapper.clearCheckbox("Test Checkbox Button");
+        assertFalse("Checkbox button should not have been selected",
+                driverWrapper.isElementChecked("my_input"));
+    }
+
+    /**
+     * Tests <code>clearCheckbox()</code> with a non matching example (checkbox not already selected).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void clearCheckboxNotMatching() {
+        browseTo("/selectCheckbox-1.html", "selectCheckbox - 1");
+        driverWrapper.clearCheckbox("Other Checkbox Button");
+    }
+
+    /**
+     * Tests <code>clearCheckbox()</code> with a matching example (checkbox already selected).
+     */
+    @Test
+    public void clearCheckboxMatchingSelected() {
+        browseTo("/selectCheckbox-3.html", "selectCheckbox - 3");
+        driverWrapper.clearCheckbox("Test Checkbox Button");
+        assertFalse("Checkbox button should not have been selected",
+                driverWrapper.isElementChecked("my_input"));
+    }
+
+    /**
+     * Tests <code>clearCheckbox()</code> with a non matching example (checkbox already selected).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void clearCheckboxNotMatchingSelected() {
+        browseTo("/selectCheckbox-3.html", "selectCheckbox - 3");
+        driverWrapper.clearCheckbox("Other Checkbox Button");
+    }
+
+    /**
+     * Tests <code>clearCheckbox()</code> with a matching example (input nested inside the label, checkbox not
+     * already selected).
+     */
+    @Test
+    public void clearCheckboxNestedMatching() {
+        browseTo("/selectCheckbox-2.html", "selectCheckbox - 2");
+        driverWrapper.clearCheckbox("Test Checkbox Button");
+        assertFalse("Checkbox button should not have been selected",
+                driverWrapper.isElementChecked("my_input"));
+    }
+
+    /**
+     * Tests <code>clearCheckbox()</code> with a non matching example (checkbox not already selected).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void clearCheckboxNestedNotMatching() {
+        browseTo("/selectCheckbox-2.html", "selectCheckbox - 2");
+        driverWrapper.clearCheckbox("Other Checkbox Button");
+    }
+
+    /**
+     * Tests <code>clearCheckbox()</code> with a matching example (input nested inside the label, checkbox
+     * already selected).
+     */
+    @Test
+    public void clearCheckboxNestedMatchingSelected() {
+        browseTo("/selectCheckbox-4.html", "selectCheckbox - 4");
+        driverWrapper.clearCheckbox("Test Checkbox Button");
+        assertFalse("Checkbox button should not have been selected",
+                driverWrapper.isElementChecked("my_input"));
+    }
+
+    /**
+     * Tests <code>clearCheckbox()</code> with a non matching example (checkbox already selected).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void clearCheckboxNestedNotMatchingSelected() {
+        browseTo("/selectCheckbox-4.html", "selectCheckbox - 4");
+        driverWrapper.clearCheckbox("Other Checkbox Button");
     }
 
     /**
@@ -819,6 +942,40 @@ public class WebDriverWrapperTest {
         browseTo("/selectCheckbox-2.html", "selectCheckbox - 2");
         assertFalse("Message should not be found",
                 driverWrapper.containsMessage("This is a really long and unique message that something happened."));
+    }
+
+    /**
+     * Tests <code>containsMessage()</code> with a matching example, with data keys.
+     */
+    @Test
+    public void containsMessageMatchingWithDataKeys() {
+        browseTo("/containsMessage-3.html", "containsMessage - 3");
+        driverWrapper.setData("name", "Fred Bloggs");
+        driverWrapper.setData("username", "USER023");
+        assertTrue("Message should be found",
+                driverWrapper.containsMessage("You have successfully updated the user: {name} '{username}'."));
+    }
+
+    /**
+     * Tests <code>containsMessage()</code> with a non matching example, with data keys.
+     */
+    @Test
+    public void containsMessageNotMatchingWithDataKeys() {
+        browseTo("/containsMessage-3.html", "containsMessage - 3");
+        driverWrapper.setData("name", "Bertie Basset"); // i.e. not Fred Bloggs
+        driverWrapper.setData("username", "USER042"); // i.e. not USER023
+        assertFalse("Message should not be found",
+                driverWrapper.containsMessage("You have successfully updated the user: {name} '{username}'."));
+    }
+
+    /**
+     * Tests <code>containsMessage()</code> with when the referenced data keys aren't set.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void containsMessageUnsetDataKeys() {
+        browseTo("/containsMessage-3.html", "containsMessage - 3");
+        // name and username keys not set
+        driverWrapper.containsMessage("You have successfully updated the user: {name} '{username}'.");
     }
 
     /**

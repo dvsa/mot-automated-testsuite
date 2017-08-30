@@ -67,6 +67,9 @@ public class WebStepDefinitions implements En {
         When("^I click the \"([^\"]+)\" checkbox$", (String labelText) ->
                 driverWrapper.selectCheckbox(labelText));
 
+        When("^I clear the \"([^\"]+)\" checkbox$", (String labelText) ->
+                driverWrapper.clearCheckbox(labelText));
+
         When("^I enter \"([^\"]+)\" in the \"([^\"]+)\" field$", (String text, String label) ->
                 driverWrapper.enterIntoField(text, label));
 
@@ -112,6 +115,9 @@ public class WebStepDefinitions implements En {
         And("^I click the first \"([^\"]+)\" link$", (String linkText) ->
                 driverWrapper.clickFirstLink(linkText));
 
+        And("^I click the first \\{([^\\}]+)\\} link$", (String linkTextKey) ->
+                driverWrapper.clickFirstLink(driverWrapper.getData(linkTextKey)));
+
         And("^I enter \"([^\"]+)\" into all fields with id prefix \"([^\"]+)\"$",
                 (String text, String idPrefix) -> driverWrapper.enterIntoAllFieldsWithIdPrefix(idPrefix, text));
 
@@ -121,5 +127,8 @@ public class WebStepDefinitions implements En {
 
         And("^I click the last \"([^\"]+)\" link$", (String linkText) ->
                 driverWrapper.clickLastLink(linkText));
+
+        And("^I click the last \\{([^\\}]+)\\} link$", (String linkTextKey) ->
+                driverWrapper.clickLastLink(driverWrapper.getData(linkTextKey)));
     }
 }

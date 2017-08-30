@@ -18,10 +18,14 @@ Feature: 14 - CSCO
     And I press the "Search" button
     And I check the Site city/town details city is {aTown}
 
-    #Scenario: Site Information search - Path 2
-      #Selects site information
-      #Enters Postcode (full or part)
-      #Selects search
+
+  Scenario: Site Information search - Path 2
+    Given I login without 2FA using "CSCO_USER" as {cscouser}
+    And I load "SITE_LOCATION_INFORMATION" as {sid}, {sName}, {sNumber}, {aTown}, {aPostcode}
+    And I click the "Site information" link
+    When I enter {aPostcode} in the "Postcode (full or part)" field
+    Then I press the "Search" button
+    And I check the Site postcode details postcode is {aPostcode}
 
     #Scenario: User Search - Update user's email
     #Selects user search
@@ -38,34 +42,29 @@ Feature: 14 - CSCO
   #Limits on this Scenario because it sends off an email to reset the account
   #Scenario: User Search - Reclaim Account
 
-  #Scenario: Issue Duplicate
-    #Select replacement/duplicate certificate
-    #Enter registration mark
-    #Select view certificate
-    #Select print certificate
-    #Ensure the user can be reprint the certificate
+  Scenario: Issue Duplicate - VRM
+    Given I login without 2FA using "CSCO_USER" as {cscouser}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
+    And I search for certificates with reg {reg}
+    And I click the first "View certificate" link
+    And I check there is a "Print certificate" link
+
 
   #Scenario: MOT Test - Site
     #Select MOT tests
     #Select Site (recent tests)
     #Enter Site number/ID
     #Ensure that a previous test results can be viewed
-  #Scenario: MOT Test - Site
-  #  Given I login without 2FA using "CSCO_USER" as {cscouser}
-  #  And I load "SITE" as {siteName}, {siteNumber}
-  #  And I click the "MOT tests" link
-  #  When I search for an mot by "Site (by recent tests)" with {siteNumber}
-  #  And I click the first "View" link
-  #  Then The page contains "MOT test summary"
-  #  And I check there is a "Print certificate" link
 
-  #Scenario: MOT Test - Tester
-    #Select MOT tests
-    #Select tester (recent tests)
-    #Enter date range
-    #Enter username
-    #Select Search
-    #Ensure that summary can be viewed
+
+  Scenario: MOT Test - Tester
+    Given I login without 2FA using "CSCO_USER" as {cscouser}
+    And I load "TESTER_WITH_2_MONTH_HISTORY" as {tester}
+    And I click the "MOT tests" link
+    When I search for an mot by "Tester (by date range)" with {tester} from 2 months ago
+    And I click the first "View" link
+    Then The page contains "MOT test summary"
+    And I check there is a "Print certificate" link
 
   Scenario: MOT Test - VIN
     Given I login without 2FA using "CSCO_USER" as {cscouser}

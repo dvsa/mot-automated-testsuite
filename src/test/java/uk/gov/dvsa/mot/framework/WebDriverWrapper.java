@@ -321,7 +321,8 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Finds any links that have the specified text.
+     * Finds any links that have the specified text, which may contain single quotes, and <code>{key}</code> format
+     * data keys, but not double quotes.
      * @param linkText  The link text
      * @return A List of zero or more Elements
      */
@@ -341,7 +342,8 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Clicks the first link that matches the text.
+     * Clicks the first link that matches the text, which may contain single quotes, and <code>{key}</code> format
+     * data keys, but not double quotes.
      * @param linkText  The link text used to find the link
      */
     public void clickFirstLink(String linkText) {
@@ -351,7 +353,8 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Clicks the last link that matches the text.
+     * Clicks the last link that matches the text, which may contain single quotes, and <code>{key}</code> format
+     * data keys, but not double quotes.
      * @param linkText  the link text used to find the link
      */
     public void clickLastLink(String linkText) {
@@ -382,7 +385,8 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Determines whether the current page contains the specified link.
+     * Determines whether the current page contains the specified link, which may contain single quotes, and
+     * <code>{key}</code> format data keys, but not double quotes.
      * @param linkText  The link text
      */
     public boolean hasLink(String linkText) {
@@ -407,7 +411,8 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Clicks the specified link.
+     * Clicks the specified link, which may contain single quotes, and <code>{key}</code> format data keys, but not
+     * double quotes.
      * @param linkText  The link text
      */
     public void clickLink(String linkText) {
@@ -726,20 +731,46 @@ public class WebDriverWrapper {
      * @param labelText  The checkbox button label
      */
     public void selectCheckbox(String labelText) {
+        WebElement checkboxElement = findCheckbox(labelText);
+
+        // click checkbox if not already selected, otherwise leave as selected
+        if (!checkboxElement.isSelected()) {
+            checkboxElement.click();
+        }
+    }
+
+    /**
+     * Clears the specified checkbox button. Supports well-formed labels and inputs nested inside the label.
+     * @param labelText  The checkbox button label
+     */
+    public void clearCheckbox(String labelText) {
+        WebElement checkboxElement = findCheckbox(labelText);
+
+        // click checkbox if already selected, otherwise leave as not selected
+        if (checkboxElement.isSelected()) {
+            checkboxElement.click();
+        }
+    }
+
+    /**
+     * Finds the specified checkbox button. Supports well-formed labels and inputs nested inside the label.
+     * @param labelText  The checkbox button label
+     */
+    private WebElement findCheckbox(String labelText) {
         try {
             // find the input associated with the specified (well-formed) label...
             WebElement labelElement = webDriver.findElement(By.xpath("//label[contains(text(),'" + labelText + "')]"));
-            webDriver.findElement(By.id(labelElement.getAttribute("for"))).click();
+            return webDriver.findElement(By.id(labelElement.getAttribute("for")));
 
         } catch (NoSuchElementException ex) {
-            webDriver.findElements(By.tagName("label")).stream()
-                .filter((label) -> label.getText().contains(labelText)) // label with text
-                .map((label) -> label.findElement(By.xpath("./input[@type = 'checkbox']"))) // nested checkbox
-                .findFirst().orElseThrow(() -> {
-                    String message = "No checkbox button found with label (well-formed or nested): " + labelText;
-                    logger.error(message);
-                    return new IllegalArgumentException(message);
-                }).click();
+            return webDriver.findElements(By.tagName("label")).stream()
+                    .filter((label) -> label.getText().contains(labelText)) // label with text
+                    .map((label) -> label.findElement(By.xpath("./input[@type = 'checkbox']"))) // nested checkbox
+                    .findFirst().orElseThrow(() -> {
+                        String message = "No checkbox button found with label (well-formed or nested): " + labelText;
+                        logger.error(message);
+                        return new IllegalArgumentException(message);
+                    });
         }
     }
 
@@ -866,18 +897,39 @@ public class WebDriverWrapper {
 
     /**
      * Checks whether the current page contains the specified message, anywhere within the page. Use only with long
-     * unique messages - may contain single quotes, but not double quotes.
+     * unique messages - may contain single quotes, and <code>{key}</code> format data keys, but not double quotes.
      * @param message   The message
      * @return <code>true</code> if found
      */
     public boolean containsMessage(String message) {
         try {
-            webDriver.findElement(By.xpath("//*[contains(text(),\"" + message + "\")]"));
+            webDriver.findElement(By.xpath("//*[contains(text(),\"" + expandDataKeys(message) + "\")]"));
             return true;
 
         } catch (NoSuchElementException ex) {
             return false;
         }
+    }
+
+    /**
+     * Expands any data references (of the format <code>{key}</code>) with the data value.
+     * @param message   The message
+     * @return The expanded message
+     * @throws IllegalStateException if data item not found
+     */
+    private String expandDataKeys(String message) {
+        Pattern pattern = Pattern.compile("\\{([^\\}]+)\\}");
+        Matcher matcher = pattern.matcher(message);
+        StringBuffer buffer = new StringBuffer();
+        while (matcher.find()) {
+            // data key name is the regex match, without the { prefix and } suffix
+            String dataKey = message.substring(matcher.start() + 1, matcher.end() - 1);
+
+            // replace data key with data value
+            matcher.appendReplacement(buffer, getData(dataKey));
+        }
+        matcher.appendTail(buffer);
+        return buffer.toString();
     }
 
     /**
