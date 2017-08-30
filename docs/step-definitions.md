@@ -13,15 +13,20 @@ These steps are completely generic to any web application.
 
 ### WebStepDefinitions
 
+Note, in the steps below:
+* ```..text with {key}s..``` can contain:
+  * Hard-coded text, possibly with data keys (```{key}```), which will be replaced by the data value
+  * Single-quotes (```\```), but **not** double-quotes (```"```)
+  
 High level:
 
 * I browse to ```URL```
 * I press the ```"..buton text.."``` button
-* I click the ```"..link text.."``` link
+* I click the ```..text with {key}s..``` link
 * I click the ```{key}``` link
-* I click the first ```"..link text.."``` link
+* I click the first ```..text with {key}s..``` link
 * I click the first ```{key}``` link
-* I click the last ```"..link text.."``` link
+* I click the last ```..text with {key}s..``` link
 * I click the last ```{key}``` link
 * I click the ```..label..``` radio button
 * I click the ```{key}``` radio button
@@ -38,12 +43,10 @@ High level:
 * I enter ```"..text.."``` in the ```"..label.."``` field
 * I enter ```{key}``` in the ```"..label.."``` field
 * I select ```"..item.."``` in the ```"..label.."``` field
-* The page contains ```"..text.."```
-   * Note: the text can contain single-quotes (```\```), but cannot contain double-quotes (```"```)
-   * Note: the text can contain data keys (```{key}```), which will be replaced by the data value
+* The page contains ```..text with {key}s..```
 * The page title contains ```"..text.."```
-* I check there is a ```"..link text.."``` link
-* I check there is no ```"..link text.."``` link
+* I check there is a ```..text with {key}s..``` link
+* I check there is no ```..text with {key}s..``` link
 * I check the ```"..button text.."``` button is disabled
 * I check the ```"..button text.."``` button is enabled
 * I check there is no ```"..button text.."``` button

@@ -321,17 +321,19 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Finds any links that have the specified text.
+     * Finds any links that have the specified text, which may contain single quotes, and <code>{key}</code> format
+     * data keys, but not double quotes.
      * @param linkText  The link text
      * @return A List of zero or more Elements
      */
     private List<WebElement> findLinks(String linkText) {
         // find any "a" elements with text containing the link text (can be partial match)
-        return webDriver.findElements(By.xpath("//a[contains(text(),'" + linkText + "')]"));
+        return webDriver.findElements(By.xpath("//a[contains(text(),'" + expandDataKeys(linkText) + "')]"));
     }
 
     /**
-     * Clicks the first link that matches the text.
+     * Clicks the first link that matches the text, which may contain single quotes, and <code>{key}</code> format
+     * data keys, but not double quotes.
      * @param linkText  The link text used to find the link
      */
     public void clickFirstLink(String linkText) {
@@ -341,7 +343,8 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Clicks the last link that matches the text.
+     * Clicks the last link that matches the text, which may contain single quotes, and <code>{key}</code> format
+     * data keys, but not double quotes.
      * @param linkText  the link text used to find the link
      */
     public void clickLastLink(String linkText) {
@@ -372,7 +375,8 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Determines whether the current page contains the specified link.
+     * Determines whether the current page contains the specified link, which may contain single quotes, and
+     * <code>{key}</code> format data keys, but not double quotes.
      * @param linkText  The link text
      */
     public boolean hasLink(String linkText) {
@@ -397,7 +401,8 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Clicks the specified link.
+     * Clicks the specified link, which may contain single quotes, and <code>{key}</code> format data keys, but not
+     * double quotes.
      * @param linkText  The link text
      */
     public void clickLink(String linkText) {
