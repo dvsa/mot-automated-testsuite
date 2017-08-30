@@ -63,7 +63,7 @@ Feature: 13 - A01 user
     And I click the "Authorised Examiner Designated Manager" radio button in fieldset "Select a role"
     And I press the "Choose role" button
     And I press the "Confirm" button
-    Then I check for assign role notification message for {unassignedTesterUsername}, {unassignedTesterName}
+    Then I check for assign AE role notification message for {unassignedTesterUsername}, {unassignedTesterName}
 
 
   Scenario: AO1 user performs AE search, then removes a role
@@ -74,7 +74,7 @@ Feature: 13 - A01 user
     And I press the "Search" button
     And I click the remove role link for {aedmName}
     And I press the "Remove role" button
-    Then I check for remove role notification message for {aedmName}
+    Then I check for remove AE role notification message for {aedmName}
 
 
   Scenario: AO1 user performs AE search, then adds a site association
@@ -104,18 +104,14 @@ Feature: 13 - A01 user
   Scenario: AO1 user performs site search, then changes site details
     Given I load "SITE" as {siteName}, {siteReference}
     And I login without 2FA using "AO1_USER" as {ao1User}
-    When I click the "Site information" link
-    And I enter {siteReference} in the "Site ID" field
-    And I press the "Search" button
-    And I click the first {siteReference} link
-    And The page title contains "Vehicle Testing Station"
+    When I search for site by reference {siteReference}
 
     And I click the "Change" link for the "Name" field row
     And The page title contains "Change site name"
     And I enter "Example Site" in the "Site name" field
     And I press the "Change site name" button
     And The page title contains "Vehicle Testing Station"
-    And The page contains "Site name has been successfully changed."
+    Then The page contains "Site name has been successfully changed."
     And I check the "Name" field row has value "Example Site"
 
     And I click the "Change" link for the "Status" field row
@@ -141,8 +137,21 @@ Feature: 13 - A01 user
     And I check the "Classes" field row has value "4,5,7"
 
 
-  # Site Information search - Assign role
-    # same logic as site mgr?
+  Scenario: AO1 user performs site search, then assigns a role
+    Given I load immediately "SITE_MGR_AND_OTHER_TESTER" as {mgrUsername}, {siteName}, {siteReference}, {unassignedTesterUsername}, {unassignedTesterName}
+    And I login without 2FA using "AO1_USER" as {ao1User}
+    When I search for site by reference {siteReference}
+    And I click the "Assign a role" link
+    And The page title contains "Assign a role"
+    And I enter {unassignedTesterUsername} in the field with id "userSearchBox"
+    And I press the "Search" button
+    And The page title contains "Choose a role"
+    And I click the "Site admin" radio button
+    And I press the "Choose role" button
+    And The page title contains "Review role"
+    And I press the "Assign role" button
+    Then I check for assign site role notification message for {unassignedTesterUsername}, {unassignedTesterName}
+    And I check for a "Site admin" role assignment for {unassignedTesterUsername}, {unassignedTesterName}
 
 
   # Site Information search - Remove role
