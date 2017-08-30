@@ -101,29 +101,44 @@ Feature: 13 - A01 user
     Then I check there is no site association for {siteReference}, {siteName}
 
 
-  # Site Information search - Change site details (name, status & class)
-    # Log on as Area Office 1 user (AO1) with USER ID “IRET3149”
-    # Click on "Site Information"
-    # Searching for site information by…  “Site ID” exp VTS000948  etc…
-    # click Class 1 to 4, then Search
-    # click first search result
-    # in VTS screen
-    # Change site details (name, status & class)
-    # Name => Change
-    # enter site name, click Change
-    # check for => Site name has been successfully changed.
-    # check for -> Name row updated
+  Scenario: AO1 user performs site search, then changes site details
+    Given I load "SITE" as {siteName}, {siteReference}
+    And I login without 2FA using "AO1_USER" as {ao1User}
+    When I click the "Site information" link
+    And I enter {siteReference} in the "Site ID" field
+    And I press the "Search" button
+    And I click the first {siteReference} link
+    And The page title contains "Vehicle Testing Station"
 
-    # status => Change
-    # change to "Lapsed", click change
-    # check for => Site status has been successfully changed.
-    # check for => Status row updated
+    And I click the "Change" link for the "Name" field row
+    And The page title contains "Change site name"
+    And I enter "Example Site" in the "Site name" field
+    And I press the "Change site name" button
+    And The page title contains "Vehicle Testing Station"
+    And The page contains "Site name has been successfully changed."
+    And I check the "Name" field row has value "Example Site"
 
-    # class => Change
-    # select just 4..7, click Review
-    # click Change
-    # check for => Classes have been successfully changed.
-    # check for => Classes row updated
+    And I click the "Change" link for the "Status" field row
+    And The page title contains "Change status"
+    And I select "Lapsed" in the "Site status" field
+    And I press the "Change site status" button
+    And The page title contains "Vehicle Testing Station"
+    And The page contains "Site status has been successfully changed."
+    And I check the "Status" field row has value "Lapsed"
+
+    And I click the "Change" link for the "Classes" field row
+    And The page title contains "Change classes"
+    And I clear the "Class 1" checkbox
+    And I clear the "Class 2" checkbox
+    And I clear the "Class 3" checkbox
+    And I click the "Class 4" checkbox
+    And I click the "Class 5" checkbox
+    And I click the "Class 7" checkbox
+    And I press the "Review classes" button
+    And I press the "Change classes" button
+    And The page title contains "Vehicle Testing Station"
+    And The page contains "Classes have been successfully changed."
+    And I check the "Classes" field row has value "4,5,7"
 
 
   # Site Information search - Assign role
