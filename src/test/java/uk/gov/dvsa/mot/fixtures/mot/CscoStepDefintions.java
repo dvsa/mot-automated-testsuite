@@ -27,7 +27,7 @@ public class CscoStepDefintions implements En {
                     driverWrapper.getTextFromTableColumn("City/postcode")
                             .contains(driverWrapper.getData(aTownKey));
                 });
-        And("^I check the Site postcode details city is \\{([^\\}]+)\\}$",
+        And("^I check the Site postcode details postcode is \\{([^\\}]+)\\}$",
                 (String aPostcode) -> {
                     driverWrapper.getTextFromTableRow("Address")
                             .contains(driverWrapper.getData(aPostcode));

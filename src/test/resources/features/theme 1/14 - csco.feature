@@ -25,7 +25,7 @@ Feature: 14 - CSCO
     And I click the "Site information" link
     When I enter {aPostcode} in the "Postcode (full or part)" field
     Then I press the "Search" button
-    And I check the Site postcode details city is {aPostcode}
+    And I check the Site postcode details postcode is {aPostcode}
 
     #Scenario: User Search - Update user's email
     #Selects user search
