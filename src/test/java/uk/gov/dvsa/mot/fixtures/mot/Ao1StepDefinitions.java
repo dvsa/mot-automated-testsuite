@@ -28,13 +28,19 @@ public class Ao1StepDefinitions implements En {
                 (String linkText, String fieldName) ->
                     driverWrapper.clickLink("th", fieldName, "../td/", linkText));
 
-        And("^I click the remove role link for \\{([^\\}]+)\\}$", (String nameKey) ->
+        And("^I click the remove AE role link for \\{([^\\}]+)\\}$", (String nameKey) ->
                 driverWrapper.clickLink("a", driverWrapper.getData(nameKey),
                     "../../td/", "Remove"));
 
+        And("^I click the remove site role link for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String nameKey, String usernameKey) ->
+                    driverWrapper.clickLink("td[contains(text(),'Tester')]/../th/a",
+                        driverWrapper.getData(nameKey) + "(" + driverWrapper.getData(usernameKey) + ")",
+                        "../../td/", "Remove"));
+
         And("^I click the remove site association link for \\{([^\\}]+)\\}$", (String nameKey) ->
                 driverWrapper.clickLink("a", driverWrapper.getData(nameKey),
-                        "../../td/", "Remove"));
+                    "../../td/", "Remove"));
 
         And("^I check the \"([^\"]+)\" field row has value \"([^\"]+)\"$",
                 (String fieldName, String value) -> assertTrue("Wrong field value",

@@ -72,7 +72,7 @@ Feature: 13 - A01 user
     When I click the "AE information" link
     And I enter {aeReference} in the "AE Number" field
     And I press the "Search" button
-    And I click the remove role link for {aedmName}
+    And I click the remove AE role link for {aedmName}
     And I press the "Remove role" button
     Then The page contains "You have removed the role of Authorised examiner designated manager from {aedmName}"
 
@@ -154,8 +154,15 @@ Feature: 13 - A01 user
     And I check for a "Site admin" role assignment for {unassignedTesterUsername}, {unassignedTesterName}
 
 
-  # Site Information search - Remove role
-    # same logic as site mgr?
+  Scenario: AO1 user performs site search, then removes a role
+    Given I load immediately "SITE_MGR_AND_TESTER_CLASS_4" as {testerUsername}, {testerName}, {mgrUsername}, {siteName}, {siteReference}
+    And I login without 2FA using "AO1_USER" as {ao1User}
+    When I search for site by reference {siteReference}
+    And I click the remove site role link for {testerName}, {testerUsername}
+    And The page title contains "Remove a role"
+    And I press the "Remove role" button
+    And The page title contains "Vehicle Testing Station"
+    And The page contains "You have removed the role of Tester from {testerName}"
 
 
   # View & record VTS event

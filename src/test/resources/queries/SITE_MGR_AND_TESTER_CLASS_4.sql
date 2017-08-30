@@ -1,5 +1,7 @@
-select distinct(person_tester.username) as tester_username, person_mgr.username as mgr_username,
-  s.name as site_name, s.site_number as site_number
+select distinct(person_tester.username) as tester_username,
+  concat_ws(' ', person_tester.first_name,
+     person_tester.middle_name, person_tester.family_name) as tester_name,
+  person_mgr.username as mgr_username, s.name as site_name, s.site_number as site_number
 from person person_mgr, person person_tester, auth_for_testing_mot aftm, organisation o,
   organisation_site_map osm, site s, auth_for_testing_mot_at_site afts,
   site_business_role_map sbrm_mgr, site_business_role_map sbrm_tester,

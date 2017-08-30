@@ -328,7 +328,7 @@ public class WebDriverWrapper {
      */
     private List<WebElement> findLinks(String linkText) {
         // find any "a" elements with text containing the link text (can be partial match)
-        return webDriver.findElements(By.xpath("//a[contains(text(),\"" + linkText + "\")]"));
+        return webDriver.findElements(By.xpath("//a[contains(text(),\"" + expandDataKeys(linkText) + "\")]"));
     }
 
     /**
@@ -456,7 +456,7 @@ public class WebDriverWrapper {
      */
     public void clickLink(String startTag, String startText, String relativeXPath, String linkText) {
         WebElement startingTextElement = webDriver.findElement(
-                By.xpath("//" + startTag.toLowerCase() + "[contains(text(),'" + startText + "')]"));
+                By.xpath("//" + startTag + "[contains(text(),'" + startText + "')]"));
         WebElement link = startingTextElement.findElement(
                 By.xpath(relativeXPath + ".//a[contains(text(),'" + linkText + "')]"));
         link.click();
