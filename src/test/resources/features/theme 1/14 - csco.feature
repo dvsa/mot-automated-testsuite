@@ -42,12 +42,13 @@ Feature: 14 - CSCO
   #Limits on this Scenario because it sends off an email to reset the account
   #Scenario: User Search - Reclaim Account
 
-  #Scenario: Issue Duplicate
-    #Select replacement/duplicate certificate
-    #Enter registration mark
-    #Select view certificate
-    #Select print certificate
-    #Ensure the user can be reprint the certificate
+  Scenario: Issue Duplicate - VRM
+    Given I login without 2FA using "CSCO_USER" as {cscouser}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
+    And I search for certificates with reg {reg}
+    And I click the first "View certificate" link
+    And I check there is a "Print certificate" link
+
 
   #Scenario: MOT Test - Site
     #Select MOT tests
