@@ -18,10 +18,14 @@ Feature: 14 - CSCO
     And I press the "Search" button
     And I check the Site city/town details city is {aTown}
 
-    #Scenario: Site Information search - Path 2
-      #Selects site information
-      #Enters Postcode (full or part)
-      #Selects search
+
+  Scenario: Site Information search - Path 2
+    Given I login without 2FA using "CSCO_USER" as {cscouser}
+    And I load "SITE_LOCATION_INFORMATION" as {sid}, {sName}, {sNumber}, {aTown}, {aPostcode}
+    And I click the "Site information" link
+    When I enter {aPostcode} in the "Postcode (full or part)" field
+    Then I press the "Search" button
+    And I check the Site postcode details city is {aPostcode}
 
     #Scenario: User Search - Update user's email
     #Selects user search
