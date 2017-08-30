@@ -2,6 +2,7 @@
 /target/
 /poc-new-selenium.iml
 /build/
+/out/
 /.idea/
 /.gradle/
 /configuration/testsuite.properties

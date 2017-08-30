@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.annotation.PreDestroy;
 
 /**
@@ -325,7 +327,17 @@ public class WebDriverWrapper {
      */
     private List<WebElement> findLinks(String linkText) {
         // find any "a" elements with text containing the link text (can be partial match)
-        return webDriver.findElements(By.xpath("//a[contains(text(),'" + linkText + "')]"));
+        return webDriver.findElements(By.xpath("//a[contains(text(),\"" + linkText + "\")]"));
+    }
+
+    /**
+     * Finds any span elements that contain the specified text.
+     * @param text  The text
+     * @return A List of zero or more Elements
+     */
+    public List<WebElement> findSpans(String text) {
+        // find any "span" elements with text containing the given text (can be partial match)
+        return webDriver.findElements(By.xpath("//span[contains(text(),\"" + text + "\")]"));
     }
 
     /**
@@ -444,6 +456,28 @@ public class WebDriverWrapper {
                 By.xpath(relativeXPath + ".//a[contains(text(),'" + linkText + "')]"));
         link.click();
         waitForPageLoad();
+    }
+
+    /**
+     * Clicks the span element that contains the given text.
+     * @param text Span element text
+     */
+    public void clickText(String text) {
+        List<WebElement> spans = findSpans(text);
+        if (spans.size() == 0) {
+            String message = "No span elements found with text: " + text;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else if (spans.size() > 1) {
+            String message = "Several links found with text: " + text;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            spans.get(0).click();
+            waitForPageLoad();
+        }
     }
 
     /**
@@ -857,6 +891,11 @@ public class WebDriverWrapper {
         waitForPageLoad();
     }
 
+    public void selectOptionInFieldWithId(String optionText, String id) {
+        Select selectElement = new Select(webDriver.findElement(By.id(id)));
+        selectElement.selectByVisibleText(optionText);
+    }
+
     /**
      * Selects a specified option in a dropdown field using the id to identify it, temporary fix for incorrect label.
      * @param optionText    The text of the option to select
@@ -1031,5 +1070,49 @@ public class WebDriverWrapper {
     public void clickLinkContainingHrefValue(String hrefContains) {
         WebElement link = webDriver.findElement(By.xpath("//*[contains(@href,'" + hrefContains + "')]"));
         link.click();
+    }
+
+    /**
+     * Calculates the next available test email address and fills in a given field with the value.
+     * @param label The field label
+     */
+    public void enterNextTestEmailIntoField(String label) {
+        Integer lastUsedSerial;
+        String lastUsedEmail = data.get("lastemail");
+
+        Pattern regex = Pattern.compile("^test(\\d{6})@example\\.com$", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = regex.matcher(lastUsedEmail);
+
+        if (matcher.matches()) {
+            lastUsedSerial = Integer.parseInt(matcher.group(1), 10);
+        } else {
+            lastUsedSerial = 0;
+        }
+
+        String nextEmail = "test" + String.format("%06d", lastUsedSerial + 1) + "@example.com";
+
+        enterIntoField(nextEmail, label);
+    }
+
+    /**
+     * Calculates the usename that will have been generated and fills in a given field with the value.
+     * @param label The field label
+     */
+    public void enterGeneratedUsernameIntoField(String label) {
+        Integer lastUsedSerial;
+        String lastUsedUsername = data.get("lastuser");
+
+        Pattern regex = Pattern.compile("^TEST(\\d+)$", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = regex.matcher(lastUsedUsername);
+
+        if (matcher.matches()) {
+            lastUsedSerial = Integer.parseInt(matcher.group(1), 10);
+        } else {
+            lastUsedSerial = 0;
+        }
+
+        String generatedUsername = "TEST" + String.format("%04d", lastUsedSerial + 1);
+
+        enterIntoField(generatedUsername, label);
     }
 }

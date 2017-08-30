@@ -35,6 +35,9 @@ public class WebStepDefinitions implements En {
         When("^I click the \"([^\"]+)\" link$", (String linkText) ->
                 driverWrapper.clickLink(linkText));
 
+        When("^I click the text \"([^\"]+)\"$", (String text) ->
+                driverWrapper.clickText(text));
+
         When("^I click the \\{([^\\}]+)\\} link$", (String linkKey) ->
                 driverWrapper.clickLink(driverWrapper.getData(linkKey)));
 
@@ -69,6 +72,12 @@ public class WebStepDefinitions implements En {
 
         When("^I enter \\{([^\\}]+)\\} in the \"([^\"]+)\" field$", (String dataKey, String label) ->
                 driverWrapper.enterIntoField(driverWrapper.getData(dataKey), label));
+
+        When("^I enter the next available test email address in the \"([^\"]+)\" field$", (String label) ->
+                driverWrapper.enterNextTestEmailIntoField(label));
+
+        When("^I enter the generated username in the \"([^\"]+)\" field$", (String label) ->
+                driverWrapper.enterGeneratedUsernameIntoField(label));
 
         When("^I enter \"([^\"]+)\" in the field with id \"([^\"]+)\"$", (String text, String id) ->
                 driverWrapper.enterIntoFieldWithId(text, id));

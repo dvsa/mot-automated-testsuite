@@ -802,6 +802,16 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>findSpans</code> with a matching example.
+     */
+    @Test
+    public void containsSpan() {
+        browseTo("/containsSpan-1.html", "containsSpan - 1");
+        assertTrue("Span should be found",
+                driverWrapper.findSpans("Don't have an account").size() == 1);
+    }
+
+    /**
      * Tests <code>containsMessage()</code> with a non matching example.
      */
     @Test

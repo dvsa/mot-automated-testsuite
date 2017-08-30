@@ -1,23 +1,49 @@
 @regression
 Feature: 01 - new user registration
 
-  #Scenario: Create new user with unique details
-    #Given I am a new user in the MOT system
-    #And I click the create account link
-    #And I click the continue button
+  Scenario: Create new user with unique details
+    Given I load "LAST_USED_TEST_EMAIL" as {lastemail}
+    And I load "LAST_REGISTERED_USER" as {lastuser}
+    And I browse to /login
 
-    #And I enter a valid unique email address
-    #And I enter the same valid unique email into the retype field
-    #And I enter a unique valid name
+    When I click the text "Don't have an account"
+    And I click the "Create a new account" link
+    And I click the "Continue" link
 
-    #And I enter a valid date of birth
-    #And I enter a valid address
-    #And I enter a valid telephone number
+    And I enter the next available test email address in the "Email address" field
+    And I enter the next available test email address in the "Re-type your email address" field
+    And I press the "Continue" button
 
-    #And I enter valid security questions and answers
-    #And I enter a valid password
-    #And I review the details entered
+    And I enter "John" in the "First name" field
+    And I enter "Bob" in the "Middle name (optional)" field
+    And I enter "Tester" in the "Last name" field
+    And I enter "20" in the "Day" field
+    And I enter "07" in the "Month" field
+    And I enter "1969" in the "Year" field
+    And I press the "Continue" button
 
-    #And I click create account
-    #Then I should have a new account
-    #And I should be able to login
+    And I enter "1 Some Street" in the "Home address" field
+    And I enter "Some Area" in the "Address line 2" field
+    And I enter "Somecity" in the "Town or city" field
+    And I enter "SW1 1AA" in the "Postcode" field
+    And I enter "01234 567890" in the "Enter your home, mobile or work number" field
+    And I press the "Continue" button
+
+    And I select "What did you want to be when you grew up?" in the field with id "question1"
+    And I enter "MOT Tester" in the field with id "answer1"
+    And I select "What was your favourite place to visit as a child?" in the field with id "question2"
+    And I enter "MOT Test Centre" in the field with id "answer2"
+    And I press the "Continue" button
+
+    And I enter "MyPassword1234" in the "Create a password" field
+    And I enter "MyPassword1234" in the "Re-type your password" field
+    And I press the "Continue" button
+
+    And I press the "Create your account" button
+
+    And I browse to /login
+    And I enter the generated username in the "User ID" field
+    And I enter "MyPassword1234" in the "Password" field
+    And I press the "Sign in" button
+
+    Then The page title contains "Your home"
