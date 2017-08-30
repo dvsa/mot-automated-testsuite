@@ -3,7 +3,7 @@ Feature: 10 - Site Manager and Site Admin
 
   Scenario: Site Manager assigns Site Admin role
     Given I login with 2FA using "SITE_MGR_AND_OTHER_TESTER" as {managerUsername1}, {sitename1}, {sitenumber1}, {otherUsername1}, {otherName1}
-    And I click on the {sitename1}, {sitenumber1} site
+    And I click the "({sitenumber1}) {sitename1}" link
     And The page title contains "Vehicle Testing Station"
 
     When I click the "Assign a role" link
@@ -20,13 +20,13 @@ Feature: 10 - Site Manager and Site Admin
     And I press the "Assign role" button
 
     Then The page title contains "Vehicle Testing Station"
-    And I check there is a role assignment confirmation message for {otherUsername1}, {otherName1}
+    And The page contains "You have assigned a role to {otherName1}, {otherUsername1}. They have been sent a notification."
     And I check there is pending "Site admin" role listed for {otherName1}
 
 
   Scenario: Site Admin assigns Tester role
     Given I login with 2FA using "SITE_MGR_AND_OTHER_TESTER" as {managerUsername1}, {sitename1}, {sitenumber1}, {otherUsername1}, {otherName1}
-    And I click on the {sitename1}, {sitenumber1} site
+    And I click the "({sitenumber1}) {sitename1}" link
     And The page title contains "Vehicle Testing Station"
 
     When I click the "Assign a role" link
@@ -43,7 +43,7 @@ Feature: 10 - Site Manager and Site Admin
     And I press the "Assign role" button
 
     Then The page title contains "Vehicle Testing Station"
-    And I check there is a role assignment confirmation message for {otherUsername1}, {otherName1}
+    And The page contains "You have assigned a role to {otherName1}, {otherUsername1}. They have been sent a notification."
     And I check there is pending "Tester" role listed for {otherName1}
 
 
@@ -56,7 +56,7 @@ Feature: 10 - Site Manager and Site Admin
     And I click the "Sign out" link
 
     When I login with 2FA as {managerUsername1}
-    And I click on the {sitename1}, {sitenumber1} site
+    And I click the "({sitenumber1}) {sitename1}" link
     And The page title contains "Vehicle Testing Station"
     And I click the {registration1} link
     And The page title contains "Vehicle Testing Station"
@@ -72,7 +72,7 @@ Feature: 10 - Site Manager and Site Admin
   Scenario: Site Admin updates VTS details
     Given I login with 2FA using "SITE_ADMIN" as {username1}, {sitename1}, {sitenumber1}, {startingGroupABrakeDefault}, {startingGroupBServiceBrakeDefault}, {startingGroupBParkingBrakeDefault}
     And I choose different brake defaults for {startingGroupABrakeDefault}, {startingGroupBServiceBrakeDefault}, {startingGroupBParkingBrakeDefault} as {newGroupABrakeDefault}, {newGroupBServiceBrakeDefault}, {newGroupBParkingBrakeDefault}
-    And I click on the {sitename1}, {sitenumber1} site
+    And I click the "({sitenumber1}) {sitename1}" link
     And The page title contains "Vehicle Testing Station"
 
     When I click the "Change default test settings" link
@@ -97,7 +97,7 @@ Feature: 10 - Site Manager and Site Admin
     # Select Month
     # Expected results: VTS TQI populated per tester
     Given I login with 2FA using "SITE_MGR" as {username1}, {sitename1}, {sitenumber1}
-    And I click on the {sitename1}, {sitenumber1} site
+    And I click the "({sitenumber1}) {sitename1}" link
     And The page title contains "Vehicle Testing Station"
 
     When I click the "Test quality information" link
