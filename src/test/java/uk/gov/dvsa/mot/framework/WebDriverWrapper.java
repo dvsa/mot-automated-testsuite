@@ -692,20 +692,46 @@ public class WebDriverWrapper {
      * @param labelText  The checkbox button label
      */
     public void selectCheckbox(String labelText) {
+        WebElement checkboxElement = findCheckbox(labelText);
+
+        // click checkbox if not already selected, otherwise leave as selected
+        if (!checkboxElement.isSelected()) {
+            checkboxElement.click();
+        }
+    }
+
+    /**
+     * Clears the specified checkbox button. Supports well-formed labels and inputs nested inside the label.
+     * @param labelText  The checkbox button label
+     */
+    public void clearCheckbox(String labelText) {
+        WebElement checkboxElement = findCheckbox(labelText);
+
+        // click checkbox if already selected, otherwise leave as not selected
+        if (checkboxElement.isSelected()) {
+            checkboxElement.click();
+        }
+    }
+
+    /**
+     * Finds the specified checkbox button. Supports well-formed labels and inputs nested inside the label.
+     * @param labelText  The checkbox button label
+     */
+    private WebElement findCheckbox(String labelText) {
         try {
             // find the input associated with the specified (well-formed) label...
             WebElement labelElement = webDriver.findElement(By.xpath("//label[contains(text(),'" + labelText + "')]"));
-            webDriver.findElement(By.id(labelElement.getAttribute("for"))).click();
+            return webDriver.findElement(By.id(labelElement.getAttribute("for")));
 
         } catch (NoSuchElementException ex) {
-            webDriver.findElements(By.tagName("label")).stream()
-                .filter((label) -> label.getText().contains(labelText)) // label with text
-                .map((label) -> label.findElement(By.xpath("./input[@type = 'checkbox']"))) // nested checkbox
-                .findFirst().orElseThrow(() -> {
-                    String message = "No checkbox button found with label (well-formed or nested): " + labelText;
-                    logger.error(message);
-                    return new IllegalArgumentException(message);
-                }).click();
+            return webDriver.findElements(By.tagName("label")).stream()
+                    .filter((label) -> label.getText().contains(labelText)) // label with text
+                    .map((label) -> label.findElement(By.xpath("./input[@type = 'checkbox']"))) // nested checkbox
+                    .findFirst().orElseThrow(() -> {
+                        String message = "No checkbox button found with label (well-formed or nested): " + labelText;
+                        logger.error(message);
+                        return new IllegalArgumentException(message);
+                    });
         }
     }
 
