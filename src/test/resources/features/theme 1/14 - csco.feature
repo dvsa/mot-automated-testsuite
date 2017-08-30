@@ -54,22 +54,16 @@ Feature: 14 - CSCO
     #Select Site (recent tests)
     #Enter Site number/ID
     #Ensure that a previous test results can be viewed
-  #Scenario: MOT Test - Site
-  #  Given I login without 2FA using "CSCO_USER" as {cscouser}
-  #  And I load "SITE" as {siteName}, {siteNumber}
-  #  And I click the "MOT tests" link
-  #  When I search for an mot by "Site (by recent tests)" with {siteNumber}
-  #  And I click the first "View" link
-  #  Then The page contains "MOT test summary"
-  #  And I check there is a "Print certificate" link
 
-  #Scenario: MOT Test - Tester
-    #Select MOT tests
-    #Select tester (recent tests)
-    #Enter date range
-    #Enter username
-    #Select Search
-    #Ensure that summary can be viewed
+
+  Scenario: MOT Test - Tester
+    Given I login without 2FA using "CSCO_USER" as {cscouser}
+    And I load "TESTER_WITH_2_MONTH_HISTORY" as {tester}
+    And I click the "MOT tests" link
+    When I search for an mot by "Tester (by date range)" with {tester} from 2 months ago
+    And I click the first "View" link
+    Then The page contains "MOT test summary"
+    And I check there is a "Print certificate" link
 
   Scenario: MOT Test - VIN
     Given I login without 2FA using "CSCO_USER" as {cscouser}
