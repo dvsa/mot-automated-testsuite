@@ -63,7 +63,7 @@ Feature: 13 - A01 user
     And I click the "Authorised Examiner Designated Manager" radio button in fieldset "Select a role"
     And I press the "Choose role" button
     And I press the "Confirm" button
-    Then I check for assign AE role notification message for {unassignedTesterUsername}, {unassignedTesterName}
+    Then The page contains "A role notification has been sent to {unassignedTesterName} '{unassignedTesterName}'."
 
 
   Scenario: AO1 user performs AE search, then removes a role
@@ -74,7 +74,7 @@ Feature: 13 - A01 user
     And I press the "Search" button
     And I click the remove role link for {aedmName}
     And I press the "Remove role" button
-    Then I check for remove AE role notification message for {aedmName}
+    Then The page contains "You have removed the role of Authorised examiner designated manager from {aedmName}"
 
 
   Scenario: AO1 user performs AE search, then adds a site association
@@ -150,7 +150,7 @@ Feature: 13 - A01 user
     And I press the "Choose role" button
     And The page title contains "Review role"
     And I press the "Assign role" button
-    Then I check for assign site role notification message for {unassignedTesterUsername}, {unassignedTesterName}
+    Then The page contains "You have assigned a role to {unassignedTesterName}, {unassignedTesterUsername}. They have been sent a notification."
     And I check for a "Site admin" role assignment for {unassignedTesterUsername}, {unassignedTesterName}
 
 

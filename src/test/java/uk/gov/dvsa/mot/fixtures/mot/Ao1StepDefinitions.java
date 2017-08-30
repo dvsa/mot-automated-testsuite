@@ -40,24 +40,6 @@ public class Ao1StepDefinitions implements En {
                 (String fieldName, String value) -> assertTrue("Wrong field value",
                     driverWrapper.getTextFromTableRow(fieldName).contains(value)));
 
-        And("^I check for assign AE role notification message for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
-                (String usernameKey, String nameKey) ->
-                    assertTrue("Message not found",
-                        driverWrapper.containsMessage("A role notification has been sent to "
-                            + driverWrapper.getData(nameKey) + " '" + driverWrapper.getData(usernameKey) + "'.")));
-
-        And("^I check for remove AE role notification message for \\{([^\\}]+)\\}$", (String nameKey) ->
-                 assertTrue("Message not found",
-                     driverWrapper.containsMessage("You have removed the role of Authorised"
-                         + " examiner designated manager from " + driverWrapper.getData(nameKey))));
-
-        And("^I check for assign site role notification message for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
-                (String usernameKey, String nameKey) ->
-                        assertTrue("Message not found",
-                                driverWrapper.containsMessage("You have assigned a role to "
-                                        + driverWrapper.getData(nameKey) + ", " + driverWrapper.getData(usernameKey)
-                                        + ". They have been sent a notification.")));
-
         And("^I check for site association for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String siteReferenceKey, String siteNameKey) -> assertTrue("Site association not found",
                     driverWrapper.getTextFromTableRowWithLink(driverWrapper.getData(siteNameKey))

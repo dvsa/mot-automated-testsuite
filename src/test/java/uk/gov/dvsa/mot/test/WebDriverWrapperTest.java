@@ -935,6 +935,40 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>containsMessage()</code> with a matching example, with data keys.
+     */
+    @Test
+    public void containsMessageMatchingWithDataKeys() {
+        browseTo("/containsMessage-3.html", "containsMessage - 3");
+        driverWrapper.setData("name", "Fred Bloggs");
+        driverWrapper.setData("username", "USER023");
+        assertTrue("Message should be found",
+                driverWrapper.containsMessage("You have successfully updated the user: {name} '{username}'."));
+    }
+
+    /**
+     * Tests <code>containsMessage()</code> with a non matching example, with data keys.
+     */
+    @Test
+    public void containsMessageNotMatchingWithDataKeys() {
+        browseTo("/containsMessage-3.html", "containsMessage - 3");
+        driverWrapper.setData("name", "Bertie Basset"); // i.e. not Fred Bloggs
+        driverWrapper.setData("username", "USER042"); // i.e. not USER023
+        assertFalse("Message should not be found",
+                driverWrapper.containsMessage("You have successfully updated the user: {name} '{username}'."));
+    }
+
+    /**
+     * Tests <code>containsMessage()</code> with when the referenced data keys aren't set.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void containsMessageUnsetDataKeys() {
+        browseTo("/containsMessage-3.html", "containsMessage - 3");
+        // name and username keys not set
+        driverWrapper.containsMessage("You have successfully updated the user: {name} '{username}'.");
+    }
+
+    /**
      * Tests <code>checkTextFromAnyTableRow()</code> with a matching example.
      */
     @Test

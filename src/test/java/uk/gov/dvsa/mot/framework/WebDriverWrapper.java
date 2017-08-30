@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.annotation.PreDestroy;
 
 /**
@@ -858,18 +860,39 @@ public class WebDriverWrapper {
 
     /**
      * Checks whether the current page contains the specified message, anywhere within the page. Use only with long
-     * unique messages - may contain single quotes, but not double quotes.
+     * unique messages - may contain single quotes, and <code>{key}</code> format data keys, but not double quotes.
      * @param message   The message
      * @return <code>true</code> if found
      */
     public boolean containsMessage(String message) {
         try {
-            webDriver.findElement(By.xpath("//*[contains(text(),\"" + message + "\")]"));
+            webDriver.findElement(By.xpath("//*[contains(text(),\"" + expandDataKeys(message) + "\")]"));
             return true;
 
         } catch (NoSuchElementException ex) {
             return false;
         }
+    }
+
+    /**
+     * Expands any data references (of the format <code>{key}</code>) with the data value.
+     * @param message   The message
+     * @return The expanded message
+     * @throws IllegalStateException if data item not found
+     */
+    private String expandDataKeys(String message) {
+        Pattern pattern = Pattern.compile("\\{([^\\}]+)\\}");
+        Matcher matcher = pattern.matcher(message);
+        StringBuffer buffer = new StringBuffer();
+        while (matcher.find()) {
+            // data key name is the regex match, without the { prefix and } suffix
+            String dataKey = message.substring(matcher.start() + 1, matcher.end() - 1);
+
+            // replace data key with data value
+            matcher.appendReplacement(buffer, getData(dataKey));
+        }
+        matcher.appendTail(buffer);
+        return buffer.toString();
     }
 
     /**
