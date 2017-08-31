@@ -30,6 +30,9 @@ public class AuthenticationStepDefinitions implements En {
     /** The data provider to use. */
     private final DatabaseDataProvider dataProvider;
 
+    /** The login data set cached for use with login retries. */
+    private List<List<String>> dataSet;
+
     /**
      * Creates a new instance.
      * @param driverWrapper     The driver wrapper to use
@@ -127,7 +130,7 @@ public class AuthenticationStepDefinitions implements En {
             List<String> dataKeys = new ArrayList<>();
             dataKeys.add(usernameKey);
             Collections.addAll(dataKeys, keys);
-            loadData(dataSetName, dataKeys);
+            loadData(dataSetName, dataKeys, loginAttempts > 1, maxLoginRetries);
 
             // get the loaded username
             String username = driverWrapper.getData(usernameKey);
@@ -218,7 +221,7 @@ public class AuthenticationStepDefinitions implements En {
             // load username from the dataset, populate the data keys and values
             List<String> dataKeys = new ArrayList<>();
             dataKeys.add(usernameKey);
-            loadData(dataSetName, dataKeys);
+            loadData(dataSetName, dataKeys, loginAttempts > 1, maxLoginRetries);
 
             // get the loaded username
             String username = driverWrapper.getData(usernameKey);
@@ -271,17 +274,38 @@ public class AuthenticationStepDefinitions implements En {
      * Loads a data set, and populates the scenario test data, for the specified keys.
      * @param dataSetName       The name of the data set
      * @param keys              The keys to populate
+     * @param isRetry           Whether this is a login retry, which needs to use cached data
+     * @param maxLoginRetries   The number of times to retry login with a different user before failing the test
      */
-    private void loadData(String dataSetName, List<String> keys) {
-        List<String> dataSet = dataProvider.getCachedDatasetEntry(dataSetName);
+    private void loadData(String dataSetName, List<String> keys, boolean isRetry, int maxLoginRetries) {
+        if (!isRetry) {
+            /*
+             * Load the data set immediately rather than using caching, because otherwise the data might be invalidated
+             * by the time we come to use it. For example, my dataset might be an application user with role <x>, and
+             * that same application user might be put through a test to remove role <x> before getting to this
+             * scenario...
+             */
+            dataSet = dataProvider.getUncachedDataset(dataSetName, maxLoginRetries);
+
+        } else if (dataSet.size() == 0) {
+            String message = "No more data available to retry login, data set " + dataSetName
+                    + " loaded less than " + maxLoginRetries + "entries";
+            logger.error(message);
+            throw new IllegalStateException(message);
+        }
+
+        // use the next entry in the data set
+        List<String> entry = dataSet.get(0);
+        dataSet.remove(0);
+        logger.debug("Using {} from dataset {}", entry, dataSetName);
 
         // check the number of items in the data set matches the number of keys in the test step
         assertEquals("Expected data set " + dataSetName + " to contain " + keys.size() + " data items, "
-                        + "but it contained " + dataSet.size() + " data items. Please check your scenario",
-                keys.size(), dataSet.size());
+                        + "but it contained " + entry.size() + " data items. Please check your scenario",
+                keys.size(), entry.size());
 
         for (int i = 0; i < keys.size(); i++) {
-            driverWrapper.setData(keys.get(i), dataSet.get(i));
+            driverWrapper.setData(keys.get(i), entry.get(i));
         }
     }
 

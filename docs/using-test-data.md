@@ -20,7 +20,7 @@ Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
 
 This above step runs the ```VEHICLE_CLASS_4``` dataset query, which must return rows with 3 columns (of any name and type - it is simply treated as a string).
 
-All such dataset queries are run before the first test scenario runs, and the results cached in memory. If no matching rows are found for a dataset then testsuite is aborted as failed. Each time a test scenario `loads` a row from a dataset, that row is deleted from the cache - this ensures each test scenario gets a unique value allowing tests to be more independent. 
+All such dataset queries are run when the step runs, and the results cached in memory. If no matching rows are found for a dataset then the testsuite is aborted as failed. Each time a test scenario `loads` a row from a dataset, that row is deleted from the cache - this ensures each test scenario gets a unique value allowing tests to be more independent. 
 
 Data keys can then be used later in the test, for example:
   
@@ -36,14 +36,17 @@ Please also consider how SQL queries perform, and test your queries both on envi
 
 ## Data loaded immediately from the database
 
-You may find in some rare scenarios that certain database queries need to be run immediately (at the point the test is running) instead of before the first test scenario runs. 
+You may find in some rare scenarios that certain database queries need to be run immediately (at the point the test is running) instead of cached. 
 
-An example would be to identify a vehicle that hasn't been tested today, as you don't want to include any vehicles also being tested in the current testsuite run (picked up in several other dataset queries).
+An example would be any type of data that could be invalidated by another test running in-between running the query in an earlier test and using the cached data in a later test -
+e.g. a query to load users with role *x*, where some of the same users are also picked up by another test query to remove role *x*
 
-To do this, use the following step syntax:
+To load data immediately, use the following step syntax:
 
 ```gherkin
 Given I load immediately "VEHICLE_CLASS_4_NOT_UPDATED_TODAY" as {reg}, {vin}, {mileage}
 ``` 
+
+The datasets loaded by the ```AuthenticationStepDefinitions``` are all handled immediately, since they typically load users able to undertake a particular action, and the same users can also be loaded by other tests to take away such permissions.
 
 Please only use this functionality when really needed, as it will be a hindrance to parallelising the test suite in the future. 

@@ -6,17 +6,12 @@ import cucumber.api.java.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
-import uk.gov.dvsa.mot.data.DatabaseDataProvider;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -31,9 +26,6 @@ public class LifecycleHooks {
     /** The driver wrapper to use. */
     private final WebDriverWrapper driverWrapper;
 
-    /** The data provider to use. */
-    private final DatabaseDataProvider dataProvider;
-
     /** The configuration settings to use. */
     private final Environment env;
 
@@ -41,13 +33,11 @@ public class LifecycleHooks {
      * Creates a new instance.
      * @param driverWrapper     The driver wrapper to use
      * @param env               The configuration settings
-     * @param dataProvider      The data provider to use
      */
     @Inject
-    public LifecycleHooks(WebDriverWrapper driverWrapper, Environment env, DatabaseDataProvider dataProvider) {
+    public LifecycleHooks(WebDriverWrapper driverWrapper, Environment env) {
         logger.debug("Creating LifecycleHooks...");
         this.driverWrapper = driverWrapper;
-        this.dataProvider = dataProvider;
         this.env = env;
     }
 
@@ -58,9 +48,6 @@ public class LifecycleHooks {
     @Before
     public void startup(Scenario scenario) {
         logger.debug("Before cucumber scenario: ********** {} **********", scenario.getName());
-
-        // load the test datasets to use in the test(s)
-        dataProvider.loadAllDatasets();
     }
 
     /**

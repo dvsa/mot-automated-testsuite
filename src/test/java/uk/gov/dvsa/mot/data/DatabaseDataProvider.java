@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class DatabaseDataProvider {
     private final DataDao dataDao;
 
     /** The cached datasets to use, keyed by name. */
-    private Map<String, List<List<String>>> datasets = null;
+    private final Map<String, List<List<String>>> datasets;
 
     /**
      * Creates a new instance.
@@ -28,39 +29,22 @@ public class DatabaseDataProvider {
     public DatabaseDataProvider(DataDao dataDao) {
         logger.debug("Creating DatabaseDataProvider...");
         this.dataDao = dataDao;
+        this.datasets = new HashMap<>();
     }
 
     /**
-     * Loads all test data sets, populating the in-memory cache.
-     * If called multiple times, does nothing once the cache has been populated.
-     */
-    @Transactional(readOnly = true)
-    public void loadAllDatasets() {
-        if (datasets == null) {
-            datasets = dataDao.loadAllDatasets();
-            logger.debug("{} datasets loaded", datasets.size());
-        } else {
-            logger.debug("datasets already loaded");
-        }
-    }
-
-    /**
-     * Get a cached entry from the specified test data set, and removes it from the in-memory cache.
+     * Get a cached entry from the specified test data set (loading and caching if needed), and removes it from the
+     * in-memory cache.
      * @param dataSetName   The data set name
      * @return The data entry
      */
+    @Transactional
     public List<String> getCachedDatasetEntry(String dataSetName) {
-        if (datasets == null) {
-            String message = "No datasets loaded, please call \"loadAllDatasets\" first";
-            logger.error(message);
-            throw new IllegalStateException(message);
-        }
-
         List<List<String>> dataset;
         if (!datasets.containsKey(dataSetName)) {
-            String message = "Unknown dataset: " + dataSetName;
-            logger.error(message);
-            throw new IllegalStateException(message);
+            // dataset not cached yet, so load and cache it
+            dataset = dataDao.loadDataset(dataSetName);
+            datasets.put(dataSetName, dataset);
 
         } else {
             dataset = datasets.get(dataSetName);
@@ -84,6 +68,7 @@ public class DatabaseDataProvider {
      * @param dataSetName   The data set name
      * @return The data entry
      */
+    @Transactional
     public List<String> getUncachedDatasetEntry(String dataSetName) {
         List<List<String>> dataset = dataDao.loadDataset(dataSetName);
 
@@ -97,5 +82,25 @@ public class DatabaseDataProvider {
 
         logger.debug("Using {} from dataset {}", entry, dataSetName);
         return entry;
+    }
+
+    /**
+     * Get the specified number of entries from the specified test data set, by executing the query immediately,
+     * ignoring any caches.
+     * @param dataSetName   The data set name
+     * @param length        The number of data set entries
+     * @return The data entries
+     */
+    @Transactional
+    public List<List<String>> getUncachedDataset(String dataSetName, int length) {
+        List<List<String>> dataset = dataDao.loadDataset(dataSetName, length);
+
+        if (dataset.size() < 1) {
+            String message = "No data available for dataset: " + dataSetName;
+            logger.error(message);
+            throw new IllegalStateException(message);
+        }
+
+        return dataset;
     }
 }

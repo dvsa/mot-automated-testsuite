@@ -12,9 +12,7 @@ import java.io.InputStreamReader;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.inject.Inject;
 
 /**
@@ -44,52 +42,33 @@ public class DataDao {
     }
 
     /**
-     * Loads all datasets, by scanning the <i>queries</i> directory on the classpath.
-     * @return A map of datasets, keyed by dataset name
-     */
-    public Map<String, List<List<String>>> loadAllDatasets() {
-        logger.debug("loading all datasets");
-
-        Map<String, List<List<String>>> datasets = new HashMap<>();
-        Resource[] resources;
-        try {
-            // scan the classpath for query files
-            resources = classpathScanner.getResources("classpath*:queries/**.sql");
-        } catch (IOException ex) {
-            String message = "Error scanning the classpath for query files";
-            logger.error(message, ex);
-            throw new IllegalStateException(message, ex);
-        }
-
-        for (Resource resource : resources) {
-            String filename = resource.getFilename();
-
-            // dataset name is filename minus the ".sql" suffix
-            String datasetName = filename.substring(0, filename.length() - 4);
-
-            logger.debug("found query file {} for dataset {}", filename, datasetName);
-
-            // load the SQL query contained in the file
-            String query = loadQuery(resource);
-
-            // execute the SQL query to load the dataset
-            List<List<String>> dataset = executeQuery(query, datasetName);
-
-            // add the dataset to the map
-            datasets.put(datasetName, dataset);
-        }
-
-        return datasets;
-    }
-
-    /**
-     * Loads the specified dataset.
+     * Loads all entries in the specified dataset.
      * @param datasetName   The name of the dataset
      * @return The dataset
      */
     public List<List<String>> loadDataset(String datasetName) {
-        logger.debug("loading dataset {}", datasetName);
+        logger.debug("loading all entries in dataset {}", datasetName);
+        return loadFromDataset(datasetName, 0);
+    }
 
+    /**
+     * Loads the specified number of entries for the dataset.
+     * @param datasetName   The name of the dataset
+     * @param length        The number of entries to load
+     * @return The dataset
+     */
+    public List<List<String>> loadDataset(String datasetName, int length) {
+        logger.debug("loading {} entries in dataset {}", length, datasetName);
+        return loadFromDataset(datasetName, length);
+    }
+
+    /**
+     * Loads the specified number of entries for the dataset.
+     * @param datasetName   The name of the dataset
+     * @param length        The number of entries to load
+     * @return The dataset
+     */
+    private List<List<String>> loadFromDataset(String datasetName, int length) {
         Resource[] resources;
         try {
             // scan the classpath for the query file
@@ -112,18 +91,26 @@ public class DataDao {
             String query = loadQuery(resource);
 
             // execute the SQL query to load the dataset
-            return executeQuery(query, datasetName);
+            return executeQuery(query, datasetName, length);
         }
     }
 
     /**
-     * Loads a data set.
+     * Executes a data set query.
      * @param query         The SQL query
      * @param dataSetName   The name of the data set
+     * @param length        The number of entries to load
      * @return The dataset
      */
-    public List<List<String>> executeQuery(String query, String dataSetName) {
+    private List<List<String>> executeQuery(String query, String dataSetName, int length) {
         long start = System.currentTimeMillis();
+
+        if (length > 0) {
+            jdbcTemplate.setMaxRows(length);
+        } else {
+            jdbcTemplate.setMaxRows(-1);
+        }
+
         List<List<String>> dataSet = jdbcTemplate.query(query, (ResultSet rs, int rowNum) -> {
             List<String> row = new ArrayList<>();
             ResultSetMetaData metaData = rs.getMetaData();

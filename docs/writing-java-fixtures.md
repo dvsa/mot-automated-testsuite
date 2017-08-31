@@ -48,7 +48,7 @@ The testsuite uses Spring (v4) to manage object lifecycles and inject dependenci
 1. Then for each scenario:
    1. New instances of all java fixtures (step definition classes) and lifecycle hooks (the ```uk.gov.dvsa.mot.framework.LifecycleHooks``` class) are instantiated
    1. Any methods in lifecycle hook classes annotated with ```@cucumber.api.java.Before``` are run
-      1. In ```uk.gov.dvsa.mot.framework.LifecycleHooks```, the ```startup``` method ensures the datasets are loaded (if not already)
+      1. In ```uk.gov.dvsa.mot.framework.LifecycleHooks```, the ```startup``` method is run
    1. The test steps are run
    1. Any methods in lifecycle hook classes annotated with ```@cucumber.api.java.After``` are run
       1. In ```uk.gov.dvsa.mot.framework.LifecycleHooks```, the ```teardown``` method takes a screenshot, writes the HTML, resets data keys, and clears any browser cookies 
