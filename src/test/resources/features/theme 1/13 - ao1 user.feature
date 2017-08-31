@@ -192,22 +192,26 @@ Feature: 13 - A01 user
     And The page contains "A new event has been recorded."
 
 
-  # User Search - Change tester Group status
-    # Log on as Area Office 1 user (AO1) with USER ID “IRET3149”
-    # "User search"
-    # enter any tester username (not Group A qualified, is Group B), Search
-    # click on first result
-    # click on "Change Group A qualification status"
-    # set status to "Qualified", press change status
-    # summary, press confirm
-    # check for => Group A tester qualification status has been changed to Qualified
-    # check for => Group A - has "Qualified" button
+  Scenario: AO1 user performs user search, then changes tester group qualification status
+    Given I load immediately "TESTER_GROUP_B_AND_NOT_A" as {testerUsername}, {testerName}
+    And I login without 2FA using "AO1_USER" as {ao1User}
+    And I click the "User search" link
+    And The page title contains "User search"
+    And I enter {testerUsername} in the "Username" field
+    And I press the "Search" button
+    And I click the first {testerName} link
+    And The page title contains "User profile"
+    When I click the "Change Group A qualification status" link
+    And I click the "Qualified" radio button
+    And I press the "Change status" button
+    And I press the "Confirm qualification status" button
+    Then The page contains "Group A tester qualification status has been changed to Qualified"
 
-    # click on "Change Group B qualification status"
-    # set status to "Suspended", press change status
-    # summary, press confirm
-    # check for => Group B tester qualification status has been changed to Suspended
-    # check for => Group B - has "Suspended" button
+    And I click the "Change Group B qualification status" link
+    And I click the "Suspended" radio button
+    And I press the "Change status" button
+    And I press the "Confirm qualification status" button
+    And The page contains "Group B tester qualification status has been changed to Suspended"
 
 
   # User Search - Edit Driver Licence no.
