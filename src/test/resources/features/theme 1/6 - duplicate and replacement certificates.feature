@@ -1,5 +1,5 @@
 @regression
-Feature: 08 - duplicate and replacement certificates
+Feature: 06 - duplicate and replacement certificates
 
   @smoke
   Scenario: AO1 edits non-vehicle details on certificate
