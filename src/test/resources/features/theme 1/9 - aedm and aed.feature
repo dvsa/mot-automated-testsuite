@@ -54,7 +54,7 @@ Feature: 09 - AEDM and AED
     And I check there is pending "Tester" role listed for {testerName}
 
   Scenario: AEDM checks today's test log at VTS
-    Given I load "AEDM_AND_TESTER_AT_SITE" as {aedm}, {aeName}, {siteName}, {tester}
+    Given I load immediately "AEDM_AND_TESTER_AT_SITE" as {aedm}, {aeName}, {siteName}, {tester}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {odometer}
     And I login with 2FA as {tester}
 
