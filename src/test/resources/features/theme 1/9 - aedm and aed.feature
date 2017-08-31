@@ -50,7 +50,7 @@ Feature: 09 - AEDM and AED
     And I press the "Assign role" button
 
     Then The page title contains "Vehicle Testing Station"
-    And I check there is a role assignment confirmation message for {tester}, {testerName}
+    And The page contains "You have assigned a role to {testerName}, {tester}. They have been sent a notification."
     And I check there is pending "Tester" role listed for {testerName}
 
   Scenario: AEDM checks today's test log at VTS
