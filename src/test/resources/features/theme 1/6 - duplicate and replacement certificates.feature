@@ -4,7 +4,7 @@ Feature: 06 - duplicate and replacement certificates
   @smoke
   Scenario: AO1 edits non-vehicle details on certificate
     Given I login without 2FA using "AO1_USER" as {AO1}
-    And I load immediately "VEHICLE_CLASS_4_NOT_UPDATED_TODAY" as {reg}, {vin}, {mileage}
+    And I load immediately "VEHICLE_CLASS_4_WITH_MOT" as {reg}, {vin}, {mileage}
     And I load "SITE" as {siteName}, {siteNumber}
     When I search for certificates with reg {reg}
     And I click the first "View certificate" link
