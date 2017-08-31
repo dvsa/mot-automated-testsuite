@@ -58,7 +58,7 @@ Feature: 09 - AEDM and AED
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {odometer}
     And I login with 2FA as {tester}
 
-    And I start an MOT test for {reg}, {vin}
+    And I start an MOT test for {reg}, {vin}, {siteName}
     And The page title contains "Your home"
     And I click the "Enter test results" link
     And I enter an odometer reading in miles of {odometer} plus 5000

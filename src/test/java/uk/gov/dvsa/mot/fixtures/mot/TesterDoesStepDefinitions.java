@@ -48,28 +48,37 @@ public class TesterDoesStepDefinitions implements En {
                 // unfortunately given no proper formed label etc we have to use the id
                 assertTrue("Wrong MOT status", driverWrapper.getElementText("testStatus").contains(status)));
 
-        When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", (String regKey, String vinKey) ->
+        When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String regKey, String vinKey, String siteNameKey) ->
                 startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
-                        false, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
+                   driverWrapper.getData(siteNameKey),false, Optional.empty(), Optional.empty(),
+                        Optional.empty(), Optional.empty()));
 
-        When("^I start an MOT retest for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", (String regKey, String vinKey) ->
+        When("^I start an MOT retest for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String regKey, String vinKey, String siteNameKey) ->
                 startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
-                        true, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
+                    driverWrapper.getData(siteNameKey),true, Optional.empty(), Optional.empty(),
+                        Optional.empty(), Optional.empty()));
 
-        When("^I start an MOT test for DVLA vehicle \\{([^\\}]+)\\}, \\{([^\\}]+)\\} as class (\\d+)$",
-                (String regKey, String vinKey, Integer vehicleClass) ->
-                startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey), false,
-                        Optional.of(vehicleClass), Optional.empty(), Optional.empty(), Optional.empty()));
+        When("^I start an MOT test for DVLA vehicle \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}"
+                 + " as class (\\d+)$", (String regKey, String vinKey, String siteNameKey, Integer vehicleClass) ->
+                startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
+                    driverWrapper.getData(siteNameKey),false, Optional.of(vehicleClass), Optional.empty(),
+                        Optional.empty(), Optional.empty()));
 
-        When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\} with colour changed to \"([^\"]+)\"$",
-                (String regKey, String vinKey, String colour) ->
-                        startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey), false,
-                                Optional.empty(), Optional.of(colour), Optional.empty(), Optional.empty()));
+        When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}"
+                + " with colour changed to \"([^\"]+)\"$",
+                (String regKey, String vinKey, String siteNameKey, String colour) ->
+                   startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
+                       driverWrapper.getData(siteNameKey), false, Optional.empty(), Optional.of(colour),
+                           Optional.empty(), Optional.empty()));
 
-        When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\} with engine changed to \"([^\"]+)\""
-                + " with capacity (\\d+)$", (String regKey, String vinKey, String fuelType, Integer capacity) ->
-                        startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey), false,
-                                Optional.empty(), Optional.empty(), Optional.of(fuelType), Optional.of(capacity)));
+        When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}"
+                + " with engine changed to \"([^\"]+)\" with capacity (\\d+)$",
+                (String regKey, String vinKey, String siteNameKey, String fuelType, Integer capacity) ->
+                        startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
+                            driverWrapper.getData(siteNameKey), false, Optional.empty(), Optional.empty(),
+                                Optional.of(fuelType), Optional.of(capacity)));
 
         And("^I browse for a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\"\\) "
                 + "with comment \"([^\"]+)\"$", (String defectType, String category, String defect, String comment) ->
@@ -146,7 +155,8 @@ public class TesterDoesStepDefinitions implements En {
 
         And("^I mark the defect \"([^\"]+)\" as repaired$", this::markAsRepaired);
 
-        And("^I search for a vehicle with \"([^\"]+)\", \"([^\"]+)\"$", this::searchForVehicle);
+        And("^I search for a vehicle with \\{([^\\}]+)\\}$", (String siteNameKey) ->
+                searchForVehicle("", "", driverWrapper.getData(siteNameKey)));
 
         And("^I check the \"Add brake test\" link is hidden$", () ->
                 assertTrue(driverWrapper.getLinkClass("Add brake test").contains("hidden")));
@@ -189,16 +199,18 @@ public class TesterDoesStepDefinitions implements En {
      * detailed below.
      * @param registration  The registration number to use
      * @param vin           The VIN to use
+     * @param siteName      The name of the site to use (for multi-site testers)
      * @param isRetest      Whether this is a retest
      * @param vehicleClass  The vehicle class to nominate (if any)
      * @param colour        The new primary colour to change to (if any)
      * @param fuelType      The new engine fuel type to change to (if any)
      * @param capacity      The new engine capacity to change to (if any)
      */
-    private void startMotTest(String registration, String vin, boolean isRetest, Optional<Integer> vehicleClass,
-                              Optional<String> colour, Optional<String> fuelType, Optional<Integer> capacity) {
+    private void startMotTest(String registration, String vin, String siteName, boolean isRetest,
+                Optional<Integer> vehicleClass, Optional<String> colour, Optional<String> fuelType,
+                    Optional<Integer> capacity) {
         //And I Search for a vehicle
-        searchForVehicle(registration, vin);
+        searchForVehicle(registration, vin, siteName);
 
         if (isRetest) {
             // check for the retest marker next to the select vehicle link
@@ -282,15 +294,16 @@ public class TesterDoesStepDefinitions implements En {
      * Search for a vehicle from the trade user search.
      * @param registration  The registration of the vehicle to find
      * @param vin           The vin number of the vehicle to find
+     * @param siteName      The site name to use (for multi-site testers)
      */
-    private void searchForVehicle(String registration, String vin) {
+    private void searchForVehicle(String registration, String vin, String siteName) {
         // When I click the "Start MOT test" link
         driverWrapper.clickLink("Start MOT test");
 
         // if page title Select your current site
         if (driverWrapper.getCurrentPageTitle().contains("Select your current site")) {
             // select the first site
-            driverWrapper.clickRadioButtonByText(driverWrapper.getData("site"));
+            driverWrapper.clickRadioButtonByText(siteName);
             // press "Confirm" button
             driverWrapper.pressButton("Confirm");
         }

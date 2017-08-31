@@ -119,7 +119,7 @@ Feature: 06 - duplicate and replacement certificates
   Scenario: Tester edits odometer and vehicle colour on certificate
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {tester}, {site}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
-    And I start an MOT test for {reg}, {vin}
+    And I start an MOT test for {reg}, {vin}, {site}
     And The page title contains "Your home"
     And I click the "Enter test results" link
 

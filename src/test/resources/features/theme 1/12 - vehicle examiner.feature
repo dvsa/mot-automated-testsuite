@@ -36,7 +36,7 @@ Feature: 12 - Vehicle Examiner
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {tester}, {site}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
     And I get the site number {siteNumber} by name {site}
-    And I start an MOT test for {reg}, {vin}
+    And I start an MOT test for {reg}, {vin}, {site}
     And I click the "Sign out" link
     And I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
     When I search for Site information by site number with {siteNumber}
