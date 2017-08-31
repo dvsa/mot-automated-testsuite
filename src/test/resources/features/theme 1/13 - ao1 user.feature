@@ -165,8 +165,31 @@ Feature: 13 - A01 user
     And The page contains "You have removed the role of Tester from {testerName}"
 
 
-  # View & record VTS event
-    # same as AE event (see above)
+  Scenario: AO1 user performs site search, then views and records a site event
+    Given I load "SITE" as {siteName}, {siteReference}
+    And I login without 2FA using "AO1_USER" as {ao1User}
+    When I search for site by reference {siteReference}
+    And I click the "Events history" link
+    And The page title contains "Events history"
+    And I click the "Record an event" link
+
+    And The page title contains "Record an event"
+    And I select "VTS complaint" in the field with id "eventType"
+    And I enter "30" in the "Day" field
+    And I enter "06" in the "Month" field
+    And I enter "2017" in the "Year" field
+    And I press the "Continue" button
+
+    And The page title contains "Record an event outcome"
+    And I select "No further action" in the field with id "outcomeCode"
+    And I enter "Test event" in the field with id "notes"
+    And I press the "Continue" button
+
+    And The page title contains "Event summary"
+    And I press the "Record event" button
+
+    Then The page title contains "Events history"
+    And The page contains "A new event has been recorded."
 
 
   # User Search - Change tester Group status
