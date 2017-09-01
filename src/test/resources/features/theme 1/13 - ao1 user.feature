@@ -224,38 +224,41 @@ Feature: 13 - A01 user
     And I press the "Search" button
     And I click the first {testerName} link
     And The page title contains "User profile"
-    And I click the "Change" link for the "Driving licence" field row
+
+    When I click the "Change" link for the "Driving licence" field row
     And I enter {newLicenceNumber} in the "Driving licence number" field
     And I press the "Review driving licence" button
     And I press the "Change driving licence" button
-    And The page title contains "User profile"
+    Then The page title contains "User profile"
     And The page contains "Driving licence has been changed successfully."
     And I check the "Driving licence" field row has value {newLicenceNumber}
 
 
-  # User Search - Remove Driver Licence no.
-    # Log on as Area Office 1 user (AO1) with USER ID “IRET3149”
-    # "User search"
-    # enter any tester username (any), Search
-    # click on first result
-    # Driving License => Change
-    # click on "Remove driving licence" link
-    # press "Remove driving license" button
-    # check for => Driving licence has been successfully removed.
-    # check for => Driving license table has "None recorded"
+  Scenario: AO1 user performs user search, and removes then adds driver licence number
+    Given I load immediately "TESTER_WITH_LICENCE" as {testerUsername}, {testerName}, {licenceNumber}
+    And I login without 2FA using "AO1_USER" as {ao1User}
+    And I click the "User search" link
+    And The page title contains "User search"
+    And I enter {testerUsername} in the "Username" field
+    And I press the "Search" button
+    And I click the first {testerName} link
+    And The page title contains "User profile"
 
+    When I click the "Change" link for the "Driving licence" field row
+    And I click the "Remove driving licence" link
+    And I press the "Remove driving licence" button
+    Then The page title contains "User profile"
+    And The page contains "Driving licence has been successfully removed."
+    And I check the "Driving licence" field row has value "None recorded"
 
-  # User Search - Add Driver Licence no.
-    # Log on as Area Office 1 user (AO1) with USER ID “IRET3149”
-    # "User search"
-    # enter any tester username (any), Search
-    # click on first result
-    # Driving License => Change
-    # enter "Driving license number" => HIELS607129SH9QG, "Issuing country" => "Great Britain (England, Scotland and Wales)"
-    # press "Review driving license" button
-    # Press "Change driving license" button
-    # check for => Driving licence has been changed successfully.
-    # check for => Driving license table has number above
+    And I click the "Change" link for the "Driving licence" field row
+    And I enter {licenceNumber} in the "Driving licence number" field
+    And I click the "Great Britain (England, Scotland and Wales)" radio button
+    And I press the "Review driving licence" button
+    And I press the "Change driving licence" button
+    And The page title contains "User profile"
+    And The page contains "Driving licence has been changed successfully."
+    And I check the "Driving licence" field row has value {licenceNumber}
 
 
   # View & record person event
