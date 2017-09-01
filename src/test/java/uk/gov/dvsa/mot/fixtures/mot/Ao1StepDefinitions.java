@@ -4,12 +4,17 @@ import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import cucumber.api.java8.En;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 /**
  * Handles steps for Area Office 1 (AO1) test scenarios.
  */
 public class Ao1StepDefinitions implements En {
+
+    /** The logger to use. */
+    private static final Logger logger = LoggerFactory.getLogger(Ao1StepDefinitions.class);
 
     /** The driver wrapper to use. */
     private final WebDriverWrapper driverWrapper;
@@ -46,6 +51,10 @@ public class Ao1StepDefinitions implements En {
                 (String fieldName, String value) -> assertTrue("Wrong field value",
                     driverWrapper.getTextFromTableRow(fieldName).contains(value)));
 
+        And("^I check the \"([^\"]+)\" field row has value \\{([^\\}]+)\\}$",
+                (String fieldName, String valueKey) -> assertTrue("Wrong field value",
+                        driverWrapper.getTextFromTableRow(fieldName).contains(driverWrapper.getData(valueKey))));
+
         And("^I check for site association for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String siteReferenceKey, String siteNameKey) -> assertTrue("Site association not found",
                     driverWrapper.getTextFromTableRowWithLink(driverWrapper.getData(siteNameKey))
@@ -63,6 +72,30 @@ public class Ao1StepDefinitions implements En {
                         driverWrapper.getTextFromTableRow(
                             driverWrapper.getData(nameKey) + "(" + driverWrapper.getData(usernameKey) + ")")
                                 .contains(role)));
+
+        And("^I choose a new driving licence number for \\{([^\\}]+)\\} as \\{([^\\}]+)\\}$",
+                (String licenceKey, String newLicenceKey) -> chooseNewDrivingLicenceNumber(licenceKey, newLicenceKey));
+    }
+
+    /**
+     * Chooses a new licence number, that passes the validation rules, based on changing the existing licence number.
+     * @param licenceKey        The key of the current licence number
+     * @param newLicenceKey     The key to set for the new licence number
+     */
+    private void chooseNewDrivingLicenceNumber(String licenceKey, String newLicenceKey) {
+        String currentLicenceNumber = driverWrapper.getData(licenceKey);
+        char lastLetter = currentLicenceNumber.charAt(currentLicenceNumber.length() - 1);
+
+        // change the last letter to A or Z (a safe change that still passes validation)
+        String newLicenceNumber;
+        if (lastLetter == 'A') {
+            newLicenceNumber = currentLicenceNumber.substring(0, currentLicenceNumber.length() - 1) + 'Z';
+        } else {
+            newLicenceNumber = currentLicenceNumber.substring(0, currentLicenceNumber.length() - 1) + 'A';
+        }
+
+        logger.debug("Changed licence number from {} to {}", currentLicenceNumber, newLicenceNumber);
+        driverWrapper.setData(newLicenceKey, newLicenceNumber);
     }
 
     /**

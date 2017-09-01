@@ -214,16 +214,23 @@ Feature: 13 - A01 user
     And The page contains "Group B tester qualification status has been changed to Suspended"
 
 
-  # User Search - Edit Driver Licence no.
-    # Log on as Area Office 1 user (AO1) with USER ID “IRET3149”
-    # "User search"
-    # enter any tester username (any), Search
-    # click on first result
-    # Driving License => Change
-    # change license from MCEWI712056DP9TV to MCEWI712056DP9TA, click Review
-    # click change
-    # check for => Driving licence has been changed successfully.
-    # check for => Driving license row updated
+  Scenario: AO1 user performs user search, then edits driver licence number
+    Given I load immediately "TESTER_WITH_LICENCE" as {testerUsername}, {testerName}, {licenceNumber}
+    And I choose a new driving licence number for {licenceNumber} as {newLicenceNumber}
+    And I login without 2FA using "AO1_USER" as {ao1User}
+    And I click the "User search" link
+    And The page title contains "User search"
+    And I enter {testerUsername} in the "Username" field
+    And I press the "Search" button
+    And I click the first {testerName} link
+    And The page title contains "User profile"
+    And I click the "Change" link for the "Driving licence" field row
+    And I enter {newLicenceNumber} in the "Driving licence number" field
+    And I press the "Review driving licence" button
+    And I press the "Change driving licence" button
+    And The page title contains "User profile"
+    And The page contains "Driving licence has been changed successfully."
+    And I check the "Driving licence" field row has value {newLicenceNumber}
 
 
   # User Search - Remove Driver Licence no.
