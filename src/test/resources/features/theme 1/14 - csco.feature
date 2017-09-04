@@ -49,6 +49,13 @@ Feature: 14 - CSCO
     And I click the first "View certificate" link
     And I check there is a "Print certificate" link
 
+  Scenario: Issue Duplicate - VIN
+    Given I login without 2FA using "CSCO_USER" as {cscouser}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
+    And I search for certificates with vin {vin}
+    And I click the first "View certificate" link
+    And I check there is a "Print certificate" link
+
 
   #Scenario: MOT Test - Site
     #Select MOT tests
