@@ -41,7 +41,7 @@ Feature: 14 - CSCO
 
   #Limits on this Scenario because it sends off an email to reset the account
   #Scenario: User Search - Reclaim Account
-
+ 
   Scenario: Issue Duplicate - VRM
     Given I login without 2FA using "CSCO_USER" as {cscouser}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
@@ -56,13 +56,14 @@ Feature: 14 - CSCO
     And I click the first "View certificate" link
     And I check there is a "Print certificate" link
 
-
-  #Scenario: MOT Test - Site
-    #Select MOT tests
-    #Select Site (recent tests)
-    #Enter Site number/ID
-    #Ensure that a previous test results can be viewed
-
+  Scenario: MOT Test - Site
+    Given I login without 2FA using "CSCO_USER" as {cscouser}
+    And I load "SITE" as {siteName}, {siteNumber}
+    And I click the "MOT tests" link
+    When I search for an mot by "Site (recent tests)" with {siteNumber}
+    And I click the first "View" link
+    Then The page contains "MOT test summary"
+    And I check there is a "Print certificate" link
 
   Scenario: MOT Test - Tester
     Given I login without 2FA using "CSCO_USER" as {cscouser}
