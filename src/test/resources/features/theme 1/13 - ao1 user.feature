@@ -261,14 +261,37 @@ Feature: 13 - A01 user
     And I check the "Driving licence" field row has value {licenceNumber}
 
 
-  # View & record person event
-    # Log on as Area Office 1 user (AO1) with USER ID “IRET3149”
-    # "User search"
-    # enter any tester username (any), Search
-    # click on first result
-    # Event history link
-    # as above...
-    # check for => A new event has been recorded.
+  Scenario: AO1 user performs user search, then views and records a person event
+    Given I load "TESTER_WITH_LICENCE" as {testerUsername}, {testerName}, {licenceNumber}
+    And I login without 2FA using "AO1_USER" as {ao1User}
+    And I click the "User search" link
+    And The page title contains "User search"
+    And I enter {testerUsername} in the "Username" field
+    And I press the "Search" button
+    And I click the first {testerName} link
+    And The page title contains "User profile"
+
+    Then I click the "Event history" link
+    And The page title contains "Events history"
+    And I click the "Record an event" link
+
+    And The page title contains "Record an event"
+    And I select "Memo" in the field with id "eventType"
+    And I enter "30" in the "Day" field
+    And I enter "06" in the "Month" field
+    And I enter "2017" in the "Year" field
+    And I press the "Continue" button
+
+    And The page title contains "Record an event outcome"
+    And I select "Closed" in the field with id "outcomeCode"
+    And I enter "Test event" in the field with id "notes"
+    And I press the "Continue" button
+
+    And The page title contains "Event summary"
+    And I press the "Record event" button
+
+    Then The page title contains "Events history"
+    And The page contains "A new event has been recorded."
 
 
   # Vehicle Information search (vehicle + test details)
