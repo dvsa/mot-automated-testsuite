@@ -32,10 +32,6 @@ public class HomePageStepDefinitions implements En {
         logger.debug("Creating HomePageStepDefinitions");
         this.driverWrapper = driverWrapper;
 
-        And("^I click the organisation link \\{([^\\}]+)\\}$", (String organisationKey) -> {
-            clickOrganisationLink(organisationKey);
-        });
-
         And("^I get the slot count from the homepage for site \\{([^\\}]+)\\}$", (String siteKey) -> {
             getSlotsCountFromHomePage(siteKey);
         });
@@ -48,18 +44,6 @@ public class HomePageStepDefinitions implements En {
                 (String siteNumberKey, String siteNameKey) -> {
                     getSiteNumberByName(siteNumberKey, siteNameKey);
                 });
-    }
-
-    /**
-     * Clicks on the organisation link on the homepage.
-     * @param organisationKey   The key for the organisation name to link
-     */
-    private void clickOrganisationLink(String organisationKey) {
-        //And I click the organisation link {ORGANISATION}
-        driverWrapper.clickLink(driverWrapper.getData(organisationKey));
-
-        //And i check the page title
-        driverWrapper.checkCurrentPageTitle("Authorised Examiner");
     }
 
     /**

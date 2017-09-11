@@ -4,7 +4,7 @@ Feature: 09 - AEDM and AED
   @smoke
   Scenario: AEDM buys slots
     Given I login with 2FA using "AEDM_USER" as {AEDM}, {ORGANISATION}
-    And I click the organisation link {ORGANISATION}
+    And I click the first {ORGANISATION} link
     And I order 25 slots
     And I enter the card details "4462030000000000", "12/18", "654"
     And I enter the card holders name as "Jimi Hendrix"
@@ -13,7 +13,7 @@ Feature: 09 - AEDM and AED
 
   Scenario: AEDM assigns AED role
     Given I login with 2FA using "AEDM_AND_NON_AED_USER" as {aedmUsername}, {otherUsername}, {organisationName}, {otherName}
-    And I click the {organisationName} link
+    And I click the first {organisationName} link
     And The page title contains "Authorised Examiner"
 
     When I click the "Assign a role" link
@@ -32,7 +32,7 @@ Feature: 09 - AEDM and AED
 
   Scenario: AED assigns tester to role
     Given I login with 2FA using "AED_AND_TESTER" as {aedmUsername}, {organisation}, {site}, {tester}, {testerName}
-    And I click the {organisation} link
+    And I click the first {organisation} link
     And I click the {site} link
     And The page title contains "Vehicle Testing Station"
 
@@ -70,7 +70,7 @@ Feature: 09 - AEDM and AED
     And I click the "Sign out" link
 
     When I login with 2FA as {aedm}
-    And I click the {aeName} link
+    And I click the first {aeName} link
     And I click the {siteName} link
     And I click the "Test logs" link
     And I click the "Today" link
@@ -80,7 +80,7 @@ Feature: 09 - AEDM and AED
   # TQI: awaiting review after 3.15...
   Scenario Outline: AEDM can view TQI for site with <status> status
     Given I login with 2FA using "<dataSource>" as {aedm}, {organisationName}, {siteName}
-    And I click the {organisationName} link
+    And I click the first {organisationName} link
     When I click the "Service reports" link
     And I click the {siteName} site link with status "<status>" on the service reports
     Then I check the TQI report has the title {siteName}
