@@ -130,5 +130,8 @@ public class WebStepDefinitions implements En {
 
         And("^I click the last \\{([^\\}]+)\\} link$", (String linkTextKey) ->
                 driverWrapper.clickLastLink(driverWrapper.getData(linkTextKey)));
+
+        And("^I click the \"([^\"]+)\" icon$", (String iconName) ->
+                driverWrapper.clickIcon(iconName));
     }
 }

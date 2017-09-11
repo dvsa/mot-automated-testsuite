@@ -28,6 +28,8 @@ High level:
 * I click the first ```{key}``` link
 * I click the last ```"..text with {key}s.."``` link
 * I click the last ```{key}``` link
+* I click the ```..name..``` icon
+   * Note: expects an ```i``` element with a Font Awesome class of the form ```fa-{..name..}```
 * I click the ```..label..``` radio button
 * I click the ```{key}``` radio button
 * I click the ```..label..``` radio button in fieldset ```..legend..```

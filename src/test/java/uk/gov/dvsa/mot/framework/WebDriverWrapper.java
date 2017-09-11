@@ -499,6 +499,17 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Clicks the specified FontAwesome icon. Expects a <code>i</code> element with a class of
+     * <code>fa-..icon name..</code> (may also have other CSS classes set).
+     * @param iconName      The FontAwesome icon css class name, without the <code>fa-</code> prefix
+     */
+    public void clickIcon(String iconName) {
+        WebElement element = webDriver.findElement(By.xpath("//i[contains(@class, '" + iconName + "')]"));
+        element.click();
+        waitForPageLoad();
+    }
+
+    /**
      * Click a radio button by the text in the input. Please only use this if there is no better way.
      * @param text  The text in the element
      */
