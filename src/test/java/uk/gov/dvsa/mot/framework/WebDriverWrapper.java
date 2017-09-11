@@ -79,6 +79,7 @@ public class WebDriverWrapper {
             ChromeOptions chromeOptions = new ChromeOptions();
             if (env.getProperty("headless").equals("true")) {
                 chromeOptions.addArguments("--headless");
+                chromeOptions.addArguments("window-size=1920,1080");
             }
 
             LoggingPreferences loggingPreferences = new LoggingPreferences();
