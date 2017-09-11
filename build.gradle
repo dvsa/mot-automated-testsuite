@@ -4,10 +4,10 @@ apply plugin: 'checkstyle'
 ext {
     javaVersion = '1.8'
     cucumberVersion = '1.2.5'
-    seleniumVersion = '3.4.0'
-    springVersion = '4.3.9.RELEASE'
-    slf4jVersion = '1.7.5'
-    checkstyleVersion = '6.15'
+    seleniumVersion = '3.5.3'
+    springVersion = '4.3.11.RELEASE'
+    slf4jVersion = '1.7.25'
+    checkstyleVersion = '6.19'
     cucumberOptions = ['--plugin', 'pretty', '--plugin', 'json:build/reports/selenium/selenium.json',
                        '--plugin', 'html:build/reports/selenium', '--glue', 'uk.gov.dvsa.mot']
 }
@@ -123,7 +123,7 @@ task('cucumber-reporting') {
 dependencies {
     testCompile "info.cukes:cucumber-java8:$cucumberVersion"
     testCompile "info.cukes:cucumber-spring:$cucumberVersion"
-    testCompile ("com.github.mkolisnyk:cucumber-runner:1.0.8") {
+    testCompile ("com.github.mkolisnyk:cucumber-runner:1.0.11") {
         // not using testng, clashes with junit
         exclude group: 'info.cukes', module: 'cucumber-testng'
     }
@@ -142,7 +142,7 @@ dependencies {
     testCompile "org.springframework:spring-test:$springVersion"
     testCompile "org.springframework:spring-jdbc:$springVersion"
     testCompile "javax.inject:javax.inject:1"
-    testCompile "mysql:mysql-connector-java:5.1.42"
+    testCompile "mysql:mysql-connector-java:5.1.44"
     testCompile "commons-dbcp:commons-dbcp:1.4"
     testCompile ("xml-apis:xml-apis:1.4.01") {
         // spring-context requires the older XML APIs

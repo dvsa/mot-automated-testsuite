@@ -39,7 +39,7 @@ public class CucumberReporting {
         cucumberDetailedResults.setOutputName(outputName);
         cucumberDetailedResults.setSourceFile(sourceFile);
         cucumberDetailedResults.setScreenShotLocation(screenShotLocation);
-        cucumberDetailedResults.execute(true, false);
+        cucumberDetailedResults.execute(true, new String[] {});
     }
 
     /**
