@@ -264,14 +264,14 @@ Feature: 13 - A01 user
   Scenario: AO1 user performs user search, then views and records a person event
     Given I load "TESTER_WITH_LICENCE" as {testerUsername}, {testerName}, {licenceNumber}
     And I login without 2FA using "AO1_USER" as {ao1User}
-    And I click the "User search" link
+    When I click the "User search" link
     And The page title contains "User search"
     And I enter {testerUsername} in the "Username" field
     And I press the "Search" button
     And I click the first {testerName} link
     And The page title contains "User profile"
 
-    Then I click the "Event history" link
+    And I click the "Event history" link
     And The page title contains "Events history"
     And I click the "Record an event" link
 
@@ -294,12 +294,16 @@ Feature: 13 - A01 user
     And The page contains "A new event has been recorded."
 
 
-  # Vehicle Information search (vehicle + test details)
-    # Log on as Area Office 1 user (AO1) with USER ID “IRET3149”
-    # "Vehicle information"
-    # select "VIN/Chassis", search icon
-    # check get correct results, click on vehicle
-    # check has correct details
+  Scenario: AO1 user performs vehicle search, then views vehicle details
+    Given I load "VEHICLE_CLASS_4" as {registration}, {vin}, {mileage}
+    And I login without 2FA using "AO1_USER" as {ao1User}
+    When I click the "Vehicle information" link
+    And I select "VIN/Chassis" in the field with id "type"
+    And I enter {vin} in the field with id "vehicle-search"
+    And I click the "search" icon
+    Then The page title contains "Vehicle Details"
+    And I check the "Registration mark" field row has value {registration}
+    And I check the "VIN" field row has value {vin}
 
 
   # MOT Tests - Site
