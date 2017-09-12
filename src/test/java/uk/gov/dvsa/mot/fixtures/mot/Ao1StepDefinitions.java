@@ -29,10 +29,6 @@ public class Ao1StepDefinitions implements En {
         And("^I search for site by reference \\{([^\\}]+)\\}$", (String siteReferenceKey) ->
                 searchSiteByReference(siteReferenceKey));
 
-        And("^I click the \"([^\"]+)\" link for the \"([^\"]+)\" field row$",
-                (String linkText, String fieldName) ->
-                    driverWrapper.clickLink("th", fieldName, "../td/", linkText));
-
         And("^I click the remove AE role link for \\{([^\\}]+)\\}$", (String nameKey) ->
                 driverWrapper.clickLink("a", driverWrapper.getData(nameKey),
                     "../../td/", "Remove"));

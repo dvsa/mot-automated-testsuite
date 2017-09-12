@@ -154,5 +154,9 @@ public class WebStepDefinitions implements En {
         And("^I check the \"([^\"]+)\" field column has value \\{([^\\}]+)\\}$",
                 (String fieldName, String valueKey) -> Assert.assertTrue("Wrong field value",
                         driverWrapper.getTextFromTableColumn(fieldName).contains(driverWrapper.getData(valueKey))));
+
+        And("^I click the \"([^\"]+)\" link for the \"([^\"]+)\" field row$",
+                (String linkText, String fieldName) ->
+                        driverWrapper.clickLink("th", fieldName, "../td/", linkText));
     }
 }
