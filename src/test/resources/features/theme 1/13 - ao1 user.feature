@@ -317,11 +317,15 @@ Feature: 13 - A01 user
     And I check the table with heading "Test date/time" has at least 1 rows
 
 
-  # MOT Tests - VRM / VIN
-    # Log on as Area Office 1 user (AO1) with USER ID “IRET3149”
-    # "MOT tests"
-    # "VIN/Chassis", enter VIN, click search icon
-    # get list of recent tests
+  Scenario: AO1 user performs MOT tests search by vin, then views tests
+    Given I load "VEHICLE_CLASS_4" as {registration}, {vin}, {mileage}
+    And I login without 2FA using "AO1_USER" as {ao1User}
+    When I click the "MOT tests" link
+    And I select "VIN/Chassis (comparison available)" in the field with id "type"
+    And I enter {vin} in the field with id "vts-search"
+    And I click the "search" icon
+    Then The page title contains "Mot Test Search Results"
+    And I check the table with heading "Test date/time" has at least 1 rows
 
 
   Scenario: AO1 user creates a new AE
