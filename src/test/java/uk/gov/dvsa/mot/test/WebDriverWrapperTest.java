@@ -1071,6 +1071,34 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>enterIntoFieldInFieldset()</code> with a matching example.
+     */
+    @Test
+    public void enterIntoFieldInFieldsetMatching() {
+        browseTo("/enterIntoFieldInFieldset-1.html", "enterIntoFieldInFieldset - 1");
+        driverWrapper.enterIntoFieldInFieldset("xyz", "Text Field", "First Fieldset");
+        assertEquals("Wrong field value", "xyz", driverWrapper.getElementValue("my_text1"));
+    }
+
+    /**
+     * Tests <code>enterIntoFieldInFieldset()</code> with a non matching example (wrong fieldset, right field).
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void enterIntoFieldInFieldsetNonMatching1() {
+        browseTo("/enterIntoFieldInFieldset-1.html", "enterIntoFieldInFieldset - 1");
+        driverWrapper.enterIntoFieldInFieldset("xyz", "Text Field", "Wrong Fieldset");
+    }
+
+    /**
+     * Tests <code>enterIntoFieldInFieldset()</code> with a non matching example (right fieldset, wrong field).
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void enterIntoFieldInFieldsetNonMatching2() {
+        browseTo("/enterIntoFieldInFieldset-1.html", "enterIntoFieldInFieldset - 1");
+        driverWrapper.enterIntoFieldInFieldset("xyz", "Wrong Field", "First Fieldset");
+    }
+
+    /**
      * Browses to the specified test page, and check the page title is correct.
      *
      * @param testPage      The test page, must start with "/"
@@ -1119,10 +1147,20 @@ public class WebDriverWrapperTest {
 
         /**
          * Used to check the outcome of tests on radio and checkbox buttons.
+         * @param id    The element id
          * @return <code>true</code> if button was checked.
          */
         boolean isElementChecked(String id) {
             return webDriver.findElement(By.id(id)).isSelected();
+        }
+
+        /**
+         * Used to check the outcome of tests on input elements.
+         * @param id    The element id
+         * @return The value, if any
+         */
+        String getElementValue(String id) {
+            return webDriver.findElement(By.id(id)).getAttribute("value");
         }
     }
 }

@@ -46,6 +46,8 @@ High level:
    * Note: ensures field is not set - clicks the checkbox if already selected, otherwise does nothing   
 * I enter ```"..text.."``` in the ```"..label.."``` field
 * I enter ```{key}``` in the ```"..label.."``` field
+* I enter ```"..text.."``` in the ```"..field label.."``` field in fieldset ```..fieldset label..```
+* I enter ```{key}``` in the ```"..field label.."``` field in fieldset ```..fieldset label..```
 * I select ```"..item.."``` in the ```"..label.."``` field
 * The page contains ```"..text with {key}s.."```
 * The page title contains ```"..text.."```
@@ -86,6 +88,7 @@ Lower level, only use if higher level steps can't be used:
 * I load immediately ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```
 * I load immediately ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```, ```{key6}```
     * Note: these steps will load the first entry in the dataset immediately without any caching
+* I set today as ```{..day key..}```, ```{..month key..}```, ```{..year key..}```   
     
 ## MOT
 
