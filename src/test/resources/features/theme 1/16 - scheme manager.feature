@@ -1,10 +1,17 @@
 @regression
 Feature: 16 - Scheme manager
 
-  # Scenario: AE Search FREY9282 / AE019726
-    # Select AE Information
-    # AE Number AE019726
-    # Check Name JUDGE & PARTNER
+  Scenario: Scheme Manager performs AE search, then views AE details
+    Given I load "AE_NOT_REJECTED" as {aeReference}, {aeName}
+    And I login without 2FA using "SCHEME_MANAGER_USER" as {schemeManager}
+
+    When I click the "AE information" link
+    And I enter {aeReference} in the "AE Number" field
+    And I press the "Search" button
+
+    Then The page title contains "Authorised Examiner"
+    And I check the "Name" field row has value {aeName}
+    And I check the "Authorised Examiner ID" field row has value {aeReference}
 
   # Scenario: User Search
     # Select User Search
