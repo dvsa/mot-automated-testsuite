@@ -17,20 +17,5 @@ public class CscoStepDefintions implements En {
     @Inject
     public CscoStepDefintions(WebDriverWrapper driverWrapper) {
 
-        And("^I check the Authorised Examiner Business details AE ID is \\{([^\\}]+)\\}$",
-                (String aeNumberKey) -> {
-                    driverWrapper.getTextFromTableRow("Authorised Examiner ID")
-                            .contains(driverWrapper.getData(aeNumberKey));
-            });
-        And("^I check the Site city/town details city is \\{([^\\}]+)\\}$",
-                (String aTownKey) -> {
-                    driverWrapper.getTextFromTableColumn("City/postcode")
-                            .contains(driverWrapper.getData(aTownKey));
-                });
-        And("^I check the Site postcode details postcode is \\{([^\\}]+)\\}$",
-                (String aPostcode) -> {
-                    driverWrapper.getTextFromTableRow("Address")
-                            .contains(driverWrapper.getData(aPostcode));
-                });
     }
 }

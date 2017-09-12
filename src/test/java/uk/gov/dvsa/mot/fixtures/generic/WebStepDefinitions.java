@@ -4,6 +4,7 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
 import cucumber.api.java8.En;
+import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
@@ -137,5 +138,21 @@ public class WebStepDefinitions implements En {
 
         And("^I click the \"([^\"]+)\" icon$", (String iconName) ->
                 driverWrapper.clickIcon(iconName));
+
+        And("^I check the \"([^\"]+)\" field row has value \"([^\"]+)\"$",
+                (String fieldName, String value) -> Assert.assertTrue("Wrong field value",
+                        driverWrapper.getTextFromTableRow(fieldName).contains(value)));
+
+        And("^I check the \"([^\"]+)\" field row has value \\{([^\\}]+)\\}$",
+                (String fieldName, String valueKey) -> Assert.assertTrue("Wrong field value",
+                        driverWrapper.getTextFromTableRow(fieldName).contains(driverWrapper.getData(valueKey))));
+
+        And("^I check the \"([^\"]+)\" field column has value \"([^\"]+)\"$",
+                (String fieldName, String value) -> Assert.assertTrue("Wrong field value",
+                        driverWrapper.getTextFromTableColumn(fieldName).contains(value)));
+
+        And("^I check the \"([^\"]+)\" field column has value \\{([^\\}]+)\\}$",
+                (String fieldName, String valueKey) -> Assert.assertTrue("Wrong field value",
+                        driverWrapper.getTextFromTableColumn(fieldName).contains(driverWrapper.getData(valueKey))));
     }
 }

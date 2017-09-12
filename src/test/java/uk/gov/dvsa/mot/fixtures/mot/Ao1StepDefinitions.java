@@ -47,14 +47,6 @@ public class Ao1StepDefinitions implements En {
                 driverWrapper.clickLink("a", driverWrapper.getData(nameKey),
                     "../../td/", "Remove"));
 
-        And("^I check the \"([^\"]+)\" field row has value \"([^\"]+)\"$",
-                (String fieldName, String value) -> assertTrue("Wrong field value",
-                    driverWrapper.getTextFromTableRow(fieldName).contains(value)));
-
-        And("^I check the \"([^\"]+)\" field row has value \\{([^\\}]+)\\}$",
-                (String fieldName, String valueKey) -> assertTrue("Wrong field value",
-                        driverWrapper.getTextFromTableRow(fieldName).contains(driverWrapper.getData(valueKey))));
-
         And("^I check for site association for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String siteReferenceKey, String siteNameKey) -> assertTrue("Site association not found",
                     driverWrapper.getTextFromTableRowWithLink(driverWrapper.getData(siteNameKey))

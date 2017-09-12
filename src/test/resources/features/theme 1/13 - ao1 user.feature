@@ -8,7 +8,7 @@ Feature: 13 - A01 user
     When I click the "AE information" link
     And I enter {aeReference} in the "AE Number" field
     And I press the "Search" button
-    And I check the Authorised Examiner Business details AE ID is {aeReference}
+    And I check the "Authorised Examiner ID" field row has value {aeReference}
     And I click the "Change" link for the "Status" field row
     And I select "Rejected" in the "Status" field
     And I press the "Change status" button

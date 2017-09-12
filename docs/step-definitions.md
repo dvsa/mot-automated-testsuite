@@ -54,6 +54,12 @@ High level:
 * I check there is no ```"..button text.."``` button
 * I check the table with heading ```"..text.."``` has at least ```..num..``` rows
    * Note: counts the number of table rows, excluding the heading row
+* I check the ```"..text.."``` field row has value ```"..value.."```
+* I check the ```"..text.."``` field row has value ```{key}```
+   * Note: these steps check the contents of a ```td``` element in the same row as a ```th``` element with the text 
+* I check the ```"..text.."``` field column has value ```"..value.."```
+* I check the ```"..text.."``` field column has value ```{key}```
+   * Note: these steps check the contents of the ```td``` element in the first row and same column as a ```th``` element with the text    
 
 Lower level, only use if higher level steps can't be used:
 
