@@ -112,6 +112,10 @@ public class WebStepDefinitions implements En {
         And("^I check the \"([^\"]+)\" button is enabled$", (String buttonText) ->
                 assertFalse(driverWrapper.isButtonDisabled(buttonText)));
 
+        And("^I check the table with heading \"([^\"]+)\" has at least (\\d+) rows$",
+                (String headingText, Integer rows) ->
+                assertTrue(driverWrapper.checkTableHasRows(headingText, rows)));
+
         And("^I click the first \"([^\"]+)\" link$", (String linkText) ->
                 driverWrapper.clickFirstLink(linkText));
 

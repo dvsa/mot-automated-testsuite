@@ -799,6 +799,30 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Checks whether a table, identified by having a heading with the specified text, has at least the specified
+     * number of rows (ignoring any heading rows).
+     * @param headingText       The table heading text to look for
+     * @param rows              The minimum number of rows the table must have
+     * @return <code>true</code> if the table has at least <code>rows</code> rows.
+     */
+    public boolean checkTableHasRows(String headingText, int rows) {
+        try {
+            // find the table with a heading containing the specified text...
+            WebElement tableElement = webDriver.findElement(
+                    By.xpath("//th[contains(text(),'" + headingText + "')]//ancestor::table[1]"));
+
+            // then count the number of rows in the table...
+            List<WebElement> rowElements = tableElement.findElements(By.tagName("tr"));
+
+            // is the number of rows (minus the heading row) at lest the specified amount?
+            return (rowElements.size() - 1) >= rows;
+
+        } catch (NoSuchElementException ex) {
+            return false;
+        }
+    }
+
+    /**
      * Checks whether the expected text is present within any of the td columns present in the same row with the
      * row text, of which there may be several.
      * @param rowText       The row text to look for
@@ -953,11 +977,6 @@ public class WebDriverWrapper {
         Select selectElement = new Select(webDriver.findElement(By.name(name)));
         selectElement.selectByVisibleText(optionText);
         waitForPageLoad();
-    }
-
-    public void selectOptionInFieldWithId(String optionText, String id) {
-        Select selectElement = new Select(webDriver.findElement(By.id(id)));
-        selectElement.selectByVisibleText(optionText);
     }
 
     /**

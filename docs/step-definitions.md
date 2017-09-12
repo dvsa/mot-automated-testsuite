@@ -52,6 +52,8 @@ High level:
 * I check the ```"..button text.."``` button is disabled
 * I check the ```"..button text.."``` button is enabled
 * I check there is no ```"..button text.."``` button
+* I check the table with heading ```"..text.."``` has at least ```..num..``` rows
+   * Note: counts the number of table rows, excluding the heading row
 
 Lower level, only use if higher level steps can't be used:
 

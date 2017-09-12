@@ -1009,6 +1009,68 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>checkTableHasRows()</code> with a matching example (no thead/tbody) that does have sufficient rows.
+     */
+    @Test
+    public void checkTableHasRowsMatching1Sufficient() {
+        browseTo("/checkTableHasRows-1.html", "checkTableHasRows - 1");
+        assertTrue("Table should have sufficient rows",
+                driverWrapper.checkTableHasRows("AAA", 2));
+    }
+
+    /**
+     * Tests <code>checkTableHasRows()</code> with a matching example (with thead/tbody) that does have sufficient rows.
+     */
+    @Test
+    public void checkTableHasRowsMatching2Sufficient() {
+        browseTo("/checkTableHasRows-2.html", "checkTableHasRows - 2");
+        assertTrue("Table should have sufficient rows",
+                driverWrapper.checkTableHasRows("AAA", 1));
+    }
+
+    /**
+     * Tests <code>checkTableHasRows()</code> with a matching example (no thead/tbody) that does not have sufficient
+     * rows.
+     */
+    @Test
+    public void checkTableHasRowsMatching1Insufficient() {
+        browseTo("/checkTableHasRows-1.html", "checkTableHasRows - 1");
+        assertFalse("Table should not have sufficient rows",
+                driverWrapper.checkTableHasRows("AAA", 3));
+    }
+
+    /**
+     * Tests <code>checkTableHasRows()</code> with a matching example (with thead/tbody) that does not have sufficient
+     * rows.
+     */
+    @Test
+    public void checkTableHasRowsMatching2Insufficient() {
+        browseTo("/checkTableHasRows-2.html", "checkTableHasRows - 2");
+        assertFalse("Table should not have sufficient rows",
+                driverWrapper.checkTableHasRows("AAA", 4));
+    }
+
+    /**
+     * Tests <code>checkTableHasRows()</code> with a non-matching example (no thead/tbody).
+     */
+    @Test
+    public void checkTableHasRowsNonMatching1() {
+        browseTo("/checkTableHasRows-1.html", "checkTableHasRows - 1");
+        assertFalse("Table should not be found",
+                driverWrapper.checkTableHasRows("BBB", 1));
+    }
+
+    /**
+     * Tests <code>checkTableHasRows()</code> with a non-matching example (with thead/tbody).
+     */
+    @Test
+    public void checkTableHasRowsNonMatching2() {
+        browseTo("/checkTableHasRows-2.html", "checkTableHasRows - 2");
+        assertFalse("Table should not be found",
+                driverWrapper.checkTableHasRows("CCC", 1));
+    }
+
+    /**
      * Browses to the specified test page, and check the page title is correct.
      *
      * @param testPage      The test page, must start with "/"

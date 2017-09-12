@@ -294,7 +294,7 @@ Feature: 13 - A01 user
     And The page contains "A new event has been recorded."
 
 
-  Scenario: AO1 user performs vehicle search, then views vehicle details
+  Scenario: AO1 user performs vehicle search by vin, then views vehicle details
     Given I load "VEHICLE_CLASS_4" as {registration}, {vin}, {mileage}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I click the "Vehicle information" link
@@ -306,11 +306,15 @@ Feature: 13 - A01 user
     And I check the "VIN" field row has value {vin}
 
 
-  # MOT Tests - Site
-    # Log on as Area Office 1 user (AO1) with USER ID “IRET3149”
-    # "MOT tests"
-    # "Site (recent tests)", enter site id
-    # get list of recent tests
+  Scenario: AO1 user performs MOT tests search by site id, then views tests
+    Given I load "SITE" as {siteName}, {siteReference}
+    And I login without 2FA using "AO1_USER" as {ao1User}
+    When I click the "MOT tests" link
+    And I select "Site (recent tests)" in the field with id "type"
+    And I enter {siteReference} in the field with id "vts-search"
+    And I click the "search" icon
+    Then The page title contains "Vehicle Testing Station Search Results"
+    And I check the table with heading "Test date/time" has at least 1 rows
 
 
   # MOT Tests - VRM / VIN
