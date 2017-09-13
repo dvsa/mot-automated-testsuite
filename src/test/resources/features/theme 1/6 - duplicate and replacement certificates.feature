@@ -124,7 +124,7 @@ Feature: 06 - duplicate and replacement certificates
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage} plus 5000
-    And I enter decelerometer results of service brake 51 and parking brake 16
+    And I enter decelerometer results of service brake 70 and parking brake 30
     And I press the "Review test" button
 
     And The page title contains "MOT test summary"
