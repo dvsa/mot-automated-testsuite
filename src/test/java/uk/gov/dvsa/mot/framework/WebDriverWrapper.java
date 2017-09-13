@@ -1176,48 +1176,4 @@ public class WebDriverWrapper {
         WebElement link = webDriver.findElement(By.xpath("//*[contains(@href,'" + hrefContains + "')]"));
         link.click();
     }
-
-    /**
-     * Calculates the next available test email address and fills in a given field with the value.
-     * @param label The field label
-     */
-    public void enterNextTestEmailIntoField(String label) {
-        Integer lastUsedSerial;
-        String lastUsedEmail = data.get("lastemail");
-
-        Pattern regex = Pattern.compile("^test(\\d{6})@example\\.com$", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = regex.matcher(lastUsedEmail);
-
-        if (matcher.matches()) {
-            lastUsedSerial = Integer.parseInt(matcher.group(1), 10);
-        } else {
-            lastUsedSerial = 0;
-        }
-
-        String nextEmail = "test" + String.format("%06d", lastUsedSerial + 1) + "@example.com";
-
-        enterIntoField(nextEmail, label);
-    }
-
-    /**
-     * Calculates the usename that will have been generated and fills in a given field with the value.
-     * @param label The field label
-     */
-    public void enterGeneratedUsernameIntoField(String label) {
-        Integer lastUsedSerial;
-        String lastUsedUsername = data.get("lastuser");
-
-        Pattern regex = Pattern.compile("^TEST(\\d+)$", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = regex.matcher(lastUsedUsername);
-
-        if (matcher.matches()) {
-            lastUsedSerial = Integer.parseInt(matcher.group(1), 10);
-        } else {
-            lastUsedSerial = 0;
-        }
-
-        String generatedUsername = "TEST" + String.format("%04d", lastUsedSerial + 1);
-
-        enterIntoField(generatedUsername, label);
-    }
 }

@@ -2,16 +2,15 @@
 Feature: 01 - new user registration
 
   Scenario: Create new user with unique details
-    Given I load "LAST_USED_TEST_EMAIL" as {lastemail}
-    And I load "LAST_REGISTERED_USER" as {lastuser}
+    Given I generate a unique email address as {email}
     And I browse to /login
 
     When I click the text "Don't have an account"
     And I click the "Create a new account" link
     And I click the "Continue" link
 
-    And I enter the next available test email address in the "Email address" field
-    And I enter the next available test email address in the "Re-type your email address" field
+    And I enter {email} in the "Email address" field
+    And I enter {email} in the "Re-type your email address" field
     And I press the "Continue" button
 
     And I enter "John" in the "First name" field
@@ -42,7 +41,8 @@ Feature: 01 - new user registration
     And I press the "Create your account" button
 
     And I browse to /login
-    And I enter the generated username in the "User ID" field
+    And I load immediately "LATEST_TEST_USER" as {username}
+    And I enter {username} in the "User ID" field
     And I enter "MyPassword1234" in the "Password" field
     And I press the "Sign in" button
 

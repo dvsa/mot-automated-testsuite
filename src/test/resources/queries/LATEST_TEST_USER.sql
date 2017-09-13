@@ -1,5 +1,5 @@
 SELECT
-  MAX(person.username) AS lastusername
+  MAX(person.username) AS username
 FROM
   person
 WHERE

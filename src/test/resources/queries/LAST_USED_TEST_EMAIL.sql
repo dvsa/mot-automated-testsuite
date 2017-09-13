@@ -1,5 +1,5 @@
 SELECT
-  ifnull(MAX(email), 0) AS lastemail
+  ifnull(MAX(email), 'test000000@example.com') AS lastemail
 FROM
   email
 WHERE
