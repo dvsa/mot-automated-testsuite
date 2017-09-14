@@ -32,6 +32,8 @@ High level:
    * Note: expects a link in a ```td``` element in the same row as a ```th``` element with the heading text
 * I click the ```..name..``` icon
    * Note: expects an ```i``` element with a Font Awesome class of the form ```fa-{..name..}```
+* I accept the alert popup
+* I dismiss the alert popup 
 * I click the ```..label..``` radio button
 * I click the ```{key}``` radio button
 * I click the ```..label..``` radio button in fieldset ```..legend..```
@@ -64,6 +66,7 @@ High level:
 * I check the ```"..heading text.."``` field column has value ```"..value.."```
 * I check the ```"..heading text.."``` field column has value ```{key}```
    * Note: these steps check the contents of the ```td``` element in the first row and same column as a ```th``` element with the heading text    
+* I check the alert popup contains ```"..text.."```
 
 Lower level, only use if higher level steps can't be used:
 

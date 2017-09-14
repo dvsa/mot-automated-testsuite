@@ -1,10 +1,12 @@
 package uk.gov.dvsa.mot.framework;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -50,6 +52,12 @@ public class WebDriverWrapper {
     /** The environment configuration to use. */
     private final Environment env;
 
+    /** The maximum time (in seconds) to wait for page refresh/events before timing out. */
+    private final long pageWaitSeconds;
+
+    /** The frequency (in milliseconds) to poll for page refresh/events. */
+    private final long pollFrequencyMilliseconds;
+
     /** The data map to use. */
     private final Map<String, String> data;
 
@@ -62,6 +70,13 @@ public class WebDriverWrapper {
         this.env = env;
         this.data = new HashMap<>();
         this.webDriver = createWebDriver();
+
+        // maximum time (in seconds) to wait before timing out
+        // as we poll much more frequently than this (see below) the actual delay should be much less
+        this.pageWaitSeconds = Long.parseLong(env.getRequiredProperty("pageWait"));
+
+        // poll frequency (in milliseconds) for page refresh/events
+        this.pollFrequencyMilliseconds = 200;
 
         // ensure all previous sessions are invalidated
         this.webDriver.manage().deleteAllCookies();
@@ -186,7 +201,7 @@ public class WebDriverWrapper {
         String url = env.getRequiredProperty("startingUrl") + relativePath;
         logger.debug("Browsing to {}", url);
         webDriver.get(url);
-        waitForPageLoad();
+        waitForFullPageLoad();
     }
 
     /**
@@ -207,7 +222,7 @@ public class WebDriverWrapper {
 
         } else {
             buttons.get(0).submit();
-            waitForPageLoad();
+            waitForFullPageLoad();
         }
     }
 
@@ -229,7 +244,7 @@ public class WebDriverWrapper {
 
         } else {
             buttons.get(0).click();
-            waitForPageLoad();
+            waitForFullPageLoad();
         }
     }
 
@@ -268,7 +283,7 @@ public class WebDriverWrapper {
 
         } else {
             buttons.get(0).submit();
-            waitForPageLoad();
+            waitForFullPageLoad();
         }
     }
 
@@ -294,7 +309,7 @@ public class WebDriverWrapper {
                 if (siblings.size() > 0) {
                     logger.debug("button found!");
                     button.click();
-                    waitForPageLoad();
+                    waitForFullPageLoad();
                     return;
                 }
             }
@@ -323,13 +338,20 @@ public class WebDriverWrapper {
 
     /**
      * Finds any links that have the specified text, which may contain single quotes, and <code>{key}</code> format
-     * data keys, but not double quotes.
+     * data keys, but not double quotes. Also matches links containing sub-elements (e.g. formatting the text).
      * @param linkText  The link text
      * @return A List of zero or more Elements
      */
     private List<WebElement> findLinks(String linkText) {
-        // find any "a" elements with text containing the link text (can be partial match)
-        return webDriver.findElements(By.xpath("//a[contains(text(),\"" + expandDataKeys(linkText) + "\")]"));
+        // find any "a" elements with text containing the link text
+        List<WebElement> links = webDriver.findElements(
+                By.xpath("//a[contains(text(),\"" + expandDataKeys(linkText) + "\")]"));
+
+        // then add any "a" elements with any sub-elements (e.g. nested "span"s) with text containing the link text
+        links.addAll(webDriver.findElements(
+                By.xpath("//a[.//*[contains(text(),\"" + expandDataKeys(linkText) + "\")]]")));
+
+        return links;
     }
 
     /**
@@ -349,8 +371,7 @@ public class WebDriverWrapper {
      */
     public void clickFirstLink(String linkText) {
         WebElement link = findLinks(linkText).get(0);
-        link.click();
-        waitForPageLoad();
+        clickAndWaitForPageLoad(link);
     }
 
     /**
@@ -360,7 +381,7 @@ public class WebDriverWrapper {
      */
     public void clickLastLink(String linkText) {
         List<WebElement> links = findLinks(linkText);
-        links.get(links.size() - 1).click();
+        clickAndWaitForPageLoad(links.get(links.size() - 1));
     }
 
     /**
@@ -429,8 +450,7 @@ public class WebDriverWrapper {
             throw new IllegalArgumentException(message);
 
         } else {
-            links.get(0).click();
-            waitForPageLoad();
+            clickAndWaitForPageLoad(links.get(0));
         }
     }
 
@@ -444,8 +464,7 @@ public class WebDriverWrapper {
         WebElement startingTextElement = webDriver.findElement(
                 By.xpath("//" + startTag.toLowerCase() + "[contains(text(),'" + startText + "')]"));
         WebElement link = startingTextElement.findElement(By.xpath(relativeXPath + ".//a"));
-        link.click();
-        waitForPageLoad();
+        clickAndWaitForPageLoad(link);
     }
 
     /**
@@ -460,8 +479,7 @@ public class WebDriverWrapper {
                 By.xpath("//" + startTag + "[contains(text(),'" + startText + "')]"));
         WebElement link = startingTextElement.findElement(
                 By.xpath(relativeXPath + ".//a[contains(text(),'" + linkText + "')]"));
-        link.click();
-        waitForPageLoad();
+        clickAndWaitForPageLoad(link);
     }
 
     /**
@@ -481,8 +499,7 @@ public class WebDriverWrapper {
             throw new IllegalArgumentException(message);
 
         } else {
-            spans.get(0).click();
-            waitForPageLoad();
+            clickAndWaitForPageLoad(spans.get(0));
         }
     }
 
@@ -494,8 +511,7 @@ public class WebDriverWrapper {
      */
     public void clickElement(String id) {
         WebElement element = webDriver.findElement(By.id(id));
-        element.click();
-        waitForPageLoad();
+        clickAndWaitForPageLoad(element);
     }
 
     /**
@@ -505,8 +521,42 @@ public class WebDriverWrapper {
      */
     public void clickIcon(String iconName) {
         WebElement element = webDriver.findElement(By.xpath("//i[contains(@class, '" + iconName + "')]"));
-        element.click();
-        waitForPageLoad();
+        clickAndWaitForPageLoad(element);
+    }
+
+    /**
+     * Clicks the accepts button (often labelled "OK") in a javascript alert popup dialog box.
+     */
+    public void acceptAlert() {
+        getAlert().accept();
+    }
+
+    /**
+     * Clicks the dismiss button (often labelled "Cancel") in a javascript alert popup dialog box.
+     */
+    public void dismissAlert() {
+        getAlert().dismiss();
+    }
+
+    /**
+     * Get the text of the current javascript alert popup dialog box.
+     * @return The text
+     */
+    public String getAlertText() {
+        return getAlert().getText();
+    }
+
+    /**
+     * Get the current javascript alert popup dialog box.
+     * @return The alert
+     */
+    private Alert getAlert() {
+        logger.debug("Waiting for alert to popup...");
+        (new WebDriverWait(webDriver, pageWaitSeconds)).pollingEvery(pollFrequencyMilliseconds, TimeUnit.MILLISECONDS)
+                .until(ExpectedConditions.alertIsPresent());
+        logger.debug("Alert has popped up...");
+
+        return webDriver.switchTo().alert();
     }
 
     /**
@@ -998,7 +1048,7 @@ public class WebDriverWrapper {
     public void selectOptionInFieldByName(String optionText, String name) {
         Select selectElement = new Select(webDriver.findElement(By.name(name)));
         selectElement.selectByVisibleText(optionText);
-        waitForPageLoad();
+        waitForFullPageLoad();
     }
 
     /**
@@ -1009,7 +1059,7 @@ public class WebDriverWrapper {
     public void selectOptionInFieldById(String optionText, String id) {
         Select selectElement = new Select(webDriver.findElement(By.id(id)));
         selectElement.selectByVisibleText(optionText);
-        waitForPageLoad();
+        waitForFullPageLoad();
     }
 
     /**
@@ -1065,11 +1115,71 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Click the specified element, and wait for a page load, unless the click was simply to trigger some JavaScript
+     * in the current page.
+     * @param element   The element to click
+     */
+    private void clickAndWaitForPageLoad(WebElement element) {
+        String beforeUrl = webDriver.getCurrentUrl();
+        logger.debug("*** before click - current URL is {}", beforeUrl);
+        element.click();
+
+        /*
+         * Attempt to detect whether the click caused a full page refresh (in which case we need to wait for the new
+         * page to load) or simply triggered some javascript in the current page (in which case waiting may cause
+         * errors).
+         *
+         * Note: in practice selenium reports different page source in the second scenario (even though the page hasn't
+         * changed, so page source can't be used to detect this reliably.
+         */
+        boolean fullPageRefresh = true;
+        try {
+            // triggers UnhandledAlertException if the click above launched an alert popup
+            String afterUrl = webDriver.getCurrentUrl();
+            logger.debug("*** after click - current URL is {}", afterUrl);
+
+            /*
+             * Note: for now, we assume if the page URL stays the same then it is the second javascript case. Of course
+             * this depends on convention, the app could post back to the same URL.
+             */
+            if (afterUrl.equals(beforeUrl)) {
+                fullPageRefresh = false;
+            }
+        } catch (UnhandledAlertException ex) {
+            logger.info("Page has alert box so assuming no fullPageRefresh!");
+            fullPageRefresh = false;
+        }
+
+        // only wait if there has been a full page refresh
+        if (fullPageRefresh) {
+            logger.debug("we assume there has been a full page refresh, so waiting...");
+            waitForFullPageLoad();
+        } else {
+            logger.debug("we assume there has not been a full page refresh, so continuing almost immediately...");
+
+            // short wait for the web browser to complete JavaScript events...
+            try {
+                Thread.sleep(200);
+
+            } catch (InterruptedException ex) {
+                // called if trying to shutdown the test suite
+                String message = "Wait for web browser to submit current page was interrupted";
+                logger.error(message, ex);
+
+                // propagate a fatal error so testsuite shuts down
+                throw new RuntimeException(message, ex);
+            }
+
+            logger.debug("Short wait completed...");
+        }
+    }
+
+    /**
      * Wait for the web page to fully re-load, and any onload javascript events to complete.
      * Failure to do this between page transitions can result in intermittent failures, such as
      * Selenium still being on the previous page, or failure to find page element in the new page.
      */
-    protected void waitForPageLoad() {
+    protected void waitForFullPageLoad() {
         logger.debug("Waiting for page reload...");
 
         // initial wait (in milliseconds) to give the selenium web driver time to tell the web browser to
@@ -1098,14 +1208,11 @@ public class WebDriverWrapper {
             throw new RuntimeException(message);
         }
 
-        // maximum time (in seconds) to wait before timing out
-        // as we poll much more frequently than this the actual delay should be much less
-        int pageWait = Integer.parseInt(env.getRequiredProperty("pageWait"));
-
         // wait until page loaded, ready and JQuery processing completed...
         if ((Boolean) ((JavascriptExecutor)webDriver).executeScript("return window.jQuery != undefined")) {
-            new WebDriverWait(webDriver, pageWait).pollingEvery(200, TimeUnit.MILLISECONDS).until(
-                    (ExpectedCondition<Boolean>) wd ->
+            new WebDriverWait(webDriver, pageWaitSeconds)
+                    .pollingEvery(pollFrequencyMilliseconds, TimeUnit.MILLISECONDS).until(
+                        (ExpectedCondition<Boolean>) wd ->
                             ((JavascriptExecutor) wd).executeScript("return jQuery.active").equals(0L));
 
             logger.debug("Page loaded, ready and JQuery activity complete, waiting for footer image...");
@@ -1113,7 +1220,8 @@ public class WebDriverWrapper {
 
         // then for good measure wait for the footer to be available
         if (!webDriver.getTitle().contains("Customer Payment Management System")) {
-            (new WebDriverWait(webDriver, pageWait)).pollingEvery(200, TimeUnit.MILLISECONDS)
+            (new WebDriverWait(webDriver, pageWaitSeconds))
+                .pollingEvery(pollFrequencyMilliseconds, TimeUnit.MILLISECONDS)
                     .until(ExpectedConditions.presenceOfElementLocated(By.id("footer")));
             logger.debug("Footer image available");
         }

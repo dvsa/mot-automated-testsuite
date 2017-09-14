@@ -121,6 +121,7 @@ task('cucumber-reporting') {
 }
 
 dependencies {
+    testCompile "junit:junit:4.12"
     testCompile "info.cukes:cucumber-java8:$cucumberVersion"
     testCompile "info.cukes:cucumber-spring:$cucumberVersion"
     testCompile ("com.github.mkolisnyk:cucumber-runner:1.0.11") {

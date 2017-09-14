@@ -160,5 +160,13 @@ public class WebStepDefinitions implements En {
         And("^I click the \"([^\"]+)\" link for the \"([^\"]+)\" field row$",
                 (String linkText, String fieldName) ->
                         driverWrapper.clickLink("th", fieldName, "../td/", linkText));
+
+        And("^I accept the alert popup$", () -> driverWrapper.acceptAlert());
+
+        And("^I dismiss the alert popup$", () -> driverWrapper.dismissAlert());
+
+        And("^I check the alert popup contains \"([^\"]+)\"$", (String text) ->
+                assertTrue("Alert popup does not contain the expected text",
+                        driverWrapper.getAlertText().contains(text)));
     }
 }

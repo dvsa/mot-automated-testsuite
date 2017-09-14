@@ -40,11 +40,12 @@ public class WebDriverWrapperTest {
     @BeforeClass
     public static void setupAll() {
         // the current working directory as a full path
-        String projectHome = Paths.get(".").toAbsolutePath().normalize().toString();
+        String home = Paths.get(".").toAbsolutePath().normalize().toString();
 
         // mocked testsuite.properties values
-        Environment env = new MockEnvironment().withProperty("startingUrl",
-                "file:/" + projectHome + "/src/test/java/uk/gov/dvsa/mot/test/exampleHtml");
+        Environment env = new MockEnvironment()
+                .withProperty("startingUrl", "file:/" + home + "/src/test/java/uk/gov/dvsa/mot/test/exampleHtml")
+                .withProperty("pageWait", "1");
 
         driverWrapper = new HtmlUnitWebDriverWrapper(env);
     }
@@ -278,7 +279,7 @@ public class WebDriverWrapperTest {
     @Test
     public void hasLinkFullText() {
         browseTo("/hasLink-1.html", "hasLink - 1");
-        assertTrue("Couldn't find link by full name", driverWrapper.hasLink("test 1"));
+        assertTrue("Should have found link by full text", driverWrapper.hasLink("test 1"));
     }
 
     /**
@@ -287,7 +288,7 @@ public class WebDriverWrapperTest {
     @Test
     public void hasLinkPartialText() {
         browseTo("/hasLink-1.html", "hasLink - 1");
-        assertTrue("Couldn't find link by partial name", driverWrapper.hasLink("2"));
+        assertTrue("Should have found link by partial text", driverWrapper.hasLink("2"));
     }
 
     /**
@@ -296,7 +297,7 @@ public class WebDriverWrapperTest {
     @Test
     public void hasLinkNotPresent() {
         browseTo("/hasLink-1.html", "hasLink - 1");
-        assertFalse("Shouldn't find link not present", driverWrapper.hasLink("test 4"));
+        assertFalse("Should have found link not present", driverWrapper.hasLink("test 4"));
     }
 
     /**
@@ -305,7 +306,16 @@ public class WebDriverWrapperTest {
     @Test
     public void hasLinkMultiple() {
         browseTo("/hasLink-2.html", "hasLink - 2");
-        assertTrue("Shouldn't find link not present", driverWrapper.hasLink("test 1"));
+        assertTrue("Should have found link present", driverWrapper.hasLink("test 1"));
+    }
+
+    /**
+     * Tests <code>hasLink()</code> with a matching link that contains nested span elements.
+     */
+    @Test
+    public void hasLinkWithNestedSpans() {
+        browseTo("/hasLink-3.html", "hasLink - 3");
+        assertTrue("Should find link present", driverWrapper.hasLink("test 1"));
     }
 
     /**
@@ -1141,7 +1151,7 @@ public class WebDriverWrapperTest {
          * Wait for the web page to fully re-load, and any onload javascript events to complete.
          */
         @Override
-        protected void waitForPageLoad() {
+        protected void waitForFullPageLoad() {
             // does nothing
         }
 
