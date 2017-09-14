@@ -1,7 +1,7 @@
 @regression
 Feature: 03 - reset password
 
-  Scenario: Tester reset their password
+  Scenario: User creates a new account and then reset their password
     Given I generate a unique email address as {email}
     And I browse to /login
 
