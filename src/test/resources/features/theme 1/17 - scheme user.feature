@@ -1,7 +1,7 @@
 @regression
 Feature: 17 - Scheme user
 
-  Scenario: Scheme user creates special notice
+  Scenario: Scheme user creates draft special notice, edits it, then retracts it
     Given I login without 2FA using "SCHEME_USER" as {schemeUser}
     And I set today as {day}, {month}, {year}
     When I click the first "Special notices" link
@@ -24,26 +24,25 @@ Feature: 17 - Scheme user
     And I click the "VTS Roles" checkbox
     And I enter "This is a test special notice." in the field with id "notice-text-input"
     And I press the "Preview" button
+    Then The page title contains "Special Notice Preview"
+    And I click the "Home" link
+    And I click the first "Special notices" link
 
-    And The page title contains "Special Notice Preview"
+    And I click the last "View" link
+    And I click the last "Edit" link
+    And I enter "Edited Test Special Notice" in the "Subject title" field
+    And I enter "This is an edited test special notice." in the field with id "notice-text-input"
+    And I press the "Preview" button
+    Then The page title contains "Special Notice Preview"
     And I press the "Publish special notice" button
 
-    Then The page title contains "Special Notices"
-    And The page contains "Special notice created"
-
-
-  # Scenario: Edit Special Notice
-    # After special notice is published from above
-    # Select Special Notices
-    # Click special notice published in Create Special Notice
-    # Click Edit
-    # Preview
-    # Publish Special Notice
-
-  # Scenario: Retract Special Notice
-    # Select Special Notices
-    # Click Special Notice already published
-    # Click Remove
+    # Note: the following steps won't work with ChromeDriver in headless mode until the fix for the following defect
+    # has been released: https://bugs.chromium.org/p/chromium/issues/detail?id=718235
+    # commented them out for now...
+    #And I click the last "View" link
+    #And I click the last "Remove" link
+    #And I check the alert popup contains "This action will delete this notice from the library."
+    #And I accept the alert popup
 
 
   Scenario: Scheme user performs AE search, then views AE details
