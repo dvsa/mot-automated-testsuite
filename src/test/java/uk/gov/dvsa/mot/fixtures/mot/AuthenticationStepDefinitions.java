@@ -87,6 +87,13 @@ public class AuthenticationStepDefinitions implements En {
                 (String dataSetName, String usernameKey) ->
                     loginWithout2fa(dataSetName, usernameKey, env.getRequiredProperty("password"),
                             env.getRequiredProperty("maxLoginRetries", Integer.class)));
+
+        Given("^I login with 2FA and drift ([\\+|\\-]\\d+) using \"([^\"]+)\" "
+                        + "as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String drift, String dataSetName, String usernameKey, String lastDriftKey) ->
+                    loginWith2faAndDrift(dataSetName, drift, usernameKey, lastDriftKey,
+                            env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
+                            env.getRequiredProperty("maxLoginRetries", Integer.class)));
     }
 
     /**
@@ -97,7 +104,7 @@ public class AuthenticationStepDefinitions implements En {
      * @param seed              The OTP seed to use
      */
     private void loginWith2fa(String usernameKey, String password, String seed) {
-        if (login2fa(driverWrapper.getData(usernameKey), password, seed)) {
+        if (login2fa(driverWrapper.getData(usernameKey), password, seed, 0, 0)) {
             // check if any special notices need clearing down
             if (driverWrapper.hasLink("Read and acknowledge")) {
                 clearDownSpecialNotices();
@@ -136,7 +143,7 @@ public class AuthenticationStepDefinitions implements En {
             String username = driverWrapper.getData(usernameKey);
 
             // try to login
-            boolean loginSuccessful = login2fa(username, password, seed);
+            boolean loginSuccessful = login2fa(username, password, seed, 0, 0);
 
             if (loginSuccessful) {
                 // check if any special notices need clearing down
@@ -161,9 +168,11 @@ public class AuthenticationStepDefinitions implements En {
      * @param username      The username data key to set
      * @param password      The password to use
      * @param seed          The OTP seed to use
+     * @param driftPeriod   The drift period to use
+     * @param lastDrift     The previous drift on last login
      * @return Whether the login was successful (any errors will have been logged)
      */
-    private boolean login2fa(String username, String password, String seed) {
+    private boolean login2fa(String username, String password, String seed, int driftPeriod, int lastDrift) {
         try {
             // enter username and password
             login(username, password);
@@ -171,9 +180,19 @@ public class AuthenticationStepDefinitions implements En {
             // check we got to the 2FA PIN screen
             driverWrapper.checkCurrentPageTitle("Your security card PIN");
 
-            // seed taken from the test OTP generator, used on all test systems
-            String pin = Generator.generatePin(seed);
-            logger.debug("Using PIN {}", pin);
+        } catch (Throwable ex) {
+            // login failed (wrong password, password needs resetting, etc)
+            String message = "login password failed for user: " + username;
+            logger.error(message);
+            return false;
+        }
+
+        try {
+            // seed is taken from the test OTP generator, used on all test systems
+            // timeoffset is current time plus drift period (each is 30 mins) converted to milliseconds
+            long timeoffset = System.currentTimeMillis() + ((lastDrift + driftPeriod) * 30 * 1000);
+            String pin = Generator.generatePin(seed, timeoffset);
+            logger.debug("Using PIN {} for drift {} and last drift {}", pin, driftPeriod, lastDrift);
 
             driverWrapper.enterIntoField(pin, "Security card PIN");
             driverWrapper.pressButton("Sign in");
@@ -184,10 +203,12 @@ public class AuthenticationStepDefinitions implements En {
             return true;
 
         } catch (Throwable ex) {
-            // login failed (wrong password, wrong PIN, password needs resetting, etc)
-            String message = "login failed for user: " + username;
+            // login failed (wrong 2FA PIN)
+            String message = "login 2FA PIN failed for user: " + username;
             logger.error(message);
-            return false;
+
+            // throw this as an exception so login is not retried, for 2FA PIN test cases
+            throw new IllegalStateException(message);
         }
     }
 
@@ -335,5 +356,56 @@ public class AuthenticationStepDefinitions implements En {
         // check special notices warning has gone
         assertFalse("Expected special notices to be cleared down",
                 driverWrapper.hasLink("Read and acknowledge"));
+    }
+
+    /**
+     * Performs 2FA login with the specified drift. Automatically retries <code>maxLoginRetries</code> times with
+     * further users taken from the dataset, if the password is rejected. No retry if 2FA PIN is wrong.
+     * @param dataSetName           The dataset to read users from
+     * @param driftString           The drift period to use (e.g. -2, 0, +1)
+     * @param usernameKey           The data key to set the username
+     * @param lastDriftKey          The data key to set the previous drift period
+     * @param password              The password to use
+     * @param seed                  The 2FA seed to use
+     * @param maxLoginRetries       The number of times to retry with new users upon password failures
+     */
+    private void loginWith2faAndDrift(String dataSetName, String driftString, String usernameKey, String lastDriftKey,
+            String password, String seed, int maxLoginRetries) {
+        int drift = Integer.parseInt(driftString);
+        int loginAttempts = 0;
+        while (loginAttempts < maxLoginRetries) {
+            loginAttempts++;
+
+            // load username and last drift period from the dataset, populate the data keys and values
+            List<String> dataKeys = new ArrayList<>();
+            dataKeys.add(usernameKey);
+            dataKeys.add(lastDriftKey);
+            loadData(dataSetName, dataKeys, loginAttempts > 1, maxLoginRetries);
+
+            // get the loaded username
+            String username = driverWrapper.getData(usernameKey);
+
+            // get the drift at last login
+            int lastDrift = Integer.parseInt(driverWrapper.getData(lastDriftKey));
+
+            try {
+                // try to login, throws exception if fails at 2FA PIN stage
+                boolean loginSuccessful = login2fa(username, password, seed, drift, lastDrift);
+
+                if (loginSuccessful) {
+                    // all successful
+                    return;
+                }
+            } catch (Throwable ex) {
+                // failed at PIN stage
+                return;
+            }
+
+            // login failed at password stage, so loop around to try again
+        }
+
+        String message = "Login failed after trying " + loginAttempts + " users";
+        logger.error(message);
+        throw new IllegalStateException(message);
     }
 }
