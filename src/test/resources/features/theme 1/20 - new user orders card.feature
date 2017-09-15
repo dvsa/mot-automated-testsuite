@@ -19,3 +19,25 @@ Feature: 20 - New user orders and activates card
     # Log back in with same user and ensure that message to activate card is visible
     # Next day log on as CAT user and select Security card order list. Ensure card ordered above is visible on download
     # (ordered cards appear on "Security Card order list")
+
+  # Scenario 1
+  # Created new user ZZZZ0001.
+  # DVSA user assigns role of AED to user.
+  # Log in as ZZZZ0001.
+  # Notification present "Nomination for Authorised Examiner Delegate - order a security card" so order card.
+  # Go to Your profile and select "Activate your security card"
+  # Entered serial "ZZZZ000000000015" and pin with drift zero
+  # Card activated.
+  # Check your profile screen has correct security card details (serial and activation date)
+  # Log out and log in with pin drift zero
+  # Notification present "Authorised Examiner Delegate nomination" accept role, log out and back in to check you are now AED.
+
+  # Scenario 2
+  # Created new user ZZZZ0002.
+  # Go to your profile and enter "MOT tester training certificates" then "Add certificate and request a demo test Certificate"
+  # Order security card
+  # Go to Your profile and select "Activate your security card"
+  # Entered serial "ZZZZ000000000021" and pin with drift zero
+  # Card activated.
+  # Check your profile screen has correct security card details (serial and activation date)
+  # Log out and log in with pin drift zero. Demo mode banner should be present.

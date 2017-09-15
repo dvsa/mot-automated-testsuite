@@ -19,3 +19,8 @@ Feature: 21 - 2FA: Forgotten Card
   # Scenario: User prompted to logon via PIN next day & able to login with existing card
     # Not worth automating?  Unless we can delete cookies - the above test sets a cookie with an expiry date of midnight of same day
     # (yes we can delete/set test cookies)
+
+  # Logged in as THOB5731 logging in with security questions.
+  # Signed out and signed back in to be automatically presented security questions instead of security card pin.
+  # To check PIN prompt next day sign out and clear all cookies and then refresh page then tried to log in and was presented security card pin again.
+  # Will also check again properly by letting cookies expire naturally overnight.

@@ -28,3 +28,18 @@ Feature: 22 - 2FA: Lost Card
     # Log out
     # Log in with username/password
     # Expected results: User directed straight to enter security question page
+
+
+  # Scenario 1
+  # Logged in as user ROHR4241 using security questions ordered new security question from login screen.
+  # Checked notification present "You have ordered a security card"
+  # Checked Your profile - "Activate your security card" link is available and security card section is no longer displayed
+  # Logged out and logged back in to see notification about signing in without card and answered security questions.
+
+  # Scenario 2
+  # Logged in as SHOL8522 using security questions and went to homepage
+  # Checked Your profile had "Order a security card" link and existing security card details are still present.
+  # Selected "Order a security card" and ordered a new card
+  # Checked notification present "You have ordered a security card"
+  # Checked Your profile - "Activate your security card" link is available and security card section is no longer displayed.
+  # Logged out and logged back in to see notification about signing in without card and answered security questions.
