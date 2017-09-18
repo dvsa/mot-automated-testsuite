@@ -14,17 +14,15 @@ Feature: 14 - CSCO
     Given I login without 2FA using "CSCO_USER" as {cscouser}
     And I load "SITE_LOCATION_INFORMATION" as {sid}, {sName}, {sNumber}, {aTown}, {aPostcode}
     And I click the "Site information" link
-    When I enter {aTown} in the "town" field
-    And I press the "Search" button
-    And I check the "City/postcode" field column has value {aTown}
+    When I perform a site search for "town" as {aTown} and select {sNumber}
+    And I check the "Address" field row has value {aTown}
 
 
   Scenario: CSCO user performs Site Information search by postcode, then views site details
     Given I login without 2FA using "CSCO_USER" as {cscouser}
     And I load "SITE_LOCATION_INFORMATION" as {sid}, {sName}, {sNumber}, {aTown}, {aPostcode}
     And I click the "Site information" link
-    When I enter {aPostcode} in the "Postcode (full or part)" field
-    Then I press the "Search" button
+    When I perform a site search for "Postcode (full or part)" as {aPostcode} and select {sNumber}
     And I check the "Address" field row has value {aPostcode}
 
 
