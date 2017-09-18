@@ -15,7 +15,7 @@ import javax.inject.Inject;
 /**
  * Step definitions specific to the <i>Tester does...</i> feature.
  */
-public class TesterrecordscontingencyStepDefinitions implements En {
+public class TesterRecordsContingencyStepDefinitions implements En {
 
     /**
      * The driver wrapper to use.
@@ -28,7 +28,7 @@ public class TesterrecordscontingencyStepDefinitions implements En {
      * @param driverWrapper The driver wrapper to use
      */
     @Inject
-    public TesterrecordscontingencyStepDefinitions(WebDriverWrapper driverWrapper, WebDriverWrapper driverWrapper1) {
+    public TesterRecordsContingencyStepDefinitions(WebDriverWrapper driverWrapper, WebDriverWrapper driverWrapper1) {
         this.driverWrapper = driverWrapper1;
 
         And("^I check the Test Information summary section of the test summary has \"([^\"]+)\" of \"([^\"]+)\"$",
