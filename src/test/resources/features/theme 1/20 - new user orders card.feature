@@ -64,7 +64,7 @@ Feature: 20 - New user orders and activates card
     And I press the "Continue" button
     And I press the "Create your account" button
 
-    # Add Group A training certificate
+    # Add Group A training certificate, then order card
     When I browse to /login
     And I load immediately "LATEST_TEST_USER" as {username}
     And I load "SITE" as {siteName}, {siteNumber}
@@ -112,7 +112,7 @@ Feature: 20 - New user orders and activates card
     And I check the "Activation date" field row has value {activationDate}
     And I check the "Serial number" field row has value {serialNumber}
 
-    # Log out and log in with pin drift zero. Demo mode banner should be present.
+    # Log out then log in with drift zero (i.e. no offset from previous drift). Demo mode banner should be present.
     And I click the "Sign out" link
     And I browse to /login
     And I enter {username} in the "User ID" field
