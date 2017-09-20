@@ -370,8 +370,15 @@ public class WebDriverWrapper {
      * @param linkText  The link text used to find the link
      */
     public void clickFirstLink(String linkText) {
-        WebElement link = findLinks(linkText).get(0);
-        clickAndWaitForPageLoad(link);
+        List<WebElement> links = findLinks(linkText);
+        if (links.size() == 0) {
+            String message = "No links found with text: " + linkText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            clickAndWaitForPageLoad(links.get(0));
+        }
     }
 
     /**
@@ -381,7 +388,14 @@ public class WebDriverWrapper {
      */
     public void clickLastLink(String linkText) {
         List<WebElement> links = findLinks(linkText);
-        clickAndWaitForPageLoad(links.get(links.size() - 1));
+        if (links.size() == 0) {
+            String message = "No links found with text: " + linkText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            clickAndWaitForPageLoad(links.get(links.size() - 1));
+        }
     }
 
     /**
