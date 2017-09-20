@@ -1,27 +1,36 @@
-SELECT DISTINCT aed_person.username, o.name as organisation, s.name as site, tester_person.username as tester_username,
-concat_ws(' ', tester_person.first_name, tester_person.middle_name, tester_person.family_name) as other_name
-FROM person aed_person, organisation o, site s, person tester_person, organisation_business_role_map obrm,
-auth_for_testing_mot aftm
-WHERE obrm.business_role_id = 2
-AND obrm.status_id = 1 -- ACtive
-AND o.id = obrm.organisation_id
-AND o.organisation_type_id = 7
-AND aed_person.id = obrm.person_id
-AND aed_person.username IS NOT NULL
-AND s.organisation_id = o.id
+select distinct aed_person.username, o.name as organisation,
+  s.name as siteName, s.site_number as siteNumber, tester_person.username as tester_username,
+  concat_ws(' ', tester_person.first_name, tester_person.middle_name, tester_person.family_name) as other_name
+from person aed_person, organisation o, site s, person tester_person, organisation_business_role_map obrm,
+  auth_for_testing_mot aftm, security_card sc, person_security_card_map pscm, security_card_drift scd
+where obrm.business_role_id = 2
+and obrm.status_id = 1 -- active
+and o.id = obrm.organisation_id
+and o.organisation_type_id = 7
+and aed_person.id = obrm.person_id
+and aed_person.username is not null
+and s.organisation_id = o.id
 and aftm.status_id = 9 -- other user is qualified tester
+and aed_person.id = pscm.person_id
+and sc.id = pscm.security_card_id
+and sc.security_card_status_lookup_id = 1
+and scd.security_card_id = pscm.security_card_id
+and scd.last_observed_drift between -60 and 60
 and tester_person.id = aftm.person_id
-AND NOT EXISTS (
-	SELECT tester_person.id FROM site_business_role_map sbrm
-	WHERE sbrm.site_id = s.id
-	AND sbrm.site_business_role_id = 1
-	AND tester_person.id = sbrm.person_id
+and not exists (
+	select 1
+	from site_business_role_map sbrm
+	where sbrm.site_id = s.id
+	and sbrm.site_business_role_id = 1
+	and tester_person.id = sbrm.person_id
 )
-AND NOT EXISTS (
-	SELECT max(psrm.person_system_role_id) as max_role FROM person_system_role_map psrm
-	WHERE tester_person.id = psrm.person_id
-	HAVING max_role != 1
-) -- Removes DVSA users that can't be searched
-AND tester_person.username IS NOT NULL
-AND tester_person.id != aed_person.id
-LIMIT 10
+and not exists (
+	select max(psrm.person_system_role_id) as max_role
+	from person_system_role_map psrm
+	where tester_person.id = psrm.person_id
+	having max_role != 1
+) -- removes dvsa users that can't be searched
+and tester_person.username is not null
+and tester_person.id != aed_person.id
+and coalesce(trim(tester_person.middle_name), '') != ''  -- avoid name formatting issues on some screens
+limit 10

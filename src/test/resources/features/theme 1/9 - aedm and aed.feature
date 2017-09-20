@@ -11,6 +11,7 @@ Feature: 09 - AEDM and AED
     And I make the payment for card "4462030000000000"
     And I check that 25 slots were bought successfully
 
+
   Scenario: AEDM assigns AED role
     Given I login with 2FA using "AEDM_AND_NON_AED_USER" as {aedmUsername}, {otherUsername}, {organisationName}, {otherName}
     And I click the first {organisationName} link
@@ -27,13 +28,15 @@ Feature: 09 - AEDM and AED
     And I check the role summary has a new role of "Authorised Examiner Delegate"
     And I press the "Confirm" button
 
-    Then I check the organisation role assignment confirmation message for {otherUsername}, {otherName}
+    Then The page contains "A role notification has been sent to {otherName} '{otherUsername}'"
     And I check there is pending "Authorised examiner delegate" role listed for {otherName}
 
+
   Scenario: AED assigns tester to role
-    Given I login with 2FA using "AED_AND_TESTER" as {aedmUsername}, {organisation}, {site}, {tester}, {testerName}
+    Given I login with 2FA using "AED_AND_TESTER" as {aedmUsername}, {organisation}, {siteName}, {siteNumber}, {tester}, {testerName}
     And I click the first {organisation} link
-    And I click the {site} link
+    And The page title contains "Authorised Examiner"
+    And I click the {siteName} site link for site reference {siteNumber}
     And The page title contains "Vehicle Testing Station"
 
     And I click the "Assign a role" link
@@ -52,6 +55,7 @@ Feature: 09 - AEDM and AED
     Then The page title contains "Vehicle Testing Station"
     And The page contains "You have assigned a role to {testerName}, {tester}. They have been sent a notification."
     And I check there is pending "Tester" role listed for {testerName}
+
 
   Scenario: AEDM checks today's test log at VTS
     Given I load immediately "AEDM_AND_TESTER_AT_SITE" as {aedm}, {aeName}, {siteName}, {tester}
@@ -77,19 +81,20 @@ Feature: 09 - AEDM and AED
 
     Then I check the site test log has the recent test {reg}, {tester}
 
-  # TQI: awaiting review after 3.15...
-  Scenario Outline: AEDM can view TQI for site with <status> status
-    Given I login with 2FA using "<dataSource>" as {aedm}, {organisationName}, {siteName}
-    And I click the first {organisationName} link
-    When I click the "Service reports" link
-    And I click the {siteName} site link with status "<status>" on the service reports
-    Then I check the TQI report has the title {siteName}
 
-  Examples:
-  |status|dataSource         |
-  |Green |AEDM_AND_GREEN_SITE|
-  |Amber |AEDM_AND_AMBER_SITE|
-  |Red   |AEDM_AND_RED_SITE  |
+  # TQI: awaiting review after 3.15...
+  #Scenario Outline: AEDM can view TQI for site with <status> status
+  #  Given I login with 2FA using "<dataSource>" as {aedm}, {organisationName}, {siteName}
+  #  And I click the first {organisationName} link
+  #  When I click the "Service reports" link
+  #  And I click the {siteName} site link with status "<status>" on the service reports
+  #  Then I check the TQI report has the title {siteName}
+
+  #Examples:
+  #|status|dataSource         |
+  #|Green |AEDM_AND_GREEN_SITE|
+  #|Amber |AEDM_AND_AMBER_SITE|
+  #|Red   |AEDM_AND_RED_SITE  |
   
 
   # Scenario: AEDM can view TQI - VTS List with RAG status

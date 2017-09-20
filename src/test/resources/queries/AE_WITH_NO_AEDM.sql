@@ -18,4 +18,5 @@ and not exists (
 and aftm.person_id = unassigned_tester.id
 and aftm.vehicle_class_id = 4 -- only cars
 and aftm.status_id = 9 -- only qualified testing authorisations
+and coalesce(trim(unassigned_tester.middle_name), '') != ''  -- avoid name formatting issues on some screens
 limit 10

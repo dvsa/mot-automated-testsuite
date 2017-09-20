@@ -25,22 +25,16 @@ public class AedmStepDefintions implements En {
     public AedmStepDefintions(WebDriverWrapper driverWrapper) {
         this.driverWrapper = driverWrapper;
 
-        And("^I check the organisation role assignment confirmation message for "
-                        + "\\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", (String usernameKey, String nameKey) -> {
-                    String message = String.format("A role notification has been sent to %s '%s'",
-                            driverWrapper.getData(nameKey), driverWrapper.getData(usernameKey));
-                    assertTrue("Role notification message incorrect",
-                            driverWrapper.getElementText("validation-message--success").contains(message));
-                });
-
         And("^I check the site test log has the recent test \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String regKey, String testerUsernameKey) -> checkSiteTestLog(regKey, testerUsernameKey));
 
         And("I click the \\{([^\\}]+)\\} site link with status \"([^\"]+)\" on the service reports$",
                 (String siteNameKey, String status) -> findSiteInServiceReportAndCheckStatus(siteNameKey, status));
 
-        And("^I check the TQI report has the title \\{([^\\}]+)\\}$", (String siteNameKey) ->
-                driverWrapper.containsMessage("Test quality information " + driverWrapper.getData(siteNameKey)));
+        And("^I click the \\{([^\\}]+)\\} site link for site reference \\{([^\\}]+)\\}$",
+                (String siteNameKey, String siteReferenceKey) ->
+                    driverWrapper.clickLink("td", driverWrapper.getData(siteReferenceKey),
+                        "../th/", driverWrapper.getData(siteNameKey)));
     }
 
     /**
