@@ -9,6 +9,7 @@ import uk.gov.dvsa.mot.data.DatabaseDataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -93,6 +94,10 @@ public class DataStepDefinitions implements En {
         When("^I set today as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String dayKeyName, String monthKeyName, String yearKeyName) ->
                         setToday(dayKeyName, monthKeyName, yearKeyName));
+
+        When("^I set today formatted using \"([^\"]+)\" as \\{([^\\}]+)\\}$",
+                (String dateTimeFormat, String dateTimeKeyName) ->
+                        setTodayWithFormat(dateTimeFormat, dateTimeKeyName));
     }
 
     /**
@@ -143,5 +148,22 @@ public class DataStepDefinitions implements En {
         driverWrapper.setData(dayKeyName, String.valueOf(today.getDayOfMonth()));
         driverWrapper.setData(monthKeyName, String.valueOf(today.getMonthValue()));
         driverWrapper.setData(yearKeyName, String.valueOf(today.getYear()));
+    }
+
+    /**
+     * Sets the specified key with the current date/time, formatted using a format pattern.
+     * @param dateTimeFormat    The pattern to use
+     * @param dateTimeKeyName   The key to set
+     */
+    private void setTodayWithFormat(String dateTimeFormat, String dateTimeKeyName) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateTimeFormat);
+            driverWrapper.setData(dateTimeKeyName, formatter.format(LocalDate.now()));
+
+        } catch (IllegalArgumentException ex) {
+            String message = "Invalid DateTimeFormatter pattern: " + dateTimeFormat;
+            logger.error(message, ex);
+            throw new IllegalArgumentException(message, ex);
+        }
     }
 }

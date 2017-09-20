@@ -91,7 +91,12 @@ Lower level, only use if higher level steps can't be used:
 * I load immediately ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```
 * I load immediately ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```, ```{key6}```
     * Note: these steps will load the first entry in the dataset immediately without any caching
-* I set today as ```{..day key..}```, ```{..month key..}```, ```{..year key..}```   
+* I set today as ```{..day key..}```, ```{..month key..}```, ```{..year key..}```  
+    * Note: this sets the current date (day/month/year as integers)
+* I set today formatted using ```"..date time format string.."``` as ```{key}```
+    * Note: supports ```java.time.format.DateTimeFormatter``` format strings 
+    (see [http://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html](DateTimeFormatter JavaDoc)) 
+    
     
 ## MOT
 
@@ -117,6 +122,8 @@ These steps are specific to the DVSA MOT application screens.
    * Note: this step will also acknowledge any special notices (so the user can undertake tests, if needed)
 * I login without 2FA using ```"..dataset name.."``` as ```{..username key..}```
    * Note: this step will load the first entry in the dataset immediately without any caching
+* I generate 2FA PIN with drift ```..drift period..``` as ```{key}```
+   * Note: ```drift period``` is of the format ```+/-<n>``` (e.g. +2, +0, -10)
 
 ### CreateVehicleStepDefinitions
 

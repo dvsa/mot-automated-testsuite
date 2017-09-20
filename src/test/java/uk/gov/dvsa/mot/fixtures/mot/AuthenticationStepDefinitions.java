@@ -94,6 +94,11 @@ public class AuthenticationStepDefinitions implements En {
                     loginWith2faAndDrift(dataSetName, drift, usernameKey, lastDriftKey,
                             env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
                             env.getRequiredProperty("maxLoginRetries", Integer.class)));
+
+        Given("^I generate 2FA PIN with drift ([\\+|\\-]\\d+) as \\{([^\\}]+)\\}$",
+                (String drift, String pinKeyName) ->
+                    driverWrapper.setData(pinKeyName,
+                        generatePin(env.getRequiredProperty("seed"), drift, 0)));
     }
 
     /**
@@ -104,7 +109,7 @@ public class AuthenticationStepDefinitions implements En {
      * @param seed              The OTP seed to use
      */
     private void loginWith2fa(String usernameKey, String password, String seed) {
-        if (login2fa(driverWrapper.getData(usernameKey), password, seed, 0, 0)) {
+        if (login2fa(driverWrapper.getData(usernameKey), password, seed, "+0", 0)) {
             // check if any special notices need clearing down
             if (driverWrapper.hasLink("Read and acknowledge")) {
                 clearDownSpecialNotices();
@@ -143,7 +148,7 @@ public class AuthenticationStepDefinitions implements En {
             String username = driverWrapper.getData(usernameKey);
 
             // try to login
-            boolean loginSuccessful = login2fa(username, password, seed, 0, 0);
+            boolean loginSuccessful = login2fa(username, password, seed, "+0", 0);
 
             if (loginSuccessful) {
                 // check if any special notices need clearing down
@@ -168,11 +173,11 @@ public class AuthenticationStepDefinitions implements En {
      * @param username      The username data key to set
      * @param password      The password to use
      * @param seed          The OTP seed to use
-     * @param driftPeriod   The drift period to use
+     * @param driftString   The drift offset to apply to the previous drift
      * @param lastDrift     The previous drift on last login
      * @return Whether the login was successful (any errors will have been logged)
      */
-    private boolean login2fa(String username, String password, String seed, int driftPeriod, int lastDrift) {
+    private boolean login2fa(String username, String password, String seed, String driftString, int lastDrift) {
         try {
             // enter username and password
             login(username, password);
@@ -190,9 +195,10 @@ public class AuthenticationStepDefinitions implements En {
         try {
             // seed is taken from the test OTP generator, used on all test systems
             // timeoffset is current time plus drift period (each is 30 mins) converted to milliseconds
-            long timeoffset = System.currentTimeMillis() + ((lastDrift + driftPeriod) * 30 * 1000);
-            String pin = Generator.generatePin(seed, timeoffset);
-            logger.debug("Using PIN {} for drift {} and last drift {}", pin, driftPeriod, lastDrift);
+            //long timeoffset = System.currentTimeMillis() + ((lastDrift + driftPeriod) * 30 * 1000);
+            //String pin = Generator.generatePin(seed, timeoffset);
+            String pin = generatePin(seed, driftString, lastDrift);
+            //logger.debug("Using PIN {} for drift {} and last drift {}", pin, driftPeriod, lastDrift);
 
             driverWrapper.enterIntoField(pin, "Security card PIN");
             driverWrapper.pressButton("Sign in");
@@ -371,7 +377,6 @@ public class AuthenticationStepDefinitions implements En {
      */
     private void loginWith2faAndDrift(String dataSetName, String driftString, String usernameKey, String lastDriftKey,
             String password, String seed, int maxLoginRetries) {
-        int drift = Integer.parseInt(driftString);
         int loginAttempts = 0;
         while (loginAttempts < maxLoginRetries) {
             loginAttempts++;
@@ -390,7 +395,7 @@ public class AuthenticationStepDefinitions implements En {
 
             try {
                 // try to login, throws exception if fails at 2FA PIN stage
-                boolean loginSuccessful = login2fa(username, password, seed, drift, lastDrift);
+                boolean loginSuccessful = login2fa(username, password, seed, driftString, lastDrift);
 
                 if (loginSuccessful) {
                     // all successful
@@ -407,5 +412,24 @@ public class AuthenticationStepDefinitions implements En {
         String message = "Login failed after trying " + loginAttempts + " users";
         logger.error(message);
         throw new IllegalStateException(message);
+    }
+
+    /**
+     * Generate a 2FA PIN using the specified seed and drift (<code>lastDrift + driftString</code>).
+     * @param seed          The OTP algorithm seed
+     * @param driftString   The drift offset (e.g. <code>-2</code>) to apply to the last drift
+     * @param lastDrift     The last drift that was used
+     * @return The PIN
+     */
+    private String generatePin(String seed, String driftString, int lastDrift) {
+        int driftPeriod = Integer.parseInt(driftString);
+
+        // timeoffset is current time plus drift period (each is 30 mins) converted to milliseconds
+        long timeoffset = System.currentTimeMillis() + ((lastDrift + driftPeriod) * 30 * 1000);
+
+        String pin = Generator.generatePin(seed, timeoffset);
+        logger.debug("Using PIN {} for drift {} and last drift {}", pin, driftPeriod, lastDrift);
+
+        return pin;
     }
 }
