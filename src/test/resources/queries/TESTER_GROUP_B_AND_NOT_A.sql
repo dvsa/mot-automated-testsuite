@@ -38,6 +38,5 @@ and exists (
   and aftm.status_id = 9 -- qualified
 )
 and p.username is not null -- exclude dodgy test data
-and p.middle_name is not null -- avoid name formatting issues on user search result screen
-and p.middle_name not like '% %'
+and coalesce(trim(p.middle_name), '') != ''  -- avoid name formatting issues on some screens
 limit 10

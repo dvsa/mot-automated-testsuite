@@ -9,5 +9,6 @@ and not exists (
   and psrm.person_system_role_id = 5 -- and not Area Office 1 (AO1) role
 )
 and p.username is not null
+and coalesce(trim(p.middle_name), '') != ''  -- avoid name formatting issues on some screens
 group by p.username
 limit 20
