@@ -97,7 +97,7 @@ Lower level, only use if higher level steps can't be used:
     * Note: this sets the current date (day/month/year as integers)
 * I set today formatted using ```"..date time format string.."``` as ```{key}```
     * Note: supports ```java.time.format.DateTimeFormatter``` format strings 
-    (see [http://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html](DateTimeFormatter JavaDoc)) 
+    (see [DateTimeFormatter JavaDoc](http://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html)) 
     
     
 ## MOT
