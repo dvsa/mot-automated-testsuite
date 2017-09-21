@@ -74,8 +74,14 @@ public class WebStepDefinitions implements En {
         When("^I enter \"([^\"]+)\" in the \"([^\"]+)\" field$", (String text, String label) ->
                 driverWrapper.enterIntoField(text, label));
 
+        When("^I enter \"([^\"]+)\" in the \\{([^\\}]+)\\} field$", (String text, String labelKey) ->
+                driverWrapper.enterIntoField(text, driverWrapper.getData(labelKey)));
+
         When("^I enter \\{([^\\}]+)\\} in the \"([^\"]+)\" field$", (String dataKey, String label) ->
                 driverWrapper.enterIntoField(driverWrapper.getData(dataKey), label));
+
+        When("^I enter \\{([^\\}]+)\\} in the \\{([^\\}]+)\\} field$", (String dataKey, String labelKey) ->
+                driverWrapper.enterIntoField(driverWrapper.getData(dataKey), driverWrapper.getData(labelKey)));
 
         When("^I enter \"([^\"]+)\" in the \"([^\"]+)\" field in fieldset \"([^\"]+)\"$",
                 (String text, String fieldLabel, String fieldsetLabel) ->

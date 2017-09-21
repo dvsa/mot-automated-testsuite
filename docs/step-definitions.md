@@ -47,7 +47,9 @@ High level:
    * Note: all checkbox steps handle labels with ```for``` and checkbox inputs nested inside the label 
    * Note: ensures field is not set - clicks the checkbox if already selected, otherwise does nothing   
 * I enter ```"..text.."``` in the ```"..label.."``` field
+* I enter ```"..text.."``` in the ```{..label key..}``` field
 * I enter ```{key}``` in the ```"..label.."``` field
+* I enter ```{key}``` in the ```{..label key..}``` field
 * I enter ```"..text.."``` in the ```"..field label.."``` field in fieldset ```..fieldset label..```
 * I enter ```{key}``` in the ```"..field label.."``` field in fieldset ```..fieldset label..```
 * I select ```"..item.."``` in the ```"..label.."``` field
@@ -115,15 +117,19 @@ These steps are specific to the DVSA MOT application screens.
 * I login with 2FA using ```"..dataset name.."``` as ```{..username key..}```, ```{key2}```, ```{key3}```
 * I login with 2FA using ```"..dataset name.."``` as ```{..username key..}```, ```{key2}```, ```{key3}```, ```{key4}```
 * I login with 2FA using ```"..dataset name.."``` as ```{..username key..}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```
+* I login with 2FA using ```"..dataset name.."``` as ```{..username key..}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```, ```{key6}```
    * Note: these steps will load the first entry in the dataset immediately without any caching
-   * Note: these steps will use the [configuration settings](../configuration/README.md) and actually try up to ```maxLoginRetries``` different users, if the password isn't ```password``` (e.g. for users that have had passwords manually changed)
+   * Note: these steps will use the [configuration settings](../configuration/README.md) and actually try up to ```maxLoginRetries``` different users, if the password or PIN is rejected 
    * Note: these steps will also acknowledge any special notices (so the user can undertake tests, if needed)
 * I login with 2FA as ```{..username key..}```
    * Note: this step will also acknowledge any special notices (so the user can undertake tests, if needed)
 * I login without 2FA using ```"..dataset name.."``` as ```{..username key..}```
    * Note: this step will load the first entry in the dataset immediately without any caching
+* I login with 2FA and drift ```..drift period..``` using ```"..dataset name.."``` as ```{..username key..}```, ```{..last drift key..}```, ```{key3}```, ```{key4}```
 * I generate 2FA PIN with drift ```..drift period..``` as ```{key}```
    * Note: ```drift period``` is of the format ```+/-<n>``` (e.g. +2, +0, -10)
+* I login and click forgotten card using ```"..dataset name.."``` as ```{..username key..}```, ```{key2}```, ```{key3}```, ```{key4}```
+   
 
 ### CreateVehicleStepDefinitions
 

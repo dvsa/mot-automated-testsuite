@@ -12,12 +12,12 @@ and answer_1.id = ( -- each user has 2 questions, selects first question
   select max(psqm.id) from person_security_question_map psqm
   where psqm.person_id = p.id
 )
-and answer_1.answer = '$2y$10$.1QYAai1g2XTuGSPL3YAyOT.DJijVMA6k9m/se5jcdcCiQTdXzD9y' -- hash of 'question'
+and answer_1.answer = '$2y$10$.1QYAai1g2XTuGSPL3YAyOT.DJijVMA6k9m/se5jcdcCiQTdXzD9y' -- hash of 'answer'
 and answer_1.security_question_id = question_1.id
 and answer_2.id = ( -- each user has 2 questions, selects second question
   select min(psqm.id) from person_security_question_map psqm
   where psqm.person_id = p.id
 )
-and answer_2.answer = '$2y$10$.1QYAai1g2XTuGSPL3YAyOT.DJijVMA6k9m/se5jcdcCiQTdXzD9y' -- hash of 'question'
+and answer_2.answer = '$2y$10$.1QYAai1g2XTuGSPL3YAyOT.DJijVMA6k9m/se5jcdcCiQTdXzD9y' -- hash of 'answer'
 and answer_2.security_question_id = question_2.id
 limit 50

@@ -102,6 +102,12 @@ public class AuthenticationStepDefinitions implements En {
                             Optional.of(Integer.parseInt(drift)), Optional.of(lastDriftKey),
                             env.getRequiredProperty("maxLoginRetries", Integer.class), key3, key4));
 
+        Given("^I login and click forgotten card using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, "
+                        + "\\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String dataSetName, String usernameKey, String key2, String key3, String key4) ->
+                        loginAndClickForgottenCard(dataSetName, usernameKey, env.getRequiredProperty("password"),
+                                env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3, key4));
+
         Given("^I generate 2FA PIN with drift ([\\+|\\-]\\d+) as \\{([^\\}]+)\\}$",
                 (String drift, String pinKeyName) ->
                     driverWrapper.setData(pinKeyName,
@@ -296,6 +302,49 @@ public class AuthenticationStepDefinitions implements En {
                     if (driverWrapper.hasLink("Read and acknowledge")) {
                         clearDownSpecialNotices();
                     }
+
+                    // all successful
+                    return;
+            }
+        }
+
+        String message = "Login failed after trying " + loginAttempts + " users";
+        logger.error(message);
+        throw new IllegalStateException(message);
+    }
+
+    /**
+     * Logs a user into the application, using password only, and clicks the forgotten card link.
+     * <p>Handles failed logins (password rejected) by trying again with another user.</p>
+     * @param dataSetName       The data set to get users from
+     * @param usernameKey       The username data key to set
+     * @param password          The password to use
+     * @param maxLoginRetries   The number of times to retry login with a different user before failing the test
+     * @param keys              The extra data keys to set
+     */
+    private void loginAndClickForgottenCard(String dataSetName, String usernameKey, String password,
+                                int maxLoginRetries, String... keys) {
+        int loginAttempts = 0;
+        while (loginAttempts < maxLoginRetries) {
+            loginAttempts++;
+
+            // load username from the dataset, populate the data keys and values
+            List<String> dataKeys = new ArrayList<>();
+            dataKeys.add(usernameKey);
+            Collections.addAll(dataKeys, keys);
+            loadData(dataSetName, dataKeys, loginAttempts > 1, maxLoginRetries);
+
+            // get the loaded username
+            String username = driverWrapper.getData(usernameKey);
+
+            // try to login
+            switch (handlePasswordScreen(username, password)) {
+                case PasswordFailed:
+                    // login failed, loop around to try again
+                    break;
+
+                default:
+                    driverWrapper.clickLink("Lost, forgotten or damaged security card?");
 
                     // all successful
                     return;
