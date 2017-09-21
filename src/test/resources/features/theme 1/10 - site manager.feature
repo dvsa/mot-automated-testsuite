@@ -101,4 +101,4 @@ Feature: 10 - Site Manager and Site Admin
     And The page title contains "Vehicle Testing Station"
 
     When I click the "Test quality information" link
-    Then I check the TQI report has the title {sitename1}
+    #Then I check the TQI report has the title {sitename1}

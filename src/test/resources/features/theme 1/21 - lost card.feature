@@ -1,5 +1,7 @@
 @regression
-Feature: 22 - 2FA: Lost Card
+Feature: 21 - Existing user has lost 2FA card 2FA
+
+  # exiting user order card, activate card, and login
 
   # Scenario: User can order a new card via login screens (after logging on via sec. ques.)
   # User can order a new security card after logging in via lost and forgotten journey
@@ -9,6 +11,9 @@ Feature: 22 - 2FA: Lost Card
     # Enter security question answers
     # Order a new card via order new security card link
     # Expected results: New security card ordered
+    # then logout, login via sec. questions
+    # activate card, logout
+    # login with PIN
 
   # Scenario: User can order new card via profile page (if logged on via sec. ques and not already ordered one)
   # User who has logged in via lost and forgotten journey can order a new card via profile page
@@ -20,14 +25,10 @@ Feature: 22 - 2FA: Lost Card
     # Navigate to your profile
     # Select Order a security card and complete order card journey
     # Expected results: New security card ordered
+    # then logout, login via sec. questions
+    # activate card, logout
+    # login with PIN
 
-  # Scenario: User logs on via security questions until replacement card activated
-  # 2FA active user who has ordered a replacement card can login via security questions until card activated
-    # Log in via lost/forgotten journey
-    # Order card
-    # Log out
-    # Log in with username/password
-    # Expected results: User directed straight to enter security question page
 
 
   # Scenario 1
