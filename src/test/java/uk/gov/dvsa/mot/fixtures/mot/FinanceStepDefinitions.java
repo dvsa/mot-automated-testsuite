@@ -1,14 +1,8 @@
 package uk.gov.dvsa.mot.fixtures.mot;
 
-        import static org.junit.Assert.assertEquals;
-
-        import cucumber.api.java8.En;
-
-        import uk.gov.dvsa.mot.framework.WebDriverWrapper;
-
-        import java.time.LocalDate;
-        import java.time.LocalTime;
-        import javax.inject.Inject;
+import cucumber.api.java8.En;
+import uk.gov.dvsa.mot.framework.WebDriverWrapper;
+import javax.inject.Inject;
 
 
 
