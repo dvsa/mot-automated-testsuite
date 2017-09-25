@@ -1,7 +1,7 @@
 @regression
 Feature: 07 - Tester records Contingency Test
 
-   Scenario: Record contingency test (Pass)
+   Scenario: A tester record a pass contingency test
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     Then I click the "Record contingency test" link
     And I enter "01" in the "Day" field
@@ -36,11 +36,11 @@ Feature: 07 - Tester records Contingency Test
     And I press the "Save test result" button
 
 
-  Scenario: Record contingency test (Fail)
+  Scenario: A tester records a fail contingency test
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     Then I click the "Record contingency test" link
-    And I enter "01" in the "Day" field
-    And I enter "03" in the "Month" field
+    And I enter "18" in the "Day" field
+    And I enter "09" in the "Month" field
     And I enter "2017" in the "Year" field
     And I enter "9" in the field with id "contingency_time-hour"
     And I enter "00" in the field with id "contingency_time-minutes"
@@ -78,7 +78,7 @@ Feature: 07 - Tester records Contingency Test
     #   - No contingency code specified
     #   - Generate CT blank certs (CT20, CT30, CT32)
 
-  Scenario: Record contingency test (Cancel)
+  Scenario: A tester record contingency test and then cancels the contingency test
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
     And I click the "Record contingency test" link
@@ -109,7 +109,5 @@ Feature: 07 - Tester records Contingency Test
     And I click the "Aborted by VE" radio button
     And I press the "Confirm and cancel test" button
     And I click the "Finish" link
-
-
 
 
