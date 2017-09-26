@@ -1201,7 +1201,7 @@ public class WebDriverWrapper {
         // initial wait (in milliseconds) to give the selenium web driver time to tell the web browser to
         // submit the current page
         try {
-            Thread.sleep(750);
+            Thread.sleep(1000);
 
         } catch (InterruptedException ex) {
             // called if trying to shutdown the test suite
