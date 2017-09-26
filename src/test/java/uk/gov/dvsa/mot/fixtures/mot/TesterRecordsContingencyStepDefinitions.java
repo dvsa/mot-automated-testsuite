@@ -8,6 +8,7 @@ import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import javax.inject.Inject;
 
 
@@ -34,6 +35,48 @@ public class TesterRecordsContingencyStepDefinitions implements En {
         And("^I check the Test Information summary section of the test summary has \"([^\"]+)\" of \"([^\"]+)\"$",
                 (String field, String value) ->
                         assertEquals(value, driverWrapper.getTextFromDefinitionList(field)));
+
+
+        And("^I set time as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String hourKeyName, String minuteKeyName, String ampmKeyName) ->
+                        setTime(hourKeyName, minuteKeyName, ampmKeyName));
+
+        And("^I pick \"([^\"]+)\" in the field with id \"([^\"]*)\"$",
+                (String optionText, String id) ->
+                driverWrapper.selectOptionInFieldById(driverWrapper.getData(optionText), id));
+
+        And("^I set the site \\{([^\\}]+)\\}$", (String siteNameKey) ->
+                setSite(driverWrapper.getData(siteNameKey)));
+
+
+    }
+
+    /**
+     * Sets the specified keys with the current date.
+     * @param hourKeyName        The key to set with the current hour of the time (1..31)
+     * @param minuteKeyName      The key to set with the current minute of the time (1..12)
+     * @param ampmKeyName        The kwy to set with the current am or pm of the day
+     */
+
+    private void setTime(String hourKeyName, String minuteKeyName, String ampmKeyName) {
+        LocalTime time = LocalTime.now().minusMinutes(1);
+        DateTimeFormatter amPmFormatter = DateTimeFormatter.ofPattern("a"); // am / pm
+        DateTimeFormatter twelveHourFormatter = DateTimeFormatter.ofPattern("h"); // 1 - 12
+
+        driverWrapper.setData(hourKeyName, time.format(twelveHourFormatter));
+        driverWrapper.setData(minuteKeyName, String.valueOf(time.getMinute()));
+        System.out.println("Hello " + time.format(amPmFormatter));
+        driverWrapper.setData(ampmKeyName, time.format(amPmFormatter));
+        driverWrapper.setData(ampmKeyName, String.valueOf(amPmFormatter));
+
+    }
+
+    private void setSite(String site) {
+        // if page title Select your current site
+        if (driverWrapper.containsMessage("Location where the test was performed")) {
+            // select the first site
+            driverWrapper.selectRadio(site);
+        }
     }
 
 }
