@@ -94,6 +94,9 @@ public class AuthenticationStepDefinitions implements En {
                     loginWithout2fa(dataSetName, usernameKey, env.getRequiredProperty("password"),
                             env.getRequiredProperty("maxLoginRetries", Integer.class)));
 
+        Given("^I login without 2FA as \\{([^\\}]+)\\}$", (String usernameKey) ->
+                        loginWithout2fa(usernameKey, env.getRequiredProperty("password")));
+
         Given("^I login with 2FA and drift ([\\+|\\-]\\d+) using \"([^\"]+)\" "
                         + "as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String drift, String dataSetName, String usernameKey, String lastDriftKey, String key3, String key4) ->
@@ -109,9 +112,15 @@ public class AuthenticationStepDefinitions implements En {
                                 env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3, key4));
 
         Given("^I generate 2FA PIN with drift ([\\+|\\-]\\d+) as \\{([^\\}]+)\\}$",
-                (String drift, String pinKeyName) ->
-                    driverWrapper.setData(pinKeyName,
+                (String drift, String pinKey) ->
+                    driverWrapper.setData(pinKey,
                         generatePin(env.getRequiredProperty("seed"), Integer.parseInt(drift), 0)));
+
+        Given("^I generate 2FA PIN with previous drift \\{([^\\}]+)\\} as \\{([^\\}]+)\\}$",
+                (String lastDriftKey, String pinKey) ->
+                        driverWrapper.setData(pinKey,
+                                generatePin(env.getRequiredProperty("seed"), 0,
+                                        Integer.parseInt(driverWrapper.getData(lastDriftKey)))));
     }
 
     /** Encapsulates the possible results from the login journey. */
@@ -227,14 +236,29 @@ public class AuthenticationStepDefinitions implements En {
     }
 
     /**
-     * Browses to the login screen, enters the user name and password and submits the form.
+     * Browses to the login screen (clears all cookies), enters the user name and password and submits the form.
      * @param username  The username to use
      * @param password  The password to use
      * @return The outcome
      */
     private LoginOutcome handlePasswordScreen(String username, String password) {
+        return handlePasswordScreen(username, password, true);
+    }
+
+    /**
+     * Browses to the login screen, enters the user name and password and submits the form.
+     * @param username                  The username to use
+     * @param password                  The password to use
+     * @param browseAndClearCookies     Whether to clear all cookies and browse to the login screen (if not assumes
+     *                                  we are already at the login screen)
+     * @return The outcome
+     */
+    private LoginOutcome handlePasswordScreen(String username, String password, boolean browseAndClearCookies) {
         logger.debug("Logging in as username {} and password {}", username, password);
-        driverWrapper.browseTo("/login");
+
+        if (browseAndClearCookies) {
+            driverWrapper.browseTo("/login");
+        }
 
         // the visible versions of the username and password fields have dynamic ids ending in _tid1 or _tid2
         driverWrapper.enterIntoFieldWithIdSuffix(username, "_tid1");
@@ -273,6 +297,7 @@ public class AuthenticationStepDefinitions implements En {
 
     /**
      * Logins in as a user that does not require 2FA authentication.
+     * <p>Handles failed logins (password rejected) by trying again with another user.</p>
      * @param dataSetName       The name of the data set to use
      * @param usernameKey       The key that the username is stored under
      * @param password          The password to use
@@ -311,6 +336,24 @@ public class AuthenticationStepDefinitions implements En {
         String message = "Login failed after trying " + loginAttempts + " users";
         logger.error(message);
         throw new IllegalStateException(message);
+    }
+
+    /**
+     * Logs a user into the application, using password only.
+     * <p>Note: doesn't tolerate failed logins caused by a user password being manually changed.</p>
+     * @param usernameKey       The username data key to set
+     * @param password          The password to use
+     */
+    private void loginWithout2fa(String usernameKey, String password) {
+        switch (handlePasswordScreen(driverWrapper.getData(usernameKey), password, false)) {
+            case PasswordSuccessful:
+                return;
+
+            default:
+                String message = "Login failed";
+                logger.error(message);
+                throw new IllegalStateException(message);
+        }
     }
 
     /**

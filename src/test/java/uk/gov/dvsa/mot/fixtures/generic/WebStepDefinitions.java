@@ -174,5 +174,11 @@ public class WebStepDefinitions implements En {
         And("^I check the alert popup contains \"([^\"]+)\"$", (String text) ->
                 assertTrue("Alert popup does not contain the expected text",
                         driverWrapper.getAlertText().contains(text)));
+
+        And("^I check the \"([^\"]+)\" cookie is set$", (String cookieName) ->
+                assertTrue("Cookie " + cookieName + " should have been set",
+                        driverWrapper.isCookieSet(cookieName)));
+
+        And("^I delete the \"([^\"]+)\" cookie$", (String cookieName) -> driverWrapper.deleteCookie(cookieName));
     }
 }

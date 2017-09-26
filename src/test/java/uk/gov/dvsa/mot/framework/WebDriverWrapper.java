@@ -2,6 +2,7 @@ package uk.gov.dvsa.mot.framework;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
@@ -32,6 +33,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
@@ -1297,5 +1299,29 @@ public class WebDriverWrapper {
     public void clickLinkContainingHrefValue(String hrefContains) {
         WebElement link = webDriver.findElement(By.xpath("//*[contains(@href,'" + hrefContains + "')]"));
         link.click();
+    }
+
+    /**
+     * Check whether the specified cookie has been set.
+     * @param name      The cookie name (can be a partial match)
+     * @return <code>true</code> if set
+     */
+    public boolean isCookieSet(String name) {
+        return webDriver.manage().getCookies().stream()
+                .anyMatch((Cookie c) -> c.getName().contains(name));
+    }
+
+    /**
+     * Deletes the specified cookie.
+     * @param name      The cookie name (can be a partial match)
+     */
+    public void deleteCookie(String name) {
+        Cookie cookie = webDriver.manage().getCookies().stream()
+                .filter((Cookie c) -> c.getName().contains(name))
+                .findFirst().orElseThrow(() -> {
+                    return new IllegalStateException("Cookie with name containing " + name + " not found");
+                });
+
+        webDriver.manage().deleteCookie(cookie);
     }
 }

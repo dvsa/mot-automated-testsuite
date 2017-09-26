@@ -69,6 +69,9 @@ High level:
 * I check the ```"..heading text.."``` field column has value ```{key}```
    * Note: these steps check the contents of the ```td``` element in the first row and same column as a ```th``` element with the heading text    
 * I check the alert popup contains ```"..text.."```
+* I check the ```"..name.."``` cookie is set
+* I delete the ```"..name.."``` cookie
+   * Note: allows partial match of the cookie name
 
 Lower level, only use if higher level steps can't be used:
 
@@ -125,9 +128,11 @@ These steps are specific to the DVSA MOT application screens.
    * Note: this step will also acknowledge any special notices (so the user can undertake tests, if needed)
 * I login without 2FA using ```"..dataset name.."``` as ```{..username key..}```
    * Note: this step will load the first entry in the dataset immediately without any caching
+* I login without 2FA as ```{..username key..}```
 * I login with 2FA and drift ```..drift period..``` using ```"..dataset name.."``` as ```{..username key..}```, ```{..last drift key..}```, ```{key3}```, ```{key4}```
 * I generate 2FA PIN with drift ```..drift period..``` as ```{key}```
    * Note: ```drift period``` is of the format ```+/-<n>``` (e.g. +2, +0, -10)
+* I generate 2FA PIN with previous drift ```{..last drift key..}``` as ```{key}```  
 * I login and click forgotten card using ```"..dataset name.."``` as ```{..username key..}```, ```{key2}```, ```{key3}```, ```{key4}```
    
 
