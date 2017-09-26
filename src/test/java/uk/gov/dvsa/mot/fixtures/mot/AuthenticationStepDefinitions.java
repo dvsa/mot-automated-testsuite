@@ -265,12 +265,18 @@ public class AuthenticationStepDefinitions implements En {
         driverWrapper.enterIntoFieldWithIdSuffix(password, "_tid2");
         driverWrapper.pressButton("Sign in");
 
-        if (driverWrapper.getCurrentPageTitle().contains("Sign in")) {
+        // message received after successful login if user has ordered new card, on page with title "Sign in"
+        String orderCardMessage = "You have ordered a new card.  Until you receive and activate the card, "
+                + "sign in with your security questions.";
+
+        if (!driverWrapper.getCurrentPageTitle().contains("Sign in")
+                || driverWrapper.containsMessage(orderCardMessage)) {
+            return LoginOutcome.PasswordSuccessful;
+
+        } else {
             // password rejected, still on the login screen
             return LoginOutcome.PasswordFailed;
 
-        } else {
-            return LoginOutcome.PasswordSuccessful;
         }
     }
 
