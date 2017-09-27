@@ -1,4 +1,7 @@
-select distinct aedm_person.username, o.name, s.name, tester_person.username
+select distinct aedm_person.username as aedm_username, o.name as ae_name,
+  s.name as site_name, s.site_number as site_number,
+  tester_person.username as tester_username,
+  concat_ws(' ', tester_person.first_name, tester_person.middle_name, tester_person.family_name) as tester_name
 from person aedm_person, organisation o, site s, person tester_person, site_business_role_map sbrm,
   organisation_business_role_map obrm, mot_test_current mtc,
   auth_for_testing_mot aftm, auth_for_testing_mot_at_site afts, auth_for_ae afa,
@@ -41,4 +44,5 @@ and not exists (
 )
 and aedm_person.username is not null
 and tester_person.username is not null
+and coalesce(trim(tester_person.middle_name), '') != ''  -- avoid name formatting issues on some screens
 limit 10

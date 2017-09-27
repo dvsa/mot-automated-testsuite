@@ -1,8 +1,7 @@
 select distinct(person_mgr.username) as mgr_username,
    s.name as site_name, s.site_number as site_number,
    person_other.username as other_username,
-   concat_ws(' ', person_other.first_name,
-     person_other.middle_name, person_other.family_name) as other_name
+   concat_ws(' ', person_other.first_name, person_other.middle_name, person_other.family_name) as other_name
 from site s, person person_mgr, organisation ae_mgr,
   organisation_site_map osm_mgr, site_business_role_map sbrm_mgr,
   person person_other, auth_for_testing_mot aftm, security_card sc, person_security_card_map pscm
@@ -31,4 +30,5 @@ and not exists ( -- not all security_card have a corresponding security_card_dri
   where sc.id = scd.security_card_id
   and (scd.last_observed_drift > 60 or scd.last_observed_drift < -60) -- no drift beyond +/-2
 )
+and coalesce(trim(person_other.middle_name), '') != ''  -- avoid name formatting issues on some screens
 limit 50

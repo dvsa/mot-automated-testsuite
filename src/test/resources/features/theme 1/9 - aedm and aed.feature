@@ -58,9 +58,9 @@ Feature: 09 - AEDM and AED
 
 
   Scenario: AEDM checks today's test log at VTS
-    Given I load immediately "AEDM_AND_TESTER_AT_SITE" as {aedm}, {aeName}, {siteName}, {tester}
+    Given I load immediately "AEDM_AND_TESTER_AT_SITE" as {aedm}, {aeName}, {siteName}, {siteNumber}, {testerUsername}, {testerName}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {odometer}
-    And I login with 2FA as {tester}
+    And I login with 2FA as {testerUsername}
 
     And I start an MOT test for {reg}, {vin}, {siteName}
     And The page title contains "Your home"
@@ -79,7 +79,7 @@ Feature: 09 - AEDM and AED
     And I click the "Test logs" link
     And I click the "Today" link
 
-    Then I check the site test log has the recent test {reg}, {tester}
+    Then I check the site test log has the recent test {reg}, {testerUsername}
 
 
   Scenario Outline: AEDM can view TQI for site with <status> status (via organisation)
@@ -100,14 +100,14 @@ Feature: 09 - AEDM and AED
   Scenario: AED can view TQI for site (via VTS)
     Given I login with 2FA using "AED_AND_GROUP_A_SITE" as {aed}, {siteName}, {siteNumber}
     And I click the first "({siteNumber}) {siteName}" link
-    And I click the "Test quality information" link
+    When I click the "Test quality information" link
     Then The page contains "This information will help you manage the quality of testing at your site. How you use it will depend on how you manage the site, its size and number of staff."
     And I check there is a "Download the group A report as a CSV (spreadsheet) file" link
 
 
-  # Scenario: AED can view TQI for each VTS tester
-    # Sign in as a AED (2FA active)
-    # Select VTS via the home page
-    # Select Test Quality Information
-    # Select Month
-    # Expected results: VTS TQI populated per tester
+  Scenario: AEDM can view TQI for each VTS tester
+    Given I login with 2FA using "AEDM_AND_TESTER_AT_SITE" as {aedm}, {aeName}, {siteName}, {siteNumber}, {testerUsername}, {testerName}
+    And I click the first "({siteNumber}) {siteName}" link
+    And I click the "Test quality information" link
+    When I click the TQI link for tester {testerUsername}
+    Then The page contains "{testerName}"

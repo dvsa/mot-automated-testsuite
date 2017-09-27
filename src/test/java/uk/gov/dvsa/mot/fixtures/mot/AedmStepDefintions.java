@@ -35,6 +35,10 @@ public class AedmStepDefintions implements En {
                 (String siteNameKey, String siteReferenceKey) ->
                     driverWrapper.clickLink("td", driverWrapper.getData(siteReferenceKey),
                         "../th/", driverWrapper.getData(siteNameKey)));
+
+        And("^I click the TQI link for tester \\{([^\\}]+)\\}$", (String usernameKey) ->
+                driverWrapper.clickLink("span", driverWrapper.getData(usernameKey),
+                        "../../td/", "View"));
     }
 
     /**
