@@ -8,6 +8,11 @@ and esa.id = latest_assessment.id
 and esa.site_assessment_score > 270.00
 and esa.site_assessment_score <= 360.00
 and o.id = s.organisation_id
+and exists (
+  select 1 from auth_for_testing_mot_at_site aft
+  where aft.site_id = s.id
+  and aft.vehicle_class_id in (3, 4, 5, 7) -- group B
+)
 and obrm.organisation_id = o.id
 and obrm.business_role_id = 1
 and obrm.status_id = 1

@@ -82,37 +82,28 @@ Feature: 09 - AEDM and AED
     Then I check the site test log has the recent test {reg}, {tester}
 
 
-  # TQI: awaiting review after 3.15...
-  #Scenario Outline: AEDM can view TQI for site with <status> status
-  #  Given I login with 2FA using "<dataSource>" as {aedm}, {organisationName}, {siteName}
-  #  And I click the first {organisationName} link
-  #  When I click the "Service reports" link
-  #  And I click the {siteName} site link with status "<status>" on the service reports
-  #  Then I check the TQI report has the title {siteName}
+  Scenario Outline: AEDM can view TQI for site with <status> status (via organisation)
+    Given I login with 2FA using "<dataSource>" as {aedm}, {organisationName}, {siteName}
+    And I click the first {organisationName} link
+    When I click the "Service reports" link
+    And I click the {siteName} site link with status "<status>" on the service reports
+    Then The page contains "This information will help you manage the quality of testing at your site. How you use it will depend on how you manage the site, its size and number of staff."
+    And I check there is a "Download the group B report as a CSV (spreadsheet) file" link
 
-  #Examples:
-  #|status|dataSource         |
-  #|Green |AEDM_AND_GREEN_SITE|
-  #|Amber |AEDM_AND_AMBER_SITE|
-  #|Red   |AEDM_AND_RED_SITE  |
-  
+  Examples:
+  |status|dataSource         |
+  |Green |AEDM_AND_GREEN_SITE|
+  |Amber |AEDM_AND_AMBER_SITE|
+  |Red   |AEDM_AND_RED_SITE  |
 
-  # Scenario: AEDM can view TQI - VTS List with RAG status
-    # Pre-req: Pre req: RAG available / calculated...?
-    # Sign in as a AEDM (2FA active)
-    # Select AE via the home page
-    # Select Test Quality Information
-    # Select Month
-    # Expected results: RAG status per VTS displayed
 
-  # Scenario: AEDM can view TQI for each VTS
-    # Pre req: VTS must have MOT's completed for selected month
-    # Pre req: National averages calculated....""National stats populate once a month on its own there is a case when automatic job fails to populate them then first user that clicks every single month starts the job""
-    # "ign in as a AEDM (2FA active)
-    # Select VTS via the home page
-    # Select Test Quality Information
-    # Select Month
-    # Expected results: VTS TQI populated
+  Scenario: AED can view TQI for site (via VTS)
+    Given I login with 2FA using "AED_AND_GROUP_A_SITE" as {aed}, {siteName}, {siteNumber}
+    And I click the first "({siteNumber}) {siteName}" link
+    And I click the "Test quality information" link
+    Then The page contains "This information will help you manage the quality of testing at your site. How you use it will depend on how you manage the site, its size and number of staff."
+    And I check there is a "Download the group A report as a CSV (spreadsheet) file" link
+
 
   # Scenario: AED can view TQI for each VTS tester
     # Sign in as a AED (2FA active)
