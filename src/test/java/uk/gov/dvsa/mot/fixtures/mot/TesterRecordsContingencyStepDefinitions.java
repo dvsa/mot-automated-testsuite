@@ -41,9 +41,6 @@ public class TesterRecordsContingencyStepDefinitions implements En {
                 (String hourKeyName, String minuteKeyName, String ampmKeyName) ->
                         setTime(hourKeyName, minuteKeyName, ampmKeyName));
 
-        And("^I pick \"([^\"]+)\" in the field with id \"([^\"]*)\"$",
-                (String optionText, String id) ->
-                driverWrapper.selectOptionInFieldById(driverWrapper.getData(optionText), id));
 
         And("^I set the site \\{([^\\}]+)\\}$", (String siteNameKey) ->
                 setSite(driverWrapper.getData(siteNameKey)));
@@ -65,12 +62,16 @@ public class TesterRecordsContingencyStepDefinitions implements En {
 
         driverWrapper.setData(hourKeyName, time.format(twelveHourFormatter));
         driverWrapper.setData(minuteKeyName, String.valueOf(time.getMinute()));
-        System.out.println("Hello " + time.format(amPmFormatter));
         driverWrapper.setData(ampmKeyName, time.format(amPmFormatter));
         driverWrapper.setData(ampmKeyName, String.valueOf(amPmFormatter));
 
     }
 
+
+    /** To set the site.
+     *
+     * @param site        The site to use (for multi-site testers)
+     */
     private void setSite(String site) {
         // if page title Select your current site
         if (driverWrapper.containsMessage("Location where the test was performed")) {
@@ -78,5 +79,6 @@ public class TesterRecordsContingencyStepDefinitions implements En {
             driverWrapper.selectRadio(site);
         }
     }
+
 
 }
