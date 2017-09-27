@@ -45,7 +45,8 @@ public class WebDriverWrapperTest {
         // mocked testsuite.properties values
         Environment env = new MockEnvironment()
                 .withProperty("startingUrl", "file:/" + home + "/src/test/java/uk/gov/dvsa/mot/test/exampleHtml")
-                .withProperty("pageWait", "1");
+                .withProperty("pageWait", "1")
+                .withProperty("clickWait", "1");
 
         driverWrapper = new HtmlUnitWebDriverWrapper(env);
     }

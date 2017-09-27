@@ -54,6 +54,9 @@ public class WebDriverWrapper {
     /** The environment configuration to use. */
     private final Environment env;
 
+    /** The amount of time to wait (in milliseconds) for browser clicks before page refresh. */
+    private final long clickWaitMilliseconds;
+
     /** The maximum time (in seconds) to wait for page refresh/events before timing out. */
     private final long pageWaitSeconds;
 
@@ -72,6 +75,10 @@ public class WebDriverWrapper {
         this.env = env;
         this.data = new HashMap<>();
         this.webDriver = createWebDriver();
+
+        // amount of time (in milliseconds) to wait for browser clicks to happen, before page refresh logic
+        // this is a mandatory delay, to accommodate any browser/environment/network latency
+        this.clickWaitMilliseconds = Long.parseLong(env.getRequiredProperty("clickWait"));
 
         // maximum time (in seconds) to wait before timing out
         // as we poll much more frequently than this (see below) the actual delay should be much less
@@ -1201,7 +1208,7 @@ public class WebDriverWrapper {
         // initial wait (in milliseconds) to give the selenium web driver time to tell the web browser to
         // submit the current page
         try {
-            Thread.sleep(1000);
+            Thread.sleep(clickWaitMilliseconds);
 
         } catch (InterruptedException ex) {
             // called if trying to shutdown the test suite

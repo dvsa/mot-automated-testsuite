@@ -27,7 +27,7 @@ Supported values are:
 * driver/linux-chromedriver
 
 ## headless
-Boolean for running in headless mode
+Boolean for running in headless mode. If enabled, emulates a 1920x1080 browser window
 
 ## takeScreenshots
 When to take screenshots of the browser window at the end of each test scenario.
@@ -48,9 +48,18 @@ Supported values are:
 ## password
 The password that all user accounts are set to in the test environment being used
 
+## clickWait
+The amount of time, in milliseconds, to wait for browser clicks to happen before starting to poll for the page refresh
+and any dynamic javascript to complete. This is a mandatory delay, to accommodate any browser/environment/network
+latency. If any tests fail and the screen shot shows the browser is still on the previous page, try increasing this
+delay. Other factors like working remotely/over VPN/using slower environments (e.g. PP) can also affect this.
+*values from 500ms to 1500ms are fairly reliable, larger values impact testsuite completion duration*
+
 ## pageWait
-The maximum wait, in seconds, for each page refresh/submit to complete and any dynamic
-javascript to run, before using Selenium to locate elements in the web page
+Maximum wait, in seconds, for each page refresh/submit to complete and any dynamic javascript to run, before using
+Selenium to locate elements in the web page (because the testsuite polls refreshed pages for completion this time
+delay will typically be much less). If a page fails to refresh/complete javascript by this time limit, the current
+test will be failed as an error
 
 ## jdbc.url
 The MariaDB/MySQL URL of the environment under test
