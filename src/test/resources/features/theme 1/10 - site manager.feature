@@ -89,16 +89,12 @@ Feature: 10 - Site Manager and Site Admin
 
 
   Scenario: Site Manager can view TQI statistics for testers associated with VTS
-    # TQI: awaiting review after 3.15...
-    # Pre-req: VTS must have MOT's completed for selected month
-    # Sign in as a Site Manager (2FA active)
-    # Select VTS via the home page
-    # Select Test Quality Information
-    # Select Month
-    # Expected results: VTS TQI populated per tester
-    Given I login with 2FA using "SITE_MGR" as {username1}, {sitename1}, {sitenumber1}
-    And I click the "({sitenumber1}) {sitename1}" link
+    Given I load immediately "SITE_MGR_AND_TESTER_CLASS_4" as {testerUsername}, {testerName}, {managerUsername}, {siteName}, {siteNumber}
+    And I login with 2FA as {managerUsername}
+    And I click the "({siteNumber}) {siteName}" link
     And The page title contains "Vehicle Testing Station"
-
     When I click the "Test quality information" link
-    #Then I check the TQI report has the title {sitename1}
+    And The page contains "This information will help you manage the quality of testing at your site. How you use it will depend on how you manage the site, its size and number of staff."
+    And I check there is a "Download the group B report as a CSV (spreadsheet) file" link
+    And I click the TQI link for tester {testerUsername}
+    Then The page contains "{testerName}"
