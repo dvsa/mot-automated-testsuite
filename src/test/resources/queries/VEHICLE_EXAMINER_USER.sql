@@ -1,4 +1,4 @@
-SELECT p.username as username
+SELECT distinct p.username as username
 FROM person p, person_system_role_map role_map, mot_test_current mtc
 WHERE p.id = role_map.person_id
 AND p.is_account_claim_required = 0
