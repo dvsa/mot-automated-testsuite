@@ -82,7 +82,7 @@ Feature: 12 - Vehicle Examiner
 
   Scenario: MOT test search by site
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
-    And I load "SITE" as {siteName}, {siteNumber}
+    And I load "SITE" as {siteNumber}, {siteName}
     And I click the "MOT tests" link
     When I search for an mot by "Site (by date range)" with {siteNumber} from 2 months ago
     And I click the first "View" link

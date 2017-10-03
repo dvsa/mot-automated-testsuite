@@ -102,7 +102,7 @@ Feature: 13 - A01 user
 
 
   Scenario: AO1 user performs site search, then changes site details
-    Given I load "SITE" as {siteName}, {siteReference}
+    Given I load "SITE" as {siteReference}, {siteName}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I search for site by reference {siteReference}
 
@@ -166,7 +166,7 @@ Feature: 13 - A01 user
 
 
   Scenario: AO1 user performs site search, then views and records a site event
-    Given I load "SITE" as {siteName}, {siteReference}
+    Given I load "SITE" as {siteReference}, {siteName}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I search for site by reference {siteReference}
     And I click the "Events history" link
@@ -307,7 +307,7 @@ Feature: 13 - A01 user
 
 
   Scenario: AO1 user performs MOT tests search by site id, then views tests
-    Given I load "SITE" as {siteName}, {siteReference}
+    Given I load "SITE" as {siteReference}, {siteName}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I click the "MOT tests" link
     And I select "Site (recent tests)" in the field with id "type"
