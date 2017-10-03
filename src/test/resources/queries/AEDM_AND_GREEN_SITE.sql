@@ -27,4 +27,4 @@ and not exists ( -- not all security_card have a corresponding security_card_dri
 and p.username is not null
 group by s.id
 order by esa.site_assessment_score desc
-limit 10
+-- limit 10

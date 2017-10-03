@@ -27,4 +27,4 @@ and not exists (
 and other_person.username is not null
 and other_person.id != aedm_person.id
 and coalesce(trim(other_person.middle_name), '') != ''  -- avoid name formatting issues on some screens
-limit 20
+-- limit 20

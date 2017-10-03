@@ -29,4 +29,4 @@ and not exists ( -- not all security_card have a corresponding security_card_dri
   where sc.id = scd.security_card_id
   and (scd.last_observed_drift > 60 or scd.last_observed_drift < -60) -- no drift beyond +/-2
 )
-limit 10
+-- limit 10

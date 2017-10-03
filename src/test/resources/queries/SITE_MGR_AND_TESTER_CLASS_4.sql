@@ -49,4 +49,4 @@ and not exists (
 and person_tester.username is not null -- exclude dodgy test data
 and person_mgr.username is not null -- exclude dodgy test data
 and coalesce(trim(person_tester.middle_name), '') != ''  -- avoid name formatting issues on some screens
-limit 50
+-- limit 50

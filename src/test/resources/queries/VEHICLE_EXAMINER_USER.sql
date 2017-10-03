@@ -10,4 +10,4 @@ AND NOT EXISTS (
   WHERE p.id = mtc.last_updated_by
   AND mtc.status_id = 4 -- exclude any examiners with active tests
 )
-LIMIT 50
+-- LIMIT 50

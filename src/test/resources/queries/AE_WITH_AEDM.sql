@@ -10,4 +10,4 @@ and obrm.status_id = 1 -- approved only
 and aedm_user.username is not null
 and obrm.person_id = aedm_user.id
 and coalesce(trim(aedm_user.middle_name), '') != ''  -- avoid name formatting issues on some screens
-limit 10
+-- limit 10

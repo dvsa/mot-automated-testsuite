@@ -20,4 +20,4 @@ and answer_2.id = ( -- each user has 2 questions, selects second question
 )
 and answer_2.answer = '$2y$10$.1QYAai1g2XTuGSPL3YAyOT.DJijVMA6k9m/se5jcdcCiQTdXzD9y' -- hash of 'answer'
 and answer_2.security_question_id = question_2.id
-limit 50
+-- limit 50

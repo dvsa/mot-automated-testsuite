@@ -90,6 +90,10 @@ public class DataDao {
             // load the SQL query contained in the file
             String query = loadQuery(resource);
 
+            // add a limit clause
+            // TODO: extract as configurable setting
+            query = query + "\nlimit 100";
+
             // execute the SQL query to load the dataset
             return executeQuery(query, datasetName, length);
         }

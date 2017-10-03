@@ -4,4 +4,4 @@ WHERE scdm.site_id = s.id
 AND cd.id = scdm.contact_detail_id
 AND a.id = cd.address_id
 ORDER BY s.name ASC
-LIMIT 30;
+-- LIMIT 30;

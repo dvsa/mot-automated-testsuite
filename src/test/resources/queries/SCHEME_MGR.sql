@@ -5,4 +5,4 @@ AND p.is_account_claim_required = 0
 AND p.is_password_change_required = 0
 AND role_map.person_system_role_id = 3 -- DVSA scheme manager role id
 AND p.username IS NOT NULL
-LIMIT 10
+-- LIMIT 10

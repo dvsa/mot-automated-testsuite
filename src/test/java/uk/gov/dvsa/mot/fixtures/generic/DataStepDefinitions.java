@@ -38,6 +38,12 @@ public class DataStepDefinitions implements En {
         this.driverWrapper = driverWrapper;
         this.dataProvider = dataProvider;
 
+
+        When("^I test the data$", () -> {
+            dataProvider.testData();
+        });
+
+
         When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}$",
                 (String dataSetName, String key1) ->
                     loadFromCachedData(dataSetName, new String[] {key1}));

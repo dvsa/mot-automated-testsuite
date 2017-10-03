@@ -1,0 +1,53 @@
+
+
+using 25 for large, 10 for medium, 4 for small - classified by intended use (small/medium/large):
+
+14:36:29.174 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider Dataset AED_AND_TESTER doesn't have sufficient entries after filtering (got 0 but needed 1)
+14:36:29.174 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider Dataset AO1_USER doesn't have sufficient entries after filtering (got 6 but needed 25)
+14:36:29.174 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider Dataset CSCO_USER doesn't have sufficient entries after filtering (got 8 but needed 10)
+
+
+other queries that could be more unique: (could refactor queries that can't simply use "select distinct" with large sub-select and group by, like AE_WITH_UNASSIGNED_SITE)
+
+13:51:02.769 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider Filtering AEDM_AND_AMBER_SITE which has 7 entries
+13:51:02.769 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider$Dataset Out of 7 entries, 5 are unique
+
+13:51:02.773 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider Filtering MOT_TESTER_CLASS_1 which has 22 entries
+13:51:02.773 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider$Dataset Out of 22 entries, 19 are unique
+
+13:51:02.775 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider Filtering AEDM_USER which has 36 entries
+13:51:02.775 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider$Dataset Out of 36 entries, 26 are unique
+
+13:51:02.776 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider Filtering AEDM_AND_TESTER_AT_SITE which has 44 entries
+13:51:02.776 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider$Dataset Out of 44 entries, 18 are unique
+
+13:51:02.776 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider Filtering AEDM_AND_GREEN_SITE which has 45 entries
+13:51:02.777 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider$Dataset Out of 45 entries, 14 are unique
+
+13:51:02.777 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider Filtering MOT_TESTER_CLASS_4 which has 76 entries
+13:51:02.778 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider$Dataset Out of 76 entries, 70 are unique
+
+13:51:02.788 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider Filtering SITE_MGR_AND_OTHER_TESTER which has 3606 entries
+13:51:02.789 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider$Dataset Out of 3606 entries, 38 are unique
+
+13:51:02.790 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider Filtering AEDM_AND_NON_AED_USER which has 10000 entries
+13:51:02.792 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider$Dataset Out of 10000 entries, 26 are unique
+
+13:51:02.792 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider Filtering AED_AND_TESTER which has 10000 entries
+13:51:02.794 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider$Dataset Out of 10000 entries, 9 are unique
+
+13:51:03.134 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider Filtering AE_WITH_ASSIGNED_SITE which has 10000 entries
+13:51:03.426 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider$Dataset Out of 10000 entries, 8308 are unique
+
+13:51:03.427 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider Filtering AE_WITH_NO_AEDM which has 10000 entries
+13:51:03.434 INFO  uk.gov.dvsa.mot.data.DatabaseDataProvider$Dataset Out of 10000 entries, 122 are unique
+
+
+
+
+
+
+
+
+
+

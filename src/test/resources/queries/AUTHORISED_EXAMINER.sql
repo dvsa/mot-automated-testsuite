@@ -9,4 +9,4 @@ AND o.registered_company_number IS NOT NULL
 AND o.name IS NOT NULL
 AND afe.organisation_id = o.id
 GROUP BY o.id
-LIMIT 20
+-- LIMIT 20

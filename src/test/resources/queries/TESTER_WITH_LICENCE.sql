@@ -12,4 +12,4 @@ and p.driving_licence_id = l.id
 and l.licence_type_id = 1 -- driving licence
 and l.licence_country_id = 11 -- issued by GB
 and coalesce(trim(p.middle_name), '') != ''  -- avoid name formatting issues on some screens
-limit 10
+-- limit 10

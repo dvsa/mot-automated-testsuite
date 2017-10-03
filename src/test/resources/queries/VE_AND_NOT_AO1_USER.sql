@@ -11,4 +11,4 @@ and not exists (
 and p.username is not null
 and coalesce(trim(p.middle_name), '') != ''  -- avoid name formatting issues on some screens
 group by p.username
-limit 20
+-- limit 20

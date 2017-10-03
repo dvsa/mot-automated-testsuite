@@ -39,4 +39,4 @@ and exists (
 )
 and p.username is not null -- exclude dodgy test data
 and coalesce(trim(p.middle_name), '') != ''  -- avoid name formatting issues on some screens
-limit 10
+-- limit 10

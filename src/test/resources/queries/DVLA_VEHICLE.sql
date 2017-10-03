@@ -11,4 +11,4 @@ and d.vin not in (
   select v.vin from vehicle v
   where v.vin is not null -- exclude same vin manually entered into the application
 )
-limit 50
+-- limit 50

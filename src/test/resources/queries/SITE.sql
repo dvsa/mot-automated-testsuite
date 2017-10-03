@@ -7,4 +7,4 @@ AND d_map.site_id = s.id
 AND d_map.contact_detail_id IS NOT NULL
 AND s.site_number != "0"
 AND s.type_id = 3
-LIMIT 30
+-- LIMIT 30
