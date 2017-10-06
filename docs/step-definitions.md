@@ -21,7 +21,11 @@ Note, in the steps below:
 High level:
 
 * I browse to ```URL```
-* I press the ```"..buton text.."``` button
+* I press the ```"..button text.."``` button
+* I click the button which contains text ```"..button text.."```
+   * Note: this finds the text element then clicks the button that is its ancestor. For use with nested tags in buttons.
+* I click the button with class name ```"..class name.."```
+   * Note: this should only be used when this is the only way to identify the button
 * I click the ```..text with {key}s..``` link
 * I click the ```{key}``` link
 * I click the first ```"..text with {key}s.."``` link
@@ -54,6 +58,7 @@ High level:
 * I enter ```{key}``` in the ```"..field label.."``` field in fieldset ```..fieldset label..```
 * I select ```"..item.."``` in the ```"..label.."``` field
 * The page contains ```"..text with {key}s.."```
+* The page does not contain ```"..text with {key}s.."```
 * The page title contains ```"..text.."```
 * I check there is a ```"..text with {key}s.."``` link
 * I check there is no ```"..text with {key}s.."``` link
@@ -134,7 +139,7 @@ These steps are specific to the DVSA MOT application screens.
    * Note: ```drift period``` is of the format ```+/-<n>``` (e.g. +2, +0, -10)
 * I generate 2FA PIN with previous drift ```{..last drift key..}``` as ```{key}```  
 * I login and click forgotten card using ```"..dataset name.."``` as ```{..username key..}```, ```{key2}```, ```{key3}```, ```{key4}```
-   
+
 
 ### CreateVehicleStepDefinitions
 

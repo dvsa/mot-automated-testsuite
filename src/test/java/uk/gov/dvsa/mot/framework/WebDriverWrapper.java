@@ -236,6 +236,26 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Clicking a button specified by its class name.
+     */
+    public void clickButtonByClassName(String className) {
+        List<WebElement> buttons = webDriver.findElements(By.xpath("//button[@class='" + className + "']"));
+        if (buttons.size() == 0) {
+            String message = "No buttons found with class name: " + className;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else if (buttons.size() > 1) {
+            String message = "Several buttons found with class name: " + className;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            buttons.get(0).click();
+        }
+    }
+
+    /**
      * Click a button rather than submit it.
      * @param buttonText    The text on the button to be clicked
      */
@@ -326,6 +346,29 @@ public class WebDriverWrapper {
                     + ") for buttons with text: " + buttonText;
             logger.error(message);
             throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * Presses the button located by the matching sibling element by its text.
+     * Finds the sibling by text then traverses back up the tree to find the parent button of the sibling.
+     * @param siblingText        The text for the sibling of the button
+     */
+    public void clickButtonWithSiblingText(String siblingText) {
+        String xpath = "//*[text() = '" + siblingText + "']/ancestor::button";
+        List<WebElement> buttons = webDriver.findElements(By.xpath(xpath));
+        if (buttons.size() == 0) {
+            String message = "No buttons found for sibling text: " + siblingText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else if (buttons.size() > 1) {
+            String message = "Several buttons found for sibling text: " + siblingText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            buttons.get(0).click();
         }
     }
 
@@ -1039,6 +1082,22 @@ public class WebDriverWrapper {
 
         } catch (NoSuchElementException ex) {
             return false;
+        }
+    }
+
+    /**
+     * Checks whether the current page does not contain the specified message, anywhere within the page. Use only with
+     * long unique messages - may contain single quotes, and <code>{key}</code> format data keys, but not double quotes.
+     * @param message   The message
+     * @return <code>true</code> if not found
+     */
+    public boolean doesNotContainMessage(String message) {
+        try {
+            webDriver.findElement(By.xpath("//*[contains(text(),\"" + expandDataKeys(message) + "\")]"));
+            return false;
+
+        } catch (NoSuchElementException ex) {
+            return true;
         }
     }
 

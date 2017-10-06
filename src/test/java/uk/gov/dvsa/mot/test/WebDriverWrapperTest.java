@@ -156,6 +156,116 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>pressButton()</code>, when a button is pressed.
+     */
+    @Test
+    public void pressButtonInvoked() {
+        browseTo("/pressButton-1.html", "pressButton-1");
+        //Invoke press button
+        driverWrapper.pressButton("Button name");
+        assertEquals("ButtonPressed", driverWrapper.getCurrentPageTitle());
+    }
+
+    /**
+     * Tests <code>pressButton()</code>, when a input type submit is pressed.
+     */
+    @Test
+    public void pressButtonInvokedInput() {
+        browseTo("/pressButton-2.html", "pressButton-2");
+        //Invoke press button
+        driverWrapper.pressButton("Button name");
+        assertEquals("ButtonPressed", driverWrapper.getCurrentPageTitle());
+    }
+
+    /**
+     * Tests <code>pressButton()</code>, when the button does not exist.
+     * Expected exception IllegalArgumentException.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void pressButtonInvokedNotFound() {
+        browseTo("/pressButton-1.html", "pressButton-1");
+        //Invoke press button
+        driverWrapper.pressButton("Non-existent Button");
+    }
+
+    /**
+     * Tests <code>pressButton()</code>, when multiple buttons exist with the same name.
+     * Expected exception IllegalArgumentException.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void pressButtonInvokedTooMany() {
+        browseTo("/pressButton-3.html", "pressButton-3");
+        //Invoke press button
+        driverWrapper.pressButton("Button name");
+    }
+
+    /**
+     * Tests <code>clickButtonWithSiblingText()</code>, when a button is pressed.
+     */
+    @Test
+    public void clickButtonWithSiblingText() {
+        browseTo("/clickButtonWithSiblingText-1.html", "clickButtonWithSiblingText-1");
+        //Invoke press button
+        driverWrapper.clickButtonWithSiblingText("Button name");
+        assertEquals("ButtonPressed", driverWrapper.getCurrentPageTitle());
+    }
+
+    /**
+     * Tests <code>clickButtonWithSiblingText()</code>, when the button does not exist.
+     * Expected exception IllegalArgumentException.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void clickButtonWithSiblingTextNotFound() {
+        browseTo("/clickButtonWithSiblingText-1.html", "clickButtonWithSiblingText-1");
+        //Invoke press button
+        driverWrapper.clickButtonWithSiblingText("Non-existant Button");
+    }
+
+    /**
+     * Tests <code>clickButtonWithSiblingText()</code>, when multiple buttons exist with the same name.
+     * Expected exception IllegalArgumentException.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void clickButtonWithSiblingTextTooMany() {
+        browseTo("/clickButtonWithSiblingText-2.html", "clickButtonWithSiblingText-2");
+        //Invoke press button
+        driverWrapper.clickButtonWithSiblingText("Button name");
+    }
+
+    /**
+     * Tests <code>clickButtonWithSiblingText()</code>, when a button is pressed.
+     */
+    @Test
+    public void clickButtonByClassName() {
+        browseTo("/clickButtonByClassName-1.html", "clickButtonByClassName-1");
+        //Invoke press button
+        driverWrapper.clickButtonByClassName("buttonClass");
+        assertEquals("ButtonPressed", driverWrapper.getCurrentPageTitle());
+    }
+
+    /**
+     * Tests <code>clickButtonWithSiblingText()</code>, when the button does not exist.
+     * Expected exception IllegalArgumentException.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void clickButtonByClassNameNotFound() {
+        browseTo("/clickButtonByClassName-1.html", "clickButtonByClassName-1");
+        //Invoke press button
+        driverWrapper.clickButtonByClassName("fakeClass");
+    }
+
+    /**
+     * Tests <code>clickButtonWithSiblingText()</code>, when multiple buttons exist with the same name.
+     * Expected exception IllegalArgumentException.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void clickButtonByClassNameTooMany() {
+        browseTo("/clickButtonByClassName-2.html", "clickButtonByClassName-2");
+        //Invoke press button
+        driverWrapper.clickButtonByClassName("buttonClass");
+    }
+
+    /**
      * Tests <code>isButtonDisabled()</code>, when the input is disabled.
      */
     @Test
@@ -987,6 +1097,26 @@ public class WebDriverWrapperTest {
         browseTo("/containsMessage-3.html", "containsMessage - 3");
         // name and username keys not set
         driverWrapper.containsMessage("You have successfully updated the user: {name} '{username}'.");
+    }
+
+    /**
+     * Tests <code>doesNotContainMessage()</code> with a non-matching example should return true.
+     */
+    @Test
+    public void doesNotContainMessageNotMatching() {
+        browseTo("/containsMessage-1.html", "containsMessage - 1");
+        assertTrue("Message should not be found",
+                driverWrapper.doesNotContainMessage("Some random non-existent text."));
+    }
+
+    /**
+     * Tests <code>doesNotContainMessage()</code> with a matching example should return false.
+     */
+    @Test
+    public void doesNotContainMessageMatching() {
+        browseTo("/containsMessage-1.html", "containsMessage - 1");
+        assertFalse("Message should be found", driverWrapper.doesNotContainMessage(
+                "This is a really long and unique message that something happened."));
     }
 
     /**

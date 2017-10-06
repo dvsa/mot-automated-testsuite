@@ -33,6 +33,12 @@ public class WebStepDefinitions implements En {
         When("^I press the \"([^\"]+)\" button$", (String buttonText) ->
                 driverWrapper.pressButton(buttonText));
 
+        When("^I click the button which contains text \"([^\"]+)\"$", (String buttonText) ->
+                driverWrapper.clickButtonWithSiblingText(buttonText));
+
+        When("^I click the button with class name \"([^\"]+)\"$", (String className) ->
+                driverWrapper.clickButtonByClassName(className));
+
         When("^I click the \"([^\"]+)\" link$", (String linkText) ->
                 driverWrapper.clickLink(linkText));
 
@@ -105,6 +111,9 @@ public class WebStepDefinitions implements En {
 
         Then("^The page contains \"([^\"]+)\"$", (String expected) ->
                 driverWrapper.containsMessage(expected));
+
+        Then("^The page does not contain \"([^\"]+)\"$", (String notExpected) ->
+                driverWrapper.doesNotContainMessage(notExpected));
 
         Then("^The page title contains \"([^\"]+)\"$", (String expected) ->
                 driverWrapper.checkCurrentPageTitle(expected));
