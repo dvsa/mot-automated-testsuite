@@ -716,6 +716,28 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Enters the specified text into the field, within the specified fieldset using legend instead of label.
+     * @param text          The text to enter
+     * @param fieldLabel    The field label
+     * @param fieldsetLabel The fieldset label
+     */
+    public void enterIntoFieldInFieldsetByLegend(String text, String fieldLabel, String fieldsetLabel) {
+        // find the fieldset with the fieldset label
+        WebElement fieldsetElement = webDriver.findElement(
+                By.xpath("//legend[contains(text(),'" + fieldsetLabel + "')]/ancestor::fieldset[1]"));
+
+        // find the specified label (with the for="id" attribute)...
+        WebElement labelElement = fieldsetElement.findElement(
+                By.xpath(".//label[contains(text(),'" + fieldLabel + "')]"));
+
+        // find the text element with id matching the for attribute
+        // (search in the fieldset rather than the whole page, to get around faulty HTML where id's aren't unique!)
+        WebElement textElement = fieldsetElement.findElement(By.id(labelElement.getAttribute("for")));
+        textElement.clear();
+        textElement.sendKeys(text);
+    }
+
+    /**
      * Enters the specified text into the field.
      * <p>Note: This is a low-level way to locate the field. Please only use this method if the text <code>input</code>
      * doesn't have a corresponding label, otherwise use the <code>enterIntoField(String,String)</code> method using

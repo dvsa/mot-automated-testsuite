@@ -2,6 +2,7 @@ package uk.gov.dvsa.mot.fixtures.mot;
 
 import static junit.framework.TestCase.assertTrue;
 
+import cucumber.api.PendingException;
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +34,8 @@ public class AedmStepDefintions implements En {
 
         And("^I click the \\{([^\\}]+)\\} site link for site reference \\{([^\\}]+)\\}$",
                 (String siteNameKey, String siteReferenceKey) ->
-                    driverWrapper.clickLink("td", driverWrapper.getData(siteReferenceKey),
-                        "../th/", driverWrapper.getData(siteNameKey)));
+                        driverWrapper.clickLink("td", driverWrapper.getData(siteReferenceKey),
+                                "../th/", driverWrapper.getData(siteNameKey)));
 
         And("^I click the TQI link for tester \\{([^\\}]+)\\}$", (String usernameKey) ->
                 driverWrapper.clickLink("span", driverWrapper.getData(usernameKey),

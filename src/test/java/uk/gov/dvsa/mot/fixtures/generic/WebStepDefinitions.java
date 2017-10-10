@@ -91,11 +91,19 @@ public class WebStepDefinitions implements En {
 
         When("^I enter \"([^\"]+)\" in the \"([^\"]+)\" field in fieldset \"([^\"]+)\"$",
                 (String text, String fieldLabel, String fieldsetLabel) ->
-                    driverWrapper.enterIntoFieldInFieldset(text, fieldLabel, fieldsetLabel));
+                        driverWrapper.enterIntoFieldInFieldset(text, fieldLabel, fieldsetLabel));
 
         When("^I enter \\{([^\\}]+)\\} in the \"([^\"]+)\" field in fieldset \"([^\"]+)\"$",
                 (String dataKey, String fieldLabel, String fieldsetLabel) ->
                     driverWrapper.enterIntoFieldInFieldset(driverWrapper.getData(dataKey), fieldLabel, fieldsetLabel));
+
+        When("^I enter \"([^\"]+)\" in the \"([^\"]+)\" field in fieldset \"([^\"]+)\" using legend$",
+                (String text, String fieldLabel, String fieldsetLabel) ->
+                        driverWrapper.enterIntoFieldInFieldsetByLegend(text, fieldLabel, fieldsetLabel));
+
+        When("^I enter \\{([^\\}]+)\\} in the \"([^\"]+)\" field in fieldset \"([^\"]+)\" using legend$",
+                (String dataKey, String fieldLabel, String fieldsetLabel) ->
+                        driverWrapper.enterIntoFieldInFieldsetByLegend(driverWrapper.getData(dataKey), fieldLabel, fieldsetLabel));
 
         When("^I enter \"([^\"]+)\" in the field with id \"([^\"]+)\"$", (String text, String id) ->
                 driverWrapper.enterIntoFieldWithId(text, id));
