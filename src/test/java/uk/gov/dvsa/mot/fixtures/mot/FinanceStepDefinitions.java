@@ -28,5 +28,19 @@ public class FinanceStepDefinitions implements En {
 
         And("^I click the link \"([^\"]+)\" with id \"([^\"]+)\"$", (String text, String id) ->
                 driverWrapper.clickElement(id));
+
+        When("^I enter the last 8 characters of \\{([^\\}]+)\\} in the field with id \"([^\"]+)\"$",
+                (String dataKey, String id) -> enterLast8CharsIntoFieldWithId(driverWrapper.getData(dataKey), id));
+
     }
+
+    /**
+     * Enters the last 8 chars of the payment/invoice reference string.
+     * @param reference the payment/invoice reference string
+     * @param id        the id of the field to enter the value into
+     */
+    private void enterLast8CharsIntoFieldWithId(String reference, String id) {
+        driverWrapper.enterIntoFieldWithId(reference.substring(reference.length() - 8, reference.length()), id);
+    }
+
 }

@@ -1,4 +1,4 @@
-@regression
+@cpms
 Feature: 09 - Slot Adjustments as Finance User
 
 
