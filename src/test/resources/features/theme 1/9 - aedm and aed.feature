@@ -138,5 +138,5 @@ Feature: 09 - AEDM and AED
     And I enter "10" in the "Month" field in fieldset "To" using legend
     And I enter "2017" in the "Year" field in fieldset "To" using legend
 
-    When I click the "Update results" button
+    And I click the "Update results" button
     Then The summary line contains "01/10/2017 and 09/10/2017"

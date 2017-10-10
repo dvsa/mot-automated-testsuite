@@ -2,24 +2,10 @@ package uk.gov.dvsa.mot.fixtures.mot;
 
 import static junit.framework.TestCase.assertTrue;
 
-import com.gargoylesoftware.htmlunit.ElementNotFoundException;
-import cucumber.api.PendingException;
 import cucumber.api.java8.En;
-import net.sf.cglib.core.Local;
-import org.openqa.selenium.InvalidArgumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.rmi.runtime.Log;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalUnit;
-import java.util.Date;
-import java.util.NoSuchElementException;
 
 import javax.inject.Inject;
 
@@ -54,7 +40,7 @@ public class PurchaseHistoryPageStepDefinitions implements En {
 
     /**
      * Check if summaryLine contains text.
-     * @param text Text to find in summaryLine.
+     * @param text Text to look for in summaryLine.
      */
     private void checkIfLabelChanged(String text) {
         assertTrue(driverWrapper.getElementText("summaryLine").contains(text));

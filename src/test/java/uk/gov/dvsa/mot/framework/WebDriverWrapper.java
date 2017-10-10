@@ -719,12 +719,12 @@ public class WebDriverWrapper {
      * Enters the specified text into the field, within the specified fieldset using legend instead of label.
      * @param text          The text to enter
      * @param fieldLabel    The field label
-     * @param fieldsetLabel The fieldset label
+     * @param fieldsetLegend The fieldset label
      */
-    public void enterIntoFieldInFieldsetByLegend(String text, String fieldLabel, String fieldsetLabel) {
-        // find the fieldset with the fieldset label
+    public void enterIntoFieldInFieldsetByLegend(String text, String fieldLabel, String fieldsetLegend) {
+        // find the fieldset with the fieldset legend
         WebElement fieldsetElement = webDriver.findElement(
-                By.xpath("//legend[contains(text(),'" + fieldsetLabel + "')]/ancestor::fieldset[1]"));
+                By.xpath("//legend[contains(text(),'" + fieldsetLegend + "')]/ancestor::fieldset[1]"));
 
         // find the specified label (with the for="id" attribute)...
         WebElement labelElement = fieldsetElement.findElement(
