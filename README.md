@@ -46,6 +46,7 @@ The following tags are used:
 
 * **@regression** = Theme 1 regression tests
 * **@smoke** = Smoke tests
+* **@cpms** = CPMS regression tests
 
 ## Reports
 Reporting is done via the [Extender Cucumber Runner](http://mkolisnyk.github.io/cucumber-reports/extended-cucumber-runner) library. The results are placed in the `target` directory along with screenshots of failing tests, and the HTML of the last page reached (if configured).

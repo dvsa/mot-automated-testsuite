@@ -33,7 +33,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
@@ -236,6 +235,26 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Clicking a button specified by its class name.
+     */
+    public void clickButtonByClassName(String className) {
+        List<WebElement> buttons = webDriver.findElements(By.xpath("//button[@class='" + className + "']"));
+        if (buttons.size() == 0) {
+            String message = "No buttons found with class name: " + className;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else if (buttons.size() > 1) {
+            String message = "Several buttons found with class name: " + className;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            buttons.get(0).click();
+        }
+    }
+
+    /**
      * Click a button rather than submit it.
      * @param buttonText    The text on the button to be clicked
      */
@@ -326,6 +345,29 @@ public class WebDriverWrapper {
                     + ") for buttons with text: " + buttonText;
             logger.error(message);
             throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * Presses the button located by the matching sibling element by its text.
+     * Finds the sibling by text then traverses back up the tree to find the parent button of the sibling.
+     * @param siblingText        The text for the sibling of the button
+     */
+    public void clickButtonWithSiblingText(String siblingText) {
+        String xpath = "//*[text() = '" + siblingText + "']/ancestor::button";
+        List<WebElement> buttons = webDriver.findElements(By.xpath(xpath));
+        if (buttons.size() == 0) {
+            String message = "No buttons found for sibling text: " + siblingText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else if (buttons.size() > 1) {
+            String message = "Several buttons found for sibling text: " + siblingText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            buttons.get(0).click();
         }
     }
 
@@ -657,9 +699,16 @@ public class WebDriverWrapper {
      * @param fieldsetLabel The fieldset label
      */
     public void enterIntoFieldInFieldset(String text, String fieldLabel, String fieldsetLabel) {
-        // find the fieldset with the fieldset label
-        WebElement fieldsetElement = webDriver.findElement(
-                By.xpath("//label[contains(text(),'" + fieldsetLabel + "')]/ancestor::fieldset[1]"));
+        WebElement fieldsetElement;
+
+        try {
+            // find the fieldset with the fieldset label
+            fieldsetElement = webDriver.findElement(
+                    By.xpath("//label[contains(text(),'" + fieldsetLabel + "')]/ancestor::fieldset[1]"));
+
+        } catch (NoSuchElementException noSuchElement) {
+            fieldsetElement = findFieldsetByLegend(fieldsetLabel);
+        }
 
         // find the specified label (with the for="id" attribute)...
         WebElement labelElement = fieldsetElement.findElement(
@@ -1043,6 +1092,22 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Checks whether the current page does not contain the specified message, anywhere within the page. Use only with
+     * long unique messages - may contain single quotes, and <code>{key}</code> format data keys, but not double quotes.
+     * @param message   The message
+     * @return <code>true</code> if not found
+     */
+    public boolean doesNotContainMessage(String message) {
+        try {
+            webDriver.findElement(By.xpath("//*[contains(text(),\"" + expandDataKeys(message) + "\")]"));
+            return false;
+
+        } catch (NoSuchElementException ex) {
+            return true;
+        }
+    }
+
+    /**
      * Expands any data references (of the format <code>{key}</code>) with the data value.
      * @param message   The message
      * @return The expanded message
@@ -1330,5 +1395,35 @@ public class WebDriverWrapper {
                 });
 
         webDriver.manage().deleteCookie(cookie);
+    }
+
+    /**
+     * Check if an element is visible.
+     *
+     * @param id ID of the element.
+     * @return Return whether the element is visible or not.
+     */
+    public boolean isVisible(String id) {
+        WebElement element = webDriver.findElement(By.id(id));
+
+        if (element == null) {
+            return false;
+        }
+
+        return element.isDisplayed();
+    }
+
+    /**
+     * Get an attribute of an element.
+     *
+     * @param id ID of the element.
+     * @param attribute Attribute to get.
+     * @return Value of the attribute.
+     */
+    public String getAttribute(String id, String attribute) {
+        WebElement element = webDriver.findElement(By.id(id));
+        String value = element.getAttribute(attribute);
+
+        return value == null ? "" : value;
     }
 }
