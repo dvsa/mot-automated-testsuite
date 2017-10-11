@@ -33,7 +33,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
@@ -700,31 +699,16 @@ public class WebDriverWrapper {
      * @param fieldsetLabel The fieldset label
      */
     public void enterIntoFieldInFieldset(String text, String fieldLabel, String fieldsetLabel) {
-        // find the fieldset with the fieldset label
-        WebElement fieldsetElement = webDriver.findElement(
-                By.xpath("//label[contains(text(),'" + fieldsetLabel + "')]/ancestor::fieldset[1]"));
+        WebElement fieldsetElement;
 
-        // find the specified label (with the for="id" attribute)...
-        WebElement labelElement = fieldsetElement.findElement(
-                By.xpath(".//label[contains(text(),'" + fieldLabel + "')]"));
+        try {
+            // find the fieldset with the fieldset label
+            fieldsetElement = webDriver.findElement(
+                    By.xpath("//label[contains(text(),'" + fieldsetLabel + "')]/ancestor::fieldset[1]"));
 
-        // find the text element with id matching the for attribute
-        // (search in the fieldset rather than the whole page, to get around faulty HTML where id's aren't unique!)
-        WebElement textElement = fieldsetElement.findElement(By.id(labelElement.getAttribute("for")));
-        textElement.clear();
-        textElement.sendKeys(text);
-    }
-
-    /**
-     * Enters the specified text into the field, within the specified fieldset using legend instead of label.
-     * @param text          The text to enter
-     * @param fieldLabel    The field label
-     * @param fieldsetLegend The fieldset label
-     */
-    public void enterIntoFieldInFieldsetByLegend(String text, String fieldLabel, String fieldsetLegend) {
-        // find the fieldset with the fieldset legend
-        WebElement fieldsetElement = webDriver.findElement(
-                By.xpath("//legend[contains(text(),'" + fieldsetLegend + "')]/ancestor::fieldset[1]"));
+        } catch (NoSuchElementException noSuchElement) {
+            fieldsetElement = findFieldsetByLegend(fieldsetLabel);
+        }
 
         // find the specified label (with the for="id" attribute)...
         WebElement labelElement = fieldsetElement.findElement(
@@ -1411,5 +1395,34 @@ public class WebDriverWrapper {
                 });
 
         webDriver.manage().deleteCookie(cookie);
+    }
+
+    /**
+     * Check if an element is visible.
+     *
+     * @param id ID of the element.
+     * @return Return whether the element is visible or not.
+     */
+    public boolean isVisible(String id) {
+        WebElement element = webDriver.findElement(By.id(id));
+
+        if (element == null) {
+            return false;
+        }
+
+        return element.isDisplayed();
+    }
+
+    /**
+     * Get an attribute of an element.
+     *
+     * @param id ID of the element.
+     * @param attribute Attribute to get.
+     * @return Value of the attribute.
+     */
+    public String getAttribute(String id, String attribute) {
+        WebElement element = webDriver.findElement(By.id(id));
+
+        return element.getAttribute(attribute);
     }
 }
