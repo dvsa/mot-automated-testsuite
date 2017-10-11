@@ -1240,6 +1240,33 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>isVisible()</code> with a matching example.
+     */
+    @Test
+    public void isVisibleMatching() {
+        browseTo("/isVisible-1.html", "isVisible - 1");
+        assertTrue(driverWrapper.isVisible("isVisible1"));
+    }
+
+    /**
+     * Tests <code>isVisible()</code> with a non-matching example.
+     */
+    @Test
+    public void isVisibleNonMatching1() {
+        browseTo("/isVisible-1.html", "isVisible - 1");
+        assertFalse(driverWrapper.isVisible("isVisible2"));
+    }
+
+    /**
+     * Tests <code>isVisible()</code> with a non-matching example.
+     */
+    @Test
+    public void isVisibleNonMatching2() {
+        browseTo("/isVisible-1.html", "isVisible - 1");
+        assertFalse(driverWrapper.isVisible("isVisible3"));
+    }
+
+    /**
      * Browses to the specified test page, and check the page title is correct.
      *
      * @param testPage      The test page, must start with "/"
