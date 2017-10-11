@@ -11,7 +11,7 @@ import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 import javax.inject.Inject;
 
 /**
- * Step definitions specific to the purchase history page of the mot app.
+ * Step definitions specific to the CPMS tests.
  */
 public class CpmsStepDefinitions implements En {
 
@@ -27,7 +27,7 @@ public class CpmsStepDefinitions implements En {
      */
     @Inject
     public CpmsStepDefinitions(WebDriverWrapper driverWrapper) {
-        logger.debug("Creating PurchaseHistoryPageStepDefinitions");
+        logger.debug("Creating CpmsStepDefinitions");
         this.driverWrapper = driverWrapper;
 
         Then("^The summary line contains \"([^\"]*)\"$", (String text) -> {
