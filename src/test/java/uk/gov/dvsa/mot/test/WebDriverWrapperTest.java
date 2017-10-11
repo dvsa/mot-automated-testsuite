@@ -1245,7 +1245,7 @@ public class WebDriverWrapperTest {
     @Test
     public void isVisibleMatching() {
         browseTo("/isVisible-1.html", "isVisible - 1");
-        assertTrue(driverWrapper.isVisible("isVisible1"));
+        assertTrue(driverWrapper.isVisible("is_visible1"));
     }
 
     /**
@@ -1254,7 +1254,7 @@ public class WebDriverWrapperTest {
     @Test
     public void isVisibleNonMatching1() {
         browseTo("/isVisible-1.html", "isVisible - 1");
-        assertFalse(driverWrapper.isVisible("isVisible2"));
+        assertFalse(driverWrapper.isVisible("is_visible2"));
     }
 
     /**
@@ -1263,7 +1263,44 @@ public class WebDriverWrapperTest {
     @Test
     public void isVisibleNonMatching2() {
         browseTo("/isVisible-1.html", "isVisible - 1");
-        assertFalse(driverWrapper.isVisible("isVisible3"));
+        assertFalse(driverWrapper.isVisible("is_visible3"));
+    }
+
+    /**
+     * Tests <code>isVisible()</code> with a non-matching example.
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void isVisibleNonMatching3() {
+        browseTo("/isVisible-1.html", "isVisible - 1");
+        assertFalse(driverWrapper.isVisible("is_visible4"));
+    }
+
+    /**
+     * Tests <code>getAttribute()</code> with a matching example.
+     */
+    @Test
+    public void getAttributeMatching() {
+        browseTo("/getAttribute-1.html", "getAttribute - 1");
+        assertTrue(driverWrapper.getAttribute("my_id", "class").contains("my_class"));
+    }
+
+    /**
+     * Tests <code>getAttribute()</code> with a non-matching example.
+     */
+    @Test
+    public void getAttributeNonMatching1() {
+        browseTo("/getAttribute-1.html", "getAttribute - 1");
+        assertFalse(driverWrapper.getAttribute("my_id", "href").contains("www.example.com"));
+    }
+
+
+    /**
+     * Tests <code>getAttribute()</code> with a non-matching example.
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void getAttributeNonMatching2() {
+        browseTo("/getAttribute-1.html", "getAttribute - 1");
+        assertTrue(driverWrapper.getAttribute("my_id2", "class").contains("my_class"));
     }
 
     /**

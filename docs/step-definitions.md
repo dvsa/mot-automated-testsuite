@@ -171,6 +171,11 @@ These steps are specific to the DVSA MOT application screens.
 * I check the expiry date of the confirmation page is correct
 * I check the vts information appears on the confirmation page
 
+### FinanceStepDefinitions
+
+* I click the link ```"..name.."``` with id ```"..id.."```
+* I enter the last 8 characters of ```..paymentRef..``` in the field with id ```"..id.."```
+
 ### HomePageStepDefinitions
 
 * I click the organisation link ```{..organisationKey..}```

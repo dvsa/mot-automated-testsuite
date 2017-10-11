@@ -1422,7 +1422,8 @@ public class WebDriverWrapper {
      */
     public String getAttribute(String id, String attribute) {
         WebElement element = webDriver.findElement(By.id(id));
+        String value = element.getAttribute(attribute);
 
-        return element.getAttribute(attribute);
+        return value == null ? "" : value;
     }
 }
