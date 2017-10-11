@@ -17,5 +17,6 @@ and not exists ( -- not all security_card have a corresponding security_card_dri
 and tst.organisation_id = o.id
 and p.username is not null
 and tst.last_updated_on > "2010-01-01 00:00:00.000000"
+group by p.username, o.name
 order by transaction_count desc
 limit 50

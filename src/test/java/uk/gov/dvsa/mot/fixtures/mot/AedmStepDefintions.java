@@ -2,7 +2,6 @@ package uk.gov.dvsa.mot.fixtures.mot;
 
 import static junit.framework.TestCase.assertTrue;
 
-import cucumber.api.PendingException;
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -13,10 +13,10 @@ import javax.inject.Inject;
 /**
  * Step definitions specific to the purchase history page of the mot app.
  */
-public class PurchaseHistoryPageStepDefinitions implements En {
+public class CpmsStepDefinitions implements En {
 
     /** The logger to use. */
-    private static final Logger logger = LoggerFactory.getLogger(HomePageStepDefinitions.class);
+    private static final Logger logger = LoggerFactory.getLogger(CpmsStepDefinitions.class);
 
     /** The Webdriver to use. */
     private final WebDriverWrapper driverWrapper;
@@ -26,7 +26,7 @@ public class PurchaseHistoryPageStepDefinitions implements En {
      * @param driverWrapper The webdriver to use
      */
     @Inject
-    public PurchaseHistoryPageStepDefinitions(WebDriverWrapper driverWrapper) {
+    public CpmsStepDefinitions(WebDriverWrapper driverWrapper) {
         logger.debug("Creating PurchaseHistoryPageStepDefinitions");
         this.driverWrapper = driverWrapper;
 
