@@ -158,7 +158,7 @@ Feature: 19 - New trade user orders and activates 2FA card
     And The page title contains "Your home"
     And I click the "Your profile" link
     And The page title contains "Your profile"
-    And I click the "MOT tester training certificates" link
+    And I click the "View or add initial training qualifications" link
     And I click the first "Add certificate and request a demo test" link
     And I enter "XYZ54321" in the "Certificate number" field
     And I enter {certDay} in the "Day" field

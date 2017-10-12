@@ -199,7 +199,7 @@ Feature: 13 - A01 user
     And The page title contains "User search"
     And I enter {testerUsername} in the "Username" field
     And I press the "Search" button
-    And I click the first {testerName} link
+    And I press the first {testerName} button
     And The page title contains "User profile"
     When I click the "Change Group A qualification status" link
     And I click the "Qualified" radio button
@@ -222,7 +222,7 @@ Feature: 13 - A01 user
     And The page title contains "User search"
     And I enter {testerUsername} in the "Username" field
     And I press the "Search" button
-    And I click the first {testerName} link
+    And I press the first {testerName} button
     And The page title contains "User profile"
 
     When I click the "Change" link for the "Driving licence" field row
@@ -241,7 +241,7 @@ Feature: 13 - A01 user
     And The page title contains "User search"
     And I enter {testerUsername} in the "Username" field
     And I press the "Search" button
-    And I click the first {testerName} link
+    And I press the first {testerName} button
     And The page title contains "User profile"
 
     When I click the "Change" link for the "Driving licence" field row
@@ -268,7 +268,7 @@ Feature: 13 - A01 user
     And The page title contains "User search"
     And I enter {testerUsername} in the "Username" field
     And I press the "Search" button
-    And I click the first {testerName} link
+    And I press the first {testerName} button
     And The page title contains "User profile"
 
     And I click the "Event history" link

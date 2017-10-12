@@ -34,7 +34,7 @@ Feature: 14 - CSCO
     And The page title contains "User search"
     And I enter {testerUsername} in the "Username" field
     And I press the "Search" button
-    And I click the first {testerName} link
+    And I press the first {testerName} button
     And The page title contains "User profile"
     When I click the "Change" link for the "Email" field row
     And I enter {email} in the "Email address" field

@@ -33,6 +33,9 @@ public class WebStepDefinitions implements En {
         When("^I press the \"([^\"]+)\" button$", (String buttonText) ->
                 driverWrapper.pressButton(buttonText));
 
+        When("^I press the first \\{([^\\}]+)\\} button$", (String buttonText) ->
+                driverWrapper.pressFirstButton(driverWrapper.getData(buttonText)));
+
         When("^I click the button which contains text \"([^\"]+)\"$", (String buttonText) ->
                 driverWrapper.clickButtonWithSiblingText(buttonText));
 
