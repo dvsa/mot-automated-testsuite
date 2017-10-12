@@ -1400,11 +1400,11 @@ public class WebDriverWrapper {
     /**
      * Check if an element is visible.
      *
-     * @param id ID of the element.
+     * @param selector Selector to find the element.
      * @return Return whether the element is visible or not.
      */
-    public boolean isVisible(String id) {
-        WebElement element = webDriver.findElement(By.id(id));
+    public boolean isVisible(By selector) {
+        WebElement element = webDriver.findElement(selector);
 
         if (element == null) {
             return false;

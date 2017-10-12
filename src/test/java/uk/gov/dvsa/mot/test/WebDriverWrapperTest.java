@@ -1245,7 +1245,7 @@ public class WebDriverWrapperTest {
     @Test
     public void isVisibleMatching() {
         browseTo("/isVisible-1.html", "isVisible - 1");
-        assertTrue(driverWrapper.isVisible("is_visible1"));
+        assertTrue(driverWrapper.isVisible(By.id("is_visible1")));
     }
 
     /**
@@ -1254,7 +1254,7 @@ public class WebDriverWrapperTest {
     @Test
     public void isVisibleNonMatching1() {
         browseTo("/isVisible-1.html", "isVisible - 1");
-        assertFalse(driverWrapper.isVisible("is_visible2"));
+        assertFalse(driverWrapper.isVisible(By.id("is_visible2")));
     }
 
     /**
@@ -1263,7 +1263,7 @@ public class WebDriverWrapperTest {
     @Test
     public void isVisibleNonMatching2() {
         browseTo("/isVisible-1.html", "isVisible - 1");
-        assertFalse(driverWrapper.isVisible("is_visible3"));
+        assertFalse(driverWrapper.isVisible(By.id("is_visible3")));
     }
 
     /**
@@ -1272,7 +1272,7 @@ public class WebDriverWrapperTest {
     @Test(expected = NoSuchElementException.class)
     public void isVisibleNonMatching3() {
         browseTo("/isVisible-1.html", "isVisible - 1");
-        assertFalse(driverWrapper.isVisible("is_visible4"));
+        assertFalse(driverWrapper.isVisible(By.id("is_visible4")));
     }
 
     /**
