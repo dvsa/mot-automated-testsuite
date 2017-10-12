@@ -1240,6 +1240,70 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>isVisible()</code> with a matching example.
+     */
+    @Test
+    public void isVisibleMatching() {
+        browseTo("/isVisible-1.html", "isVisible - 1");
+        assertTrue(driverWrapper.isVisible(By.id("is_visible1")));
+    }
+
+    /**
+     * Tests <code>isVisible()</code> with a non-matching example.
+     */
+    @Test
+    public void isVisibleNonMatching1() {
+        browseTo("/isVisible-1.html", "isVisible - 1");
+        assertFalse(driverWrapper.isVisible(By.id("is_visible2")));
+    }
+
+    /**
+     * Tests <code>isVisible()</code> with a non-matching example.
+     */
+    @Test
+    public void isVisibleNonMatching2() {
+        browseTo("/isVisible-1.html", "isVisible - 1");
+        assertFalse(driverWrapper.isVisible(By.id("is_visible3")));
+    }
+
+    /**
+     * Tests <code>isVisible()</code> with a non-matching example.
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void isVisibleNonMatching3() {
+        browseTo("/isVisible-1.html", "isVisible - 1");
+        assertFalse(driverWrapper.isVisible(By.id("is_visible4")));
+    }
+
+    /**
+     * Tests <code>getAttribute()</code> with a matching example.
+     */
+    @Test
+    public void getAttributeMatching() {
+        browseTo("/getAttribute-1.html", "getAttribute - 1");
+        assertTrue(driverWrapper.getAttribute("my_id", "class").contains("my_class"));
+    }
+
+    /**
+     * Tests <code>getAttribute()</code> with a non-matching example.
+     */
+    @Test
+    public void getAttributeNonMatching1() {
+        browseTo("/getAttribute-1.html", "getAttribute - 1");
+        assertFalse(driverWrapper.getAttribute("my_id", "href").contains("www.example.com"));
+    }
+
+
+    /**
+     * Tests <code>getAttribute()</code> with a non-matching example.
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void getAttributeNonMatching2() {
+        browseTo("/getAttribute-1.html", "getAttribute - 1");
+        assertTrue(driverWrapper.getAttribute("my_id2", "class").contains("my_class"));
+    }
+
+    /**
      * Browses to the specified test page, and check the page title is correct.
      *
      * @param testPage      The test page, must start with "/"

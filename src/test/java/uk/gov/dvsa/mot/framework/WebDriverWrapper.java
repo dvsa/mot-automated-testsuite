@@ -33,7 +33,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
@@ -700,9 +699,16 @@ public class WebDriverWrapper {
      * @param fieldsetLabel The fieldset label
      */
     public void enterIntoFieldInFieldset(String text, String fieldLabel, String fieldsetLabel) {
-        // find the fieldset with the fieldset label
-        WebElement fieldsetElement = webDriver.findElement(
-                By.xpath("//label[contains(text(),'" + fieldsetLabel + "')]/ancestor::fieldset[1]"));
+        WebElement fieldsetElement;
+
+        try {
+            // find the fieldset with the fieldset label
+            fieldsetElement = webDriver.findElement(
+                    By.xpath("//label[contains(text(),'" + fieldsetLabel + "')]/ancestor::fieldset[1]"));
+
+        } catch (NoSuchElementException noSuchElement) {
+            fieldsetElement = findFieldsetByLegend(fieldsetLabel);
+        }
 
         // find the specified label (with the for="id" attribute)...
         WebElement labelElement = fieldsetElement.findElement(
@@ -1389,5 +1395,35 @@ public class WebDriverWrapper {
                 });
 
         webDriver.manage().deleteCookie(cookie);
+    }
+
+    /**
+     * Check if an element is visible.
+     *
+     * @param selector Selector to find the element.
+     * @return Return whether the element is visible or not.
+     */
+    public boolean isVisible(By selector) {
+        WebElement element = webDriver.findElement(selector);
+
+        if (element == null) {
+            return false;
+        }
+
+        return element.isDisplayed();
+    }
+
+    /**
+     * Get an attribute of an element.
+     *
+     * @param id ID of the element.
+     * @param attribute Attribute to get.
+     * @return Value of the attribute.
+     */
+    public String getAttribute(String id, String attribute) {
+        WebElement element = webDriver.findElement(By.id(id));
+        String value = element.getAttribute(attribute);
+
+        return value == null ? "" : value;
     }
 }
