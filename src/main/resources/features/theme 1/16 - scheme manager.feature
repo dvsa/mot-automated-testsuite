@@ -21,7 +21,7 @@ Feature: 16 - Scheme manager
     And The page title contains "User search"
     And I enter {veUsername} in the "Username" field
     And I press the "Search" button
-    And I click the first {veName} link
+    And I press the first {veName} button
     And The page title contains "User profile"
     And I check the "Name" field row has value {veName}
     And I check the "User ID" field row has value {veUsername}

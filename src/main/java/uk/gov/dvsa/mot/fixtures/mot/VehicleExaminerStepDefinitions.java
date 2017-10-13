@@ -97,7 +97,7 @@ public class VehicleExaminerStepDefinitions implements En {
                 });
 
         And("^I click the first name in the list", () -> {
-            driverWrapper.clickFirstLink(driverWrapper.getTextFromTableColumn("Name"));
+            driverWrapper.pressFirstButton(driverWrapper.getTextFromTableColumn("Name"));
         });
 
         And("^I check the user profile contains username \\{([^\\}]+)\\}$", (String usernameKey) -> {
