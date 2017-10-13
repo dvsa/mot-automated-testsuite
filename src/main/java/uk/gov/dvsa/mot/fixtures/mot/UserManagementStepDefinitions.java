@@ -3,7 +3,7 @@ package uk.gov.dvsa.mot.fixtures.mot;
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.dvsa.mot.data.DatabaseDataProvider;
+import uk.gov.dvsa.mot.data.DataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 import java.util.List;
@@ -22,14 +22,14 @@ public class UserManagementStepDefinitions implements En {
     private final WebDriverWrapper driverWrapper;
 
     /** The data provider to use. */
-    private final DatabaseDataProvider dataProvider;
+    private final DataProvider dataProvider;
 
     /**
      * Creates a new instance.
      * @param driverWrapper     The driver wrapper to use
      * @param dataProvider      The data provider to use
      */
-    public UserManagementStepDefinitions(WebDriverWrapper driverWrapper, DatabaseDataProvider dataProvider) {
+    public UserManagementStepDefinitions(WebDriverWrapper driverWrapper, DataProvider dataProvider) {
         this.driverWrapper = driverWrapper;
         this.dataProvider = dataProvider;
 

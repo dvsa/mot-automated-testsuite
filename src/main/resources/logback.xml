@@ -7,7 +7,7 @@
     </appender>
 
     <!-- logs to a separate file per pid, relies upon pid being set in the MDC -->
-    <!--<appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+    <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
         <discriminator>
             <key>pid</key>
             <defaultValue>bootstrap</defaultValue>
@@ -21,8 +21,9 @@
                 </encoder>
             </appender>
         </sift>
-    </appender>-->
+    </appender>
 
+    <!--
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>build/logs/testsuite.log</file>
         <append>false</append>
@@ -30,6 +31,7 @@
             <pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger %msg%n</pattern>
         </encoder>
     </appender>
+    -->
 
     <!-- the application log levels -->
     <logger name="uk.gov.dvsa" level="debug"/>
@@ -38,28 +40,21 @@
     <logger name="uk.gov.dvsa.mot.framework.WebDriverWrapper" level="warn"/>
 
     <!-- set to debug to see test data being loaded and used -->
-    <logger name="uk.gov.dvsa.mot.data.DatabaseDataProvider" level="debug"/>
+    <logger name="uk.gov.dvsa.mot.data.ClientDataProvider" level="debug"/>
 
     <!-- default log levels for cucumber, selenium and 3rd party libraries -->
     <logger name="ch.qos.logback" level="warn"/>
     <logger name="org.openqa.selenium" level="info"/>
     <logger name="org.apache.http" level="info"/>
     <logger name="org.springframework" level="warn"/>
-
-    <!-- set to debug to output SQL being executed -->
-    <logger name="org.springframework.jdbc.core.JdbcTemplate" level="warn"/>
-
-    <!-- set to at least info to see MySQL performance advice -->
-    <logger name="MySQL" level="error"/>
-
-    <!-- set to debug to see db connection use and transactions -->
-    <logger name="org.springframework.jdbc.datasource" level="warn"/>
+    <logger name="freemarker" level="warn"/>
 
     <root level="ALL">
         <!-- Uncomment this to send logging to the console (useful but gets mixed with Cucumber output) -->
         <!--<appender-ref ref="STDOUT" />-->
 
         <!-- Uncomment this to send logging to a file -->
-        <appender-ref ref="FILE" />
+        <appender-ref ref="SIFT" />
+        <!--<appender-ref ref="FILE" />-->
     </root>
 </configuration>

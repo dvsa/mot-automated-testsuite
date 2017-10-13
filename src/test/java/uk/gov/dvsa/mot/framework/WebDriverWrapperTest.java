@@ -1,4 +1,4 @@
-package uk.gov.dvsa.mot.test;
+package uk.gov.dvsa.mot.framework;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -16,8 +16,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.springframework.core.env.Environment;
 import org.springframework.mock.env.MockEnvironment;
-import uk.gov.dvsa.mot.framework.WebDriverWrapper;
-import uk.gov.dvsa.mot.framework.WrongPageException;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -44,7 +42,7 @@ public class WebDriverWrapperTest {
 
         // mocked testsuite.properties values
         Environment env = new MockEnvironment()
-                .withProperty("startingUrl", "file:/" + home + "/src/test/java/uk/gov/dvsa/mot/test/exampleHtml")
+                .withProperty("startingUrl", "file:/" + home + "/src/test/resources/exampleHtml")
                 .withProperty("pageWait", "1")
                 .withProperty("clickWait", "1");
 

@@ -33,7 +33,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
@@ -368,7 +367,7 @@ public class WebDriverWrapper {
      * @param text  The text
      * @return A List of zero or more Elements
      */
-    public List<WebElement> findSpans(String text) {
+    List<WebElement> findSpans(String text) {
         // find any "span" elements with text containing the given text (can be partial match)
         return webDriver.findElements(By.xpath("//span[contains(text(),\"" + text + "\")]"));
     }

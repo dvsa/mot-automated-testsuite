@@ -1,4 +1,4 @@
-package uk.gov.dvsa.mot.di;
+package uk.gov.dvsa.mot.server.di;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +12,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import uk.gov.dvsa.mot.data.DataDao;
-import uk.gov.dvsa.mot.data.DatabaseDataProvider;
-import uk.gov.dvsa.mot.framework.WebDriverWrapper;
+import uk.gov.dvsa.mot.server.data.DataDao;
+import uk.gov.dvsa.mot.server.data.DatabaseDataProvider;
 
 import javax.sql.DataSource;
 
 /**
- * Spring configuration class for the test suite.
- * <p>Note: Using the Cucumber cli runner with the Cucumber-JVM Spring module results in a single Spring application
- * created for the testsuite, shared between every Cucumber feature being run.</p>
- * <p>Note 2: New instances of hooks and step definitions are created by Spring for every scenario within each feature,
- * with Spring dependencies injected from the current Spring application.</p>
+ * Spring configuration class for the data server.
  */
 @Configuration
 @EnableTransactionManagement
@@ -80,10 +75,5 @@ public class SpringConfiguration {
     @Bean
     public DataDao dataDao(JdbcTemplate jdbcTemplate, ResourcePatternResolver classpathScanner) {
         return new DataDao(jdbcTemplate, classpathScanner);
-    }
-
-    @Bean
-    public WebDriverWrapper webDriverWrapper() {
-        return new WebDriverWrapper(env);
     }
 }

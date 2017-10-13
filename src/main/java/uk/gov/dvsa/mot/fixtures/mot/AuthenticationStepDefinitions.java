@@ -7,7 +7,7 @@ import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
-import uk.gov.dvsa.mot.data.DatabaseDataProvider;
+import uk.gov.dvsa.mot.data.DataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 import uk.gov.dvsa.mot.otp.Generator;
 
@@ -29,7 +29,7 @@ public class AuthenticationStepDefinitions implements En {
     private final WebDriverWrapper driverWrapper;
 
     /** The data provider to use. */
-    private final DatabaseDataProvider dataProvider;
+    private final DataProvider dataProvider;
 
     /** The login data set cached for use with login retries. */
     private List<List<String>> dataSet;
@@ -41,7 +41,7 @@ public class AuthenticationStepDefinitions implements En {
      * @param env               The config settings to use
      */
     @Inject
-    public AuthenticationStepDefinitions(WebDriverWrapper driverWrapper, DatabaseDataProvider dataProvider,
+    public AuthenticationStepDefinitions(WebDriverWrapper driverWrapper, DataProvider dataProvider,
                                          Environment env) {
         logger.debug("Creating AuthenticationStepDefinitions...");
         this.driverWrapper = driverWrapper;

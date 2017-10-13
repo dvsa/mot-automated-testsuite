@@ -1,0 +1,49 @@
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{HH:mm:ss.SSS} %-5level %logger %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>build/logs/server.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- the application log levels -->
+    <logger name="uk.gov.dvsa" level="debug"/>
+
+    <!-- set to debug to see test data being loaded and used -->
+    <logger name="uk.gov.dvsa.mot.data.DatabaseDataProvider" level="debug"/>
+
+    <!-- default log levels for 3rd party libraries -->
+    <logger name="ch.qos.logback" level="warn"/>
+    <logger name="org.springframework" level="info"/>
+    <logger name="org.apache.tomcat" level="info"/>
+    <logger name="org.apache.catalina" level="info"/>
+    <logger name="org.apache.coyote" level="info"/>
+    <logger name="org.hibernate" level="info"/>
+    <logger name="javax.activation" level="info"/>
+    <logger name="javax.management" level="info"/>
+
+    <!-- set to debug to output SQL being executed -->
+    <logger name="org.springframework.jdbc.core.JdbcTemplate" level="warn"/>
+
+    <!-- set to at least info to see MySQL performance advice -->
+    <logger name="MySQL" level="error"/>
+
+    <!-- set to debug to see db connection use and transactions -->
+    <logger name="org.springframework.jdbc.datasource" level="debug"/>
+
+    <root level="ALL">
+        <!-- Uncomment this to send logging to the console (useful but gets mixed with Cucumber output) -->
+        <!--<appender-ref ref="STDOUT" />-->
+
+        <!-- Uncomment this to send logging to a file -->
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>

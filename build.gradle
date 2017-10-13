@@ -3,9 +3,11 @@ apply plugin: 'checkstyle'
 
 ext {
     javaVersion = '1.8'
+    junitVersion = '4.12'
     cucumberVersion = '1.2.5'
-    seleniumVersion = '3.5.3'
+    seleniumVersion = '3.6.0'
     springVersion = '4.3.11.RELEASE'
+    springBootVersion = '1.5.7.RELEASE'
     slf4jVersion = '1.7.25'
     checkstyleVersion = '6.19'
     cucumberOptions = ['--plugin', 'pretty', '--plugin', 'json:build/reports/selenium/selenium.json',
@@ -19,10 +21,30 @@ repositories {
     jcenter()
 }
 
+sourceSets {
+    server {
+        java {
+            srcDirs = ['src/server/java']
+        }
+        resources {
+            srcDirs = ['src/server/resources']
+        }
+    }
+    serverTest {
+        java {
+            srcDirs = ['src/server-test/java']
+        }
+        resources {
+            srcDirs = ['src/server-test/resources']
+        }
+    }
+}
+
 configurations {
     cucumberRuntime {
-        extendsFrom testRuntime
+        extendsFrom runtime
     }
+    all*.exclude group: 'commons-logging', module: 'commons-logging'
 }
 
 checkstyle {
@@ -36,25 +58,37 @@ checkstyle {
 
 task('cucumber-feature') {
     description 'Runs a single feature (specified using -Pfeature=...)'
-    dependsOn assemble, compileTestJava, check
+    dependsOn assemble, compileJava, check
     finalizedBy 'cucumber-reporting'
     doLast {
         if (!project.hasProperty('feature')) {
             throw new GradleException('feature parameter must be defined')
         }
+        copy {
+            into "build/server-libs"
+            from configurations.serverRuntime + sourceSets.server.output
+        }
+        javaexec {
+            main = 'uk.gov.dvsa.mot.runner.StartDataServer'
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
+        }
         javaexec {
             main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.test.output
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
 
             // Cucumber configuration
-            args = cucumberOptions + ['src/test/resources/features/' + feature]
+            args = cucumberOptions + ['src/main/resources/features/' + feature]
+        }
+        javaexec {
+            main = 'uk.gov.dvsa.mot.runner.StopDataServer'
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
         }
     }
 }
 
 task('cucumber-scenario') {
     description 'Runs matching scenarios within a single feature test (specified using -Pfeature=... -Pscenario=...)'
-    dependsOn assemble, compileTestJava, check
+    dependsOn assemble, compileJava, check
     finalizedBy 'cucumber-reporting'
     doLast {
         if (!project.hasProperty('feature')) {
@@ -63,45 +97,96 @@ task('cucumber-scenario') {
         if (!project.hasProperty('scenario')) {
             throw new GradleException('scenario parameter must be defined')
         }
+        copy {
+            into "build/server-libs"
+            from configurations.serverRuntime + sourceSets.server.output
+        }
+        javaexec {
+            main = 'uk.gov.dvsa.mot.runner.StartDataServer'
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
+        }
         javaexec {
             main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.test.output
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
 
             // Cucumber configuration
-            args = cucumberOptions + ['--name', scenario, 'src/test/resources/features/' + feature]
+            args = cucumberOptions + ['--name', scenario, 'src/main/resources/features/' + feature]
+        }
+        javaexec {
+            main = 'uk.gov.dvsa.mot.runner.StopDataServer'
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
         }
     }
 }
 
 task('cucumber-tag') {
     description 'Runs all features matching the tag(s) (specified using -Ptag=...)'
-    dependsOn assemble, compileTestJava, check
+    dependsOn assemble, compileJava, check
     finalizedBy 'cucumber-reporting'
     doLast {
         if (!project.hasProperty('tag')) {
             throw new GradleException('tag parameter must be defined')
         }
+        copy {
+            into "build/server-libs"
+            from configurations.serverRuntime + sourceSets.server.output
+        }
+        javaexec {
+            main = 'uk.gov.dvsa.mot.runner.StartDataServer'
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
+        }
         javaexec {
             main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.test.output
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
 
             // Cucumber configuration
-            args = cucumberOptions + ['--tags', tag, 'src/test/resources/features']
+            args = cucumberOptions + ['--tags', tag, 'src/main/resources/features']
+        }
+        javaexec {
+            main = 'uk.gov.dvsa.mot.runner.StopDataServer'
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
         }
     }
 }
 
-task('cucumber-all') {
-    description 'Runs all feature tests in serial'
-    dependsOn assemble, compileTestJava, check
+task('parallel') {
+    description 'Runs all features matching the tag(s) (specified using -Ptag=...) in parallel'
+    dependsOn assemble, compileJava, check
     finalizedBy 'cucumber-reporting'
     doLast {
+        if (!project.hasProperty('tag')) {
+            throw new GradleException('tag parameter must be defined')
+        }
+        copy {
+            into "build/server-libs"
+            from configurations.serverRuntime + sourceSets.server.output
+        }
         javaexec {
-            main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.test.output
+            main = 'uk.gov.dvsa.mot.runner.StartDataServer'
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
+        }
+        javaexec {
+            main = 'org.junit.runner.JUnitCore'
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
+            args = [ 'uk.gov.dvsa.mot.runner.CourgetteJUnitRunner' ]
 
             // Cucumber configuration
-            args = cucumberOptions + ['src/test/resources/features']
+            systemProperties = [ 'cucumber.options': '--tags ' + tag ]
+        }
+        javaexec {
+            main = 'uk.gov.dvsa.mot.runner.StopDataServer'
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
+        }
+    }
+}
+
+task('run-server') {
+    description 'Use to test/debug the data server'
+    dependsOn assemble, compileJava, check
+    doLast {
+        javaexec {
+            main = 'uk.gov.dvsa.mot.server.ServerApplication'
+            classpath = configurations.serverRuntime + sourceSets.server.output
         }
     }
 }
@@ -111,24 +196,25 @@ clean.doFirst {
 }
 
 task('cucumber-reporting') {
-    dependsOn assemble, compileTestJava, check
+    dependsOn assemble, compileJava, check
     doLast{
         javaexec {
             main = "uk.gov.dvsa.mot.reporting.CucumberReporting"
-            classpath = configurations.cucumberRuntime + sourceSets.test.output
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
         }
     }
 }
 
 dependencies {
-    testCompile "junit:junit:4.12"
-    testCompile "info.cukes:cucumber-java8:$cucumberVersion"
-    testCompile "info.cukes:cucumber-spring:$cucumberVersion"
-    testCompile ("com.github.mkolisnyk:cucumber-runner:1.0.11") {
+    compile "junit:junit:$junitVersion"
+    compile "info.cukes:cucumber-java8:$cucumberVersion"
+    compile "info.cukes:cucumber-spring:$cucumberVersion"
+    compile "io.github.prashant-ramcharan:courgette-jvm:1.4.0"
+    compile ("com.github.mkolisnyk:cucumber-report-generator:1.3") {
         // not using testng, clashes with junit
         exclude group: 'info.cukes', module: 'cucumber-testng'
     }
-    testCompile ("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
+    compile ("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
         // exclude the unused drivers (IE, Edge, Safari, Firefox, Opera)
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-edge-driver'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-firefox-driver'
@@ -136,20 +222,43 @@ dependencies {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-opera-driver'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
     }
-    testCompile "org.slf4j:slf4j-api:$slf4jVersion"
-    testCompile "org.slf4j:log4j-over-slf4j:$slf4jVersion"
-    testCompile "ch.qos.logback:logback-classic:1.2.3"
-    testCompile "org.springframework:spring-context:$springVersion"
-    testCompile "org.springframework:spring-test:$springVersion"
-    testCompile "org.springframework:spring-jdbc:$springVersion"
-    testCompile "javax.inject:javax.inject:1"
-    testCompile "mysql:mysql-connector-java:5.1.44"
-    testCompile "commons-dbcp:commons-dbcp:1.4"
-    testCompile ("xml-apis:xml-apis:1.4.01") {
+    compile "org.slf4j:slf4j-api:$slf4jVersion"
+    runtime "org.slf4j:log4j-over-slf4j:$slf4jVersion"
+    runtime "org.slf4j:jcl-over-slf4j:$slf4jVersion"
+    runtime "org.slf4j:jul-to-slf4j:$slf4jVersion"
+    runtime "ch.qos.logback:logback-classic:1.2.3"
+    compile "org.springframework:spring-context:$springVersion"
+    compile "org.springframework:spring-web:$springVersion"
+    compile "org.springframework:spring-test:$springVersion"
+    compile "javax.inject:javax.inject:1"
+    runtime ("xml-apis:xml-apis:1.4.01") {
         // spring-context requires the older XML APIs
         force = true
     }
 
     // depends upon the "mot/2fa-pin-generator" project being checked out alongside this project, then built manually
-    testCompile files("../2fa-pin-generator/build/libs/2fa-generator-1.0.jar")
+    compile files("../2fa-pin-generator/build/libs/2fa-generator-1.0.jar")
+
+    serverCompile "org.slf4j:slf4j-api:$slf4jVersion"
+    serverRuntime "ch.qos.logback:logback-classic:1.2.3"
+    serverCompile "org.springframework:spring-jdbc:$springVersion"
+    serverCompile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
+    serverCompile("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
+    serverCompile "javax.inject:javax.inject:1"
+    serverCompile "mysql:mysql-connector-java:5.1.44"
+    serverCompile"commons-dbcp:commons-dbcp:1.4"
+    serverRuntime ("xml-apis:xml-apis:1.4.01") {
+        // spring-context requires the older XML APIs
+        force = true
+    }
+
+    // only used by the tests for the tests
+    testCompile "org.seleniumhq.selenium:htmlunit-driver:2.27"
+    testCompile "org.springframework:spring-test:$springVersion"
+
+    // only used by the tests for the server
+    serverTestCompile sourceSets.server.output
+    serverTestCompile configurations.serverCompile
+    serverTestCompile "junit:junit:$junitVersion"
+    serverTestCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
 }

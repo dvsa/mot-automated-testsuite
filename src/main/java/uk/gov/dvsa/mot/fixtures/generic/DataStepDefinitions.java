@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.dvsa.mot.data.DatabaseDataProvider;
+import uk.gov.dvsa.mot.data.DataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 import java.time.LocalDate;
@@ -25,7 +25,7 @@ public class DataStepDefinitions implements En {
     private final WebDriverWrapper driverWrapper;
 
     /** The data provider to use. */
-    private final DatabaseDataProvider dataProvider;
+    private final DataProvider dataProvider;
 
     /**
      * Creates a new instance.
@@ -33,7 +33,7 @@ public class DataStepDefinitions implements En {
      * @param dataProvider      The data provider to use
      */
     @Inject
-    public DataStepDefinitions(WebDriverWrapper driverWrapper, DatabaseDataProvider dataProvider) {
+    public DataStepDefinitions(WebDriverWrapper driverWrapper, DataProvider dataProvider) {
         logger.debug("Creating DataStepDefinitions...");
         this.driverWrapper = driverWrapper;
         this.dataProvider = dataProvider;
