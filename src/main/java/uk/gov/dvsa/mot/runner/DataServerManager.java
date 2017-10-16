@@ -20,7 +20,6 @@ public class DataServerManager {
     /** The logger to use. */
     private static final Logger logger = LoggerFactory.getLogger(DataServerManager.class);
 
-
     /** The server process. */
     private static Process serverProcess;
 
@@ -64,21 +63,23 @@ public class DataServerManager {
         logger.info("In DataServerManager.stopServer");
 
         try {
-            if (serverProcess != null) {
-                // POST to Spring Boot shutdown handler to trigger a clean shutdown...
-                // (it returns a short JSON reply message)
-                RestTemplate restTemplate = new RestTemplate();
-                String result = restTemplate.postForObject(
-                        "http://localhost:9999/shutdown", null, String.class);
-                logger.info("Server shutdown triggered, received {}", result);
-            }
+            // POST to Spring Boot shutdown handler to trigger a clean shutdown...
+            // (it returns a short JSON reply message)
+            RestTemplate restTemplate = new RestTemplate();
+            String result = restTemplate.postForObject(
+                    "http://localhost:9999/shutdown", null, String.class);
+            logger.info("Server shutdown triggered, received {}", result);
+
         } catch (RestClientException ex) {
             String message = "Failed to post server shutdown message: " + ex.getMessage();
             logger.error(message, ex);
 
-            // attempt to kill the server process as a last resort...
-            serverProcess.destroy();
-            logger.info("Server proess killed");
+            if (serverProcess != null) {
+                // attempt to kill the server process as a last resort...
+                // not possible if using Courgette runner (as start and stop is in different processes)
+                serverProcess.destroy();
+                logger.info("Server process killed");
+            }
         }
     }
 
