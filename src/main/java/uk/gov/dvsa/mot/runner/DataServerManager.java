@@ -2,6 +2,7 @@ package uk.gov.dvsa.mot.runner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,6 +29,14 @@ public class DataServerManager {
      */
     public static void startServer() {
         logger.info("In DataServerManager.startServer");
+
+        /*
+         * Just in case the data server wasn't successfully shutdown last time the testsuite was run, check here
+         * if it responds and if so shut it down before running the new version up
+         */
+        if (checkIfServerAlreadyRunning()) {
+            stopServer();
+        }
 
         try {
             String classpath = calculateServerClasspath("./build/server-libs");
@@ -57,7 +66,7 @@ public class DataServerManager {
     }
 
     /**
-     * Stops the data server, gracefully if possible otherwise forcibly.
+     * Stops the data server, gracefully if possible (using the /shutdown endpoint) otherwise forcibly.
      */
     public static void stopServer() {
         logger.info("In DataServerManager.stopServer");
@@ -80,9 +89,35 @@ public class DataServerManager {
                 serverProcess.destroy();
                 logger.info("Server process killed");
             }
+
+            // swallow exception
         }
     }
 
+    /**
+     * Checks if the data server is already running, by calling the /health endpoint.
+     * @return <code>true</code> if running
+     */
+    private static boolean checkIfServerAlreadyRunning() {
+        logger.info("In DataServerManager.checkIfServerAlreadyRunning");
+
+        try {
+            // issue a GET to Spring Boot health endpoint to determine if data server is already running...
+            // (it returns a short JSON reply message)
+            RestTemplate restTemplate = new RestTemplate();
+            SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+            requestFactory.setConnectTimeout(500); // set short connect timeout
+            requestFactory.setReadTimeout(2000); // set slightly longer read timeout
+            restTemplate.setRequestFactory(requestFactory);
+            String result = restTemplate.getForObject("http://localhost:9999/health", String.class);
+            logger.info("Server is already running, received {}", result);
+            return true;
+
+        } catch (RestClientException ex) {
+            logger.info("Server not already running");
+            return false;
+        }
+    }
 
     /**
      * Calculates the server classpath, which is a colon-delimited string of directories and .jar files.
