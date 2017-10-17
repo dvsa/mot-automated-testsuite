@@ -50,10 +50,14 @@ The following tags are used:
 ## Reports
 Reporting is done via the [Extender Cucumber Runner](http://mkolisnyk.github.io/cucumber-reports/extended-cucumber-runner) library. The results are placed in the `target` directory along with screenshots of failing tests, and the HTML of the last page reached (if configured).
 
+A custom report detailing the usage of database test data is also output in the `target` directory, with any errors highlighted in red.
+
+
 ## Data Server
 This test suite requires sharing/co-ordination of data between tests, however Cucumber-JVM does not support multi-threading.
 
 The test suite uses the [Courgette JVM](https://github.com/prashant-ramcharan/courgette-jvm) runner, which runs features in separate processes. Before the test suite starts, a data sever (which is a small SpringBoot microservice) is started. During each test, a simple REST API is invoked from each feature process to obtain test data. After the test suite completes, the data server is automatically shut down.
+
 
 ## Source Code Folders
 * main
