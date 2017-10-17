@@ -48,6 +48,13 @@ configurations {
     all*.exclude group: 'commons-logging', module: 'commons-logging'
 }
 
+task serverTest(type: Test) {
+    testClassesDir = sourceSets.serverTest.output.classesDir
+    classpath = sourceSets.serverTest.runtimeClasspath
+}
+
+check.dependsOn test, serverTest
+
 checkstyle {
     configFile = new File(rootDir, "dvsa_java_checks.xml")
     toolVersion = checkstyleVersion
