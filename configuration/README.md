@@ -76,3 +76,6 @@ To accommodate changed user passwords, the testsuite tries again with another us
 
 ## dataserverUrl
 Base URL to use when connecting to the local dataserver
+
+## dataUsageReport
+Name and path of the test data usage report (e.g. `target/data-usage-report.html`)
