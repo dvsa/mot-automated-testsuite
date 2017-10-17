@@ -271,6 +271,7 @@ dependencies {
     // only used by the tests for the tests
     testCompile "org.seleniumhq.selenium:htmlunit-driver:2.27"
     testCompile "org.springframework:spring-test:$springVersion"
+    testCompile "org.mockito:mockito-core:1.10.19"
 
     // only used by the tests for the server
     serverTestCompile sourceSets.server.output
