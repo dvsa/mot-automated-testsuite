@@ -103,8 +103,6 @@ public class DataDao {
      * @return The dataset
      */
     private List<List<String>> executeQuery(String query, String dataSetName, int length) {
-        long start = System.currentTimeMillis();
-
         if (length > 0) {
             jdbcTemplate.setMaxRows(length);
         } else {
@@ -121,21 +119,11 @@ public class DataDao {
             }
             return row;
         });
-        long end = System.currentTimeMillis();
 
         // check dataset is not empty
         if (dataSet.size() == 0) {
             String message = "No test data found matching data set name: '" + dataSetName + "'";
             logger.warn(message);
-        }
-
-        double timingInSeconds = (end - start) / 1000.0D;
-        String formattedTiming = String.format("%.3f", timingInSeconds);
-        logger.debug("loaded {} entries for dataset {} in {} secs", dataSet.size(), dataSetName, formattedTiming);
-
-        if (timingInSeconds > 10.0D) {
-            logger.warn("slow dataset: {} took {} seconds, please check the SQL query performance!",
-                    dataSetName, formattedTiming);
         }
 
         return dataSet;

@@ -14,6 +14,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import uk.gov.dvsa.mot.server.data.DataDao;
 import uk.gov.dvsa.mot.server.data.DatabaseDataProvider;
+import uk.gov.dvsa.mot.server.reporting.DataUsageReportGenerator;
 
 import javax.sql.DataSource;
 
@@ -63,8 +64,8 @@ public class SpringConfiguration {
     }
 
     @Bean
-    public DatabaseDataProvider dataProvider(DataDao dataDao) {
-        return new DatabaseDataProvider(dataDao);
+    public DatabaseDataProvider dataProvider(DataDao dataDao, DataUsageReportGenerator dataUsageReportGenerator) {
+        return new DatabaseDataProvider(dataDao, dataUsageReportGenerator);
     }
 
     @Bean
@@ -75,5 +76,10 @@ public class SpringConfiguration {
     @Bean
     public DataDao dataDao(JdbcTemplate jdbcTemplate, ResourcePatternResolver classpathScanner) {
         return new DataDao(jdbcTemplate, classpathScanner);
+    }
+
+    @Bean
+    public DataUsageReportGenerator dataUsageReportGenerator(Environment env) {
+        return new DataUsageReportGenerator(env);
     }
 }

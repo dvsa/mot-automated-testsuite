@@ -9,6 +9,7 @@ ext {
     springVersion = '4.3.11.RELEASE'
     springBootVersion = '1.5.7.RELEASE'
     slf4jVersion = '1.7.25'
+    logbackVersion = '1.2.3'
     checkstyleVersion = '6.19'
     cucumberOptions = ['--plugin', 'pretty', '--plugin', 'json:build/reports/selenium/selenium.json',
                        '--plugin', 'html:build/reports/selenium', '--glue', 'uk.gov.dvsa.mot']
@@ -75,6 +76,7 @@ task('cucumber-feature') {
         javaexec {
             main = "cucumber.api.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.main.output
+            ignoreExitValue = true
 
             // Cucumber configuration
             args = cucumberOptions + ['src/main/resources/features/' + feature]
@@ -82,6 +84,7 @@ task('cucumber-feature') {
         javaexec {
             main = 'uk.gov.dvsa.mot.runner.StopDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
+            ignoreExitValue = true
         }
     }
 }
@@ -108,6 +111,7 @@ task('cucumber-scenario') {
         javaexec {
             main = "cucumber.api.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.main.output
+            ignoreExitValue = true
 
             // Cucumber configuration
             args = cucumberOptions + ['--name', scenario, 'src/main/resources/features/' + feature]
@@ -115,6 +119,7 @@ task('cucumber-scenario') {
         javaexec {
             main = 'uk.gov.dvsa.mot.runner.StopDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
+            ignoreExitValue = true
         }
     }
 }
@@ -138,6 +143,7 @@ task('cucumber-tag') {
         javaexec {
             main = "cucumber.api.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.main.output
+            ignoreExitValue = true
 
             // Cucumber configuration
             args = cucumberOptions + ['--tags', tag, 'src/main/resources/features']
@@ -145,6 +151,7 @@ task('cucumber-tag') {
         javaexec {
             main = 'uk.gov.dvsa.mot.runner.StopDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
+            ignoreExitValue = true
         }
     }
 }
@@ -169,6 +176,7 @@ task('parallel') {
             main = 'org.junit.runner.JUnitCore'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
             args = [ 'uk.gov.dvsa.mot.runner.CourgetteJUnitRunner' ]
+            ignoreExitValue = true
 
             // Cucumber configuration
             systemProperties = [ 'cucumber.options': '--tags ' + tag ]
@@ -176,6 +184,7 @@ task('parallel') {
         javaexec {
             main = 'uk.gov.dvsa.mot.runner.StopDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
+            ignoreExitValue = true
         }
     }
 }
@@ -226,7 +235,7 @@ dependencies {
     runtime "org.slf4j:log4j-over-slf4j:$slf4jVersion"
     runtime "org.slf4j:jcl-over-slf4j:$slf4jVersion"
     runtime "org.slf4j:jul-to-slf4j:$slf4jVersion"
-    runtime "ch.qos.logback:logback-classic:1.2.3"
+    runtime "ch.qos.logback:logback-classic:$logbackVersion"
     compile "org.springframework:spring-context:$springVersion"
     compile "org.springframework:spring-web:$springVersion"
     compile "org.springframework:spring-test:$springVersion"
@@ -240,7 +249,7 @@ dependencies {
     compile files("../2fa-pin-generator/build/libs/2fa-generator-1.0.jar")
 
     serverCompile "org.slf4j:slf4j-api:$slf4jVersion"
-    serverRuntime "ch.qos.logback:logback-classic:1.2.3"
+    serverRuntime "ch.qos.logback:logback-classic:$logbackVersion"
     serverCompile "org.springframework:spring-jdbc:$springVersion"
     serverCompile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     serverCompile("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
