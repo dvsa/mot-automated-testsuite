@@ -18,7 +18,7 @@
     <logger name="uk.gov.dvsa" level="debug"/>
 
     <!-- set to debug to see test data being loaded and used -->
-    <logger name="uk.gov.dvsa.mot.data.DatabaseDataProvider" level="debug"/>
+    <logger name="uk.gov.dvsa.mot.data.DatabaseDataProvider" level="warn"/>
 
     <!-- default log levels for 3rd party libraries -->
     <logger name="ch.qos.logback" level="warn"/>
@@ -37,7 +37,7 @@
     <logger name="MySQL" level="error"/>
 
     <!-- set to debug to see db connection use and transactions -->
-    <logger name="org.springframework.jdbc.datasource" level="debug"/>
+    <logger name="org.springframework.jdbc.datasource" level="warn"/>
 
     <root level="ALL">
         <!-- Uncomment this to send logging to the console (useful but gets mixed with Cucumber output) -->
