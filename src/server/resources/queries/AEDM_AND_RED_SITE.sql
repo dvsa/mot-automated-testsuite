@@ -1,10 +1,7 @@
 select p.username, o.name, s.name
 from site s, organisation o, person p, organisation_business_role_map obrm,
-  (select max(id) as id, site_id from enforcement_site_assessment group by site_id) as latest_assessment,
   enforcement_site_assessment esa, security_card sc, person_security_card_map pscm
-where latest_assessment.id = esa.id
-and latest_assessment.site_id = s.id
-and esa.id = latest_assessment.id
+where s.last_site_assessment_id = esa.id
 and esa.site_assessment_score > 360.00
 and o.id = s.organisation_id
 and exists (

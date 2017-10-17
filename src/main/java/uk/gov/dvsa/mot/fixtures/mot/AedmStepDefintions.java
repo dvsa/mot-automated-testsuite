@@ -70,10 +70,10 @@ public class AedmStepDefintions implements En {
         while (!finished) {
             if (driverWrapper.hasLink(driverWrapper.getData(siteNameKey))) {
                 assertTrue("The site status is incorrect",
-                        driverWrapper.getElementText("a", driverWrapper.getData(siteNameKey),
+                        driverWrapper.getElementText("td/a", driverWrapper.getData(siteNameKey),
                                 "../../td[4]").contains(siteStatus));
                 finished = true;
-                driverWrapper.clickLink("a", driverWrapper.getData(siteNameKey), "../",
+                driverWrapper.clickLink("td/a", driverWrapper.getData(siteNameKey), "../",
                         "Test quality information");
                 assertTrue("The site name is not correct on TQI page",
                         driverWrapper.getElementText("h1", "", ".")
