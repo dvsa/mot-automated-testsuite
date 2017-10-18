@@ -59,11 +59,16 @@ public class DataUsageReportGenerator {
                 .append("</style></head><body><h1>Data Usage Report</h1>");
 
         builder.append("<table><thead><tr>")
+                    .append("<th colspan=\"2\"/>")
+                    .append("<th colspan=\"2\">Cached</th>")
+                    .append("<th colspan=\"2\">Loaded Immediately</th>")
+                .append("</tr><tr>")
                     .append("<th>Dataset Name</th>")
                     .append("<th>Timing (secs)</th>")
                     .append("<th>Dataset Size</th>")
                     .append("<th>Amount Requested</th>")
-                    .append("<th>Amount loaded immediately</th>")
+                    .append("<th>Dataset Size</th>")
+                    .append("<th>Amount Requested</th>")
                 .append("</tr></thead><tbody>");
 
         datasetMetrics.keySet().stream().sorted().forEach(name -> {
@@ -78,30 +83,46 @@ public class DataUsageReportGenerator {
             boolean isSlowQuery = metrics.getTimingMilliseconds().orElse(0L) > 10000;
 
             // highlight if queries to cache had no data
-            boolean cacheEmpty = metrics.getEntriesCached().orElse(1) == 0;
+            boolean cacheEmpty = metrics.getCacheSize().orElse(1) == 0;
 
             // highlight if more data requested than available in cache
             boolean cacheInsufficient =
-                    metrics.getEntriesRequested().orElse(0) > metrics.getEntriesCached().orElse(0);
+                    metrics.getCacheRequested().orElse(0) > metrics.getCacheSize().orElse(0);
 
             // highlight if queries loaded immediately had no data
-            boolean loadImmediatelyEmpty = metrics.getEntriesLoadedImmediately().orElse(1) == 0;
+            boolean loadImmediatelyEmpty = metrics.getLoadedImmediatelySize().orElse(1) == 0;
+
+            // highlight if more data requested than available when loaded immediately
+            // Note: in practice this depends upon whether the amount of changed passwords in the environment tested
+            boolean loadImmediatelyInsufficient =
+                    metrics.getLoadedImmediatelyRequested().orElse(0)
+                            > metrics.getLoadedImmediatelySize().orElse(0);
 
             builder.append("<tr>")
+                        // dataset name
                         .append(formatDataCell(false))
                             .append(name).append("</td>")
 
+                        // timing
                         .append(formatDataCell(isSlowQuery))
                             .append(formattedTiming).append("</td>")
 
+                        // cached - dataset size
                         .append(formatDataCell(cacheEmpty))
-                            .append(formatOptional(metrics.getEntriesCached())).append("</td>")
+                            .append(formatOptional(metrics.getCacheSize())).append("</td>")
 
+                        // cached - amount requested
                         .append(formatDataCell(cacheInsufficient))
-                            .append(formatOptional(metrics.getEntriesRequested())).append("</td>")
+                            .append(formatOptional(metrics.getCacheRequested())).append("</td>")
 
+                        // loaded immediately - dataset size
                         .append(formatDataCell(loadImmediatelyEmpty))
-                            .append(formatOptional(metrics.getEntriesLoadedImmediately())).append("</td>")
+                            .append(formatOptional(metrics.getLoadedImmediatelySize())).append("</td>")
+
+                        // loaded immediately - amount requested
+                        .append(formatDataCell(loadImmediatelyInsufficient))
+                            .append(formatOptional(metrics.getLoadedImmediatelyRequested())).append("</td>")
+
                     .append("</tr>");
         });
         builder.append("</tbody></table></body></html>");

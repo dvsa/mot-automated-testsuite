@@ -9,7 +9,6 @@ import uk.gov.dvsa.mot.server.reporting.DataUsageReportGenerator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import javax.annotation.PreDestroy;
 
 /**
@@ -62,7 +61,7 @@ public class DatabaseDataProvider {
             datasets.put(dataSetName, dataset);
 
             // record size of the cached dataset, and query timing
-            getDatasetMetrics(dataSetName).setEntriesCached(dataset.size());
+            getDatasetMetrics(dataSetName).setCacheSize(dataset.size());
             getDatasetMetrics(dataSetName).setTimingMilliseconds(stop - start);
 
         } else {
@@ -70,7 +69,7 @@ public class DatabaseDataProvider {
         }
 
         // record request for data from the cached dataset
-        getDatasetMetrics(dataSetName).increaseEntriesRequested();
+        getDatasetMetrics(dataSetName).increaseCacheRequested();
 
         if (dataset.size() < 1) {
             String message = "No more data available for dataset: " + dataSetName;
@@ -96,8 +95,9 @@ public class DatabaseDataProvider {
         List<List<String>> dataset = dataDao.loadDataset(dataSetName);
         long stop = System.currentTimeMillis();
 
-        // record dataset size, and query timing
-        getDatasetMetrics(dataSetName).setEntriesLoadedImmediately(dataset.size());
+        // record dataset size, request, and query timing
+        getDatasetMetrics(dataSetName).setLoadedImmediatelySize(dataset.size());
+        getDatasetMetrics(dataSetName).increaseLoadedImmediatelyRequested();
         getDatasetMetrics(dataSetName).setTimingMilliseconds(stop - start);
 
         if (dataset.size() < 1) {
@@ -125,8 +125,10 @@ public class DatabaseDataProvider {
         List<List<String>> dataset = dataDao.loadDataset(dataSetName, length);
         long stop = System.currentTimeMillis();
 
-        // record dataset size, and query timing
-        getDatasetMetrics(dataSetName).setEntriesLoadedImmediately(dataset.size());
+        // record dataset size, request, and query timing
+        // note: could actually have used length entries, if passwords are not valid
+        getDatasetMetrics(dataSetName).setLoadedImmediatelySize(dataset.size());
+        getDatasetMetrics(dataSetName).increaseLoadedImmediatelyRequested();
         getDatasetMetrics(dataSetName).setTimingMilliseconds(stop - start);
 
         if (dataset.size() < 1) {

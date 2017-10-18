@@ -11,13 +11,16 @@ public class DatasetMetrics {
     private final String name;
 
     /** The number of entries (rows) loaded from the database, cached and available for use by the test suite. */
-    private Optional<Integer> entriesCached = Optional.empty();
+    private Optional<Integer> cacheSize = Optional.empty();
 
     /** The number of entries (rows) requested from the cache by the test suite. */
-    private Optional<Integer> entriesRequested = Optional.empty();
+    private Optional<Integer> cacheRequested = Optional.empty();
 
-    /** The number of entries (rows) loaded immediately from the database, not using caching. */
-    private Optional<Integer> entriesLoadedImmediately = Optional.empty();
+    /** The number of entries (rows) loaded immediately from the database, available for use by the test suite. */
+    private Optional<Integer> loadedImmediatelySize = Optional.empty();
+
+    /** The number of entries (rows) requested from queries loaded immediately from the database. */
+    private Optional<Integer> loadedImmediatelyRequested = Optional.empty();
 
     /** The amount of time (in milliseconds) the database query took to execute. */
     private Optional<Long> timingMilliseconds = Optional.empty();
@@ -32,41 +35,41 @@ public class DatasetMetrics {
 
     /**
      * Set the number of entries (rows) loaded from the database, cached and available for use by the test suite.
-     * @param entriesCached     The number of entries
+     * @param cacheSize     The number of entries
      */
-    public void setEntriesCached(int entriesCached) {
-        this.entriesCached = Optional.of(entriesCached);
+    public void setCacheSize(int cacheSize) {
+        this.cacheSize = Optional.of(cacheSize);
     }
 
     /**
      * Get the number of entries (rows) loaded from the database, cached and available for use by the test suite.
      * @return The number of entries
      */
-    public Optional<Integer> getEntriesCached() {
-        return entriesCached;
+    public Optional<Integer> getCacheSize() {
+        return cacheSize;
     }
 
     /**
      * Increase the number of entries (rows) requested from the cache by the test suite.
      */
-    public void increaseEntriesRequested() {
-        entriesRequested = Optional.of(entriesRequested.map(value -> value + 1).orElse(1));
+    public void increaseCacheRequested() {
+        cacheRequested = Optional.of(cacheRequested.map(value -> value + 1).orElse(1));
     }
 
     /**
      * Get the number of entries (rows) requested from the cache by the test suite.
      * @return The number of entries
      */
-    public Optional<Integer> getEntriesRequested() {
-        return entriesRequested;
+    public Optional<Integer> getCacheRequested() {
+        return cacheRequested;
     }
 
     /**
      * Set the number of entries (rows) loaded immediately from the database, not using caching.
-     * @param entriesLoadedImmediately  The number of entries
+     * @param loadedImmediatelySize  The number of entries
      */
-    public void setEntriesLoadedImmediately(int entriesLoadedImmediately) {
-        this.entriesLoadedImmediately = Optional.of(entriesLoadedImmediately);
+    public void setLoadedImmediatelySize(int loadedImmediatelySize) {
+        this.loadedImmediatelySize = Optional.of(loadedImmediatelySize);
     }
 
     /**
@@ -75,8 +78,23 @@ public class DatasetMetrics {
      * was loaded)</i></p>
      * @return The number of entries
      */
-    public Optional<Integer> getEntriesLoadedImmediately() {
-        return entriesLoadedImmediately;
+    public Optional<Integer> getLoadedImmediatelySize() {
+        return loadedImmediatelySize;
+    }
+
+    /**
+     * Increase the number of entries (rows) requested from queries loaded immediately from the database.
+     */
+    public void increaseLoadedImmediatelyRequested() {
+        loadedImmediatelyRequested = Optional.of(loadedImmediatelyRequested.map(value -> value + 1).orElse(1));
+    }
+
+    /**
+     * Get the number of entries (rows) requested from queries loaded immediately from the database.
+     * @return The number of entries
+     */
+    public Optional<Integer> getLoadedImmediatelyRequested() {
+        return loadedImmediatelyRequested;
     }
 
     /**
