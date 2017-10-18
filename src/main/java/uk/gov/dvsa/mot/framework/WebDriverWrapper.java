@@ -1083,7 +1083,7 @@ public class WebDriverWrapper {
      */
     public boolean containsMessage(String message) {
         return webDriver.findElements(
-                By.xpath("//*[contains(text(),\"" + expandDataKeys(message) + "\")]")).size() > 0;
+                By.xpath("//*[text()[contains(.,\"" + expandDataKeys(message) + "\")]]")).size() > 0;
     }
 
     /**
@@ -1094,7 +1094,7 @@ public class WebDriverWrapper {
      */
     public boolean doesNotContainMessage(String message) {
         return webDriver.findElements(
-                By.xpath("//*[contains(text(),\"" + expandDataKeys(message) + "\")]")).size() == 0;
+                By.xpath("//*[text()[contains(.,\"" + expandDataKeys(message) + "\")]]")).size() == 0;
     }
 
     /**

@@ -1098,6 +1098,24 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>containsMessage()</code> with text that is a trailing text node.
+     */
+    @Test
+    public void containsMessageTrailingTextNodes() {
+        browseTo("/containsMessage-4.html", "containsMessage - 4");
+        assertTrue(driverWrapper.containsMessage("Trailing text."));
+    }
+
+    /**
+     * Tests <code>doesNotContainMessage()</code> with text that is a trailing text node.
+     */
+    @Test
+    public void doesNotContainMessageTrailingTextNodes() {
+        browseTo("/containsMessage-4.html", "containsMessage - 4");
+        assertFalse(driverWrapper.doesNotContainMessage("Trailing text."));
+    }
+
+    /**
      * Tests <code>doesNotContainMessage()</code> with a non-matching example should return true.
      */
     @Test
