@@ -113,10 +113,10 @@ public class WebStepDefinitions implements En {
                 driverWrapper.selectOptionInFieldById(optionText, id));
 
         Then("^The page contains \"([^\"]+)\"$", (String expected) ->
-                driverWrapper.containsMessage(expected));
+                assertTrue(driverWrapper.containsMessage(expected)));
 
         Then("^The page does not contain \"([^\"]+)\"$", (String notExpected) ->
-                driverWrapper.doesNotContainMessage(notExpected));
+                assertTrue(driverWrapper.doesNotContainMessage(notExpected)));
 
         Then("^The page title contains \"([^\"]+)\"$", (String expected) ->
                 driverWrapper.checkCurrentPageTitle(expected));

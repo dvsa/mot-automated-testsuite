@@ -1082,13 +1082,8 @@ public class WebDriverWrapper {
      * @return <code>true</code> if found
      */
     public boolean containsMessage(String message) {
-        try {
-            webDriver.findElement(By.xpath("//*[contains(text(),\"" + expandDataKeys(message) + "\")]"));
-            return true;
-
-        } catch (NoSuchElementException ex) {
-            return false;
-        }
+        return webDriver.findElements(
+                By.xpath("//*[contains(text(),\"" + expandDataKeys(message) + "\")]")).size() > 0;
     }
 
     /**
@@ -1098,13 +1093,8 @@ public class WebDriverWrapper {
      * @return <code>true</code> if not found
      */
     public boolean doesNotContainMessage(String message) {
-        try {
-            webDriver.findElement(By.xpath("//*[contains(text(),\"" + expandDataKeys(message) + "\")]"));
-            return false;
-
-        } catch (NoSuchElementException ex) {
-            return true;
-        }
+        return webDriver.findElements(
+                By.xpath("//*[contains(text(),\"" + expandDataKeys(message) + "\")]")).size() == 0;
     }
 
     /**
