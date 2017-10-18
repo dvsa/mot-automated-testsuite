@@ -29,7 +29,7 @@ Feature: 12a - Vehicle Examiner
     When I search for AE information with {aeNumber}
     Then I check the AE name is {aeName}
     And I click the "Slot usage" link
-    And The page contains "Test logs of Authorised Examiner"
+    And The page contains "Test slot usage"
     And I check the slot usage for the past 30 days is {slotUsage}
 
   Scenario: Site information search and abort active test

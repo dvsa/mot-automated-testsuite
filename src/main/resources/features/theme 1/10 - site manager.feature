@@ -66,7 +66,7 @@ Feature: 10 - Site Manager and Site Admin
     And I press the "Abort MOT test" button
 
     Then The page contains "You have successfully aborted MOT test"
-    And The page contains "with a reason of Vehicle registered in error."
+    And The page contains "Vehicle registered in error"
 
 
   Scenario: Site Admin updates VTS details
@@ -94,7 +94,7 @@ Feature: 10 - Site Manager and Site Admin
     And I click the "({siteNumber}) {siteName}" link
     And The page title contains "Vehicle Testing Station"
     When I click the "Test quality information" link
-    And The page contains "This information will help you manage the quality of testing at your site. How you use it will depend on how you manage the site, its size and number of staff."
+    And The page contains "This information will help you manage the quality of testing at your site."
     And I check there is a "Download the group B report as a CSV (spreadsheet) file" link
     And I click the TQI link for tester {testerUsername}
     Then The page contains "{testerName}"

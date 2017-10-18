@@ -63,7 +63,7 @@ Feature: 13a - A01 user
     And I click the "Authorised Examiner Designated Manager" radio button in fieldset "Select a role"
     And I press the "Choose role" button
     And I press the "Confirm" button
-    Then The page contains "A role notification has been sent to {unassignedTesterName} '{unassignedTesterName}'."
+    Then The page contains "A role notification has been sent to {unassignedTesterName} '{unassignedTesterUsername}'."
 
 
   Scenario: AO1 user performs AE search, then removes a role

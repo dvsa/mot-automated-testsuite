@@ -47,7 +47,7 @@ Feature: 19 - New trade user orders and activates 2FA card
     And I click the "Authorised Examiner Designated Manager" radio button in fieldset "Select a role"
     And I press the "Choose role" button
     And I press the "Confirm" button
-    And The page contains "A role notification has been sent to {username} 'Bert William Tester'."
+    And The page contains "A role notification has been sent to Bert William Tester '{username}'."
     And I click the "Sign out" link
 
     # Login as the new user and order a card

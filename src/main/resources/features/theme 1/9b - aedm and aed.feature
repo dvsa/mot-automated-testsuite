@@ -6,7 +6,7 @@ Feature: 09b - AEDM and AED
     And I click the first {organisationName} link
     When I click the "Service reports" link
     And I click the {siteName} site link with status "<status>" on the service reports
-    Then The page contains "This information will help you manage the quality of testing at your site. How you use it will depend on how you manage the site, its size and number of staff."
+    Then The page contains "This information will help you manage the quality of testing at your site."
     And I check there is a "Download the group B report as a CSV (spreadsheet) file" link
 
   Examples:
@@ -20,7 +20,7 @@ Feature: 09b - AEDM and AED
     Given I login with 2FA using "AED_AND_GROUP_A_SITE" as {aed}, {siteName}, {siteNumber}
     And I click the first "({siteNumber}) {siteName}" link
     When I click the "Test quality information" link
-    Then The page contains "This information will help you manage the quality of testing at your site. How you use it will depend on how you manage the site, its size and number of staff."
+    Then The page contains "This information will help you manage the quality of testing at your site."
     And I check there is a "Download the group A report as a CSV (spreadsheet) file" link
 
 
