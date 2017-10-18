@@ -63,7 +63,13 @@ public class LifecycleHooks {
         outputFinalScreenshot(scenario);
         outputFinalHtml(scenario);
 
-        // test cleanup
+        // log the current user out, if they are logged in
+        if (driverWrapper.hasLink("Sign out")) {
+            logger.debug("Logging the current user out...");
+            driverWrapper.clickLink("Sign out");
+        }
+
+        // test cleanup (note: this will clear permanent cookies but not HTTP/Session cookies)
         driverWrapper.reset();
     }
 
