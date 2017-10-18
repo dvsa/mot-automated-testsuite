@@ -3,6 +3,7 @@ package uk.gov.dvsa.mot.server.data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.dvsa.mot.server.model.Dataset;
 import uk.gov.dvsa.mot.server.model.DatasetMetrics;
 import uk.gov.dvsa.mot.server.reporting.DataUsageReportGenerator;
 
@@ -22,11 +23,14 @@ public class DatabaseDataProvider {
     /** The DataDao to use. */
     private final DataDao dataDao;
 
+    /** The Query file loader to use. */
+    private final QueryFileLoader queryFileLoader;
+
     /** The data usage report generator to use. */
     private final DataUsageReportGenerator dataUsageReportGenerator;
 
     /** The cached datasets to use, keyed by name. */
-    private final Map<String, List<List<String>>> datasets;
+    private final Map<String, Dataset> datasets;
 
     /** The metrics recorded for each dataset. */
     private final Map<String, DatasetMetrics> datasetMetrics;
@@ -34,11 +38,14 @@ public class DatabaseDataProvider {
     /**
      * Creates a new instance.
      * @param dataDao                       The user DAO to use
+     * @param queryFileLoader               The SQL Query file loader
      * @param dataUsageReportGenerator      The data usage report generator to use
      */
-    public DatabaseDataProvider(DataDao dataDao, DataUsageReportGenerator dataUsageReportGenerator) {
+    public DatabaseDataProvider(DataDao dataDao, QueryFileLoader queryFileLoader,
+                                DataUsageReportGenerator dataUsageReportGenerator) {
         logger.debug("Creating DatabaseDataProvider...");
         this.dataDao = dataDao;
+        this.queryFileLoader = queryFileLoader;
         this.dataUsageReportGenerator = dataUsageReportGenerator;
         this.datasets = new HashMap<>();
         this.datasetMetrics = new HashMap<>();
@@ -52,34 +59,23 @@ public class DatabaseDataProvider {
      */
     @Transactional
     public List<String> getCachedDatasetEntry(String dataSetName) {
-        List<List<String>> dataset;
-        if (!datasets.containsKey(dataSetName)) {
+        Dataset dataset = getDataset(dataSetName);
+        if (!dataset.isCachePopulated()) {
             // dataset not cached yet, so load and cache it
             final long start = System.currentTimeMillis();
-            dataset = dataDao.loadDataset(dataSetName);
+            List<List<String>> results = dataDao.loadDataset(dataset, 0);
             final long stop = System.currentTimeMillis();
-            datasets.put(dataSetName, dataset);
+            dataset.populateCache(results);
 
             // record size of the cached dataset, and query timing
-            getDatasetMetrics(dataSetName).setCacheSize(dataset.size());
+            getDatasetMetrics(dataSetName).setCacheSize(results.size());
             getDatasetMetrics(dataSetName).setTimingMilliseconds(stop - start);
-
-        } else {
-            dataset = datasets.get(dataSetName);
         }
 
         // record request for data from the cached dataset
         getDatasetMetrics(dataSetName).increaseCacheRequested();
 
-        if (dataset.size() < 1) {
-            String message = "No more data available for dataset: " + dataSetName;
-            logger.error(message);
-            throw new IllegalStateException(message);
-        }
-
-        List<String> entry = dataset.get(0);
-        dataset.remove(entry);
-
+        List<String> entry = dataset.getCachedResult();
         logger.debug("Using {} from dataset {}", entry, dataSetName);
         return entry;
     }
@@ -91,23 +87,24 @@ public class DatabaseDataProvider {
      */
     @Transactional
     public List<String> getUncachedDatasetEntry(String dataSetName) {
+        Dataset dataset = getDataset(dataSetName);
+
         long start = System.currentTimeMillis();
-        List<List<String>> dataset = dataDao.loadDataset(dataSetName);
+        List<List<String>> results = dataDao.loadDataset(dataset, 1);
         long stop = System.currentTimeMillis();
 
         // record dataset size, request, and query timing
-        getDatasetMetrics(dataSetName).setLoadedImmediatelySize(dataset.size());
+        getDatasetMetrics(dataSetName).setLoadedImmediatelySize(results.size());
         getDatasetMetrics(dataSetName).increaseLoadedImmediatelyRequested();
         getDatasetMetrics(dataSetName).setTimingMilliseconds(stop - start);
 
-        if (dataset.size() < 1) {
+        if (results.size() < 1) {
             String message = "No more data available for dataset: " + dataSetName;
             logger.error(message);
             throw new IllegalStateException(message);
         }
 
-        List<String> entry = dataset.get(0);
-
+        List<String> entry = results.get(0);
         logger.debug("Using {} from dataset {}", entry, dataSetName);
         return entry;
     }
@@ -121,23 +118,26 @@ public class DatabaseDataProvider {
      */
     @Transactional
     public List<List<String>> getUncachedDataset(String dataSetName, int length) {
+        Dataset dataset = getDataset(dataSetName);
+
         long start = System.currentTimeMillis();
-        List<List<String>> dataset = dataDao.loadDataset(dataSetName, length);
+        List<List<String>> results = dataDao.loadDataset(dataset, length);
         long stop = System.currentTimeMillis();
 
         // record dataset size, request, and query timing
         // note: could actually have used length entries, if passwords are not valid
-        getDatasetMetrics(dataSetName).setLoadedImmediatelySize(dataset.size());
+        getDatasetMetrics(dataSetName).setLoadedImmediatelySize(results.size());
         getDatasetMetrics(dataSetName).increaseLoadedImmediatelyRequested();
         getDatasetMetrics(dataSetName).setTimingMilliseconds(stop - start);
 
-        if (dataset.size() < 1) {
+        if (results.size() < 1) {
             String message = "No data available for dataset: " + dataSetName;
             logger.error(message);
             throw new IllegalStateException(message);
         }
 
-        return dataset;
+        logger.debug("Using {} entries from dataset {}", results.size(), dataSetName);
+        return results;
     }
 
     /**
@@ -162,6 +162,22 @@ public class DatabaseDataProvider {
             DatasetMetrics metrics = new DatasetMetrics(datasetName);
             datasetMetrics.put(datasetName, metrics);
             return metrics;
+        }
+    }
+
+    /**
+     * Get the dataset details, handling loading and caching on demand when needed.
+     * @param datasetName   The dataset name
+     * @return The dataset details
+     */
+    private Dataset getDataset(String datasetName) {
+        if (datasets.containsKey(datasetName)) {
+            return datasets.get(datasetName);
+
+        } else {
+            Dataset dataset = queryFileLoader.loadFromFile(datasetName);
+            datasets.put(datasetName, dataset);
+            return dataset;
         }
     }
 }
