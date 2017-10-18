@@ -255,3 +255,11 @@ These steps are specific to the DVSA MOT application screens.
 * I click the first name in the list
 * I check the user profile contains username ```{usernameKey}```
 * I change the testers group ```"..group.."``` status to ```"..status.."```
+
+### MothStepDefinitions
+
+* I enter ```"..text.."``` in the registration field
+* I enter ```{key}``` in the registration field
+* I click the last text ```..text..```
+* I go to the next tab
+* I close extra tabs
