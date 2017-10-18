@@ -1426,4 +1426,69 @@ public class WebDriverWrapper {
 
         return value == null ? "" : value;
     }
+
+    /**
+     * Enters the specified text into the field.
+     * @param text  The text to enter
+     */
+    public void enterIntoFieldWithLabel(String labelText, String text) {
+        // find the input associated with the specified label...
+        WebElement labelElement = webDriver.findElement(
+                By.xpath("//*[text() = '" + labelText + "']//ancestor::label"));
+        WebElement textElement = webDriver.findElement(By.id(labelElement.getAttribute("for")));
+        textElement.clear();
+        textElement.sendKeys(text);
+    }
+
+    /**
+     * Goes to the next tab.
+     */
+    public void goNextTab() {
+        String oldTab = webDriver.getWindowHandle();
+        List<String> newTab = new ArrayList<String>(webDriver.getWindowHandles());
+        newTab.remove(oldTab);
+        int numTabs = newTab.size();
+        if (numTabs > 2) {
+            String message = "Too many tabs. Expected 2 but there are " + numTabs;
+            logger.error(message);
+            throw new IllegalStateException(message);
+        }
+        // change focus to new tab
+        webDriver.switchTo().window(newTab.get(0));
+    }
+
+    /**
+     * Closes all but the main tab.
+     */
+    public void closeTabs() {
+        String originalHandle = webDriver.getWindowHandle();
+
+        //Do something to open new tabs
+
+        for (String handle : webDriver.getWindowHandles()) {
+            if (!handle.equals(originalHandle)) {
+                webDriver.switchTo().window(handle);
+                webDriver.close();
+            }
+        }
+
+        webDriver.switchTo().window(originalHandle);
+    }
+
+    /**
+     * Clicks the last occurrence of the text, which may contain single quotes, and <code>{key}</code> format
+     * data keys, but not double quotes.
+     * @param linkText  The text used to find the text
+     */
+    public void clickLastText(String linkText) {
+        List<WebElement> spans = findSpans(linkText);
+        if (spans.size() == 0) {
+            String message = "Text not found: " + linkText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            clickAndWaitForPageLoad(spans.get(spans.size() - 1));
+        }
+    }
 }
