@@ -34,9 +34,23 @@ Feature: 06a - duplicate and replacement certificates
   |AO1         |AO1_USER         |
   |DVLA Manager|DVLA_MANAGER_USER|
 
-  Scenario: Tester issues duplicate certificate and cannot edit historic
-    Given I login with 2FA using "MOT_TESTER_CLASS_4" as {tester}, {site}
-    And I load immediately "VEHICLE_CLASS_4_HISTORIC_10_DAYS" as {reg}, {vin}, {mileage}, {testNumber}
+  Scenario: Tester issues duplicate certificate and can edit test in last 10 days
+    Given I login with 2FA using "MOT_TESTER_CLASS_4_WITH_RECENT_TEST" as {tester}, {site}, {reg}, {mileage}
+    And I search for certificates with reg {reg}
+    And I click the first "View certificate" link
+    And I check there is a "Print certificate" link
+    And I press the "Edit this MOT test result" button
+    And I update the odometer reading by 3000
+    And I edit the primary colour "Red" and secondary colour "White"
+    And I press the "Review changes" button
+    And I check the odometer reading on the confirmation page is correct
+    #  And I check the colours are correct "Red" and "White" - commented out due to a known bug ticket 4513
+    And I press the "Finish changes and print certificate" button
+    Then The page title contains "Test Results Updated Successfully"
+    And I check there is a "Print" link
+
+  Scenario: Tester issues duplicate certificate and cannot edit another sites tests
+    Given I login with 2FA using "MOT_TESTER_CLASS_4_WITH_OTHER_SITE_TEST" as {tester}, {site}, {reg}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
     And I check there is a "Print certificate" link
