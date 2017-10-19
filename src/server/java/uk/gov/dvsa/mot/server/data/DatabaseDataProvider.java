@@ -60,6 +60,8 @@ public class DatabaseDataProvider {
     @Transactional
     public List<String> getCachedDatasetEntry(String dataSetName) {
         Dataset dataset = getDataset(dataSetName);
+        DatasetMetrics metrics = getDatasetMetrics(dataSetName);
+
         if (!dataset.isCachePopulated()) {
             // dataset not cached yet, so load and cache it
             final long start = System.currentTimeMillis();
@@ -68,12 +70,12 @@ public class DatabaseDataProvider {
             dataset.populateCache(results);
 
             // record size of the cached dataset, and query timing
-            getDatasetMetrics(dataSetName).setCacheSize(results.size());
-            getDatasetMetrics(dataSetName).setTimingMilliseconds(stop - start);
+            metrics.setCacheSize(results.size());
+            metrics.setTimingMilliseconds(stop - start);
         }
 
         // record request for data from the cached dataset
-        getDatasetMetrics(dataSetName).increaseCacheRequested();
+        metrics.increaseCacheRequested();
 
         List<String> entry = dataset.getCachedResult();
         logger.debug("Using {} from dataset {}", entry, dataSetName);
@@ -88,15 +90,16 @@ public class DatabaseDataProvider {
     @Transactional
     public List<String> getUncachedDatasetEntry(String dataSetName) {
         Dataset dataset = getDataset(dataSetName);
+        DatasetMetrics metrics = getDatasetMetrics(dataSetName);
 
         long start = System.currentTimeMillis();
         List<List<String>> results = dataDao.loadDataset(dataset, 1);
         long stop = System.currentTimeMillis();
 
         // record dataset size, request, and query timing
-        getDatasetMetrics(dataSetName).setLoadedImmediatelySize(results.size());
-        getDatasetMetrics(dataSetName).increaseLoadedImmediatelyRequested();
-        getDatasetMetrics(dataSetName).setTimingMilliseconds(stop - start);
+        metrics.setLoadedImmediatelySize(results.size());
+        metrics.increaseLoadedImmediatelyRequested();
+        metrics.setTimingMilliseconds(stop - start);
 
         if (results.size() < 1) {
             String message = "No more data available for dataset: " + dataSetName;
@@ -119,6 +122,7 @@ public class DatabaseDataProvider {
     @Transactional
     public List<List<String>> getUncachedDataset(String dataSetName, int length) {
         Dataset dataset = getDataset(dataSetName);
+        DatasetMetrics metrics = getDatasetMetrics(dataSetName);
 
         long start = System.currentTimeMillis();
         List<List<String>> results = dataDao.loadDataset(dataset, length);
@@ -126,12 +130,12 @@ public class DatabaseDataProvider {
 
         // record dataset size, request, and query timing
         // note: could actually have used length entries, if passwords are not valid
-        getDatasetMetrics(dataSetName).setLoadedImmediatelySize(results.size());
-        getDatasetMetrics(dataSetName).increaseLoadedImmediatelyRequested();
-        getDatasetMetrics(dataSetName).setTimingMilliseconds(stop - start);
+        metrics.setLoadedImmediatelySize(results.size());
+        metrics.increaseLoadedImmediatelyRequested();
+        metrics.setTimingMilliseconds(stop - start);
 
         if (results.size() < 1) {
-            String message = "No data available for dataset: " + dataSetName;
+            String message = "No more data available for dataset: " + dataSetName;
             logger.error(message);
             throw new IllegalStateException(message);
         }
