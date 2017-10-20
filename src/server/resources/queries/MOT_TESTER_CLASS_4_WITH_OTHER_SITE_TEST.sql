@@ -26,7 +26,6 @@ and sc.security_card_status_lookup_id = 1 -- only assigned cards
 and mtc.site_id <> s.id
 and mtc.status_id = 6 -- Passed tests only
 and mtc.vehicle_id = v.id
-and DATE(mtc.issued_date) > date_sub(CURDATE(), INTERVAL 7 DAY) -- Certificate within 10 days
 and mtc.id = (select max(lmtc.id) from mot_test_current lmtc where lmtc.vehicle_id = v.id) -- Checking only the latest test for vehicle
 and not exists (
     select 1 from vehicle v2
