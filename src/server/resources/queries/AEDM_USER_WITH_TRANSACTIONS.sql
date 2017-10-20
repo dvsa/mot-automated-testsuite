@@ -1,8 +1,9 @@
-select p.username as username, o.name as organisation, count(tst.id) as transaction_count
+select p.username as username, o.name as organisation, count(tst.id) as transaction_count, ae.ae_ref
 from person p, organisation o, organisation_business_role_map obrm,
-  security_card sc, person_security_card_map pscm, test_slot_transaction as tst
+  security_card sc, person_security_card_map pscm, test_slot_transaction as tst, auth_for_ae ae
 where obrm.person_id = p.id
 and obrm.business_role_id = 1 -- AEDM role id
+and o.id = ae.organisation_id
 and p.is_account_claim_required = 0
 and p.is_password_change_required = 0
 and obrm.organisation_id = o.id

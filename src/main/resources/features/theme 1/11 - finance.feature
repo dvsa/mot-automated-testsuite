@@ -1,19 +1,55 @@
 @regression
 Feature: 11 - Finance
 
-  # Logged in as finance user HERA5734
+  Scenario: View AE transaction
+    Given I login without 2FA using "FINANCE_USER" as {username}
+    And I click the "AE information" link
+    # We are purposefully picking AE with the most transactions available so we definately have results and pagination
+    And I load "AEDM_USER_WITH_TRANSACTIONS" as {aedm}, {organisation}, {count}, {aeRef}
+    And I enter {aeRef} in the "AE Number" field
+    And I press the "Search" button
+    And I click the "Transaction history" link
 
-  # Scenario: View AE transaction
-    # Search for AE with lots of transactions - AE085610
-    # Selected transaction history
-    # Downloaded CSV, compared to screen results
-    # Selected Today filter - verified transactions displayed were relevant to filter
-    # Selected Last 7 days filter - verified transactions displayed were relevant to filter
-    # Selected Last 30 days filter - verified transactions displayed were relevant to filter
-    # Selected All transactions - verified transactions displayed were relevant to filter
-    # Tested pagination
-    # Viewed and printed various transactions
-    # Tried various custom date range filters
+    When I click the "Today" link
+    Then The summary line contains "today"
+
+    When I click the "Last 7 days" link
+    Then The summary line contains "last 7 days"
+
+    When I click the "Last 30 days" link
+    Then The summary line contains "last 30 days"
+
+    # All transactions is the only link we are guaranteed to have CSV link and pagination
+    When I click the "All Transactions" link
+    Then The summary line contains "all transactions"
+    And I check there is a "CSV (excel)" link
+    And I check there is a "2" link
+    And I check there is a "3" link
+    And I check there is no "Previous" link
+    And I check there is a "Next" link
+
+    When I click the "Next" link
+    Then I check there is a "1" link
+    And I check there is a "3" link
+    And I check there is a "Previous" link
+    And I check there is a "Next" link
+
+    When I click the "Previous" link
+    And I check there is a "2" link
+    And I check there is a "3" link
+    And I check there is no "Previous" link
+    And I check there is a "Next" link
+
+    When I enter "01" in the "Day" field in fieldset "From"
+    And I enter "10" in the "Month" field in fieldset "From"
+    And I enter "2017" in the "Year" field in fieldset "From"
+
+    And I enter "09" in the "Day" field in fieldset "To"
+    And I enter "10" in the "Month" field in fieldset "To"
+    And I enter "2017" in the "Year" field in fieldset "To"
+
+    And I click the "Update results" button
+    Then The summary line contains "01/10/2017 and 09/10/2017"
 
   # The below scenario contains a bug - BL-5595 where
   # the cheque details were not being stored
