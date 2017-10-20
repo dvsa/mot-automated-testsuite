@@ -1,4 +1,4 @@
-@moth
+@moth2
 Feature: 08 - Check fake and invalid registration numbers
 
   Scenario: A MOTH user searches for a vehicle with an invalid reg 1
