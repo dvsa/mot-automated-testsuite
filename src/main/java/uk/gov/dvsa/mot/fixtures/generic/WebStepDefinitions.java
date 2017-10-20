@@ -115,6 +115,10 @@ public class WebStepDefinitions implements En {
         Then("^The page contains \"([^\"]+)\"$", (String expected) ->
                 assertTrue(driverWrapper.containsMessage(expected)));
 
+        Then("^The page contains \"([^\"]+)\" or \"([^\"]+)\"$", (String expected1, String expected2) ->
+                assertTrue(driverWrapper.containsMessage(expected1)
+                        || driverWrapper.containsMessage(expected2)));
+
         Then("^The page does not contain \"([^\"]+)\"$", (String notExpected) ->
                 assertTrue(driverWrapper.doesNotContainMessage(notExpected)));
 

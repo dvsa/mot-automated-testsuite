@@ -58,6 +58,7 @@ High level:
 * I enter ```{key}``` in the ```"..field label.."``` field in fieldset ```..fieldset label..```
 * I select ```"..item.."``` in the ```"..label.."``` field
 * The page contains ```"..text with {key}s.."```
+* The page contains ```"..text with {key}s.."``` or ```"..text with {key}s.."```
 * The page does not contain ```"..text with {key}s.."```
 * The page title contains ```"..text.."```
 * I check there is a ```"..text with {key}s.."``` link
