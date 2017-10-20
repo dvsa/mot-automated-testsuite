@@ -11,7 +11,6 @@ Feature: 02a - Check vehicle with current MOT - reminder email tab
 
     Then The page contains "{registration}"
     And The page contains "{model}"
-#    Add extra checks based on details extracted from the DB
     And The page contains "MOT valid until"
     And The page contains "Get a reminder email"
 
