@@ -3,7 +3,7 @@ Feature: 24 - Garage with min length address
 
   Scenario: A MOTH user searches for a vehicle, test location has min length address
     Given I browse to /
-    And I load "VEHICLE_REG_GARAGE_MIN_ADDR" as {registration}, {number}, {add1}, {add2}
+    And I load "VEHICLE_REG_GARAGE_MAX_ADDR" as {registration}, {number}, {add1}, {add2}
     And I enter {registration} in the registration field
 
     When I press the "Continue" button
