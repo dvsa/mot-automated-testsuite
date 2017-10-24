@@ -1,4 +1,4 @@
-@moth4
+@moth2
 Feature: 14 - Check vehicle with short/long registration
 
   Scenario: A MOTH user searches for a vehicle with short reg
