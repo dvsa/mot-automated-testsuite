@@ -1,7 +1,7 @@
 @moth2
-Feature: 24 - Garage with min length address
+Feature: 23 - Garage with max length address
 
-  Scenario: A MOTH user searches for a vehicle, test location has min length address
+  Scenario: A MOTH user searches for a vehicle, test location has max length address
     Given I browse to /
     And I load "VEHICLE_REG_GARAGE_MAX_ADDR" as {registration}, {number}, {add1}, {add2}
     And I enter {registration} in the registration field
