@@ -1,7 +1,7 @@
 @moth2
 Feature: 09 - Check registration with invalid symbols
 
-  Scenario: A MOTH user searches for a reg with invalid symbols 1
+  Scenario: A MOTH user searches for a reg with invalid symbols ! annd ?
     Given I browse to /
     And I enter "AB!?ABC" in the registration field
 
@@ -11,7 +11,7 @@ Feature: 09 - Check registration with invalid symbols
     And The page contains "The registration can only contain letters and numbers"
     And The page title contains "What is the vehicle's registration number"
 
-  Scenario: A MOTH user searches for a reg with invalid symbols 2
+  Scenario: A MOTH user searches for a reg with invalid symbols <>,.
     Given I browse to /
     And I enter "A<>,." in the registration field
 
