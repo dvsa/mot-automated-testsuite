@@ -39,10 +39,10 @@ Feature: 17 - Scheme user
     # Note: the following steps won't work with ChromeDriver in headless mode until the fix for the following defect
     # has been released: https://bugs.chromium.org/p/chromium/issues/detail?id=718235
     # commented them out for now...
-    #And I click the last "View" link
-    #And I click the last "Remove" link
-    #And I check the alert popup contains "This action will delete this notice from the library."
-    #And I accept the alert popup
+    And I click the last "View" link
+    And I click the last "Remove" link
+    And I check the alert popup contains "This action will delete this notice from the library."
+    And I accept the alert popup
 
 
   Scenario: Scheme user performs AE search, then views AE details
