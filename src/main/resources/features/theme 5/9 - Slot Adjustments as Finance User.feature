@@ -15,7 +15,8 @@ Feature: 09 - Slot Adjustments as Finance User
     And I enter "9 - slot adjustment positive" in the field with id "inputComment"
     And I press the "Review slot adjustment" button
 
-    When The page contains "Add 100 slots"
+    Then The page contains "Add"
+    And The page contains "100 slots"
     And The page contains "new balance will be {slotsup} slots"
     And The page contains "MOT04"
     And The page contains "9 - slot adjustment positive"
@@ -40,7 +41,8 @@ Feature: 09 - Slot Adjustments as Finance User
     And I enter "9 - slot adjustment negative" in the field with id "inputComment"
     And I press the "Review slot adjustment" button
 
-    When The page contains "Remove 100 slots"
+    Then The page contains "Remove"
+    And The page contains "100 slots"
     And The page contains "new balance will be {slotsdown} slots"
     And The page contains "MOT04"
     And The page contains "9 - slot adjustment negative"
