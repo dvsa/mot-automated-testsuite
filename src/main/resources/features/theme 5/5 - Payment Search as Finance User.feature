@@ -14,7 +14,7 @@ Feature: 5 - Payment Search as Finance User
      And The page contains "{amount}"
      And I click the "{payment_ref}" link
      Then The page contains "{payment_ref}"
-     And The page contains "{payment_date}"
+#     And The page contains "{payment_date}"
      And The page contains "{payment_type}"
      And The page contains "{amount}"
      And The page contains "{invoice_ref}"
@@ -33,7 +33,7 @@ Feature: 5 - Payment Search as Finance User
     And The page contains "{amount}"
     And I click the "{payment_ref}" link
     Then The page contains "{payment_ref}"
-    And The page contains "{payment_date}"
+#    And The page contains "{payment_date}"
     And The page contains "{payment_type}"
     And The page contains "{amount}"
     And The page contains "{invoice_ref}"
@@ -52,7 +52,7 @@ Feature: 5 - Payment Search as Finance User
     And The page contains "{amount}"
     And I click the "{invoice_ref}" link
     Then The page contains "{payment_ref}"
-    And The page contains "{payment_date}"
+#    And The page contains "{payment_date}"
     And The page contains "{payment_type}"
     And The page contains "{amount}"
     And The page contains "{invoice_ref}"
@@ -71,7 +71,7 @@ Feature: 5 - Payment Search as Finance User
     And The page contains "{amount}"
     And I click the "{invoice_ref}" link
     Then The page contains "{payment_ref}"
-    And The page contains "{payment_date}"
+#    And The page contains "{payment_date}"
     And The page contains "{payment_type}"
     And The page contains "{amount}"
     And The page contains "{invoice_ref}"
