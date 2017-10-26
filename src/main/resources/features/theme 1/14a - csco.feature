@@ -12,7 +12,7 @@ Feature: 14a - CSCO
 
   Scenario: CSCO user performs Site Information search by town, then views site details
     Given I login without 2FA using "CSCO_USER" as {cscouser}
-    And I load "SITE_LOCATION_INFORMATION" as {sid}, {sName}, {sNumber}, {aTown}, {aPostcode}
+    And I load "SITE_LOCATION_INFORMATION" as {sNumber}, {sid}, {sName}, {aTown}, {aPostcode}
     And I click the "Site information" link
     When I perform a site search for "town" as {aTown} and select {sNumber}
     And I check the "Address" field row has value {aTown}
@@ -20,7 +20,7 @@ Feature: 14a - CSCO
 
   Scenario: CSCO user performs Site Information search by postcode, then views site details
     Given I login without 2FA using "CSCO_USER" as {cscouser}
-    And I load "SITE_LOCATION_INFORMATION" as {sid}, {sName}, {sNumber}, {aTown}, {aPostcode}
+    And I load "SITE_LOCATION_INFORMATION" as {sNumber}, {sid}, {sName}, {aTown}, {aPostcode}
     And I click the "Site information" link
     When I perform a site search for "Postcode (full or part)" as {aPostcode} and select {sNumber}
     And I check the "Address" field row has value {aPostcode}

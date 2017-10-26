@@ -60,14 +60,19 @@ public class DataUsageReportGenerator {
 
         builder.append("<table><thead><tr>")
                     .append("<th colspan=\"2\"/>")
-                    .append("<th colspan=\"2\">Cached</th>")
+                    .append("<th colspan=\"5\">Cached</th>")
                     .append("<th colspan=\"2\">Loaded Immediately</th>")
                 .append("</tr><tr>")
                     .append("<th>Dataset Name</th>")
                     .append("<th>Timing (secs)</th>")
-                    .append("<th>Dataset Size</th>")
+
+                    .append("<th>Query Results Size</th>")
+                    .append("<th>Amount Filtered Out</th>")
+                    .append("<th>Filter</th>")
+                    .append("<th>Amount Available</th>")
                     .append("<th>Amount Requested</th>")
-                    .append("<th>Dataset Size</th>")
+
+                    .append("<th>Query Results Size</th>")
                     .append("<th>Amount Requested</th>")
                 .append("</tr></thead><tbody>");
 
@@ -83,20 +88,24 @@ public class DataUsageReportGenerator {
             boolean isSlowQuery = metrics.getTimingMilliseconds().orElse(0L) > 10000;
 
             // highlight if queries to cache had no data
-            boolean cacheEmpty = metrics.getCacheSize().orElse(1) == 0;
+            boolean queryEmpty = metrics.getCacheSize().orElse(1) == 0;
+
+            // amount of data available in cache after filtering
+            Optional<Integer> amountAvailable = Optional.empty();
+            if (metrics.getCacheSize().isPresent()) {
+                amountAvailable = Optional.of(metrics.getCacheSize().get() - metrics.getFilteredOut().orElse(0));
+            }
+
+            // highlight if no data available after filtering
+            boolean cacheEmpty = amountAvailable.orElse(1) == 0;
 
             // highlight if more data requested than available in cache
             boolean cacheInsufficient =
-                    metrics.getCacheRequested().orElse(0) > metrics.getCacheSize().orElse(0);
+                    metrics.getCacheRequested().orElse(0)
+                            > metrics.getCacheSize().orElse(0) - metrics.getFilteredOut().orElse(0);
 
             // highlight if queries loaded immediately had no data
             boolean loadImmediatelyEmpty = metrics.getLoadedImmediatelySize().orElse(1) == 0;
-
-            // highlight if more data requested than available when loaded immediately
-            // Note: in practice this depends upon whether the amount of changed passwords in the environment tested
-            boolean loadImmediatelyInsufficient =
-                    metrics.getLoadedImmediatelyRequested().orElse(0)
-                            > metrics.getLoadedImmediatelySize().orElse(0);
 
             builder.append("<tr>")
                         // dataset name
@@ -107,20 +116,32 @@ public class DataUsageReportGenerator {
                         .append(formatDataCell(isSlowQuery))
                             .append(formattedTiming).append("</td>")
 
-                        // cached - dataset size
-                        .append(formatDataCell(cacheEmpty))
+                        // cached - query results size
+                        .append(formatDataCell(queryEmpty))
                             .append(formatOptional(metrics.getCacheSize())).append("</td>")
+
+                        // cached - amount filtered out
+                        .append(formatDataCell(false))
+                            .append(formatOptional(metrics.getFilteredOut())).append("</td>")
+
+                        // cached - filter name
+                        .append(formatDataCell(false))
+                            .append(metrics.getFilterName().orElse("<i>None</i>")).append("</td>")
+
+                        // cached - amount available
+                        .append(formatDataCell(cacheEmpty))
+                            .append(formatOptional(amountAvailable)).append("</td>")
 
                         // cached - amount requested
                         .append(formatDataCell(cacheInsufficient))
                             .append(formatOptional(metrics.getCacheRequested())).append("</td>")
 
-                        // loaded immediately - dataset size
+                        // loaded immediately - query results size
                         .append(formatDataCell(loadImmediatelyEmpty))
                             .append(formatOptional(metrics.getLoadedImmediatelySize())).append("</td>")
 
                         // loaded immediately - amount requested
-                        .append(formatDataCell(loadImmediatelyInsufficient))
+                        .append(formatDataCell(false))
                             .append(formatOptional(metrics.getLoadedImmediatelyRequested())).append("</td>")
 
                     .append("</tr>");

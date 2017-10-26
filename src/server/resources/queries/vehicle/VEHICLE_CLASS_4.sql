@@ -5,14 +5,17 @@ from vehicle veh, model_detail md,
    limit 100000) as latest_mot,
    mot_test_current mtc
 where veh.model_detail_id = md.id
-and md.vehicle_class_id = 2 -- class 2 vehicles only
+and md.vehicle_class_id = 4 -- cars only
 and veh.id = latest_mot.vehicle_id
 and mtc.id = latest_mot.id
-and mtc.status_id not in (4,5) -- exclude vehicles whose latest status is under test or failed
+and mtc.status_id = 6 -- Passed MOT tests
+and mtc.mot_test_type_id = 1 -- Normal MOT test
 and odometer_result_type = 'OK'
 and veh.registration not like "%-%" -- exclude dodgy test data on ACPT
 and veh.registration is not null -- nullable in PP/Prod
 and veh.vin is not null -- nullable in PP/Prod
+and mtc.vehicle_version = veh.version
+and veh.registration <> "R3GHAU5" -- A vehicle that we haven't already changed.
 and not exists (
     select 1 from vehicle v
     where v.registration = veh.registration
@@ -25,6 +28,4 @@ and not exists (
     group by v.vin
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
-and veh.primary_colour_id = 13 -- 13 is "Red"
-and veh.secondary_colour_id = 19 -- 19 is "Not Stated"
-limit 10
+limit 50

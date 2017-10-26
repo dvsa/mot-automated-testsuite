@@ -36,4 +36,4 @@ and not exists (
 and tester_person.username is not null
 and tester_person.id != aed_person.id
 and coalesce(trim(tester_person.middle_name), '') != ''  -- avoid name formatting issues on some screens
-limit 10
+limit 50

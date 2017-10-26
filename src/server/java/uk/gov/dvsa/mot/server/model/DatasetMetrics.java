@@ -25,12 +25,29 @@ public class DatasetMetrics {
     /** The amount of time (in milliseconds) the database query took to execute. */
     private Optional<Long> timingMilliseconds = Optional.empty();
 
+    /** The filter name (if any). */
+    private final Optional<String> filterName;
+
+    /** The number of entries (rows) filtered out because they are not unique. */
+    private Optional<Integer> filteredOut = Optional.empty();
+
     /**
-     * Creates a new instance.
+     * Creates a new instance, with no filtering.
      * @param name  The dataset name
      */
     public DatasetMetrics(String name) {
         this.name = name;
+        this.filterName = Optional.empty();
+    }
+
+    /**
+     * Creates a new instance.
+     * @param name          The dataset name
+     * @param filterName    The filter name
+     */
+    public DatasetMetrics(String name, String filterName) {
+        this.name = name;
+        this.filterName = Optional.of(filterName);
     }
 
     /**
@@ -54,6 +71,21 @@ public class DatasetMetrics {
      */
     public void increaseCacheRequested() {
         cacheRequested = Optional.of(cacheRequested.map(value -> value + 1).orElse(1));
+    }
+
+    /**
+     * Increase the number of entries (rows) filtered out because they are not unique.
+     */
+    public void increaseFilteredOut() {
+        filteredOut = Optional.of(filteredOut.map(value -> value + 1).orElse(1));
+    }
+
+    /**
+     * Get the number of entries (rows) filtered out because they are not unique.
+     * @return The number of entries
+     */
+    public Optional<Integer> getFilteredOut() {
+        return filteredOut;
     }
 
     /**
@@ -113,5 +145,13 @@ public class DatasetMetrics {
      */
     public Optional<Long> getTimingMilliseconds() {
         return timingMilliseconds;
+    }
+
+    /**
+     * Get the filter name (if any).
+     * @return The name
+     */
+    public Optional<String> getFilterName() {
+        return filterName;
     }
 }

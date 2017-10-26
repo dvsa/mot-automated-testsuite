@@ -10,6 +10,7 @@ import uk.gov.dvsa.mot.server.reporting.DataUsageReportGenerator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PreDestroy;
 
 /**
@@ -32,9 +33,6 @@ public class DatabaseDataProvider {
     /** The cached datasets to use, keyed by name. */
     private final Map<String, Dataset> datasets;
 
-    /** The metrics recorded for each dataset. */
-    private final Map<String, DatasetMetrics> datasetMetrics;
-
     /**
      * Creates a new instance.
      * @param dataDao                       The user DAO to use
@@ -48,7 +46,6 @@ public class DatabaseDataProvider {
         this.queryFileLoader = queryFileLoader;
         this.dataUsageReportGenerator = dataUsageReportGenerator;
         this.datasets = new HashMap<>();
-        this.datasetMetrics = new HashMap<>();
     }
 
     /**
@@ -60,22 +57,14 @@ public class DatabaseDataProvider {
     @Transactional
     public List<String> getCachedDatasetEntry(String dataSetName) {
         Dataset dataset = getDataset(dataSetName);
-        DatasetMetrics metrics = getDatasetMetrics(dataSetName);
 
         if (!dataset.isCachePopulated()) {
             // dataset not cached yet, so load and cache it
             final long start = System.currentTimeMillis();
             List<List<String>> results = dataDao.loadDataset(dataset, 0);
             final long stop = System.currentTimeMillis();
-            dataset.populateCache(results);
-
-            // record size of the cached dataset, and query timing
-            metrics.setCacheSize(results.size());
-            metrics.setTimingMilliseconds(stop - start);
+            dataset.populateCache(results, stop - start);
         }
-
-        // record request for data from the cached dataset
-        metrics.increaseCacheRequested();
 
         List<String> entry = dataset.getCachedResult();
         logger.debug("Using {} from dataset {}", entry, dataSetName);
@@ -90,7 +79,7 @@ public class DatabaseDataProvider {
     @Transactional
     public List<String> getUncachedDatasetEntry(String dataSetName) {
         Dataset dataset = getDataset(dataSetName);
-        DatasetMetrics metrics = getDatasetMetrics(dataSetName);
+        DatasetMetrics metrics = dataset.getMetrics();
 
         long start = System.currentTimeMillis();
         List<List<String>> results = dataDao.loadDataset(dataset, 1);
@@ -122,7 +111,7 @@ public class DatabaseDataProvider {
     @Transactional
     public List<List<String>> getUncachedDataset(String dataSetName, int length) {
         Dataset dataset = getDataset(dataSetName);
-        DatasetMetrics metrics = getDatasetMetrics(dataSetName);
+        DatasetMetrics metrics = dataset.getMetrics();
 
         long start = System.currentTimeMillis();
         List<List<String>> results = dataDao.loadDataset(dataset, length);
@@ -150,23 +139,11 @@ public class DatabaseDataProvider {
     @PreDestroy
     public void outputUsageReport() {
         logger.info("In outputUsageReport...");
-        dataUsageReportGenerator.generateReport(datasetMetrics);
-    }
-
-    /**
-     * Get the metrics for the specified dataset, handling creation and caching on demand when needed.
-     * @param datasetName   The dataset name
-     * @return The metrics
-     */
-    private DatasetMetrics getDatasetMetrics(String datasetName) {
-        if (datasetMetrics.containsKey(datasetName)) {
-            return datasetMetrics.get(datasetName);
-
-        } else {
-            DatasetMetrics metrics = new DatasetMetrics(datasetName);
-            datasetMetrics.put(datasetName, metrics);
-            return metrics;
-        }
+        dataUsageReportGenerator.generateReport(
+                // extract metrics, keyed by dataset name
+                datasets.values().stream().collect(Collectors.toMap(
+                        dataset -> dataset.getName(), dataset -> dataset.getMetrics()))
+        );
     }
 
     /**

@@ -34,6 +34,9 @@ public class AuthenticationStepDefinitions implements En {
     /** The login data set cached for use with login retries. */
     private List<List<String>> dataSet;
 
+    /** Whether we are filtering data. */
+    private final boolean isFilteringEnabled;
+
     /**
      * Creates a new instance.
      * @param driverWrapper     The driver wrapper to use
@@ -46,6 +49,8 @@ public class AuthenticationStepDefinitions implements En {
         logger.debug("Creating AuthenticationStepDefinitions...");
         this.driverWrapper = driverWrapper;
         this.dataProvider = dataProvider;
+        this.isFilteringEnabled = Boolean.parseBoolean(env.getProperty("dataFiltering", "false"));
+        logger.info("Filtering enabled: {}", isFilteringEnabled);
 
         Given("^I login with 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String dataSetName, String usernameKey, String key2) ->
@@ -413,25 +418,37 @@ public class AuthenticationStepDefinitions implements En {
      * @param maxLoginRetries   The number of times to retry login with a different user before failing the test
      */
     private void loadData(String dataSetName, List<String> keys, boolean isRetry, int maxLoginRetries) {
-        if (!isRetry) {
+        List<String> entry;
+        if (isFilteringEnabled) {
             /*
-             * Load the data set immediately rather than using caching, because otherwise the data might be invalidated
-             * by the time we come to use it. For example, my dataset might be an application user with role <x>, and
-             * that same application user might be put through a test to remove role <x> before getting to this
-             * scenario...
+             * If filtering is enabled then we simply read from the cache as needed. The filtering will ensure each
+             * test receives a different user, so data should not be invalidated...
              */
-            dataSet = dataProvider.getUncachedDataset(dataSetName, maxLoginRetries);
+            entry = dataProvider.getCachedDatasetEntry(dataSetName);
 
-        } else if (dataSet.size() == 0) {
-            String message = "No more data available to retry login, data set " + dataSetName
-                    + " loaded less than " + maxLoginRetries + "entries";
-            logger.error(message);
-            throw new IllegalStateException(message);
+
+        } else {
+            if (!isRetry) {
+                /*
+                 * Load the data set immediately rather than using caching, because otherwise the data might be
+                 * invalidated by the time we come to use it. For example, my dataset might be an application user
+                 * with role <x>, and that same application user might be put through a test to remove role <x>
+                 * before getting to this scenario...
+                 */
+                dataSet = dataProvider.getUncachedDataset(dataSetName, maxLoginRetries);
+
+            } else if (dataSet.size() == 0) {
+                String message = "No more data available to retry login, data set " + dataSetName
+                        + " loaded less than " + maxLoginRetries + "entries";
+                logger.error(message);
+                throw new IllegalStateException(message);
+            }
+
+            // use the next entry in the data set
+            entry = dataSet.get(0);
+            dataSet.remove(0);
         }
 
-        // use the next entry in the data set
-        List<String> entry = dataSet.get(0);
-        dataSet.remove(0);
         logger.debug("Using {} from dataset {}", entry, dataSetName);
 
         // check the number of items in the data set matches the number of keys in the test step

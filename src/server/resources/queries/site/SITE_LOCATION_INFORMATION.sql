@@ -1,4 +1,4 @@
-SELECT s.id, s.name, s.site_number, a.town, a.postcode
+SELECT s.site_number, s.id, s.name, a.town, a.postcode
 FROM site s, site_contact_detail_map scdm, contact_detail cd, address a
 WHERE scdm.site_id = s.id
 AND cd.id = scdm.contact_detail_id

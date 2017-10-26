@@ -9,7 +9,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -19,6 +18,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import uk.gov.dvsa.mot.server.model.Dataset;
 import uk.gov.dvsa.mot.server.model.DatasetMetrics;
+import uk.gov.dvsa.mot.server.model.Filter;
 import uk.gov.dvsa.mot.server.reporting.DataUsageReportGenerator;
 
 import java.util.ArrayList;
@@ -33,6 +33,12 @@ public class DatabaseDataProviderTest {
 
     /** The first data set name. */
     private static final String DATA_SET1 = "TEST_DATA_SET1";
+
+    /** The second data set name. */
+    private static final String DATA_SET2 = "TEST_DATA_SET2";
+
+    /** The third data set name. */
+    private static final String DATA_SET3 = "TEST_DATA_SET3";
 
     /** The mock DAO. */
     private DataDao mockDao;
@@ -60,7 +66,13 @@ public class DatabaseDataProviderTest {
         ArgumentCaptor<Map<String, DatasetMetrics>> arg = ArgumentCaptor.forClass((Class) Map.class);
         captor = arg;
 
+        // mocks a non-filtered dataset
         given(mockLoader.loadFromFile(DATA_SET1)).willReturn(new Dataset(DATA_SET1, "sql"));
+
+        // mocks filtered datasets
+        Filter filter = new Filter("test-filter");
+        given(mockLoader.loadFromFile(DATA_SET2)).willReturn(new Dataset(DATA_SET2, "sql2", filter));
+        given(mockLoader.loadFromFile(DATA_SET3)).willReturn(new Dataset(DATA_SET3, "sql3", filter));
     }
 
     /**
@@ -119,7 +131,7 @@ public class DatabaseDataProviderTest {
         assertEquals("Wrong results returned", entry3, actual2);
 
         // loaded immediately size is of most recent query, requested should be 2...
-        checkDatasetMetrics(DATA_SET1, empty(), empty(), of(1), of(2));
+        checkDatasetMetrics(DATA_SET1, empty(), empty(), of(1), of(2), empty(), empty());
     }
 
     /**
@@ -141,7 +153,7 @@ public class DatabaseDataProviderTest {
         }
 
         // then
-        checkDatasetMetrics(DATA_SET1, empty(), empty(), of(0), of(1));
+        checkDatasetMetrics(DATA_SET1, empty(), empty(), of(0), of(1), empty(), empty());
     }
 
     /**
@@ -199,7 +211,7 @@ public class DatabaseDataProviderTest {
         assertEquals("Wrong results returned", secondResults, actual2);
 
         // loaded immediately size is of most recent query, requested should be 2...
-        checkDatasetMetrics(DATA_SET1, empty(), empty(), of(3), of(2));
+        checkDatasetMetrics(DATA_SET1, empty(), empty(), of(3), of(2), empty(), empty());
     }
 
     /**
@@ -221,14 +233,14 @@ public class DatabaseDataProviderTest {
         }
 
         // then
-        checkDatasetMetrics(DATA_SET1, empty(), empty(), of(0), of(1));
+        checkDatasetMetrics(DATA_SET1, empty(), empty(), of(0), of(1), empty(), empty());
     }
 
     /**
-     * Tests the <code>getCachedDatasetEntry</code> with a successful query.
+     * Tests the <code>getCachedDatasetEntry</code> with a successful unfiltered query.
      */
     @Test
-    public void getCachedDatasetEntry_HappyPath() {
+    public void getCachedDatasetEntry_HappyPathUnfiltered() {
         List<String> entry1 = new ArrayList<>();
         entry1.add("abcd");
         entry1.add("123");
@@ -246,23 +258,10 @@ public class DatabaseDataProviderTest {
 
         // when
         List<String> actual1 = provider.getCachedDatasetEntry(DATA_SET1);
-
-        // then
-        assertEquals("Wrong results returned", entry1, actual1);
-
-        // then to test the dataset is cached, get another entry...
-
-        // when
         List<String> actual2 = provider.getCachedDatasetEntry(DATA_SET1);
 
-        // then
-        assertEquals("Wrong results returned", entry2, actual2);
-
-        // then get another entry (trigger no more data) and check the cumulative metrics...
-
-        // when
+        // and
         try {
-            // when
             provider.getCachedDatasetEntry(DATA_SET1);
             fail("Expected exception to be thrown");
 
@@ -272,11 +271,62 @@ public class DatabaseDataProviderTest {
                     "No more data available for dataset: TEST_DATA_SET1", ex.getMessage());
         }
 
+        // then
+        assertEquals("Wrong results returned", entry1, actual1);
+        assertEquals("Wrong results returned", entry2, actual2);
+
+        // and check the DAO was only called once...
+        verify(mockDao, times(1)).loadDataset(any(Dataset.class), eq(0));
+
+        // and cache size should be 2, requested should be 3...
+        checkDatasetMetrics(DATA_SET1, of(2), of(3), empty(), empty(), empty(), empty());
+    }
+
+    /**
+     * Tests the <code>getCachedDatasetEntry</code> with a single successful filtered query.
+     */
+    @Test
+    public void getCachedDatasetEntry_SingleFilter() {
+        List<String> entry1 = new ArrayList<>();
+        entry1.add("abcd");
+        entry1.add("123");
+
+        List<String> entry2 = new ArrayList<>();
+        entry2.add("wxyz");
+        entry2.add("789");
+
+        List<String> entry3 = new ArrayList<>();
+        entry3.add("wxyz"); // same key as entry2
+        entry3.add("456");
+
+        List<String> entry4 = new ArrayList<>();
+        entry4.add("efgh");
+        entry4.add("001");
+
+        List<List<String>> queryResults = new ArrayList<>();
+        queryResults.add(entry1);
+        queryResults.add(entry2);
+        queryResults.add(entry3);
+        queryResults.add(entry4);
+
+        // given
+        given(mockDao.loadDataset(any(Dataset.class), eq(0))).willReturn(queryResults);
+
+        // when
+        List<String> actual1 = provider.getCachedDatasetEntry(DATA_SET2);
+        List<String> actual2 = provider.getCachedDatasetEntry(DATA_SET2);
+        List<String> actual3 = provider.getCachedDatasetEntry(DATA_SET2);
+
+        // then
+        assertEquals("Wrong results returned", entry1, actual1);
+        assertEquals("Wrong results returned", entry2, actual2);
+        assertEquals("Wrong results returned", entry4, actual3); // entry3 filtered out
+
         // check the DAO was only called once...
         verify(mockDao, times(1)).loadDataset(any(Dataset.class), eq(0));
 
-        // cache size should be 2, requested should be 3...
-        checkDatasetMetrics(DATA_SET1, of(2), of(3), empty(), empty());
+        // 1 cached result filtered out...
+        checkDatasetMetrics(DATA_SET2, of(4), of(3), empty(), empty(), of("test-filter"), of(1));
     }
 
     /**
@@ -298,7 +348,7 @@ public class DatabaseDataProviderTest {
         }
 
         // then
-        checkDatasetMetrics(DATA_SET1, of(0), of(1), empty(), empty());
+        checkDatasetMetrics(DATA_SET1, of(0), of(1), empty(), empty(), empty(), empty());
     }
 
     /**
@@ -308,10 +358,13 @@ public class DatabaseDataProviderTest {
      * @param expectedCacheRequested                The expected cache requested amount
      * @param expectedLoadedImmediatelySize         The expected loaded immediately size
      * @param expectedLoadedImmediatelyRequested    The expected loaded immediately requested amount
+     * @param expectedFilterName                    The expected filter name
+     * @param expectedFilteredOut                   The expected filtered out amount
      */
     private void checkDatasetMetrics(String datasetName, Optional<Integer> expectedCacheSize,
                 Optional<Integer> expectedCacheRequested, Optional<Integer> expectedLoadedImmediatelySize,
-                    Optional<Integer> expectedLoadedImmediatelyRequested) {
+                    Optional<Integer> expectedLoadedImmediatelyRequested, Optional<String> expectedFilterName,
+                        Optional<Integer> expectedFilteredOut) {
         provider.outputUsageReport();
         verify(mockGenerator).generateReport(captor.capture());
         DatasetMetrics metrics = captor.getValue().get(datasetName);
@@ -328,5 +381,11 @@ public class DatabaseDataProviderTest {
 
         assertEquals("Wrong loaded immediately requested",
                 expectedLoadedImmediatelyRequested, metrics.getLoadedImmediatelyRequested());
+
+        assertEquals("Wrong filter name",
+                expectedFilterName, metrics.getFilterName());
+
+        assertEquals("Wrong filtered out",
+                expectedFilteredOut, metrics.getFilteredOut());
     }
 }
