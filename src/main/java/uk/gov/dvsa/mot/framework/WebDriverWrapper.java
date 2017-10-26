@@ -748,20 +748,6 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Enters the specified text into the field.
-     * <p>Note: This is a low-level way to locate the field. Please only use this method if the text <code>input</code>
-     * doesn't have a corresponding label, otherwise use the <code>enterIntoField(String,String)</code> method using
-     * the label text to identify the field.</p>
-     * @param text      The text to enter
-     * @param idSuffix  The field id suffix
-     */
-    public void enterIntoFieldWithIdSuffix(String text, String idSuffix) {
-        WebElement textElement = webDriver.findElement(By.xpath("//*[contains(@id,'" + idSuffix + "')]"));
-        textElement.clear();
-        textElement.sendKeys(text);
-    }
-
-    /**
      * Selects the specified radio button. Supports well-formed labels and radio buttons nested inside the label.
      * @param labelText  The radio button label
      */

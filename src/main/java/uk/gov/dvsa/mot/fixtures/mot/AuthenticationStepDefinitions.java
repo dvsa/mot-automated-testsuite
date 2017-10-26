@@ -265,9 +265,8 @@ public class AuthenticationStepDefinitions implements En {
             driverWrapper.browseTo("/login");
         }
 
-        // the visible versions of the username and password fields have dynamic ids ending in _tid1 or _tid2
-        driverWrapper.enterIntoFieldWithIdSuffix(username, "_tid1");
-        driverWrapper.enterIntoFieldWithIdSuffix(password, "_tid2");
+        driverWrapper.enterIntoField(username, "User ID");
+        driverWrapper.enterIntoField(password, "Password");
         driverWrapper.pressButton("Sign in");
 
         // message received after successful login if user has ordered new card, on page with title "Sign in"
