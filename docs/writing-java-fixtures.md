@@ -37,23 +37,46 @@ The test suite uses `slf4j` for logging. Add a logger to your fixture class as f
 private static final Logger logger = LoggerFactory.getLogger(MyStepDefinitions.class);
 ```
 
-The logging configuration is in ```src/test/resources/logback.xml```, and the logs are written to ```build/logs/testsuite.log```.
+The logging configuration is in ```src/main/resources/logback.xml```, and the logs are written to ```build/logs``` directory
+(as *pid@hostname.log*).
+
+If needed, the logging configuration for the data server is in ```src/server/resources/logback.xml```, and the logs are also written to ```build/logs```
+directory (as *server.log*).
+
+## Data Server and Testsuite processes
+
+If running the testsuite in serial, there will be two processes: the data server (```src/server```), and the cucumber testsuite (```src/main```).
+
+If running the testsuite in parallel, there will be several processes: one data server (```src/server```), and one process (```src/main```) for each cucumber feature.
+The maximum number of processes run in parallel is set in ```threads``` setting of the ```@CourgetteOptions``` annotation in ```CourgetteJUnitRunner```.
+
+The Courgette-JVM library handles aggregating the various separate ```selenium.json``` results into a single file, and will re-run failed scenarios
+(if the ```rerunFailedScenarios``` setting of the ```@CourgetteOptions``` is set to ```true```).
 
 ## Object lifecycles and Dependency Injection
 
 The testsuite uses Spring (v4) to manage object lifecycles and inject dependencies. When the testsuite runs, the following actions happen:
 
-1. The Spring configuration is loaded from ```src/test/resources/cucumber.xml```, which references the Java Configuration in ```uk.gov.dvsa.mot.di.SpringConfiguration```
-   1. Common global objects, such as ```uk.gov.dvsa.mot.data.DatabaseDataProvider``` (handles DB datasets) and ```uk.gov.dvsa.mot.framework.WebDriverWrapper``` (runs the Chrome web browser) are created
-1. Then for each scenario:
-   1. New instances of all java fixtures (step definition classes) and lifecycle hooks (the ```uk.gov.dvsa.mot.framework.LifecycleHooks``` class) are instantiated
-   1. Any methods in lifecycle hook classes annotated with ```@cucumber.api.java.Before``` are run
-      1. In ```uk.gov.dvsa.mot.framework.LifecycleHooks```, the ```startup``` method is run
-   1. The test steps are run
-   1. Any methods in lifecycle hook classes annotated with ```@cucumber.api.java.After``` are run
-      1. In ```uk.gov.dvsa.mot.framework.LifecycleHooks```, the ```teardown``` method takes a screenshot, writes the HTML, resets data keys, and clears any browser cookies 
-1. Then upon shutdown any methods in Spring beans annotated with ```@javax.annotation.PreDestroy``` are run
-   1. In ```uk.gov.dvsa.mot.framework.WebDriverWrapper```, the ```preDestroy``` method shuts down the Chrome web browser
+1. The ```main``` method of ```uk.gov.dvsa.mot.runner.StartDataServer``` is run to start the data server
+   1. A sanity check is made to see if the data server is already running (e.g. left over from a previous failed run), if so it is shut down
+   1. The ```uk.gov.dvsa.mot.server.ServerApplication``` is started
+       1. The Spring configuration is loaded from ```uk.gov.dvsa.mot.server.di.SpringConfiguration```
+           1. Common global objects, such as ```uk.gov.dvsa.mot.data.DatabaseDataProvider``` (handles DB datasets) are created
+1. *Then for each cucumber feature:*   
+    1. The Spring configuration is loaded from ```src/main/resources/cucumber.xml```, which references the Java Configuration in ```uk.gov.dvsa.mot.di.SpringConfiguration```
+       1. Common global objects, such as ```uk.gov.dvsa.mot.framework.WebDriverWrapper``` (runs the Chrome web browser) are created
+    1. *Then for each cucumber scenario:*
+       1. New instances of all java fixtures (step definition classes) and lifecycle hooks (the ```uk.gov.dvsa.mot.framework.LifecycleHooks``` class) are instantiated
+       1. Any methods in lifecycle hook classes annotated with ```@cucumber.api.java.Before``` are run
+          1. In ```uk.gov.dvsa.mot.framework.LifecycleHooks```, the ```startup``` method is run
+       1. The test steps are run
+       1. Any methods in lifecycle hook classes annotated with ```@cucumber.api.java.After``` are run
+          1. In ```uk.gov.dvsa.mot.framework.LifecycleHooks```, the ```teardown``` method takes a screenshot, writes the HTML, resets data keys, and clears any browser cookies 
+    1. Then upon shutdown any methods in Spring beans annotated with ```@javax.annotation.PreDestroy``` are run
+       1. In ```uk.gov.dvsa.mot.framework.WebDriverWrapper```, the ```preDestroy``` method shuts down the Chrome web browser
+1. Then once all testsuite processes have completed, the ```main``` method of ```uk.gov.dvsa.mot.runner.StopDataServer``` is run to stop the data server
+   1. Any methods in Spring beans annotated with ```@javax.annotation.PreDestroy``` are run
+       1. This triggers the data usage report to be written to the ```target``` folder
 1. Then ```uk.gov.dvsa.mot.reporting.CucumberReporting``` is invoked to process the ```build/reports/selenium/selenium.json``` file and produce reports in ```target``` folder
     
 Each java fixture class can be stateful, if required, and any maintained state will be kept for a single test scenario.
