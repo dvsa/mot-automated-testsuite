@@ -38,10 +38,10 @@ private static final Logger logger = LoggerFactory.getLogger(MyStepDefinitions.c
 ```
 
 The logging configuration is in ```src/main/resources/logback.xml```, and the logs are written to ```build/logs``` directory
-(as *pid@hostname.log*).
+(as several ```pid@hostname.log``` files).
 
 If needed, the logging configuration for the data server is in ```src/server/resources/logback.xml```, and the logs are also written to ```build/logs```
-directory (as *server.log*).
+directory (as ```server.log```).
 
 ## Data Server and Testsuite processes
 
