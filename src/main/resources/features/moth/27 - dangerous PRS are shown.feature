@@ -1,4 +1,4 @@
-@moth2
+@moth2 @moth-int
 Feature: 27 - Dangerous PRS are shown
 
   Scenario: A MOTH user searches for an MOT test with dangerous PRS

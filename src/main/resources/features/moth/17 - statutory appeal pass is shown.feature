@@ -1,4 +1,4 @@
-@moth2
+@moth2 @moth-int
 Feature: 17 - Check vehicle with statutory appeal pass
 
   Scenario: A MOTH user searches for a vehicle with statutory appeal pass

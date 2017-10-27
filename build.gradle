@@ -147,18 +147,20 @@ task('cucumber-tag') {
             main = 'uk.gov.dvsa.mot.runner.StartDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
         }
-        javaexec {
-            main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.main.output
-            ignoreExitValue = true
+        try {
+            javaexec {
+                main = "cucumber.api.cli.Main"
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
 
-            // Cucumber configuration
-            args = cucumberOptions + ['--tags', tag, 'src/main/resources/features']
-        }
-        javaexec {
-            main = 'uk.gov.dvsa.mot.runner.StopDataServer'
-            classpath = configurations.cucumberRuntime + sourceSets.main.output
-            ignoreExitValue = true
+                // Cucumber configuration
+                args = cucumberOptions + ['--tags', tag, 'src/main/resources/features']
+            }
+        }  finally {
+            javaexec {
+                main = 'uk.gov.dvsa.mot.runner.StopDataServer'
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
+                ignoreExitValue = true
+            }
         }
     }
 }
@@ -182,11 +184,11 @@ task('parallel') {
         javaexec {
             main = 'org.junit.runner.JUnitCore'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
-            args = [ 'uk.gov.dvsa.mot.runner.CourgetteJUnitRunner' ]
+            args = ['uk.gov.dvsa.mot.runner.CourgetteJUnitRunner']
             ignoreExitValue = true
 
             // Cucumber configuration
-            systemProperties = [ 'cucumber.options': '--tags ' + tag ]
+            systemProperties = ['cucumber.options': '--tags ' + tag]
         }
         javaexec {
             main = 'uk.gov.dvsa.mot.runner.StopDataServer'
@@ -213,7 +215,7 @@ clean.doFirst {
 
 task('cucumber-reporting') {
     dependsOn assemble, compileJava, check
-    doLast{
+    doLast {
         javaexec {
             main = "uk.gov.dvsa.mot.reporting.CucumberReporting"
             classpath = configurations.cucumberRuntime + sourceSets.main.output
@@ -226,11 +228,11 @@ dependencies {
     compile "info.cukes:cucumber-java8:$cucumberVersion"
     compile "info.cukes:cucumber-spring:$cucumberVersion"
     compile "io.github.prashant-ramcharan:courgette-jvm:1.4.0"
-    compile ("com.github.mkolisnyk:cucumber-report-generator:1.3") {
+    compile("com.github.mkolisnyk:cucumber-report-generator:1.3") {
         // not using testng, clashes with junit
         exclude group: 'info.cukes', module: 'cucumber-testng'
     }
-    compile ("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
+    compile("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
         // exclude the unused drivers (IE, Edge, Safari, Firefox, Opera)
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-edge-driver'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-firefox-driver'
@@ -247,7 +249,7 @@ dependencies {
     compile "org.springframework:spring-web:$springVersion"
     compile "org.springframework:spring-test:$springVersion"
     compile "javax.inject:javax.inject:1"
-    runtime ("xml-apis:xml-apis:1.4.01") {
+    runtime("xml-apis:xml-apis:1.4.01") {
         // spring-context requires the older XML APIs
         force = true
     }
@@ -262,8 +264,8 @@ dependencies {
     serverCompile("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
     serverCompile "javax.inject:javax.inject:1"
     serverCompile "mysql:mysql-connector-java:5.1.44"
-    serverCompile"commons-dbcp:commons-dbcp:1.4"
-    serverRuntime ("xml-apis:xml-apis:1.4.01") {
+    serverCompile "commons-dbcp:commons-dbcp:1.4"
+    serverRuntime("xml-apis:xml-apis:1.4.01") {
         // spring-context requires the older XML APIs
         force = true
     }
