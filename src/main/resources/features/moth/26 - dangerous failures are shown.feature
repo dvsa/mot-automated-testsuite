@@ -1,4 +1,4 @@
-@moth2
+@moth2 @moth-int
 Feature: 26 - Dangerous failures are shown
 
   Scenario: A MOTH user searches for an MOT test with dangerous failures

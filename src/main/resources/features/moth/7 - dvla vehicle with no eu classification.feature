@@ -1,4 +1,4 @@
-@moth2
+@moth2 @moth-int
 Feature: 07 - Check vehicle with no EU classification
 
   Scenario: A MOTH user searches for a vehicle with no EU classification and goes to fees table

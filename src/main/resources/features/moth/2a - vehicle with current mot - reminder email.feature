@@ -1,4 +1,4 @@
-@moth2
+@moth2 @moth-int
 Feature: 02a - Check vehicle with current MOT - reminder email tab
 
 
