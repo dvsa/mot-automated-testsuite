@@ -1,5 +1,5 @@
 @regression
-Feature: 06a - duplicate and replacement certificates
+Feature: test
 
   Scenario Outline: <user> user issues duplicate certificate
     Given I login without 2FA using "<dataScript>" as {<user>}
