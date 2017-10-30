@@ -76,7 +76,7 @@ public class CreateVehicleStepDefinitions implements En {
             driverWrapper.clickElement("reasonForCancel28");
 
             //And I press the "Confirm and cancel test" button
-            driverWrapper.pressButton("Confirm and cancel test");
+            driverWrapper.pressButton("Cancel test");
 
             //Check the page title contains "MOT test aborted"
             driverWrapper.checkCurrentPageTitle("MOT test aborted");

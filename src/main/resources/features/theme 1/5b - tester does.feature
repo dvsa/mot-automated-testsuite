@@ -100,9 +100,9 @@ Feature: 05b - Tester does...
     And The page title contains "MOT test results"
     And I click the "Cancel test" link
 
-    And The page title contains "Cancel MOT test"
+    And The page title contains "Cancel test"
     And I click the "Aborted by VE" radio button
-    And I press the "Confirm and cancel test" button
+    And I press the "Cancel test" button
     Then The page title contains "MOT test aborted"
 
 

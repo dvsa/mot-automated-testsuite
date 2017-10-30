@@ -9,7 +9,6 @@ and md.vehicle_class_id = 4 -- cars only
 and veh.id = latest_mot.vehicle_id
 and mtc.id = latest_mot.id
 and mtc.status_id not in (4,5) -- exclude vehicles whose latest status is under test or failed
-and mtc.expiry_date > curdate() -- latest MOT expires after today
 and odometer_result_type = 'OK'
 and veh.registration not like "%-%" -- exclude dodgy test data on ACPT
 and veh.registration is not null -- nullable in PP/Prod
@@ -26,4 +25,5 @@ and not exists (
     group by v.vin
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
-limit 10
+and veh.last_updated_on < CURDATE() -- vehicles not updated today
+limit 50

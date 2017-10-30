@@ -1,0 +1,2 @@
+select wibble
+from nowhere

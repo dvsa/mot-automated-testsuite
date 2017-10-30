@@ -25,5 +25,5 @@ and not exists (
     group by v.vin
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
-and veh.first_used_date >= str_to_date('01/09/2010', '%d/%m/%Y') -- vehicle first used on or after 01/09/2010
-limit 10
+and veh.first_used_date < str_to_date('01/09/2010', '%d/%m/%Y') -- vehicle first used before 01/09/2010
+limit 50

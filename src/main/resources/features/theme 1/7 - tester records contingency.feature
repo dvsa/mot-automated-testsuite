@@ -145,7 +145,7 @@ Feature: 07 - Tester records Contingency Test
     And I click the "Cancel test" link
 
     And I click the "Aborted by VE" radio button
-    And I press the "Confirm and cancel test" button
+    And I press the "Cancel test" button
     And I click the "Finish" link
 
 

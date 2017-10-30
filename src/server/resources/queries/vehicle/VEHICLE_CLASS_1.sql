@@ -5,7 +5,7 @@ from vehicle veh, model_detail md,
    limit 100000) as latest_mot,
    mot_test_current mtc
 where veh.model_detail_id = md.id
-and md.vehicle_class_id = 4 -- cars only
+and md.vehicle_class_id = 1 -- class 1 only
 and veh.id = latest_mot.vehicle_id
 and mtc.id = latest_mot.id
 and mtc.status_id not in (4,5) -- exclude vehicles whose latest status is under test or failed
@@ -25,5 +25,4 @@ and not exists (
     group by v.vin
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
-and veh.first_used_date < str_to_date('01/09/2010', '%d/%m/%Y') -- vehicle first used before 01/09/2010
-limit 10
+limit 50

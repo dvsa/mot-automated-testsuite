@@ -14,10 +14,10 @@ Feature: 05d - Tester does...
     And I browse for a "Advisory" defect of ("Non-component advisories", "Spare tyre defective") with comment "Test advisory 1"
     And I click the "Cancel test" link
 
-    And The page title contains "Cancel MOT test"
+    And The page title contains "Cancel test"
     And I click the "Inspection may be dangerous or cause damage" radio button
     And I enter "Test reason" in the "How might this be dangerous or cause damage?" field
-    And I press the "Confirm and cancel test" button
+    And I press the "Cancel test" button
     Then The page title contains "MOT test abandoned"
 
 

@@ -77,7 +77,7 @@ public class SpringConfiguration {
 
     @Bean
     public QueryFileLoader queryFileLoader(ResourcePatternResolver classpathScanner) {
-        return new QueryFileLoader(classpathScanner);
+        return new QueryFileLoader(classpathScanner, env);
     }
 
     @Bean

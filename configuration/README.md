@@ -79,3 +79,6 @@ Base URL to use when connecting to the local dataserver
 
 ## dataUsageReport
 Name and path of the test data usage report (e.g. `target/data-usage-report.html`)
+
+## dataFiltering
+Whether to filter test data to be unique, by test data type, for a testsuite run
