@@ -80,18 +80,20 @@ task('cucumber-feature') {
             main = 'uk.gov.dvsa.mot.runner.StartDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
         }
-        javaexec {
-            main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.main.output
-            ignoreExitValue = true
+        try {
+            javaexec {
+                main = "cucumber.api.cli.Main"
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
 
-            // Cucumber configuration
-            args = cucumberOptions + ['src/main/resources/features/' + feature]
-        }
-        javaexec {
-            main = 'uk.gov.dvsa.mot.runner.StopDataServer'
-            classpath = configurations.cucumberRuntime + sourceSets.main.output
-            ignoreExitValue = true
+                // Cucumber configuration
+                args = cucumberOptions + ['src/main/resources/features/' + feature]
+            }
+        } finally {
+            javaexec {
+                main = 'uk.gov.dvsa.mot.runner.StopDataServer'
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
+                ignoreExitValue = true
+            }
         }
     }
 }
@@ -115,18 +117,20 @@ task('cucumber-scenario') {
             main = 'uk.gov.dvsa.mot.runner.StartDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
         }
-        javaexec {
-            main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.main.output
-            ignoreExitValue = true
+        try {
+            javaexec {
+                main = "cucumber.api.cli.Main"
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
 
-            // Cucumber configuration
-            args = cucumberOptions + ['--name', scenario, 'src/main/resources/features/' + feature]
-        }
-        javaexec {
-            main = 'uk.gov.dvsa.mot.runner.StopDataServer'
-            classpath = configurations.cucumberRuntime + sourceSets.main.output
-            ignoreExitValue = true
+                // Cucumber configuration
+                args = cucumberOptions + ['--name', scenario, 'src/main/resources/features/' + feature]
+            }
+        } finally {
+            javaexec {
+                main = 'uk.gov.dvsa.mot.runner.StopDataServer'
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
+                ignoreExitValue = true
+            }
         }
     }
 }
@@ -147,18 +151,20 @@ task('cucumber-tag') {
             main = 'uk.gov.dvsa.mot.runner.StartDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
         }
-        javaexec {
-            main = "cucumber.api.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.main.output
-            ignoreExitValue = true
+        try {
+            javaexec {
+                main = "cucumber.api.cli.Main"
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
 
-            // Cucumber configuration
-            args = cucumberOptions + ['--tags', tag, 'src/main/resources/features']
-        }
-        javaexec {
-            main = 'uk.gov.dvsa.mot.runner.StopDataServer'
-            classpath = configurations.cucumberRuntime + sourceSets.main.output
-            ignoreExitValue = true
+                // Cucumber configuration
+                args = cucumberOptions + ['--tags', tag, 'src/main/resources/features']
+            }
+        } finally {
+            javaexec {
+                main = 'uk.gov.dvsa.mot.runner.StopDataServer'
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
+                ignoreExitValue = true
+            }
         }
     }
 }
@@ -179,19 +185,21 @@ task('parallel') {
             main = 'uk.gov.dvsa.mot.runner.StartDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
         }
-        javaexec {
-            main = 'org.junit.runner.JUnitCore'
-            classpath = configurations.cucumberRuntime + sourceSets.main.output
-            args = [ 'uk.gov.dvsa.mot.runner.CourgetteJUnitRunner' ]
-            ignoreExitValue = true
+        try {
+            javaexec {
+                main = 'org.junit.runner.JUnitCore'
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
+                args = ['uk.gov.dvsa.mot.runner.CourgetteJUnitRunner']
 
-            // Cucumber configuration
-            systemProperties = [ 'cucumber.options': '--tags ' + tag ]
-        }
-        javaexec {
-            main = 'uk.gov.dvsa.mot.runner.StopDataServer'
-            classpath = configurations.cucumberRuntime + sourceSets.main.output
-            ignoreExitValue = true
+                // Cucumber configuration
+                systemProperties = ['cucumber.options': '--tags ' + tag]
+            }
+        } finally {
+            javaexec {
+                main = 'uk.gov.dvsa.mot.runner.StopDataServer'
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
+                ignoreExitValue = true
+            }
         }
     }
 }
