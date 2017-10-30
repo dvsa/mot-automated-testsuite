@@ -1,9 +1,13 @@
 package uk.gov.dvsa.mot.framework;
 
+import org.apache.pdfbox.pdfparser.PDFParser;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -26,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -65,6 +70,9 @@ public class WebDriverWrapper {
     /** The data map to use. */
     private final Map<String, String> data;
 
+    /** Request handler to process HTTP requests. **/
+    private final RequestHandler requestHandler;
+
     /**
      * Creates a new instance.
      * @param env   The environment configuration to use
@@ -74,6 +82,7 @@ public class WebDriverWrapper {
         this.env = env;
         this.data = new HashMap<>();
         this.webDriver = createWebDriver();
+        this.requestHandler = new RequestHandler(this.webDriver);
 
         // amount of time (in milliseconds) to wait for browser clicks to happen, before page refresh logic
         // this is a mandatory delay, to accommodate any browser/environment/network latency
@@ -1466,5 +1475,24 @@ public class WebDriverWrapper {
         } else {
             clickAndWaitForPageLoad(spans.get(spans.size() - 1));
         }
+    }
+
+    /**
+     * Parse PDF context into a string.
+     * @param url to the target document.
+     */
+    public String parsePdfFromUrl(String url) {
+        try {
+            PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setSortByPosition(true);
+
+            PDDocument pdf = requestHandler.getDocument(url);
+
+            return textStripper.getText(pdf);
+        } catch (IOException ioException) {
+            logger.error(String.format("Failed to load PDF document from %s.", url));
+        }
+
+        return "";
     }
 }
