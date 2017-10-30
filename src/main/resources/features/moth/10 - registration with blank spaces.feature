@@ -1,4 +1,5 @@
-@moth2
+@mothpp
+@mothint
 Feature: 10 - Check vehicle reg with blank spaces
 
   Scenario: A MOTH user searches for a vehicle reg with blank spaces

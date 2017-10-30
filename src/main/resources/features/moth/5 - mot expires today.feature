@@ -1,4 +1,4 @@
-@moth2
+@mothpp
 Feature: 05 - Check vehicle with MOT that expires today
 
   Scenario: A MOTH user searches for a vehicle with an MOT that expires today

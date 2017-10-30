@@ -1,4 +1,5 @@
-@moth2
+@mothpp
+@mothint
 Feature: 19 - Check vehicle with inverted appeal pass
 
   Scenario: A MOTH user searches for a vehicle with inverted appeal pass

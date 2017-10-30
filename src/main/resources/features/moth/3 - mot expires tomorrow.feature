@@ -1,4 +1,4 @@
-@moth2
+@mothpp
 Feature: 03 - Check vehicle with MOT about to expire
 
   Scenario: A MOTH user searches for a vehicle with an MOT about to expire

@@ -1,4 +1,5 @@
-@moth2
+@mothpp
+@mothint
 Feature: 12 - Check blank registration
 
   Scenario: A MOTH user searches for a vehicle with the registration field blank

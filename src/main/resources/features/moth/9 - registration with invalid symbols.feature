@@ -1,4 +1,5 @@
-@moth2
+@mothpp
+@mothint
 Feature: 09 - Check registration with invalid symbols
 
   Scenario: A MOTH user searches for a reg with invalid symbols ! annd ?

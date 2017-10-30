@@ -1,4 +1,5 @@
-@moth2
+@mothpp
+@mothint
 Feature: 01 - Check vehicle with expired MOT
 
   Scenario: A MOTH user searches for a vehicle with an expired MOT

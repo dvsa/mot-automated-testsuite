@@ -1,4 +1,5 @@
-@moth2
+@mothpp
+@mothint
 Feature: 02b - Check vehicle with current MOT - contact DVSA
 
 

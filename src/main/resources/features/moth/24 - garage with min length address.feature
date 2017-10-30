@@ -1,4 +1,4 @@
-@moth2
+@moth_onhold
 Feature: 24 - Garage with min length address
 
   Scenario: A MOTH user searches for a vehicle, test location has min length address

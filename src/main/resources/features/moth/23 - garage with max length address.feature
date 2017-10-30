@@ -1,4 +1,4 @@
-@moth2
+@moth_onhold
 Feature: 23 - Garage with max length address
 
   Scenario: A MOTH user searches for a vehicle, test location has max length address

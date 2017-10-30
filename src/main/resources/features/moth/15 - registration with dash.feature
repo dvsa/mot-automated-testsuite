@@ -1,4 +1,4 @@
-@moth2
+@mothpp
 Feature: 15 - Check vehicle with dash in the registration
 
   Scenario: A MOTH user searches for a vehicle with dash
