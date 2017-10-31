@@ -1,13 +1,14 @@
 package uk.gov.dvsa.mot.framework;
 
-import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
+import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
+import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -1478,7 +1479,7 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Parse PDF context into a string.
+     * Parse PDF document into a string.
      * @param url to the target document.
      */
     public String parsePdfFromUrl(String url) {
@@ -1494,5 +1495,56 @@ public class WebDriverWrapper {
         }
 
         return "";
+    }
+
+    /**
+     * Get PDF document.
+     * @param url to the target document.
+     */
+    public PDDocument getPdfFromUrl(String url) {
+        try {
+            PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setSortByPosition(true);
+
+            return requestHandler.getDocument(url);
+        } catch (IOException ioException) {
+            logger.error(String.format("Failed to load PDF document from %s.", url));
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the value of a specific field.
+     *
+     * @param target document to search through.
+     * @param fieldLabel name of the label to search for in the document.
+     * @param valueRegex regex to extract the information from the document.
+     * @return value of the field as a string.
+     */
+    public String getPdfFieldContent(PDDocument target, String fieldLabel, String valueRegex) {
+        String value = null;
+        try {
+            PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setSortByPosition(true);
+
+            String document = textStripper.getText(target);
+            String[] lines = document.split(System.getProperty("line.separator"));
+            Pattern regex = Pattern.compile(valueRegex);
+
+            for (int i = 0; i < lines.length; ++i) {
+                if (lines[i].contains(fieldLabel)) {
+                    if (lines.length > i + 1) {
+                        Matcher matcher = regex.matcher(lines[i + 1]);
+                        if (matcher.find()) {
+                            value = matcher.group();
+                        }
+                    }
+                }
+            }
+        } catch (IOException io) {
+            logger.error("Failed to match '%s' pattern for the %s label.", valueRegex, fieldLabel);
+        }
+        return value;
     }
 }
