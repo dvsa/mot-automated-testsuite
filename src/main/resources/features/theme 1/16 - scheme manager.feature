@@ -15,7 +15,7 @@ Feature: 16 - Scheme manager
 
 
   Scenario: Scheme manager performs user search, then adds AO1 role
-    Given I load immediately "VE_AND_NOT_AO1_USER" as {veUsername}, {veName}
+    Given I load uniquely "VE_AND_NOT_AO1_USER" as {veUsername}, {veName}
     And I login without 2FA using "SCHEME_MGR" as {schemeManager}
     And I click the "User search" link
     And The page title contains "User search"

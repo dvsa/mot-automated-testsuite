@@ -89,7 +89,7 @@ Feature: 10 - Site Manager and Site Admin
 
 
   Scenario: Site Manager can view TQI statistics for testers associated with VTS
-    Given I load immediately "SITE_MGR_AND_TESTER_CLASS_4" as {testerUsername}, {testerName}, {managerUsername}, {siteName}, {siteNumber}
+    Given I load uniquely "SITE_MGR_AND_TESTER_CLASS_4" as {testerUsername}, {testerName}, {managerUsername}, {siteName}, {siteNumber}
     And I login with 2FA as {managerUsername}
     And I click the "({siteNumber}) {siteName}" link
     And The page title contains "Vehicle Testing Station"

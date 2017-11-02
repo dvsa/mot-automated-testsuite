@@ -27,7 +27,7 @@ Feature: 14a - CSCO
 
 
   Scenario: CSCO user performs a user search, then edits the email address
-    Given I load immediately "TESTER_GROUP_B_AND_NOT_A" as {testerUsername}, {testerName}
+    Given I load uniquely "TESTER_GROUP_B_AND_NOT_A" as {testerUsername}, {testerName}
     And I generate a unique email address as {email}
     And I login without 2FA using "CSCO_USER" as {cscouser}
     And I click the "User search" link

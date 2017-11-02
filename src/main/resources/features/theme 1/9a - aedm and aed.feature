@@ -58,7 +58,7 @@ Feature: 09a - AEDM and AED
 
 
   Scenario: AEDM checks today's test log at VTS
-    Given I load immediately "AEDM_AND_TESTER_AT_SITE" as {aedm}, {aeName}, {siteName}, {siteNumber}, {testerUsername}, {testerName}
+    Given I load uniquely "AEDM_AND_TESTER_AT_SITE" as {aedm}, {aeName}, {siteName}, {siteNumber}, {testerUsername}, {testerName}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {odometer}
     And I login with 2FA as {testerUsername}
 

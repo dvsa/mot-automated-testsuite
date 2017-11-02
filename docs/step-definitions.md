@@ -95,6 +95,8 @@ Lower level, only use if higher level steps can't be used:
 * I load ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```
 * I load ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```, ```{key6}```
     * Note: these steps will load the next entry from the cached dataset. Each dataset is read at the start of the testsuite execution
+    * Note: if data filtering (parallel execution) is on, each entry will be unique across all tests
+    * Note: this is the recommended way to load data
 * I load immediately ```"..dataset name.."``` as ```{key1}```
 * I load immediately ```"..dataset name.."``` as ```{key1}```, ```{key2}```
 * I load immediately ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```
@@ -102,6 +104,17 @@ Lower level, only use if higher level steps can't be used:
 * I load immediately ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```
 * I load immediately ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```, ```{key6}```
     * Note: these steps will load the first entry in the dataset immediately without any caching
+    * Note: this should only be used for data that changes during the test itself
+* I load uniquely ```"..dataset name.."``` as ```{key1}```
+* I load uniquely ```"..dataset name.."``` as ```{key1}```, ```{key2}```
+* I load uniquely ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```
+* I load uniquely ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```
+* I load uniquely ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```
+* I load uniquely ```"..dataset name.."``` as ```{key1}```, ```{key2}```, ```{key3}```, ```{key4}```, ```{key5}```, ```{key6}```
+    * Note: if the testsuite is in parallel mode, these steps operate like ```I load ...``` (using caching and data filtering)
+    * Note: if not in parallel mode, these steps operate like ```I load immediately ...``` (loading immediately) 
+    * Note: use this as a temporary work-around for data that can be affected/invalidated by other tests
+    * Note: once sufficient data exists to use parallel/data filtering in all environment, replace with ```I load ...```    
 * I set today as ```{..day key..}```, ```{..month key..}```, ```{..year key..}```  
     * Note: this sets the current date (day/month/year as integers)
 * I set today formatted using ```"..date time format string.."``` as ```{key}```

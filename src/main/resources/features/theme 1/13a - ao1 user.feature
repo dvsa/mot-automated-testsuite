@@ -52,7 +52,7 @@ Feature: 13a - A01 user
 
 
   Scenario: AO1 user performs AE search, then assigns a role
-    Given I load immediately "AE_WITH_NO_AEDM" as {aeReference}, {aeName}, {unassignedTesterUsername}, {unassignedTesterName}
+    Given I load uniquely "AE_WITH_NO_AEDM" as {aeReference}, {aeName}, {unassignedTesterUsername}, {unassignedTesterName}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I click the "AE information" link
     And I enter {aeReference} in the "AE Number" field
@@ -67,7 +67,7 @@ Feature: 13a - A01 user
 
 
   Scenario: AO1 user performs AE search, then removes a role
-    Given I load immediately "AE_WITH_AEDM" as {aeReference}, {aeName}, {aedmUsername}, {aedmName}
+    Given I load uniquely "AE_WITH_AEDM" as {aeReference}, {aeName}, {aedmUsername}, {aedmName}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I click the "AE information" link
     And I enter {aeReference} in the "AE Number" field
@@ -78,7 +78,7 @@ Feature: 13a - A01 user
 
 
   Scenario: AO1 user performs AE search, then adds a site association
-    Given I load immediately "AE_WITH_UNASSIGNED_SITE" as {aeReference}, {aeName}, {siteReference}, {siteName}
+    Given I load uniquely "AE_WITH_UNASSIGNED_SITE" as {aeReference}, {aeName}, {siteReference}, {siteName}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I click the "AE information" link
     And I enter {aeReference} in the "AE Number" field
