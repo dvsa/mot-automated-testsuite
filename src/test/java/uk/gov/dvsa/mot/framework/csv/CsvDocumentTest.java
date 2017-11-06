@@ -32,8 +32,6 @@ public class CsvDocumentTest {
 
             csvDocument = loadDocument(fileName);
         } catch (FailedToLoadCsvException failedToLoadCsv) {
-            // Throw runtime exception to make sure JUnit can detect the failure as a success, loading invalidCSV will
-            // always throw FailedToLoadCsvException.
             throw new RuntimeException(failedToLoadCsv.getMessage());
         }
     }
