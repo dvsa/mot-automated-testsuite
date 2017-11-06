@@ -1,6 +1,5 @@
 package uk.gov.dvsa.mot.framework;
 
-import org.apache.commons.lang.UnhandledException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.openqa.selenium.Alert;
@@ -1538,7 +1537,7 @@ public class WebDriverWrapper {
                 }
             }
         } catch (IOException io) {
-            logger.error("Failed to match '%s' pattern for the %s label.", valueRegex, fieldLabel);
+            logger.error(String.format("Failed to match '%s' pattern for the %s label.", valueRegex, fieldLabel));
         }
 
         return null;
@@ -1570,7 +1569,7 @@ public class WebDriverWrapper {
                 }
             }
         } catch (IOException io) {
-            logger.error("Failed to match '%s' pattern for the %s label.", valueRegex, fieldLabel);
+            logger.error(String.format("Failed to match '%s' pattern for the %s label.", valueRegex, fieldLabel));
         }
 
         return null;

@@ -16,10 +16,7 @@ import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.csv.CsvDocument;
 import uk.gov.dvsa.mot.framework.csv.FailedToLoadCsvException;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Properties;
 
 public class RequestHandler {
 

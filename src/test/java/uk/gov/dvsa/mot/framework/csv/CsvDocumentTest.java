@@ -2,7 +2,6 @@ package uk.gov.dvsa.mot.framework.csv;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.Test;
@@ -49,7 +48,7 @@ public class CsvDocumentTest {
 
             assertTrue(csvDocument.getValue(0, 0).equals("column1"));
         } catch (FailedToLoadCsvException failedToLoadCsv) {
-            failedToLoadCsv.printStackTrace();
+            throw new RuntimeException(failedToLoadCsv.getMessage());
         }
     }
 
@@ -72,7 +71,7 @@ public class CsvDocumentTest {
             assertFalse(csvDocument.contains("X"));
             assertFalse(csvDocument.contains("123"));
         } catch (FailedToLoadCsvException failedToLoadCsv) {
-            failedToLoadCsv.printStackTrace();
+            throw new RuntimeException(failedToLoadCsv.getMessage());
         }
     }
 
@@ -100,7 +99,7 @@ public class CsvDocumentTest {
 
             return CsvDocument.load(rawDocument.toString());
         } catch (IOException io) {
-            throw new FailedToLoadCsvException(io.getMessage());
+            throw new RuntimeException(io.getMessage());
         }
     }
 }
