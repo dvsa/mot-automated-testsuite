@@ -2,7 +2,6 @@ package uk.gov.dvsa.mot.fixtures.mot;
 
 import static junit.framework.TestCase.assertTrue;
 
-import cucumber.api.PendingException;
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +49,7 @@ public class DuplicateAndReplacementStepDefinitions implements En {
                 (String testingLocationKey, String siteNameKey) -> {
                     updateTestingLocation(driverWrapper.getData(testingLocationKey),
                             driverWrapper.getData(siteNameKey));
-            });
+                });
 
         And("^I update the expiry date by adding (\\d+) days$", (Integer daysToAdd) -> {
             updateExpiryDate(daysToAdd);
@@ -116,9 +115,6 @@ public class DuplicateAndReplacementStepDefinitions implements En {
                 (String primaryColour, String secondaryColour) -> {
                     checkColoursOnConfirmationPage(primaryColour, secondaryColour);
                 });
-        And("^I check the PDF certificate contains correct data$", () -> {
-            checkIfPdfMatchesWebpage();
-        });
     }
 
     /**
@@ -421,14 +417,5 @@ public class DuplicateAndReplacementStepDefinitions implements En {
         //Check the colours appear correctly
         assertTrue("The vehicle colours are not as expected",
                 driverWrapper.getElementText("colour").contains(colourString));
-    }
-
-    private void checkIfPdfMatchesWebpage() {
-        String url = driverWrapper.getAttribute("reprint-certificate", "href");
-
-        logger.debug(url);
-
-        String pdfText = driverWrapper.parsePdfFromUrl(url);
-        logger.debug(pdfText);
     }
 }
