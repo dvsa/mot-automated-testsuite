@@ -13,12 +13,17 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.dvsa.mot.framework.csv.CsvDocument;
+import uk.gov.dvsa.mot.framework.csv.FailedToLoadCsvException;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Properties;
 
 public class RequestHandler {
 
-    //** These are the default cookie names for authentication. **/
+    /** These are the default cookie names for authentication. **/
     private static final String DEFAULT_TOKEN_COOKIE_NAME = "iPlanetDirectoryPro";
     private static final String DEFAULT_SESSION_COOKIE_NAME = "PHPSESSID";
 
@@ -60,7 +65,7 @@ public class RequestHandler {
      * @param url of the file to load.
      * @return loaded PDF document.
      */
-    public PDDocument getDocument(String url) throws IOException {
+    public PDDocument getPdfDocument(String url) throws IOException {
         Cookie session = getCookie(DEFAULT_SESSION_COOKIE_NAME);
         Cookie token = getCookie(DEFAULT_TOKEN_COOKIE_NAME);
 
@@ -70,5 +75,29 @@ public class RequestHandler {
                 .get(url);
 
         return PDDocument.load(serverRespone.asInputStream());
+    }
+
+    /**
+     * Get CSV document.
+     * @param url of the file to load.
+     * @return csv document as a string.
+     */
+    public CsvDocument getCsvDocument(String url) throws IOException {
+        Cookie session = getCookie(DEFAULT_SESSION_COOKIE_NAME);
+        Cookie token = getCookie(DEFAULT_TOKEN_COOKIE_NAME);
+
+        Response serverRespone = with()
+                .cookie(session.getName(), session.getValue())
+                .cookie(token.getName(), token.getValue())
+                .get(url);
+
+        String document = new String(serverRespone.asByteArray());
+        
+        try {
+            return CsvDocument.load(document);
+        } catch (FailedToLoadCsvException failedToLoadCsv) {
+            logger.debug(failedToLoadCsv.getMessage());
+            return null;
+        }
     }
 }
