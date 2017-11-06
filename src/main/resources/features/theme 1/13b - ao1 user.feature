@@ -2,7 +2,7 @@
 Feature: 13b - A01 user
 
   Scenario: AO1 user performs AE search, then remove a site association
-    Given I load immediately "AE_WITH_ASSIGNED_SITE" as {aeReference}, {aeName}, {siteReference}, {siteName}
+    Given I load uniquely "AE_WITH_ASSIGNED_SITE" as {aeReference}, {aeName}, {siteReference}, {siteName}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I click the "AE information" link
     And I enter {aeReference} in the "AE Number" field
@@ -50,7 +50,7 @@ Feature: 13b - A01 user
 
 
   Scenario: AO1 user performs site search, then assigns a role
-    Given I load immediately "SITE_MGR_AND_OTHER_TESTER" as {mgrUsername}, {siteName}, {siteReference}, {unassignedTesterUsername}, {unassignedTesterName}
+    Given I load uniquely "SITE_MGR_AND_OTHER_TESTER" as {mgrUsername}, {siteName}, {siteReference}, {unassignedTesterUsername}, {unassignedTesterName}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I search for site by reference {siteReference}
     And I click the "Assign a role" link
@@ -67,7 +67,7 @@ Feature: 13b - A01 user
 
 
   Scenario: AO1 user performs site search, then removes a role
-    Given I load immediately "SITE_MGR_AND_TESTER_CLASS_4" as {testerUsername}, {testerName}, {mgrUsername}, {siteName}, {siteReference}
+    Given I load uniquely "SITE_MGR_AND_TESTER_CLASS_4" as {testerUsername}, {testerName}, {mgrUsername}, {siteName}, {siteReference}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I search for site by reference {siteReference}
     And I click the remove site role link for {testerName}, {testerUsername}

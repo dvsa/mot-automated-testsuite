@@ -92,7 +92,7 @@ public class RequestHandler {
                 .get(url);
 
         String document = new String(serverRespone.asByteArray());
-        
+
         try {
             return CsvDocument.load(document);
         } catch (FailedToLoadCsvException failedToLoadCsv) {

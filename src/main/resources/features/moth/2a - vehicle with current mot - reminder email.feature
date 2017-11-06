@@ -18,6 +18,6 @@ Feature: 02a - Check vehicle with current MOT - reminder email tab
     When I click the "Get a reminder email" link
     And I go to the next tab
 
-    Then The page title contains "Get an annual MOT reminder"
+    Then The page title contains "Get MOT reminders - GOV.UK"
     And I close extra tabs
 

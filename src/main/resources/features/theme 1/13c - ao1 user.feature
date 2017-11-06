@@ -2,7 +2,7 @@
 Feature: 13c - A01 user
 
   Scenario: AO1 user performs user search, then changes tester group qualification status
-    Given I load immediately "TESTER_GROUP_B_AND_NOT_A" as {testerUsername}, {testerName}
+    Given I load uniquely "TESTER_GROUP_B_AND_NOT_A" as {testerUsername}, {testerName}
     And I login without 2FA using "AO1_USER" as {ao1User}
     And I click the "User search" link
     And The page title contains "User search"
@@ -24,7 +24,7 @@ Feature: 13c - A01 user
 
 
   Scenario: AO1 user performs user search, then edits driver licence number
-    Given I load immediately "TESTER_WITH_LICENCE" as {testerUsername}, {testerName}, {licenceNumber}
+    Given I load uniquely "TESTER_WITH_LICENCE" as {testerUsername}, {testerName}, {licenceNumber}
     And I choose a new driving licence number for {licenceNumber} as {newLicenceNumber}
     And I login without 2FA using "AO1_USER" as {ao1User}
     And I click the "User search" link
@@ -44,7 +44,7 @@ Feature: 13c - A01 user
 
 
   Scenario: AO1 user performs user search, and removes then adds driver licence number
-    Given I load immediately "TESTER_WITH_LICENCE" as {testerUsername}, {testerName}, {licenceNumber}
+    Given I load uniquely "TESTER_WITH_LICENCE" as {testerUsername}, {testerName}, {licenceNumber}
     And I login without 2FA using "AO1_USER" as {ao1User}
     And I click the "User search" link
     And The page title contains "User search"

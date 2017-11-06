@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.data.DataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
@@ -27,16 +28,20 @@ public class DataStepDefinitions implements En {
     /** The data provider to use. */
     private final DataProvider dataProvider;
 
+    /** Indicates whether parallel mode and data filtering is enabled. */
+    private final boolean isParallelMode;
+
     /**
      * Creates a new instance.
      * @param driverWrapper     The driver wrapper to use
      * @param dataProvider      The data provider to use
      */
     @Inject
-    public DataStepDefinitions(WebDriverWrapper driverWrapper, DataProvider dataProvider) {
+    public DataStepDefinitions(WebDriverWrapper driverWrapper, DataProvider dataProvider, Environment env) {
         logger.debug("Creating DataStepDefinitions...");
         this.driverWrapper = driverWrapper;
         this.dataProvider = dataProvider;
+        this.isParallelMode = Boolean.parseBoolean(env.getProperty("dataFiltering", "false"));
 
         When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}$",
                 (String dataSetName, String key1) ->
@@ -91,6 +96,33 @@ public class DataStepDefinitions implements En {
                 (String dataSetName, String key1, String key2, String key3, String key4, String key5, String key6) ->
                         loadFromUncachedData(dataSetName, new String[] {key1, key2, key3, key4, key5, key6}));
 
+        When("^I load uniquely \"([^\"]+)\" as \\{([^\\}]+)\\}$",
+                (String dataSetName, String key1) ->
+                        loadUniqueData(dataSetName, new String[] {key1}));
+
+        When("^I load uniquely \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String dataSetName, String key1, String key2) ->
+                        loadUniqueData(dataSetName, new String[] {key1, key2}));
+
+        When("^I load uniquely \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String dataSetName, String key1, String key2, String key3) ->
+                        loadUniqueData(dataSetName, new String[] {key1, key2, key3}));
+
+        When("^I load uniquely \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, "
+                        + "\\{([^\\}]+)\\}$",
+                (String dataSetName, String key1, String key2, String key3, String key4) ->
+                        loadUniqueData(dataSetName, new String[] {key1, key2, key3, key4}));
+
+        When("^I load uniquely \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, "
+                        + "\\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String dataSetName, String key1, String key2, String key3, String key4, String key5) ->
+                        loadUniqueData(dataSetName, new String[] {key1, key2, key3, key4, key5}));
+
+        When("^I load uniquely \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, "
+                        + "\\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String dataSetName, String key1, String key2, String key3, String key4, String key5, String key6) ->
+                        loadUniqueData(dataSetName, new String[] {key1, key2, key3, key4, key5, key6}));
+
         When("^I set today as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String dayKeyName, String monthKeyName, String yearKeyName) ->
                         setToday(dayKeyName, monthKeyName, yearKeyName));
@@ -134,6 +166,26 @@ public class DataStepDefinitions implements En {
 
         for (int i = 0; i < keys.length; i++) {
             driverWrapper.setData(keys[i], dataSet.get(i));
+        }
+    }
+
+    /**
+     * Loads unique data (either using caching and data filtering if parallel enabled, otherwise load immediately).
+     * @param dataSetName       The name of the data set
+     * @param keys              The keys to populate
+     */
+    private void loadUniqueData(String dataSetName, String[] keys) {
+        if (isParallelMode) {
+            /*
+             * If running in parallel mode then each test gets unique data thanks to the data filtering.
+             */
+            loadFromCachedData(dataSetName, keys);
+        } else {
+            /*
+             * If running in serial mode then loading uncached data immediately will help work around data changes
+             * due to preceding tests, although in other situations it results in the same data being loaded every time
+             */
+            loadFromUncachedData(dataSetName, keys);
         }
     }
 
