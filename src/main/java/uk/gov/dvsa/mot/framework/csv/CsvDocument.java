@@ -41,7 +41,12 @@ public class CsvDocument {
      * @return output as 2D string array.
      */
     public static ArrayList<ArrayList<String>> parse(String document) throws FailedToLoadCsvException {
+<<<<<<< Updated upstream
         boolean usesDoubleQuotes = false;
+=======
+        try {
+            boolean usesDoubleQuotes = false;
+>>>>>>> Stashed changes
 
         //This pattern is to check if values are wrapped in double quotes
         Pattern pattern = Pattern.compile("(\"([\\s]+)?,([\\s]+)?\")");
@@ -64,8 +69,15 @@ public class CsvDocument {
                 String value = trimSpaces(values[j], usesDoubleQuotes);
                 mappedCsv.get(i).add(usesDoubleQuotes ? stripDoubleQuotesFromValue(value) : value);
             }
+<<<<<<< Updated upstream
         }
         return mappedCsv;
+=======
+            return mappedCsv;
+        } catch (RuntimeException runtime) {
+            throw new FailedToLoadCsvException(runtime.getMessage());
+        }
+>>>>>>> Stashed changes
     }
 
     /**
