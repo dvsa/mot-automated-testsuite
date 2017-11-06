@@ -1,9 +1,7 @@
 package uk.gov.dvsa.mot.framework;
 
+import org.apache.commons.lang.UnhandledException;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
-import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -30,6 +28,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import uk.gov.dvsa.mot.framework.csv.CsvDocument;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -1487,14 +1486,14 @@ public class WebDriverWrapper {
             PDFTextStripper textStripper = new PDFTextStripper();
             textStripper.setSortByPosition(true);
 
-            PDDocument pdf = requestHandler.getDocument(url);
+            PDDocument pdf = requestHandler.getPdfDocument(url);
 
             return textStripper.getText(pdf);
         } catch (IOException ioException) {
             logger.error(String.format("Failed to load PDF document from %s.", url));
         }
 
-        return "";
+        return null;
     }
 
     /**
@@ -1503,10 +1502,7 @@ public class WebDriverWrapper {
      */
     public PDDocument getPdfFromUrl(String url) {
         try {
-            PDFTextStripper textStripper = new PDFTextStripper();
-            textStripper.setSortByPosition(true);
-
-            return requestHandler.getDocument(url);
+            return requestHandler.getPdfDocument(url);
         } catch (IOException ioException) {
             logger.error(String.format("Failed to load PDF document from %s.", url));
         }
@@ -1522,8 +1518,7 @@ public class WebDriverWrapper {
      * @param valueRegex regex to extract the information from the document.
      * @return value of the field as a string.
      */
-    public String getPdfFieldContent(PDDocument target, String fieldLabel, String valueRegex) {
-        String value = null;
+    public String getPdfFieldValueBelowLabel(PDDocument target, String fieldLabel, String valueRegex) {
         try {
             PDFTextStripper textStripper = new PDFTextStripper();
             textStripper.setSortByPosition(true);
@@ -1534,10 +1529,10 @@ public class WebDriverWrapper {
 
             for (int i = 0; i < lines.length; ++i) {
                 if (lines[i].contains(fieldLabel)) {
-                    if (lines.length > i + 1) {
+                    if (lines.length >= i + 1) {
                         Matcher matcher = regex.matcher(lines[i + 1]);
                         if (matcher.find()) {
-                            value = matcher.group();
+                            return matcher.group();
                         }
                     }
                 }
@@ -1545,6 +1540,77 @@ public class WebDriverWrapper {
         } catch (IOException io) {
             logger.error("Failed to match '%s' pattern for the %s label.", valueRegex, fieldLabel);
         }
-        return value;
+
+        return null;
+    }
+
+    /**
+     * Get the value of a specific field.
+     *
+     * @param target document to search through.
+     * @param fieldLabel name of the label to search for in the document.
+     * @param valueRegex regex to extract the information from the document.
+     * @return value of the field as a string.
+     */
+    public String getPdfFieldValueNextToLabel(PDDocument target, String fieldLabel, String valueRegex) {
+        try {
+            PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setSortByPosition(true);
+
+            String document = textStripper.getText(target);
+            String[] lines = document.split(System.getProperty("line.separator"));
+            Pattern regex = Pattern.compile(valueRegex);
+
+            for (int i = 0; i < lines.length; ++i) {
+                if (lines[i].contains(fieldLabel)) {
+                    Matcher matcher = regex.matcher(lines[i]);
+                    if (matcher.find()) {
+                        return matcher.group();
+                    }
+                }
+            }
+        } catch (IOException io) {
+            logger.error("Failed to match '%s' pattern for the %s label.", valueRegex, fieldLabel);
+        }
+
+        return null;
+    }
+
+    /**
+     * Get a CSV as a parsed CsvDocument.
+     *
+     * @param url of the target document.
+     * @return parsed CSV containing the url output.
+     */
+    public CsvDocument getCsvFromUrl(String url) {
+        try {
+            return requestHandler.getCsvDocument(url);
+        } catch (IOException ioException) {
+            logger.error(String.format("Failed to load CSV document from %s.", url));
+        }
+
+        return null;
+    }
+
+    /**
+     * Check if a target document contains a specified value.
+     *
+     * @param target document to search through.
+     * @param value to search for.
+     * @return whether target document contains the value or not.
+     */
+    public boolean contains(PDDocument target, String value) {
+        try {
+            PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setSortByPosition(true);
+
+            String document = textStripper.getText(target);
+
+            return document.contains(value);
+        } catch (IOException io) {
+            logger.debug(io.getMessage());
+        }
+
+        return false;
     }
 }
