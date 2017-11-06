@@ -41,7 +41,6 @@ public class CsvDocument {
      * @return output as 2D string array.
      */
     public static ArrayList<ArrayList<String>> parse(String document) throws FailedToLoadCsvException {
-        try {
             boolean usesDoubleQuotes = false;
 
             //This pattern is to check if values are wrapped in double quotes
@@ -67,9 +66,6 @@ public class CsvDocument {
                 }
             }
             return mappedCsv;
-        } catch (RuntimeException runtime) {
-            throw new FailedToLoadCsvException(runtime.getMessage());
-        }
     }
 
     /**
@@ -127,6 +123,32 @@ public class CsvDocument {
     }
 
     /**
+     * Get count of all rows in the CSV.
+     *
+     * @return row count.
+     */
+    public int getRowCount() {
+        if (csvData == null) {
+            return -1;
+        }
+
+        return csvData.size();
+    }
+
+    /**
+     * Get count of all columns in the CSV.
+     *
+     * @return column count. Returns -1 if data contained by object is null.
+     */
+    public int getColumnCount() {
+        if (csvData == null && csvData.get(0) == null) {
+            return -1;
+        }
+
+        return csvData.get(0).size();
+    }
+
+    /**
      * Removes the spaces from value.
      *
      * @param value value to trim spaces from.
@@ -136,7 +158,7 @@ public class CsvDocument {
         int rightOffset = getWhiteSpaceOffsetRight(value, usesDoubleQuotes);
         int leftOffset = getWhiteSpaceOffsetLeft(value, usesDoubleQuotes);
 
-        return value.substring(leftOffset, rightOffset);
+        return value.substring(leftOffset, value.length() - rightOffset);
     }
 
     /**
@@ -149,10 +171,10 @@ public class CsvDocument {
     private static int getWhiteSpaceOffsetRight(String value, boolean usesDoubleQuotes) {
         int offset = 0;
         for (int i = value.length() - 1; i >= 0; --i) {
-            if (value.charAt(i) == ' ') {
-                if (usesDoubleQuotes && value.charAt(i) == '"') {
-                    ++offset;
-                }
+            if (value.charAt(i) == ' ' || value.charAt(i) == '\t' || value.charAt(i) == '\n') {
+                ++offset;
+            } else {
+                return offset;
             }
         }
 
@@ -168,11 +190,11 @@ public class CsvDocument {
      */
     private static int getWhiteSpaceOffsetLeft(String value, boolean usesDoubleQuotes) {
         int offset = 0;
-        for (int i = 0; i < value.length(); --i) {
-            if (value.charAt(i) == ' ') {
-                if (usesDoubleQuotes && value.charAt(i) == '"') {
-                    ++offset;
-                }
+        for (int i = 0; i < value.length(); ++i) {
+            if (value.charAt(i) == ' ' || value.charAt(i) == '\t' || value.charAt(i) == '\n') {
+                ++offset;
+            } else {
+                return offset;
             }
         }
 
@@ -189,3 +211,4 @@ public class CsvDocument {
         return value.substring(1, value.length() -  1);
     }
 }
+
