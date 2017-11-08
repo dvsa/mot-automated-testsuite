@@ -63,10 +63,10 @@ As a temporary work-around, the following step definition has been added, to be 
 Given I load uniquely ...
 ``` 
 
-If data filtering is enabled, these steps operate like ```I load ...``` - using caching and data filtering.
-If data filtering is not enabled, these steps operate like ```I load immediately ...``` - loading data immediately.
+*  If data filtering is enabled, these steps operate like ```I load ...``` - using caching and data filtering.
+*  If data filtering is not enabled, these steps operate like ```I load immediately ...``` - loading data immediately.
 
-Once sufficient data exists to use parallel/data filtering in all environment, these steps can be replaced with ```I load ...``` and some of the data server functionality cleaned up.
+Once sufficient data exists to use parallel tests with data filtering in all environment, these steps can be replaced with ```I load ...``` and some of the data server functionality cleaned up.
 
 The steps in ```AuthenticationStepDefinitions``` also operate in the same manner, using caching and filtering if the data filtering setting is enabled, otherwise loading data immediately. 
     
