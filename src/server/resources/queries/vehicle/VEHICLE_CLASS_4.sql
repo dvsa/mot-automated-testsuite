@@ -15,7 +15,6 @@ and veh.registration not like "%-%" -- exclude dodgy test data on ACPT
 and veh.registration is not null -- nullable in PP/Prod
 and veh.vin is not null -- nullable in PP/Prod
 and mtc.vehicle_version = veh.version
-and veh.registration <> "R3GHAU5" -- A vehicle that we haven't already changed.
 and not exists (
     select 1 from vehicle v
     where v.registration = veh.registration
@@ -28,4 +27,4 @@ and not exists (
     group by v.vin
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
-limit 50
+limit 100

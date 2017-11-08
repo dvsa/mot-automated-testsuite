@@ -1,6 +1,3 @@
-SELECT
-  MAX(person.username) AS username
-FROM
-  person
-WHERE
-  person.username LIKE "TEST%"
+select ifnull(MAX(person.username), 'TEST0000') as username
+from person
+where person.username like "TEST%"

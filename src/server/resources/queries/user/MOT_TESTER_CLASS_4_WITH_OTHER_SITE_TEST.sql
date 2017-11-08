@@ -50,4 +50,4 @@ and not exists (
   and mtc.status_id = 4 -- exclude any testers with active tests
 )
 and p.username is not null -- exclude dodgy test data
-limit 50
+limit 100
