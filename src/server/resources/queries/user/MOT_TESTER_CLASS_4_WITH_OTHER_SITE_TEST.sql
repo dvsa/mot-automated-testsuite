@@ -26,6 +26,7 @@ and sc.security_card_status_lookup_id = 1 -- only assigned cards
 and mtc.site_id <> s.id
 and mtc.status_id = 6 -- Passed tests only
 and mtc.vehicle_id = v.id
+and mtc.document_id IS NOT NULL
 and mtc.id = (select max(lmtc.id) from mot_test_current lmtc where lmtc.vehicle_id = v.id) -- Checking only the latest test for vehicle
 and not exists (
     select 1 from vehicle v2
@@ -50,4 +51,4 @@ and not exists (
   and mtc.status_id = 4 -- exclude any testers with active tests
 )
 and p.username is not null -- exclude dodgy test data
-limit 100
+limit 200,10
