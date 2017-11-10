@@ -20,4 +20,5 @@ and not exists ( -- not all security_card have a corresponding security_card_dri
   and (scd.last_observed_drift > 60 or scd.last_observed_drift < -60) -- no drift beyond +/-2
 )
 and p.username is not null
+and (select count(*) from site site_count where site_count.organisation_id = o.id) < 5 -- Has less than 5 sites else we see a different link
 limit 10

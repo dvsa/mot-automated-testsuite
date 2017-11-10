@@ -22,6 +22,7 @@ and not exists ( -- not all security_card have a corresponding security_card_dri
   and (scd.last_observed_drift > 60 or scd.last_observed_drift < -60) -- no drift beyond +/-2
 )
 and p.username is not null
+and exists (select 1 from site_business_role_map sbrm where sbrm.site_id = s.id and sbrm.site_business_role_id = 1) -- At least one tester exists
 group by s.id
 order by esa.site_assessment_score desc
 limit 10

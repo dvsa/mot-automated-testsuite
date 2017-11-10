@@ -42,6 +42,7 @@ and not exists (
   where tester_person.id = mtc.last_updated_by
   and mtc.status_id = 4 -- exclude any testers with active tests
 )
+and (select count(*) from site site_count where site_count.organisation_id = o.id) < 5 -- Has less than 5 sites else we see a different link
 and aedm_person.username is not null
 and tester_person.username is not null
 and coalesce(trim(tester_person.middle_name), '') != ''  -- avoid name formatting issues on some screens
