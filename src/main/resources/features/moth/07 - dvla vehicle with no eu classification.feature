@@ -1,5 +1,6 @@
 @mothpp
 @mothint
+  @karl1
 Feature: 07 - Check vehicle with no EU classification
 
   Scenario: A MOTH user searches for a vehicle with no EU classification and goes to fees table
@@ -15,7 +16,7 @@ Feature: 07 - Check vehicle with no EU classification
     And The page contains "Unknown"
     And The page contains "MOT fees table"
 
-    When I click the "MOT fees table" link
+    When I click the "MOT fees" link
     And I go to the next tab
 
     Then The page title contains "Getting an MOT: MOT costs"
