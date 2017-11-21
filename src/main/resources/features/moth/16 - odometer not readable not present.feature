@@ -22,5 +22,5 @@ Feature: 16 - Check vehicle with odometer unreadable/not present
 
     Then The page contains "{registration}"
     And The page contains "{model}"
-    And The page contains "Not present"
+    And The page contains "No odometer"
     And The page title contains "Check MOT history"
