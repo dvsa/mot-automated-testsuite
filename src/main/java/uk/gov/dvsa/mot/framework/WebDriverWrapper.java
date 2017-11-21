@@ -251,6 +251,7 @@ public class WebDriverWrapper {
 
         } else {
             buttons.get(0).click();
+            webDriver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
         }
     }
 

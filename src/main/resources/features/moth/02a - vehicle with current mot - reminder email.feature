@@ -13,9 +13,9 @@ Feature: 02a - Check vehicle with current MOT - reminder email tab
     Then The page contains "{registration}"
     And The page contains "{model}"
     And The page contains "MOT valid until"
-    And The page contains "Get a reminder email"
+    And The page contains "Get an MOT reminder"
 
-    When I click the "Get a reminder email" link
+    When I click the "Get an MOT reminder" link
     And I go to the next tab
 
     Then The page title contains "Get MOT reminders - GOV.UK"
