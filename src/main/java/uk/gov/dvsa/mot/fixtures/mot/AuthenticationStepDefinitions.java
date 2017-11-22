@@ -273,7 +273,16 @@ public class AuthenticationStepDefinitions implements En {
         String orderCardMessage = "You have ordered a new card.  Until you receive and activate the card, "
                 + "sign in with your security questions.";
 
-        if (!driverWrapper.getCurrentPageTitle().contains("Sign in")
+        // message for when the account is locked
+        String accountNearlyLockedMessage = "You have tried to sign in 4 times";
+        String accountLockedMessage = "Your account is locked";
+
+        if (driverWrapper.containsMessage(accountNearlyLockedMessage)
+                || driverWrapper.containsMessage(accountLockedMessage)) {
+            //Account is locked or about to be locked
+            return LoginOutcome.PasswordFailed;
+
+        } else if (!driverWrapper.getCurrentPageTitle().contains("Sign in")
                 || driverWrapper.containsMessage(orderCardMessage)) {
             return LoginOutcome.PasswordSuccessful;
 
