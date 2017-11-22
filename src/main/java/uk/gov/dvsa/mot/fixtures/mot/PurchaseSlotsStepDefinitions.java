@@ -3,6 +3,7 @@ package uk.gov.dvsa.mot.fixtures.mot;
 import static junit.framework.TestCase.assertTrue;
 
 import cucumber.api.java8.En;
+import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
@@ -134,19 +135,22 @@ public class PurchaseSlotsStepDefinitions implements En {
         //Check the page title
         System.out.print(driverWrapper.getCurrentPageTitle());
 
-        //Switch to password frame
-        driverWrapper.switchToFrame("scp_threeDSecure_iframe");
+        // If 3 D Secure Authorisation screen present fill it in
+        if (driverWrapper.containsMessage("3 D Secure Authorisation")) {
+            //Switch to password frame
+            driverWrapper.switchToFrame("scp_threeDSecure_iframe");
 
-        String passwordPrefix = "Test_";
-        String passwordSuffix = cardNumber.substring(cardNumber.length() - 4);
+            String passwordPrefix = "Test_";
+            String passwordSuffix = cardNumber.substring(cardNumber.length() - 4);
 
-        String password = passwordPrefix.concat(passwordSuffix);
+            String password = passwordPrefix.concat(passwordSuffix);
 
-        //And I enter the password into the input
-        driverWrapper.enterIntoField(password, "Password");
+            //And I enter the password into the input
+            driverWrapper.enterIntoField(password, "Password");
 
-        //And I click the continue button
-        driverWrapper.clickButton("Continue");
+            //And I click the continue button
+            driverWrapper.clickButton("Continue");
+        }
 
         //And I click the save button
         driverWrapper.clickButton("Cancel");
