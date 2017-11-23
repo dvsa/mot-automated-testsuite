@@ -12,14 +12,13 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.mock.env.MockEnvironment;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.ResponseCreator;
 import org.springframework.web.client.RestTemplate;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +47,8 @@ public class ClientDataProviderTest {
     public void setUp() {
         RestTemplate restTemplate = new RestTemplate();
         server = MockRestServiceServer.bindTo(restTemplate).build();
-        Environment env = new MockEnvironment().withProperty("dataserverUrl", URL);
+        TestsuiteConfig env = new TestsuiteConfig();
+        env.setProperty("dataserverUrl", URL);
         dataProvider = new ClientDataProvider(env, restTemplate);
     }
 

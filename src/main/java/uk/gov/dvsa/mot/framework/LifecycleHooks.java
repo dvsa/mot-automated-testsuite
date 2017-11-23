@@ -3,16 +3,31 @@ package uk.gov.dvsa.mot.framework;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.openqa.selenium.remote.SessionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
+import uk.gov.dvsa.mot.browserstack.BrowserStackManager;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+import javax.annotation.Resource;
 import javax.inject.Inject;
 
 /**
@@ -27,18 +42,18 @@ public class LifecycleHooks {
     private final WebDriverWrapper driverWrapper;
 
     /** The configuration settings to use. */
-    private final Environment env;
+    private final TestsuiteConfig env;
 
     /**
      * Creates a new instance.
      * @param driverWrapper     The driver wrapper to use
-     * @param env               The configuration settings
      */
     @Inject
-    public LifecycleHooks(WebDriverWrapper driverWrapper, Environment env) {
+    public LifecycleHooks(WebDriverWrapper driverWrapper,
+                          TestsuiteConfig testsuiteConfig) {
         logger.debug("Creating LifecycleHooks...");
         this.driverWrapper = driverWrapper;
-        this.env = env;
+        this.env = testsuiteConfig;
     }
 
     /**
@@ -62,6 +77,12 @@ public class LifecycleHooks {
         outputDataUse(scenario);
         outputFinalScreenshot(scenario);
         outputFinalHtml(scenario);
+
+        if (env.getProperty("automateKey") != null
+                || env.getProperty("username") != null
+                || scenario.isFailed()) {
+            BrowserStackManager.sendStatusToBrowserStack(driverWrapper, scenario);
+        }
 
         // log the current user out, if they are logged in
         if (driverWrapper.hasLink("Sign out")) {
@@ -96,7 +117,7 @@ public class LifecycleHooks {
      * @param scenario  The scenario just completed
      */
     private void outputFinalScreenshot(Scenario scenario) {
-        String takeScreenshots = env.getRequiredProperty("takeScreenshots");
+        String takeScreenshots = env.getProperty("takeScreenshots");
         switch (takeScreenshots) {
             case "onErrorOnly":
                 if (scenario.isFailed()) {
@@ -125,7 +146,7 @@ public class LifecycleHooks {
      * @param scenario  The scenario just completed
      */
     private void outputFinalHtml(Scenario scenario) {
-        String outputHtml = env.getRequiredProperty("outputHtml");
+        String outputHtml = env.getProperty("outputHtml");
         switch (outputHtml) {
             case "onErrorOnly":
                 if (scenario.isFailed()) {
