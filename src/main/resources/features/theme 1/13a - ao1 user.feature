@@ -22,6 +22,7 @@ Feature: 13a - A01 user
     And I check the "DVSA Area Office" field row has value "08"
 
 
+  @browserstack
   Scenario: AO1 user performs AE search, then views and records an AE event
     Given I load "AE_NOT_REJECTED" as {aeReference}, {aeName}
     And I login without 2FA using "AO1_USER" as {ao1User}
@@ -51,6 +52,7 @@ Feature: 13a - A01 user
     And The page contains "A new event has been recorded."
 
 
+  @browserstack
   Scenario: AO1 user performs AE search, then assigns a role
     Given I load uniquely "AE_WITH_NO_AEDM" as {aeReference}, {aeName}, {unassignedTesterUsername}, {unassignedTesterName}
     And I login without 2FA using "AO1_USER" as {ao1User}
@@ -66,6 +68,7 @@ Feature: 13a - A01 user
     Then The page contains "A role notification has been sent to {unassignedTesterName} '{unassignedTesterUsername}'."
 
 
+  @browserstack
   Scenario: AO1 user performs AE search, then removes a role
     Given I load uniquely "AE_WITH_AEDM" as {aeReference}, {aeName}, {aedmUsername}, {aedmName}
     And I login without 2FA using "AO1_USER" as {ao1User}
@@ -77,6 +80,7 @@ Feature: 13a - A01 user
     Then The page contains "You have removed the role of Authorised examiner designated manager from {aedmName}"
 
 
+  @browserstack
   Scenario: AO1 user performs AE search, then adds a site association
     Given I load uniquely "AE_WITH_UNASSIGNED_SITE" as {aeReference}, {aeName}, {siteReference}, {siteName}
     And I login without 2FA using "AO1_USER" as {ao1User}

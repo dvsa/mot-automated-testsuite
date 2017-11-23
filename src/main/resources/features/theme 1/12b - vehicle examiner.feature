@@ -1,6 +1,7 @@
 @regression
 Feature: 12b - Vehicle Examiner
 
+  @browserstack
   Scenario: MOT test search by vin
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}

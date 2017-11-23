@@ -23,6 +23,7 @@ Feature: 13d - A01 user
     And I check the table with heading "Test date/time" has at least 1 rows
 
 
+  @browserstack
   Scenario: AO1 user creates a new AE
     Given I login without 2FA using "AO1_USER" as {ao1User}
 
@@ -49,6 +50,7 @@ Feature: 13d - A01 user
     And I check the "Status" field row has value "Applied"
 
 
+  @browserstack
   Scenario: AO1 user creates a new VTS
     Given I login without 2FA using "AO1_USER" as {ao1User}
 

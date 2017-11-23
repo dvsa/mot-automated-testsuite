@@ -1,6 +1,7 @@
 @regression
 Feature: 12a - Vehicle Examiner
 
+  @browserstack
   Scenario: VE records re-inspection
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
@@ -23,6 +24,7 @@ Feature: 12a - Vehicle Examiner
     And I perform a test comparison with outcome "No further action" and justification "Test was satisfactory"
     And I check the case outcome "No further action" is saved
 
+  @browserstack
   Scenario: Authorised Examiner Search
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
     And I load "AUTHORISED_EXAMINER" as {aeNumber}, {aeName}, {slotUsage}
@@ -50,6 +52,7 @@ Feature: 12a - Vehicle Examiner
     And I check the user profile contains username {searchUser}
     And I change the testers group "A" status to "Qualified"
 
+  @browserstack
   Scenario: Vehicle information search
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}

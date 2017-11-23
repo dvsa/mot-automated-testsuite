@@ -1,6 +1,7 @@
 @regression
 Feature: 21 - Existing user has lost 2FA card
 
+  @browserstack
   Scenario: Existing user orders new card via security questions screens, then activates it, then logs in
     # Login via security questions, order a new card
     Given I login and click forgotten card using "2FA_CARD_USER" as {username}, {lastDrift}, {question1}, {question2}
