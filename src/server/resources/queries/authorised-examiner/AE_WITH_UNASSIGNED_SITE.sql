@@ -15,4 +15,4 @@ select ae_ref, ae_name, site_number, site_name from (
     and unassigned_site.type_id = 3 -- VTS
     limit 100000) o
 group by o.ae_ref
-limit 10
+limit 20

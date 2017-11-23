@@ -31,4 +31,5 @@ and not exists ( -- not all security_card have a corresponding security_card_dri
   and (scd.last_observed_drift > 60 or scd.last_observed_drift < -60) -- no drift beyond +/-2
 )
 and coalesce(trim(person_other.middle_name), '') != ''  -- avoid name formatting issues on some screens
+and (select count(*) from site site_count where site_count.organisation_id = osm_mgr.organisation_id) < 5 -- Has less than 5 sites else we see a different link
 limit 50
