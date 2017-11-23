@@ -8,4 +8,4 @@ and osm.site_id = assigned_site.id
 and osm.status_id = 2 -- active site association
 and assigned_site.name not like 'VOSA %'
 and assigned_site.name not like 'DVSA %'
-limit 10
+limit 20

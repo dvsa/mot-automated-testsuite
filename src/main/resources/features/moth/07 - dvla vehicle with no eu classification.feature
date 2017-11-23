@@ -15,7 +15,7 @@ Feature: 07 - Check vehicle with no EU classification
     And The page contains "Unknown"
     And The page contains "MOT fees table"
 
-    When I click the "MOT fees table" link
+    When I click the "MOT fees" link
     And I go to the next tab
 
     Then The page title contains "Getting an MOT: MOT costs"

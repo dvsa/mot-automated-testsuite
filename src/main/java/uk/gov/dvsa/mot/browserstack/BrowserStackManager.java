@@ -133,9 +133,9 @@ public class BrowserStackManager {
     /**
      * Notifies BrowserStack's REST api of scenario failure.
      *
-     * IMPORTANT NOTE: This only sends the failure, as the final status is used to determine test
+     * <p>IMPORTANT NOTE: This only sends the failure, as the final status is used to determine test
      * failure/timeout/success. So if a scenario failed during the test, and the last status sent to BrowserStack is
-     * success, it will still appear green on the website, even though the build contains failed test scenarios.
+     * success, it will still appear green on the website, even though the build contains failed test scenarios.</p>
      *
      * @param driverWrapper to get the session ID from.
      * @param scenario that just finished running.

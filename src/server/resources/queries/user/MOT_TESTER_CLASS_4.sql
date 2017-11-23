@@ -34,4 +34,5 @@ and not exists (
   and mtc.status_id = 4 -- exclude any testers with active tests
 )
 and p.username is not null -- exclude dodgy test data
-limit 50
+and (select count(*) from organisation_site_map osm2 where o.id = osm2.organisation_id) < 6
+limit 100
