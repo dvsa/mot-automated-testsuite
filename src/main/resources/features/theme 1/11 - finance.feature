@@ -1,6 +1,7 @@
 @regression
 Feature: 11 - Finance
 
+  @browserstack
   Scenario: View AE transaction
     Given I login without 2FA using "FINANCE_USER" as {username}
     And I click the "AE information" link
@@ -54,7 +55,8 @@ Feature: 11 - Finance
   # The below scenario contains a bug - BL-5595 where
   # the cheque details were not being stored
   # therefore the cheque details will not show up in full
-   Scenario: A finance user buys slots for an AE and processes the payment as a Cheque payment
+  @browserstack
+  Scenario: A finance user buys slots for an AE and processes the payment as a Cheque payment
 
      Given I login without 2FA using "FINANCE_USER" as {username}
      And I click the "AE information" link

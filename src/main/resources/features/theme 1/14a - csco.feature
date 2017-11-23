@@ -26,6 +26,7 @@ Feature: 14a - CSCO
     And I check the "Address" field row has value {aPostcode}
 
 
+  @browserstack
   Scenario: CSCO user performs a user search, then edits the email address
     Given I load uniquely "TESTER_GROUP_B_AND_NOT_A" as {testerUsername}, {testerName}
     And I generate a unique email address as {email}
@@ -45,7 +46,7 @@ Feature: 14a - CSCO
 
   #Limits on this Scenario because it sends off an email to reset the account
   #Scenario: User Search - Reclaim Account
-
+  @browserstack
   Scenario: CSCO user performs certificate search by vrm/registration, and is able to print duplicate certificate
     Given I login without 2FA using "CSCO_USER" as {cscouser}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
