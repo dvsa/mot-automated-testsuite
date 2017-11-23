@@ -18,13 +18,20 @@ import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.SessionId;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+<<<<<<< HEAD
 import org.springframework.core.env.Environment;
+=======
+import uk.gov.dvsa.mot.browserstack.BrowserStackManager;
+import uk.gov.dvsa.mot.framework.csv.CsvDocument;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
+>>>>>>> b2f1db4... Added BrowserStack funcitonality, replaced Environment with TestsuiteConfig and adapted existing classes to use it instead.
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -38,6 +45,7 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 /**
  * Wraps the <code>WebDriver</code> instance needed by step definitions with a simplified generic API.
@@ -51,7 +59,7 @@ public class WebDriverWrapper {
     private final WebDriver webDriver;
 
     /** The environment configuration to use. */
-    private final Environment env;
+    private final TestsuiteConfig env;
 
     /** The amount of time to wait (in milliseconds) for browser clicks before page refresh. */
     private final long clickWaitMilliseconds;
@@ -69,7 +77,8 @@ public class WebDriverWrapper {
      * Creates a new instance.
      * @param env   The environment configuration to use
      */
-    public WebDriverWrapper(Environment env) {
+    @Inject
+    public WebDriverWrapper(TestsuiteConfig env) {
         logger.debug("Creating WebDriverWrapper...");
         this.env = env;
         this.data = new HashMap<>();
@@ -97,51 +106,171 @@ public class WebDriverWrapper {
      */
     protected WebDriver createWebDriver() {
         logger.debug("Creating new chrome driver");
-        String browser = env.getRequiredProperty("browser");
-        if ("chrome".equals(browser)) {
-            ChromeOptions chromeOptions = new ChromeOptions();
-            if (env.getProperty("headless").equals("true")) {
-                chromeOptions.addArguments("--headless");
-                chromeOptions.addArguments("window-size=1920,1080");
-            }
 
-            LoggingPreferences loggingPreferences = new LoggingPreferences();
+        ChromeOptions chromeOptions = new ChromeOptions();
+        if (env.getProperty("headless").equals("true")) {
+            chromeOptions.addArguments("--headless");
+            chromeOptions.addArguments("window-size=1920,1080");
+        }
 
-            // logging turned off completely
-            loggingPreferences.enable(LogType.BROWSER, Level.OFF);
-            loggingPreferences.enable(LogType.PERFORMANCE, Level.OFF);
-            loggingPreferences.enable(LogType.PROFILER, Level.OFF);
-            loggingPreferences.enable(LogType.SERVER, Level.OFF);
+        LoggingPreferences loggingPreferences = new LoggingPreferences();
 
-            // logging enabled
-            loggingPreferences.enable(LogType.DRIVER, Level.WARNING);
-            loggingPreferences.enable(LogType.CLIENT, Level.WARNING);
+        // logging turned off completely
+        loggingPreferences.enable(LogType.BROWSER, Level.OFF);
+        loggingPreferences.enable(LogType.PERFORMANCE, Level.OFF);
+        loggingPreferences.enable(LogType.PROFILER, Level.OFF);
+        loggingPreferences.enable(LogType.SERVER, Level.OFF);
 
-            DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        // logging enabled
+        loggingPreferences.enable(LogType.DRIVER, Level.WARNING);
+        loggingPreferences.enable(LogType.CLIENT, Level.WARNING);
+
+        if (env.isUsingBrowserStack()) {
+            DesiredCapabilities capabilities = getDesiredCapabilities();
+
             capabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
-            capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 
-            // path to driver executable
-            System.setProperty("webdriver.chrome.driver", env.getRequiredProperty("driver"));
+            capabilities.setCapability("browser", env.getRequiredProperty("browser"));
+            capabilities.setCapability("browser_version", env.getProperty("browser_version"));
 
-            //If gridURL is set create a remote webdriver instance
-            if (env.containsProperty("gridURL")) {
-                try {
-                    return new RemoteWebDriver(new URL(env.getProperty("gridURL")), capabilities);
+            String localIdentifier = BrowserStackManager.getLocalIdentifier(env);
+            capabilities.setCapability("browserstack.localIdentifier",
+                    localIdentifier);
+            capabilities.setCapability("browserstack.debug", env.getProperty("debug"));
+            capabilities.setCapability("browserstack.local", env.getProperty("local"));
+            capabilities.setCapability("browserstack.selenium_version", "3.5.2");
 
-                } catch (MalformedURLException malformedUrlException) {
-                    String message = "Error while creating remote driver: " + malformedUrlException.getMessage();
-                    logger.error(message);
-                    throw new IllegalArgumentException(message);
+            capabilities.setCapability("name", env.getProperty("name"));
+            capabilities.setCapability("build", env.getProperty("build"));
+
+            capabilities.setCapability("acceptSslCerts", "true");
+
+            if (env.isMobileConfig()) {
+                capabilities.setCapability("device", env.getProperty("device"));
+
+                if (env.getProperty("realMobile") != null) {
+                    capabilities.setCapability("realMobile", env.getProperty("realMobile"));
+                    capabilities.setCapability("os_version", env.getProperty("os_version"));
+                } else {
+                    capabilities.setCapability("platform", env.getProperty("platform"));
+                    capabilities.setCapability("browserName", env.getProperty("browserName"));
                 }
             } else {
+                capabilities.setCapability("os", env.getProperty("os"));
+                capabilities.setCapability("os_version", env.getProperty("os_version"));
+                capabilities.setCapability("resolution", env.getProperty("resolution"));
+            }
+
+            try {
+                return new RemoteWebDriver(new URL("https://" + env.getProperty("username") + ":"
+                        + env.getProperty("automateKey") + "@" + env.getProperty("server")),
+                        capabilities);
+            } catch (MalformedURLException malformedUrl) {
                 return new ChromeDriver(chromeOptions);
             }
         } else {
-            String message = "Unsupported browser: " + browser;
-            logger.error(message);
-            throw new IllegalArgumentException(message);
+            DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+
+            capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
+            capabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
+
+            capabilities.setCapability("browser", env.getRequiredProperty("browser"));
+
+            System.setProperty("webdriver.chrome.driver", env.getRequiredProperty("driver"));
+
+            return new ChromeDriver(chromeOptions);
         }
+    }
+
+    /**
+     * This method creates new DesiredCapabilites depending on the config passed by the tester.
+     *
+     * @return new DesiredCapabilities compatible with loaded config.
+     */
+    private DesiredCapabilities getDesiredCapabilities() {
+        logger.debug("Preparing desired capabilities for the current config...");
+
+        DesiredCapabilities desiredCapabilities = null;
+        String target = "";
+
+        if (env.isMobileConfig()) {
+            logger.debug("Detected mobile config...");
+
+            if (Boolean.parseBoolean(env.getProperty("realMobile"))) {
+                logger.debug("Getting desired capabilities for a real mobile...");
+
+                target = env.getProperty("device").toLowerCase();
+
+                if (target.contains("iphone")) {
+                    target = "iphone";
+                } else {
+                    target = "android";
+                }
+            } else {
+                logger.debug("Getting desired capabilities for an emulated mobile...");
+
+                target = env.getProperty("browserName").toLowerCase();
+            }
+        } else {
+            logger.debug("Detected desktop config...");
+
+            target = env.getRequiredProperty("browser").toLowerCase();
+        }
+
+        logger.debug(String.format("Detected %s target...", target));
+
+        switch (target) {
+            case "android":
+                desiredCapabilities = DesiredCapabilities.android();
+                desiredCapabilities.setCapability("browserstack.appium_version", "1.6.5");
+                break;
+            case "chrome":
+                desiredCapabilities = DesiredCapabilities.chrome();
+                break;
+            case "edge":
+                desiredCapabilities = DesiredCapabilities.edge();
+                break;
+            case "firefox":
+                desiredCapabilities = DesiredCapabilities.firefox();
+                desiredCapabilities.setCapability("browserstack.geckodriver", "0.18.0");
+                break;
+            case "iphone":
+                desiredCapabilities = DesiredCapabilities.iphone();
+                desiredCapabilities.setCapability("browserstack.appium_version", "1.7.0");
+                break;
+            case "ipad":
+                desiredCapabilities = DesiredCapabilities.ipad();
+                desiredCapabilities.setCapability("browserstack.appium_version", "1.7.0");
+                break;
+            case "opera":
+                desiredCapabilities = DesiredCapabilities.operaBlink();
+                break;
+            case "ie":
+                desiredCapabilities = DesiredCapabilities.internetExplorer();
+                desiredCapabilities.setCapability("browserstack.ie.driver", "2.53.1");
+                break;
+            case "safari":
+                desiredCapabilities = DesiredCapabilities.safari();
+                desiredCapabilities.setCapability("browserstack.safari.driver", "2.48");
+                break;
+            default:
+                throw new IllegalArgumentException(String.format("Unsupported target BrowserStack browser - %s.",
+                        target));
+        }
+
+        return desiredCapabilities;
+    }
+
+    /**
+     * Get the config used by WebDriverWrapper.
+     *
+     * NOTE: this is a workaround for dynamically providing config files from terminal, as this did not work with
+     * Spring framework. Might need some additional investigation, whether this is possible or not.
+     *
+     * @return config stored in the class.
+     */
+    public TestsuiteConfig getConfig() {
+        return env;
     }
 
     /**
@@ -397,7 +526,6 @@ public class WebDriverWrapper {
         // find any "a" elements with text containing the link text
         List<WebElement> links = webDriver.findElements(
                 By.xpath("//a[contains(text(),\"" + expandDataKeys(linkText) + "\")]"));
-
         // then add any "a" elements with any sub-elements (e.g. nested "span"s) with text containing the link text
         links.addAll(webDriver.findElements(
                 By.xpath("//a[.//*[contains(text(),\"" + expandDataKeys(linkText) + "\")]]")));
@@ -586,6 +714,7 @@ public class WebDriverWrapper {
      */
     public void clickIcon(String iconName) {
         WebElement element = webDriver.findElement(By.xpath("//i[contains(@class, '" + iconName + "')]"));
+
         clickAndWaitForPageLoad(element);
     }
 
@@ -630,6 +759,7 @@ public class WebDriverWrapper {
      */
     public void clickRadioButtonByText(String text) {
         WebElement radioButton = webDriver.findElement(By.xpath("//strong[contains(text(),'" + text + "')]"));
+
         radioButton.click();
     }
 
@@ -1467,4 +1597,153 @@ public class WebDriverWrapper {
             clickAndWaitForPageLoad(spans.get(spans.size() - 1));
         }
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * Parse PDF document into a string.
+     * @param url to the target document.
+     */
+    public String parsePdfFromUrl(String url) {
+        try {
+            PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setSortByPosition(true);
+
+            PDDocument pdf = requestHandler.getPdfDocument(url);
+
+            return textStripper.getText(pdf);
+        } catch (IOException ioException) {
+            logger.error(String.format("Failed to load PDF document from %s.", url));
+        }
+
+        return null;
+    }
+
+    /**
+     * Get PDF document.
+     * @param url to the target document.
+     */
+    public PDDocument getPdfFromUrl(String url) {
+        try {
+            return requestHandler.getPdfDocument(url);
+        } catch (IOException ioException) {
+            logger.error(String.format("Failed to load PDF document from %s.", url));
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the value of a specific field.
+     *
+     * @param target document to search through.
+     * @param fieldLabel name of the label to search for in the document.
+     * @param valueRegex regex to extract the information from the document.
+     * @return value of the field as a string.
+     */
+    public String getPdfFieldValueBelowLabel(PDDocument target, String fieldLabel, String valueRegex) {
+        try {
+            PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setSortByPosition(true);
+
+            String document = textStripper.getText(target);
+            String[] lines = document.split(System.getProperty("line.separator"));
+            Pattern regex = Pattern.compile(valueRegex);
+
+            for (int i = 0; i < lines.length; ++i) {
+                if (lines[i].contains(fieldLabel)) {
+                    if (lines.length >= i + 1) {
+                        Matcher matcher = regex.matcher(lines[i + 1]);
+                        if (matcher.find()) {
+                            return matcher.group();
+                        }
+                    }
+                }
+            }
+        } catch (IOException io) {
+            logger.error(String.format("Failed to match '%s' pattern for the %s label.", valueRegex, fieldLabel));
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the value of a specific field.
+     *
+     * @param target document to search through.
+     * @param fieldLabel name of the label to search for in the document.
+     * @param valueRegex regex to extract the information from the document.
+     * @return value of the field as a string.
+     */
+    public String getPdfFieldValueNextToLabel(PDDocument target, String fieldLabel, String valueRegex) {
+        try {
+            PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setSortByPosition(true);
+
+            String document = textStripper.getText(target);
+            String[] lines = document.split(System.getProperty("line.separator"));
+            Pattern regex = Pattern.compile(valueRegex);
+
+            for (int i = 0; i < lines.length; ++i) {
+                if (lines[i].contains(fieldLabel)) {
+                    Matcher matcher = regex.matcher(lines[i]);
+                    if (matcher.find()) {
+                        return matcher.group();
+                    }
+                }
+            }
+        } catch (IOException io) {
+            logger.error(String.format("Failed to match '%s' pattern for the %s label.", valueRegex, fieldLabel));
+        }
+
+        return null;
+    }
+
+    /**
+     * Get a CSV as a parsed CsvDocument.
+     *
+     * @param url of the target document.
+     * @return parsed CSV containing the url output.
+     */
+    public CsvDocument getCsvFromUrl(String url) {
+        try {
+            return requestHandler.getCsvDocument(url);
+        } catch (IOException ioException) {
+            logger.error(String.format("Failed to load CSV document from %s.", url));
+        }
+
+        return null;
+    }
+
+    /**
+     * Check if a target document contains a specified value.
+     *
+     * @param target document to search through.
+     * @param value to search for.
+     * @return whether target document contains the value or not.
+     */
+    public boolean contains(PDDocument target, String value) {
+        try {
+            PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setSortByPosition(true);
+
+            String document = textStripper.getText(target);
+
+            return document.contains(value);
+        } catch (IOException io) {
+            logger.debug(io.getMessage());
+        }
+
+        return false;
+    }
+
+    /**
+     * Get current session id.
+     *
+     * @return session id used by Selenium web driver.
+     */
+    public SessionId getSessionId() {
+        return ((RemoteWebDriver) webDriver).getSessionId();
+    }
+>>>>>>> b2f1db4... Added BrowserStack funcitonality, replaced Environment with TestsuiteConfig and adapted existing classes to use it instead.
 }

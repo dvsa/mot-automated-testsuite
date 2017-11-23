@@ -2,7 +2,9 @@ package uk.gov.dvsa.mot.fixtures.mot;
 
 import static junit.framework.TestCase.assertTrue;
 
+import cucumber.api.PendingException;
 import cucumber.api.java8.En;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
@@ -113,8 +115,9 @@ public class DuplicateAndReplacementStepDefinitions implements En {
 
         And("^I check the colours are correct \"([^\"]+)\" and \"([^\"]+)\"$",
                 (String primaryColour, String secondaryColour) -> {
-                    checkColoursOnConfirmationPage(primaryColour, secondaryColour);
-                });
+                checkColoursOnConfirmationPage(primaryColour, secondaryColour);
+            });
+
     }
 
     /**
