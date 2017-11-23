@@ -42,8 +42,11 @@ public class CsvDocument {
      */
     public static ArrayList<ArrayList<String>> parse(String document) throws FailedToLoadCsvException {
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         boolean usesDoubleQuotes = false;
 =======
+=======
+>>>>>>> Stashed changes
         try {
             boolean usesDoubleQuotes = false;
 >>>>>>> Stashed changes
@@ -60,22 +63,40 @@ public class CsvDocument {
             usesDoubleQuotes = true;
         }
 
+<<<<<<< Updated upstream
         for (int i = 0; i < rows.length; ++i) {
             String[] values = rows[i].split( ",");
+=======
+            for (int i = 0; i < rows.length; ++i) {
+                String[] values = rows[i].split(",");
+>>>>>>> Stashed changes
 
             mappedCsv.add(new ArrayList<>());
 
+<<<<<<< Updated upstream
             for (int j = 0; j < values.length; ++j) {
                 String value = trimSpaces(values[j], usesDoubleQuotes);
                 mappedCsv.get(i).add(usesDoubleQuotes ? stripDoubleQuotesFromValue(value) : value);
+=======
+                for (int j = 0; j < values.length; ++j) {
+                    String value = trimSpaces(values[j]);
+                    mappedCsv.get(i).add(usesDoubleQuotes ? stripDoubleQuotesFromValue(value) : value);
+                }
+>>>>>>> Stashed changes
             }
 <<<<<<< Updated upstream
         }
         return mappedCsv;
 =======
             return mappedCsv;
+<<<<<<< Updated upstream
         } catch (RuntimeException runtime) {
             throw new FailedToLoadCsvException(runtime.getMessage());
+        }
+>>>>>>> Stashed changes
+=======
+        } catch (Exception exception) {
+            throw new FailedToLoadCsvException("Unable to parse CSV document.");
         }
 >>>>>>> Stashed changes
     }
@@ -166,9 +187,9 @@ public class CsvDocument {
      * @param value value to trim spaces from.
      * @return value with removed whitespaces.
      */
-    private static String trimSpaces(String value, boolean usesDoubleQuotes) {
-        int rightOffset = getWhiteSpaceOffsetRight(value, usesDoubleQuotes);
-        int leftOffset = getWhiteSpaceOffsetLeft(value, usesDoubleQuotes);
+    private static String trimSpaces(String value) {
+        int rightOffset = getWhiteSpaceOffsetRight(value);
+        int leftOffset = getWhiteSpaceOffsetLeft(value);
 
         return value.substring(leftOffset, value.length() - rightOffset);
     }
@@ -177,10 +198,9 @@ public class CsvDocument {
      * Get the offset, from the end of the value, without whitespaces & double quotes.
      *
      * @param value to get the offset from.
-     * @param usesDoubleQuotes whether the value is encapsulated in double quotes.
      * @return offset of white space starting from the end of the value.
      */
-    private static int getWhiteSpaceOffsetRight(String value, boolean usesDoubleQuotes) {
+    private static int getWhiteSpaceOffsetRight(String value) {
         int offset = 0;
         for (int i = value.length() - 1; i >= 0; --i) {
             if (value.charAt(i) == ' ' || value.charAt(i) == '\t' || value.charAt(i) == '\n') {
@@ -197,10 +217,9 @@ public class CsvDocument {
      * Get the offset, from the beginning of the value, without whitespaces & double quotes.
      *
      * @param value to get the offset from.
-     * @param usesDoubleQuotes whether the value is encapsulated in double quotes.
      * @return offset of white space starting from the beginning of the value.
      */
-    private static int getWhiteSpaceOffsetLeft(String value, boolean usesDoubleQuotes) {
+    private static int getWhiteSpaceOffsetLeft(String value) {
         int offset = 0;
         for (int i = 0; i < value.length(); ++i) {
             if (value.charAt(i) == ' ' || value.charAt(i) == '\t' || value.charAt(i) == '\n') {
