@@ -366,43 +366,13 @@ task('browserstack-tag') {
                 main = 'uk.gov.dvsa.mot.browserstack.StopBrowserStackLocal'
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
 
-                systemProperty "target_config", target_config
-            }
-            javaexec {
-                main = 'uk.gov.dvsa.mot.runner.StopDataServer'
-                classpath = configurations.cucumberRuntime + sourceSets.main.output
-                ignoreExitValue = true
-            }
-        }
-    }
-}
+                javaexec {
+                    main = 'uk.gov.dvsa.mot.browserstack.StartBrowserStackLocal'
+                    classpath = configurations.cucumberRuntime + sourceSets.main.output
 
-task('parallel') {
-    description 'Runs all features matching the tag(s) (specified using -Ptag=...) in parallel'
-    dependsOn assemble, compileJava
-    finalizedBy 'cucumber-reporting'
-    doLast {
-        if (!project.hasProperty('tag')) {
-            throw new GradleException('tag parameter must be defined')
-        }
-        copy {
-            into "build/server-libs"
-            from configurations.serverRuntime + sourceSets.server.output
-        }
-        javaexec {
-            main = 'uk.gov.dvsa.mot.runner.StartDataServer'
-            classpath = configurations.cucumberRuntime + sourceSets.main.output
-        }
-        try {
-            javaexec {
-                main = 'org.junit.runner.JUnitCore'
-                classpath = configurations.cucumberRuntime + sourceSets.main.output
-                args = ['uk.gov.dvsa.mot.runner.CourgetteJUnitRunner']
-
-                // Cucumber configuration
-                systemProperties = ['cucumber.options': '--tags ' + tag]
+                    systemProperty "target_config", target_config
+                }
             }
-        } finally {
             javaexec {
                 main = 'uk.gov.dvsa.mot.runner.StopDataServer'
                 classpath = configurations.cucumberRuntime + sourceSets.main.output

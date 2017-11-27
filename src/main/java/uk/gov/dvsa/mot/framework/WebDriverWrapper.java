@@ -108,7 +108,7 @@ public class WebDriverWrapper {
      * @return The web driver instance
      */
     protected WebDriver createWebDriver() {
-        logger.debug("Creating new chrome driver");
+        logger.debug("Creating new web driver");
 
         ChromeOptions chromeOptions = new ChromeOptions();
         if (env.getProperty("headless").equals("true")) {
@@ -225,7 +225,6 @@ public class WebDriverWrapper {
         switch (target) {
             case "android":
                 desiredCapabilities = DesiredCapabilities.android();
-                desiredCapabilities.setCapability("browserstack.appium_version", "1.6.5");
                 break;
             case "chrome":
                 desiredCapabilities = DesiredCapabilities.chrome();
@@ -239,11 +238,9 @@ public class WebDriverWrapper {
                 break;
             case "iphone":
                 desiredCapabilities = DesiredCapabilities.iphone();
-                desiredCapabilities.setCapability("browserstack.appium_version", "1.7.0");
                 break;
             case "ipad":
                 desiredCapabilities = DesiredCapabilities.ipad();
-                desiredCapabilities.setCapability("browserstack.appium_version", "1.7.0");
                 break;
             case "opera":
                 desiredCapabilities = DesiredCapabilities.operaBlink();
@@ -254,7 +251,6 @@ public class WebDriverWrapper {
                 break;
             case "safari":
                 desiredCapabilities = DesiredCapabilities.safari();
-                desiredCapabilities.setCapability("browserstack.safari.driver", "2.48");
                 break;
             default:
                 throw new IllegalArgumentException(String.format("Unsupported target BrowserStack browser - %s.",
