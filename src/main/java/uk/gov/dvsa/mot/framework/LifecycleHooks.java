@@ -79,8 +79,8 @@ public class LifecycleHooks {
         outputFinalHtml(scenario);
 
         if (env.getProperty("automateKey") != null
-                || env.getProperty("username") != null
-                || scenario.isFailed()) {
+                && env.getProperty("username") != null
+                && scenario.isFailed()) {
             BrowserStackManager.sendStatusToBrowserStack(driverWrapper, scenario);
         }
 
