@@ -230,6 +230,8 @@ task('cucumber-reporting') {
 }
 
 dependencies {
+    compile 'org.apache.pdfbox:pdfbox:2.0.7'
+    compile 'com.jayway.restassured:rest-assured:2.9.0'
     compile "junit:junit:$junitVersion"
     compile "info.cukes:cucumber-java8:$cucumberVersion"
     compile "info.cukes:cucumber-spring:$cucumberVersion"
