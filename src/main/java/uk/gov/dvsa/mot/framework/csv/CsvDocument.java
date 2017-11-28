@@ -41,64 +41,35 @@ public class CsvDocument {
      * @return output as 2D string array.
      */
     public static ArrayList<ArrayList<String>> parse(String document) throws FailedToLoadCsvException {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        boolean usesDoubleQuotes = false;
-=======
-=======
->>>>>>> Stashed changes
         try {
             boolean usesDoubleQuotes = false;
->>>>>>> Stashed changes
 
-        //This pattern is to check if values are wrapped in double quotes
-        Pattern pattern = Pattern.compile("(\"([\\s]+)?,([\\s]+)?\")");
-        Matcher matcher = pattern.matcher(document);
-        int matchingCount = matcher.groupCount();
+            //This pattern is to check if values are wrapped in double quotes
+            Pattern pattern = Pattern.compile("(\"([\\s]+)?,([\\s]+)?\")");
+            Matcher matcher = pattern.matcher(document);
+            int matchingCount = matcher.groupCount();
 
-        String[] rows = document.split(System.getProperty("line.separator"));
-        ArrayList<ArrayList<String>> mappedCsv = new ArrayList<>();
+            String[] rows = document.split(System.getProperty("line.separator"));
+            ArrayList<ArrayList<String>> mappedCsv = new ArrayList<>();
 
-        if (matchingCount > 0) {
-            usesDoubleQuotes = true;
-        }
+            if (matchingCount > 0) {
+                usesDoubleQuotes = true;
+            }
 
-<<<<<<< Updated upstream
-        for (int i = 0; i < rows.length; ++i) {
-            String[] values = rows[i].split( ",");
-=======
             for (int i = 0; i < rows.length; ++i) {
-                String[] values = rows[i].split(",");
->>>>>>> Stashed changes
+                String[] values = rows[i].split( ",");
 
-            mappedCsv.add(new ArrayList<>());
+                mappedCsv.add(new ArrayList<>());
 
-<<<<<<< Updated upstream
-            for (int j = 0; j < values.length; ++j) {
-                String value = trimSpaces(values[j], usesDoubleQuotes);
-                mappedCsv.get(i).add(usesDoubleQuotes ? stripDoubleQuotesFromValue(value) : value);
-=======
                 for (int j = 0; j < values.length; ++j) {
                     String value = trimSpaces(values[j]);
                     mappedCsv.get(i).add(usesDoubleQuotes ? stripDoubleQuotesFromValue(value) : value);
                 }
->>>>>>> Stashed changes
             }
-<<<<<<< Updated upstream
-        }
-        return mappedCsv;
-=======
             return mappedCsv;
-<<<<<<< Updated upstream
-        } catch (RuntimeException runtime) {
-            throw new FailedToLoadCsvException(runtime.getMessage());
-        }
->>>>>>> Stashed changes
-=======
         } catch (Exception exception) {
             throw new FailedToLoadCsvException("Unable to parse CSV document.");
         }
->>>>>>> Stashed changes
     }
 
     /**
