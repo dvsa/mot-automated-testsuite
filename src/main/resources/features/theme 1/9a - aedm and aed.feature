@@ -2,6 +2,7 @@
 Feature: 09a - AEDM and AED
 
   @smoke
+  @browserstack
   Scenario: AEDM buys slots
     Given I login with 2FA using "AEDM_USER" as {AEDM}, {ORGANISATION}
     And I click the first {ORGANISATION} link
@@ -12,6 +13,7 @@ Feature: 09a - AEDM and AED
     And I check that 25 slots were bought successfully
 
 
+  @browserstack
   Scenario: AEDM assigns AED role
     Given I login with 2FA using "AEDM_AND_NON_AED_USER" as {aedmUsername}, {otherUsername}, {organisationName}, {otherName}
     And I click the first {organisationName} link
@@ -57,6 +59,7 @@ Feature: 09a - AEDM and AED
     And I check there is pending "Tester" role listed for {testerName}
 
 
+  @browserstack
   Scenario: AEDM checks today's test log at VTS
     Given I load uniquely "AEDM_AND_TESTER_AT_SITE" as {aedm}, {aeName}, {siteName}, {siteNumber}, {testerUsername}, {testerName}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {odometer}

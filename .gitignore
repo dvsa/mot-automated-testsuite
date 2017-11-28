@@ -5,5 +5,6 @@
 /out/
 /.idea/
 /.gradle/
-/configuration/testsuite.properties
+/configuration/*.properties
+/configuration/*.json
 *.DS_Store

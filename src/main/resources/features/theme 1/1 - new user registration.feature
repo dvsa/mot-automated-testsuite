@@ -1,6 +1,7 @@
 @regression
 Feature: 01 - new user registration
 
+  @browserstack
   Scenario: Create new user with unique details
     Given I generate a unique email address as {email}
     And I browse to /login

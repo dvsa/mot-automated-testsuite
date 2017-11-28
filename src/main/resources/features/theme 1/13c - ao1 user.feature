@@ -1,6 +1,7 @@
 @regression
 Feature: 13c - A01 user
 
+  @browserstack
   Scenario: AO1 user performs user search, then changes tester group qualification status
     Given I load uniquely "TESTER_GROUP_B_AND_NOT_A" as {testerUsername}, {testerName}
     And I login without 2FA using "AO1_USER" as {ao1User}
@@ -43,6 +44,7 @@ Feature: 13c - A01 user
     And I check the "Driving licence" field row has value {newLicenceNumber}
 
 
+  @browserstack
   Scenario: AO1 user performs user search, and removes then adds driver licence number
     Given I load uniquely "TESTER_WITH_LICENCE" as {testerUsername}, {testerName}, {licenceNumber}
     And I login without 2FA using "AO1_USER" as {ao1User}
