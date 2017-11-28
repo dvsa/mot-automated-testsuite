@@ -1,11 +1,7 @@
 package uk.gov.dvsa.mot.browserstack;
 
-import com.browserstack.local.Local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class StopBrowserStackLocal {
 

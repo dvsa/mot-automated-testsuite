@@ -2,17 +2,14 @@ package uk.gov.dvsa.mot.browserstack;
 
 import com.browserstack.local.Local;
 import cucumber.api.Scenario;
-import junit.framework.TestSuite;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.junit.Test;
 import org.openqa.selenium.remote.SessionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
@@ -22,7 +19,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javax.inject.Inject;
 
 /**
  * Class to encapsulate BrowserStack related functionality.
