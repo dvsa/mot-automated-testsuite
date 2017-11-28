@@ -1,4 +1,4 @@
-@mothrecall
+@mothrecall @mothpp @mothint
 Feature: 31 - Non Participating Manufacturer Not Showing Recall
 
   Scenario: A MOTH user searches for a Non Participating Manufacturer vehicle which will not display any Recalls

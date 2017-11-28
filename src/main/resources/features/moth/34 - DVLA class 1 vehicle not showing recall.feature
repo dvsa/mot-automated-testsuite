@@ -1,4 +1,4 @@
-@mothrecall
+@mothrecall @mothpp @mothint
 Feature: 30 - Class 1 Vehicle Not Showing Recall
 
   Scenario: A MOTH user searches for a class 1 vehicle which will not display any Recalls
