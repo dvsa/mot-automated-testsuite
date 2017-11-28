@@ -1,5 +1,10 @@
 package uk.gov.dvsa.mot.framework;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
+import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
+import org.apache.pdfbox.pdmodel.interactive.form.PDField;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -26,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -65,6 +71,9 @@ public class WebDriverWrapper {
     /** The data map to use. */
     private final Map<String, String> data;
 
+    /** Request handler to process HTTP requests. **/
+    private final RequestHandler requestHandler;
+
     /**
      * Creates a new instance.
      * @param env   The environment configuration to use
@@ -74,6 +83,7 @@ public class WebDriverWrapper {
         this.env = env;
         this.data = new HashMap<>();
         this.webDriver = createWebDriver();
+        this.requestHandler = new RequestHandler(this.webDriver);
 
         // amount of time (in milliseconds) to wait for browser clicks to happen, before page refresh logic
         // this is a mandatory delay, to accommodate any browser/environment/network latency
@@ -1466,5 +1476,75 @@ public class WebDriverWrapper {
         } else {
             clickAndWaitForPageLoad(spans.get(spans.size() - 1));
         }
+    }
+
+    /**
+     * Parse PDF document into a string.
+     * @param url to the target document.
+     */
+    public String parsePdfFromUrl(String url) {
+        try {
+            PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setSortByPosition(true);
+
+            PDDocument pdf = requestHandler.getDocument(url);
+
+            return textStripper.getText(pdf);
+        } catch (IOException ioException) {
+            logger.error(String.format("Failed to load PDF document from %s.", url));
+        }
+
+        return "";
+    }
+
+    /**
+     * Get PDF document.
+     * @param url to the target document.
+     */
+    public PDDocument getPdfFromUrl(String url) {
+        try {
+            PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setSortByPosition(true);
+
+            return requestHandler.getDocument(url);
+        } catch (IOException ioException) {
+            logger.error(String.format("Failed to load PDF document from %s.", url));
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the value of a specific field.
+     *
+     * @param target document to search through.
+     * @param fieldLabel name of the label to search for in the document.
+     * @param valueRegex regex to extract the information from the document.
+     * @return value of the field as a string.
+     */
+    public String getPdfFieldContent(PDDocument target, String fieldLabel, String valueRegex) {
+        String value = null;
+        try {
+            PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setSortByPosition(true);
+
+            String document = textStripper.getText(target);
+            String[] lines = document.split(System.getProperty("line.separator"));
+            Pattern regex = Pattern.compile(valueRegex);
+
+            for (int i = 0; i < lines.length; ++i) {
+                if (lines[i].contains(fieldLabel)) {
+                    if (lines.length > i + 1) {
+                        Matcher matcher = regex.matcher(lines[i + 1]);
+                        if (matcher.find()) {
+                            value = matcher.group();
+                        }
+                    }
+                }
+            }
+        } catch (IOException io) {
+            logger.error("Failed to match '%s' pattern for the %s label.", valueRegex, fieldLabel);
+        }
+        return value;
     }
 }
