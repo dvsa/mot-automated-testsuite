@@ -4,6 +4,7 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
+import cucumber.api.PendingException;
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -192,6 +193,11 @@ public class TesterDoesStepDefinitions implements En {
 
         And("^I check the advisory section of the test summary does not have \"([^\"]+)\"$", (String text) ->
                 assertFalse(driverWrapper.getTextFromUnorderedList("Advisory text").contains(text)));
+        And("^I save the test result by clicking \"([^\"]+)\" button$", (String buttonText) -> {
+            driverWrapper.addTestResult(driverWrapper.getElementText("motTestNumber"),
+                    driverWrapper.getElementText("testStatus"));
+            driverWrapper.pressButton(buttonText);
+        });
     }
 
     /**

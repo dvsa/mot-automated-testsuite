@@ -75,7 +75,7 @@ Feature: 05a - Tester does...
     And I check the fails section of the test summary has "Test defect 1"
     And I check the fails section of the test summary has "Test defect 2"
     And I check the fails section of the test summary has "Test defect 3"
-    And I press the "Save test result" button
+    And I save the test result by clicking "Save test result" button
     And The page title contains "MOT test complete"
 
 
@@ -98,7 +98,7 @@ Feature: 05a - Tester does...
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Not tested"
     And I check the fails section of the test summary has "Brake performance not tested"
-    And I press the "Save test result" button
+    And I save the test result by clicking "Save test result" button
     And The page title contains "MOT test complete"
 
 
@@ -133,6 +133,6 @@ Feature: 05a - Tester does...
     And I check the advisory section of the test summary has "Test advisory 3"
     And I check the advisory section of the test summary has "Test advisory 4"
     And I check the advisory section of the test summary has "Test manual advisory"
-    And I press the "Save test result" button
+    And I save the test result by clicking "Save test result" button
     And The page title contains "MOT test complete"
 

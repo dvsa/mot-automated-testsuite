@@ -65,6 +65,9 @@ public class WebDriverWrapper {
     /** The data map to use. */
     private final Map<String, String> data;
 
+    /** All test results performed when running the testsuite. */
+    private static Map<String, String> recordedTests;
+
     /**
      * Creates a new instance.
      * @param env   The environment configuration to use
@@ -74,6 +77,7 @@ public class WebDriverWrapper {
         this.env = env;
         this.data = new HashMap<>();
         this.webDriver = createWebDriver();
+        this.recordedTests = new HashMap<>();
 
         // amount of time (in milliseconds) to wait for browser clicks to happen, before page refresh logic
         // this is a mandatory delay, to accommodate any browser/environment/network latency
@@ -84,7 +88,7 @@ public class WebDriverWrapper {
         this.pageWaitSeconds = Long.parseLong(env.getRequiredProperty("pageWait"));
 
         // poll frequency (in milliseconds) for page refresh/events
-        this.pollFrequencyMilliseconds = 200;
+        this.pollFrequencyMilliseconds = 500;
 
         // ensure all previous sessions are invalidated
         this.webDriver.manage().deleteAllCookies();
@@ -144,6 +148,10 @@ public class WebDriverWrapper {
         }
     }
 
+    public void addTestResult(String dateTime, String result) {
+        this.recordedTests.put(dateTime, result);
+    }
+    
     /**
      * Resets the web driver between test scenarios.
      */
@@ -1223,7 +1231,7 @@ public class WebDriverWrapper {
 
             // short wait for the web browser to complete JavaScript events...
             try {
-                Thread.sleep(200);
+                Thread.sleep(900);
 
             } catch (InterruptedException ex) {
                 // called if trying to shutdown the test suite
@@ -1276,7 +1284,7 @@ public class WebDriverWrapper {
         if ((Boolean) ((JavascriptExecutor)webDriver).executeScript("return window.jQuery != undefined")) {
             new WebDriverWait(webDriver, pageWaitSeconds)
                     .pollingEvery(pollFrequencyMilliseconds, TimeUnit.MILLISECONDS).until(
-                        (ExpectedCondition<Boolean>) wd ->
+                    (ExpectedCondition<Boolean>) wd ->
                             ((JavascriptExecutor) wd).executeScript("return jQuery.active").equals(0L));
 
             logger.debug("Page loaded, ready and JQuery activity complete, waiting for footer image...");

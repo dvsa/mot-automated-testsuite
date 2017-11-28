@@ -36,6 +36,10 @@ public class MothStepDefintions implements En {
         When("^I go to the next tab$", () -> driverWrapper.goNextTab());
 
         When("^I close extra tabs$", () -> driverWrapper.closeTabs());
+
+        And("^I check the results of all tests performed today$", () -> {
+            //TODO: Implementation here.
+        });
     }
 
 
