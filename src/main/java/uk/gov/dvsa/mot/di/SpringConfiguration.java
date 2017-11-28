@@ -1,23 +1,14 @@
 package uk.gov.dvsa.mot.di;
 
-import groovy.lang.MissingPropertyException;
 import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.web.client.RestTemplate;
-import uk.gov.dvsa.mot.browserstack.BrowserStackManager;
 import uk.gov.dvsa.mot.data.ClientDataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.lang.management.ManagementFactory;
-import java.util.Properties;
 
 /**
  * Spring configuration class for the test suite.
