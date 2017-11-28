@@ -234,6 +234,7 @@ task('cucumber-scenario') {
 task('browserstack-scenario') {
     description 'Runs matching scenarios within a single feature test (specified using -Pfeature=... -Pscenario=... -Ptarget_config=...)'
     dependsOn assemble, compileJava, check
+    finalizedBy 'cucumber-reporting'
     doLast {
         if (!project.hasProperty('feature')) {
             throw new GradleException('feature parameter must be defined')
@@ -287,6 +288,7 @@ task('browserstack-scenario') {
 task('cucumber-tag') {
     description 'Runs all features matching the tag(s) (specified using -Ptag=...)'
     dependsOn assemble, compileJava, check
+    finalizedBy 'cucumber-reporting'
     doLast {
         if (!project.hasProperty('tag')) {
             throw new GradleException('tag parameter must be defined')
@@ -320,6 +322,7 @@ task('cucumber-tag') {
 task('browserstack-tag') {
     description 'Runs all features matching the tag(s) (specified using -Ptag=... -Ptarget_config=...)'
     dependsOn assemble, compileJava, check
+    finalizedBy 'cucumber-reporting'
     doLast {
         if (!project.hasProperty('tag')) {
             throw new GradleException('tag parameter must be defined')
