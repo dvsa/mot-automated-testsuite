@@ -4,8 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class CsvDocument {
 
@@ -14,6 +18,8 @@ public class CsvDocument {
 
     /** This is the 2d array of strings containing values parsed from a requested CSV file. */
     private ArrayList<ArrayList<String>> csvData = null;
+
+    private static final Set<Character> WHITESPACE_CHARACTERS = new HashSet<>(Arrays.asList(' ', '\t', '\n'));
 
     /**
      * Default constructor.
@@ -174,7 +180,7 @@ public class CsvDocument {
     private static int getWhiteSpaceOffsetRight(String value) {
         int offset = 0;
         for (int i = value.length() - 1; i >= 0; --i) {
-            if (value.charAt(i) == ' ' || value.charAt(i) == '\t' || value.charAt(i) == '\n') {
+            if (checkIfCharIsWhitespace(value.charAt(i))) {
                 ++offset;
             } else {
                 return offset;
@@ -193,7 +199,7 @@ public class CsvDocument {
     private static int getWhiteSpaceOffsetLeft(String value) {
         int offset = 0;
         for (int i = 0; i < value.length(); ++i) {
-            if (value.charAt(i) == ' ' || value.charAt(i) == '\t' || value.charAt(i) == '\n') {
+            if (checkIfCharIsWhitespace(value.charAt(i))) {
                 ++offset;
             } else {
                 return offset;
@@ -201,6 +207,19 @@ public class CsvDocument {
         }
 
         return offset;
+    }
+
+    /**
+     * Check if character is whitespace char.
+     *
+     * @param character char to check.
+     * @return if the character is whitespace or not.
+     */
+    private static boolean checkIfCharIsWhitespace(char character) {
+        if (WHITESPACE_CHARACTERS.contains(character)) {
+            return true;
+        }
+        return false;
     }
 
     /**
