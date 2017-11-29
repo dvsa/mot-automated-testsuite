@@ -49,7 +49,7 @@ public class DuplicateAndReplacementStepDefinitions implements En {
                 (String testingLocationKey, String siteNameKey) -> {
                     updateTestingLocation(driverWrapper.getData(testingLocationKey),
                             driverWrapper.getData(siteNameKey));
-                });
+            });
 
         And("^I update the expiry date by adding (\\d+) days$", (Integer daysToAdd) -> {
             updateExpiryDate(daysToAdd);
