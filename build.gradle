@@ -411,12 +411,9 @@ task('cucumber-reporting') {
 }
 
 dependencies {
-<<<<<<< HEAD
-=======
     compile 'com.browserstack:browserstack-local-java:1.0.2'
     compile 'org.apache.pdfbox:pdfbox:2.0.7'
     compile 'com.jayway.restassured:rest-assured:2.9.0'
->>>>>>> 4e8e120... Added new tasks to build.gradle & now ignoring all property files in .properties
     compile "junit:junit:$junitVersion"
     compile "info.cukes:cucumber-java8:$cucumberVersion"
     compile "info.cukes:cucumber-spring:$cucumberVersion"
