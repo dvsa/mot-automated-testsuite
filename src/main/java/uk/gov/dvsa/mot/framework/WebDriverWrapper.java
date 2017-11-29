@@ -251,7 +251,6 @@ public class WebDriverWrapper {
 
         } else {
             buttons.get(0).click();
-            webDriver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
         }
     }
 
@@ -1467,5 +1466,13 @@ public class WebDriverWrapper {
         } else {
             clickAndWaitForPageLoad(spans.get(spans.size() - 1));
         }
+    }
+
+    /**
+     * Pauses the tests for the required amount of seconds.
+     * @param time  The amount of seconds to wait
+     */
+    public void timeWait(Integer time) {
+        webDriver.manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);
     }
 }
