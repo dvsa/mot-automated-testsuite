@@ -1,7 +1,7 @@
 @mothrecall @mothpp @mothint
 Feature: 28 - DVLA Vehicle without an Outstanding Recall
 
-  Scenario: A MOTH user searches for a vehicle without an Outstanding Recall
+  Scenario: A MOTH user searches for a DVLA vehicle without an Outstanding Recall
     Given I browse to /
     And I load "VEHICLE_RECALL_DVLA_NOT_OUTSTANDING" as {registration}, {make}, {model}
     And I enter {registration} in the registration field

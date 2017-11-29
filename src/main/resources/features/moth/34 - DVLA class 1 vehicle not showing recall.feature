@@ -1,7 +1,7 @@
 @mothrecall @mothpp @mothint
-Feature: 30 - Class 1 Vehicle Not Showing Recall
+Feature: 30 - DVLA Class 1 Vehicle Not Showing Recall
 
-  Scenario: A MOTH user searches for a class 1 vehicle which will not display any Recalls
+  Scenario: A MOTH user searches for a class 1 DVLA vehicle which will not display any Recalls
     Given I browse to /
     And I load "VEHICLE_RECALL_DVLA_CLASS_1" as {registration}, {make}, {model}
     And I enter {registration} in the registration field
