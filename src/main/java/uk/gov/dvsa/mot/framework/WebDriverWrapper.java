@@ -25,13 +25,9 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-<<<<<<< HEAD
-import org.springframework.core.env.Environment;
-=======
 import uk.gov.dvsa.mot.browserstack.BrowserStackManager;
 import uk.gov.dvsa.mot.framework.csv.CsvDocument;
 import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
->>>>>>> b2f1db4... Added BrowserStack funcitonality, replaced Environment with TestsuiteConfig and adapted existing classes to use it instead.
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -1593,145 +1589,6 @@ public class WebDriverWrapper {
             clickAndWaitForPageLoad(spans.get(spans.size() - 1));
         }
     }
-<<<<<<< HEAD
-=======
-
-    /**
-     * Parse PDF document into a string.
-     * @param url to the target document.
-     */
-    public String parsePdfFromUrl(String url) {
-        try {
-            PDFTextStripper textStripper = new PDFTextStripper();
-            textStripper.setSortByPosition(true);
-
-            PDDocument pdf = requestHandler.getPdfDocument(url);
-
-            return textStripper.getText(pdf);
-        } catch (IOException ioException) {
-            logger.error(String.format("Failed to load PDF document from %s.", url));
-        }
-
-        return null;
-    }
-
-    /**
-     * Get PDF document.
-     * @param url to the target document.
-     */
-    public PDDocument getPdfFromUrl(String url) {
-        try {
-            return requestHandler.getPdfDocument(url);
-        } catch (IOException ioException) {
-            logger.error(String.format("Failed to load PDF document from %s.", url));
-        }
-
-        return null;
-    }
-
-    /**
-     * Get the value of a specific field.
-     *
-     * @param target document to search through.
-     * @param fieldLabel name of the label to search for in the document.
-     * @param valueRegex regex to extract the information from the document.
-     * @return value of the field as a string.
-     */
-    public String getPdfFieldValueBelowLabel(PDDocument target, String fieldLabel, String valueRegex) {
-        try {
-            PDFTextStripper textStripper = new PDFTextStripper();
-            textStripper.setSortByPosition(true);
-
-            String document = textStripper.getText(target);
-            String[] lines = document.split(System.getProperty("line.separator"));
-            Pattern regex = Pattern.compile(valueRegex);
-
-            for (int i = 0; i < lines.length; ++i) {
-                if (lines[i].contains(fieldLabel)) {
-                    if (lines.length >= i + 1) {
-                        Matcher matcher = regex.matcher(lines[i + 1]);
-                        if (matcher.find()) {
-                            return matcher.group();
-                        }
-                    }
-                }
-            }
-        } catch (IOException io) {
-            logger.error(String.format("Failed to match '%s' pattern for the %s label.", valueRegex, fieldLabel));
-        }
-
-        return null;
-    }
-
-    /**
-     * Get the value of a specific field.
-     *
-     * @param target document to search through.
-     * @param fieldLabel name of the label to search for in the document.
-     * @param valueRegex regex to extract the information from the document.
-     * @return value of the field as a string.
-     */
-    public String getPdfFieldValueNextToLabel(PDDocument target, String fieldLabel, String valueRegex) {
-        try {
-            PDFTextStripper textStripper = new PDFTextStripper();
-            textStripper.setSortByPosition(true);
-
-            String document = textStripper.getText(target);
-            String[] lines = document.split(System.getProperty("line.separator"));
-            Pattern regex = Pattern.compile(valueRegex);
-
-            for (int i = 0; i < lines.length; ++i) {
-                if (lines[i].contains(fieldLabel)) {
-                    Matcher matcher = regex.matcher(lines[i]);
-                    if (matcher.find()) {
-                        return matcher.group();
-                    }
-                }
-            }
-        } catch (IOException io) {
-            logger.error(String.format("Failed to match '%s' pattern for the %s label.", valueRegex, fieldLabel));
-        }
-
-        return null;
-    }
-
-    /**
-     * Get a CSV as a parsed CsvDocument.
-     *
-     * @param url of the target document.
-     * @return parsed CSV containing the url output.
-     */
-    public CsvDocument getCsvFromUrl(String url) {
-        try {
-            return requestHandler.getCsvDocument(url);
-        } catch (IOException ioException) {
-            logger.error(String.format("Failed to load CSV document from %s.", url));
-        }
-
-        return null;
-    }
-
-    /**
-     * Check if a target document contains a specified value.
-     *
-     * @param target document to search through.
-     * @param value to search for.
-     * @return whether target document contains the value or not.
-     */
-    public boolean contains(PDDocument target, String value) {
-        try {
-            PDFTextStripper textStripper = new PDFTextStripper();
-            textStripper.setSortByPosition(true);
-
-            String document = textStripper.getText(target);
-
-            return document.contains(value);
-        } catch (IOException io) {
-            logger.debug(io.getMessage());
-        }
-
-        return false;
-    }
 
     /**
      * Get current session id.
@@ -1741,5 +1598,4 @@ public class WebDriverWrapper {
     public SessionId getSessionId() {
         return ((RemoteWebDriver) webDriver).getSessionId();
     }
->>>>>>> b2f1db4... Added BrowserStack funcitonality, replaced Environment with TestsuiteConfig and adapted existing classes to use it instead.
 }
