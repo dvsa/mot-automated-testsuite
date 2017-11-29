@@ -26,7 +26,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.browserstack.BrowserStackManager;
-import uk.gov.dvsa.mot.framework.csv.CsvDocument;
 import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.net.MalformedURLException;
@@ -518,6 +517,7 @@ public class WebDriverWrapper {
         // find any "a" elements with text containing the link text
         List<WebElement> links = webDriver.findElements(
                 By.xpath("//a[contains(text(),\"" + expandDataKeys(linkText) + "\")]"));
+
         // then add any "a" elements with any sub-elements (e.g. nested "span"s) with text containing the link text
         links.addAll(webDriver.findElements(
                 By.xpath("//a[.//*[contains(text(),\"" + expandDataKeys(linkText) + "\")]]")));
@@ -706,7 +706,6 @@ public class WebDriverWrapper {
      */
     public void clickIcon(String iconName) {
         WebElement element = webDriver.findElement(By.xpath("//i[contains(@class, '" + iconName + "')]"));
-
         clickAndWaitForPageLoad(element);
     }
 
@@ -751,7 +750,6 @@ public class WebDriverWrapper {
      */
     public void clickRadioButtonByText(String text) {
         WebElement radioButton = webDriver.findElement(By.xpath("//strong[contains(text(),'" + text + "')]"));
-
         radioButton.click();
     }
 
