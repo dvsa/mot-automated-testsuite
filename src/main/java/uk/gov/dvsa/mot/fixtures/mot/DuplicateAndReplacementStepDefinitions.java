@@ -4,7 +4,6 @@ import static junit.framework.TestCase.assertTrue;
 
 import cucumber.api.PendingException;
 import cucumber.api.java8.En;
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
