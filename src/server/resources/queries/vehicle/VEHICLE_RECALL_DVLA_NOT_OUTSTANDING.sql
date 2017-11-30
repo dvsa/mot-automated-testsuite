@@ -11,4 +11,4 @@ and ma.name is not null
 and mo.name is not null
 and (v.eu_classification = 'M1' or v.eu_classification = 'N1')-- DVLA cars and vans only
 and (ma.name = 'BMW' or ma.name = 'AUDI') -- show results where the manufacture is BMW or AUDI as this is set to return a non outstanding recall from the fake SMMT service
-limit 100;
+limit 10;

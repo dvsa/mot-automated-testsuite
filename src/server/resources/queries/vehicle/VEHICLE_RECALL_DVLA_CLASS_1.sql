@@ -10,4 +10,4 @@ and length(v.vin) > 5
 and ma.name is not null
 and mo.name is not null
 and v.eu_classification = 'L1'  -- DVLA moped
-limit 100;
+limit 10;
