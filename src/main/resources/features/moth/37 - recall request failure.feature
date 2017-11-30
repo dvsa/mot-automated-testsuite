@@ -1,9 +1,9 @@
 @mothrecall @mothpp @mothint
-Feature: 31 - Non Participating Manufacturer Not Showing Recall
+Feature: 37 - Recall Request Fails
 
-  Scenario: A MOTH user searches for a Non Participating Manufacturer vehicle which will not display any Recalls
+  Scenario: A MOTH user searches for a Vehicle which will display the Persistent failure Message
     Given I browse to /
-    And I load "VEHICLE_RECALL_NOT_PARTICIPATING" as {registration}, {make}, {model}
+    And I load "VEHICLE_RECALL_FAILURE" as {registration}, {make}, {model}
     And I enter {registration} in the registration field
     When I press the "Continue" button
     Then The page contains "{registration}"
