@@ -78,6 +78,7 @@ High level:
 * I check the ```"..name.."``` cookie is set
 * I delete the ```"..name.."``` cookie
    * Note: allows partial match of the cookie name
+* I wait for ```"..number.."``` seconds
 
 Lower level, only use if higher level steps can't be used:
 
