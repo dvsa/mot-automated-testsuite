@@ -294,7 +294,7 @@ public class TesterDoesStepDefinitions implements En {
     }
 
     /**
-     * Starting a contingency for a specific site where the user has multiple sites
+     * Starting a contingency for a specific site where the user has multiple sites.
      * @param siteName  the site to perform the contingency test against
      */
     private void startContingencyMotTest(String siteName) {
