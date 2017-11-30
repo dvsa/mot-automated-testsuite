@@ -1,9 +1,9 @@
 @mothrecall @mothpp @mothint
-Feature: 31 - DVLA Non Participating Manufacturer Not Showing Recall
+Feature: 35 - DVLA Non Participating Manufacturer Not Showing Recall
 
   Scenario: A MOTH user searches for a Non Participating Manufacturer DVLA vehicle which will not display any Recalls
     Given I browse to /
-    And I load "VEHICLE_RECALL_NOT_PARTICIPATING.sql" as {registration}, {make}, {model}
+    And I load "VEHICLE_RECALL_NOT_PARTICIPATING" as {registration}, {make}, {model}
     And I enter {registration} in the registration field
     When I press the "Continue" button
     Then The page contains "{registration}"

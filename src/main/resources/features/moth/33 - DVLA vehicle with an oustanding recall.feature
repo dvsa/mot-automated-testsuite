@@ -1,5 +1,5 @@
 @mothrecall @mothpp @mothint
-Feature: 29 - DVLA Vehicle with an Outstanding Recall
+Feature: 33 - DVLA Vehicle with an Outstanding Recall
 
   Scenario: A MOTH user searches for a DVLA vehicle with an Outstanding Recall
     Given I browse to /

@@ -1,5 +1,5 @@
 @mothrecall @mothpp @mothint
-Feature: 30 - DVLA Class 1 Vehicle Not Showing Recall
+Feature: 34 - DVLA Class 1 Vehicle Not Showing Recall
 
   Scenario: A MOTH user searches for a class 1 DVLA vehicle which will not display any Recalls
     Given I browse to /
