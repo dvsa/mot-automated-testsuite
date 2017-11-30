@@ -3,6 +3,7 @@ select distinct (aed.username), ae.name, s.name, s.site_number, tester_person.us
 from person aed
 left join person_security_card_map pscm on aed.id = pscm.person_id
 left join security_card sc on sc.id = pscm.security_card_id
+left join security_card_drift scd on sc.id = scd.security_card_id
 right join organisation_business_role_map obrm on aed.id = obrm.person_id
 right join organisation ae on obrm.organisation_id = ae.id
 right join site s on s.organisation_id = ae.id
@@ -11,11 +12,7 @@ join person tester_person
 left join auth_for_testing_mot aftm on tester_person.id = aftm.person_id
 where aed.username is not null
 and sc.security_card_status_lookup_id = 1 -- only assigned cards
-and not exists ( -- not all security_card have a corresponding security_card_drift
-  select 1 from security_card_drift scd
-  where sc.id = scd.security_card_id
-  and scd.last_observed_drift = 0
-)
+and scd.last_observed_drift between -60 and 60 -- has security_card with acceptable drift
 and obrm.business_role_id = 2
 and obrm.status_id = 1 -- active
 and ae.organisation_type_id = 7
