@@ -1576,6 +1576,34 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Find the label in the PDF document, and check if it c
+     *
+     * @param target document to check.
+     * @param label label used to locate the text.
+     * @param text to look for in the document.
+     * @return
+     */
+    public boolean containsValueNextToLabel(PDDocument target, String label, String text) {
+        try {
+            PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setSortByPosition(true);
+
+            String document = textStripper.getText(target);
+            String[] lines = document.split(System.getProperty("line.separator"));
+
+            for (int i = 0; i < lines.length; ++i) {
+                if (lines[i].contains(label) && lines[i].contains(text)) {
+                    return true;
+                }
+            }
+        } catch (IOException io) {
+            logger.error(String.format("Failed to find '%s' pattern for the %s label.", text, label));
+        }
+
+        return false;
+    }
+
+    /**
      * Get a CSV as a parsed CsvDocument.
      *
      * @param url of the target document.
