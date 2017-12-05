@@ -11,6 +11,7 @@ Feature: 33 - DVLA Vehicle with an Outstanding Recall
     And The page contains "Check if {make} {model} has outstanding safety recall"
     And I click the button with class name "js-accordion__expand-button"
     And I wait for "6" seconds
+    And The page contains "This vehicle hasn't had its first MOT"
     And The page contains "Outstanding recall found"
     And The page contains "there's an outstanding manufacturer's safety recall on"
     And The page contains "{make} {model} {registration}"

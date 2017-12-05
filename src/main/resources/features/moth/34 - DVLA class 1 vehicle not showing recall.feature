@@ -11,6 +11,7 @@ Feature: 34 - DVLA Class 1 Vehicle Not Showing Recall
     And The page contains "Check if {make} {model} has outstanding safety recall"
     And I click the button with class name "js-accordion__expand-button"
     And I wait for "6" seconds
+    And The page contains "This vehicle hasn't had its first MOT"
     And The page contains "We don't hold information about manufacturer's safety recalls for"
     And The page contains "{make} {model} {registration}"
     And The page contains "Contact a"

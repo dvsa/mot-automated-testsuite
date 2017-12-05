@@ -10,5 +10,5 @@ and length(v.vin) > 5
 and ma.name is not null
 and mo.name is not null
 and (v.eu_classification = 'L1' or v.eu_classification = 'N1')-- DVLA cars and vans only
-and (ma.name != 'RENAULT' or ma.name != 'VOLKSWAGEN' or ma.name != 'BMW' or ma.name != 'AUDI' or ma.name != 'PEUGEOT' or ma.name != 'VOLVO') -- show results where the manufacture is not part of the fake SMMT service
+and ma.name = 'MERCEDES' -- show results where the manufacture is not part of the fake SMMT service
 limit 10;
