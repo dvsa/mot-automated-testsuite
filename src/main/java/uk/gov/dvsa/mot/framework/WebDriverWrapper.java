@@ -255,8 +255,8 @@ public class WebDriverWrapper {
     /**
      * Get the config used by WebDriverWrapper.
      *
-     * NOTE: this is a workaround for dynamically providing config files from terminal, as this did not work with
-     * Spring framework. Might need some additional investigation, whether this is possible or not.
+     * <p>NOTE: this is a workaround for dynamically providing config files from terminal, as this did not work with
+     * Spring framework. Might need some additional investigation, whether this is possible or not.</p>
      *
      * @return config stored in the class.
      */
