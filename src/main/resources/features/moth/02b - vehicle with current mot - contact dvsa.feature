@@ -19,3 +19,4 @@ Feature: 02b - Check vehicle with current MOT - contact DVSA
 
     Then The page title contains "Contact DVSA"
     And I close extra tabs
+
