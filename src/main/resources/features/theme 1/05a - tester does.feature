@@ -58,9 +58,9 @@ Feature: 05a - Tester does...
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I browse for a "Failure" defect of ("Steering", "Steering operation", "Steering system excessively tight") with comment "Test defect 1"
-    And I browse for a "Failure" defect of ("Exhaust, fuel and emissions", "Exhaust system", "Exhaust has a major leak of exhaust gases") with comment "Test defect 2"
-    And I browse for a "Failure" defect of ("Lamps, reflectors and electrical equipment", "Battery", "Battery leaking electrolyte") with comment "Test defect 3"
+    And I browse for a "Dangerous" defect of ("Steering", "Steering column", "Modified such that the steering is adversely affected") with comment "Test defect 1"
+    And I browse for a "Major" defect of ("Body, structure and attachments", "Exhaust system", "Exhaust system insecure") with comment "Test defect 2"
+    And I browse for a "Major" defect of ("Lamps, reflectors and electrical equipment", "Battery(ies)", "Battery leaking") with comment "Test defect 3"
     And I enter decelerometer results of service brake 60 and parking brake 60
     And I press the "Review test" button
 
@@ -69,9 +69,10 @@ Feature: 05a - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
-    And I check the fails section of the test summary has "Steering system excessively tight"
-    And I check the fails section of the test summary has "Exhaust has a major leak of exhaust gases"
-    And I check the fails section of the test summary has "Battery leaking electrolyte"
+    And I check the fails section of the test summary has "modified such that the steering is adversely affected"
+    And I check the fails section of the test summary has "Dangerous"
+    And I check the fails section of the test summary has "Exhaust system insecure"
+    And I check the fails section of the test summary has "Battery leaking"
     And I check the fails section of the test summary has "Test defect 1"
     And I check the fails section of the test summary has "Test defect 2"
     And I check the fails section of the test summary has "Test defect 3"
