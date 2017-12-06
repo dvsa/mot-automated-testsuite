@@ -146,9 +146,9 @@ Feature: 05b - Tester does...
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I browse for a "Failure" defect of ("Body, structure and general items", "Engine mountings", "Engine mounting missing") with comment "Test defect 1"
-    And I browse for a "Failure" defect of ("Brakes", "ABS", "Anti-lock braking system component missing") with comment "Test defect 2"
-    And I browse for a "Failure" defect of ("Road wheels", "Attachment", "Wheel insecure") with comment "Test defect 3"
+    And I browse for a "Dangerous" defect of ("Body, structure and attachments", "Engine mountings", "Engine mounting/bracket missing") with comment "Test defect 1"
+    And I browse for a "Major" defect of ("Brakes", "Anti-lock braking system", "Component missing") with comment "Test defect 2"
+    And I browse for a "Major" defect of ("Axles, wheels, tyres and suspension", "Wheel bearings", "Wheel bearing has excessive play") with comment "Test defect 3"
     And I enter decelerometer results of service brake 61 and parking brake 16
     And I press the "Review test" button
 
@@ -157,9 +157,10 @@ Feature: 05b - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
-    And I check the fails section of the test summary has "engine mounting missing"
-    And I check the fails section of the test summary has "Anti-lock braking system component missing"
-    And I check the fails section of the test summary has "Wheel insecure"
+    And I check the fails section of the test summary has "Engine mounting/bracket missing"
+    And I check the fails section of the test summary has "Dangerous"
+    And I check the fails section of the test summary has "component missing"
+    And I check the fails section of the test summary has "Wheel bearing has excessive play"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
@@ -177,9 +178,9 @@ Feature: 05b - Tester does...
     And I click the "Enter retest results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I mark the defect "engine mounting missing" as repaired
-    And I mark the defect "Anti-lock braking system component missing" as repaired
-    And I mark the defect "Wheel insecure" as repaired
+    And I mark the defect "Engine mounting/bracket missing" as repaired
+    And I mark the defect " component missing" as repaired
+    And I mark the defect "Wheel bearing has excessive play" as repaired
     And I press the "Review test" button
 
     Then The page title contains "MOT re-test summary"

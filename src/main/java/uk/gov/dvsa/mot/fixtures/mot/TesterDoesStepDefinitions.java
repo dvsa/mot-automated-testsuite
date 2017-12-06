@@ -1017,7 +1017,11 @@ public class TesterDoesStepDefinitions implements En {
 
     /** Encapsulates the type of defect. */
     private enum DefectType {
-        Failure("Failure", "failure"), PRS("PRS", "PRS"), Advisory("Advisory", "advisory");
+        Dangerous("Dangerous", "failure"),
+        Major("Major", "failure"),
+        Minor("Minor", "failure"),
+        PRS("PRS", "PRS"),
+        Advisory("Advisory", "advisory");
 
         /** Capitalised defect type. */
         private final String type;
@@ -1043,8 +1047,14 @@ public class TesterDoesStepDefinitions implements En {
          */
         public static DefectType fromString(String type) {
             switch (type) {
-                case "Failure":
-                    return Failure;
+                case "Dangerous":
+                    return Dangerous;
+
+                case "Major":
+                    return Major;
+
+                case "Minor":
+                    return Minor;
 
                 case "PRS":
                     return PRS;
