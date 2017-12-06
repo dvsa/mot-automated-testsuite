@@ -388,16 +388,6 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Finds any accordions that have the specified text.
-     * @param accordionText    The button text
-     * @return A List of zero or more Elements
-     */
-    private List<WebElement> findAccordions(String accordionText) {
-        // find any "input" elements with value matching the button text (exact match)
-        return webDriver.findElements(By.xpath("//button[@value = '" + accordionText + "']"));
-    }
-
-    /**
      * Finds any links that have the specified text, which may contain single quotes, and <code>{key}</code> format
      * data keys, but not double quotes. Also matches links containing sub-elements (e.g. formatting the text).
      * @param linkText  The link text
