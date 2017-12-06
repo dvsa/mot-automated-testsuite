@@ -15,4 +15,9 @@ Feature: 28 - Vehicle without an Outstanding Recall
     And The page contains "No outstanding recalls found"
     And The page contains "There are no outstanding manufacturer's safety recalls for"
     And The page contains "{make} {model} {registration}"
+    And The page contains "Was this vehicle recall information useful to you?"
+    And The page contains "Tell us your views"
+    And The page contains "so we can improve the service."
+
+
 
