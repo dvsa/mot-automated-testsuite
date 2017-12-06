@@ -10,7 +10,7 @@ Feature: 28 - Vehicle without an Outstanding Recall
     And The page contains "{make} {model}"
     And The page contains "Mileage recorded at test, parts failed or had minor problems"
     And The page contains "Check if {make} {model} has outstanding safety recall"
-    And I click the button with class name "js-accordion__expand-button"
+    And I click the accordion section with the id "vehicle-recalls-description"
     And I wait for "6" seconds
     And The page contains "No outstanding recalls found"
     And The page contains "There are no outstanding manufacturer's safety recalls for"
@@ -18,6 +18,4 @@ Feature: 28 - Vehicle without an Outstanding Recall
     And The page contains "Was this vehicle recall information useful to you?"
     And The page contains "Tell us your views"
     And The page contains "so we can improve the service."
-
-
 

@@ -388,6 +388,16 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Finds any accordions that have the specified text.
+     * @param accordionText    The button text
+     * @return A List of zero or more Elements
+     */
+    private List<WebElement> findAccordions(String accordionText) {
+        // find any "input" elements with value matching the button text (exact match)
+        return webDriver.findElements(By.xpath("//button[@value = '" + accordionText + "']"));
+    }
+
+    /**
      * Finds any links that have the specified text, which may contain single quotes, and <code>{key}</code> format
      * data keys, but not double quotes. Also matches links containing sub-elements (e.g. formatting the text).
      * @param linkText  The link text
@@ -1474,5 +1484,27 @@ public class WebDriverWrapper {
      */
     public void timeWait(Integer time) {
         webDriver.manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);
+    }
+
+    /**
+     * Clicks the specified accordion.
+     * @param accordionId  The accordion ID
+     */
+    public void accordionClick(String accordionId) {
+        List<WebElement> accordions =  webDriver.findElements(By.xpath("//p[@id = '" + accordionId + "']"));
+        if (accordions.size() == 0) {
+            String message = "No accordions found with ID name: " + accordionId;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else if (accordions.size() > 1) {
+            String message = "Several accordions found with ID name: " + accordionId;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            accordions.get(0).click();
+            waitForFullPageLoad();
+        }
     }
 }
