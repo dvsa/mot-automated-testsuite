@@ -48,6 +48,24 @@ configurations {
     all*.exclude group: 'commons-logging', module: 'commons-logging'
 }
 
+void browserstack(boolean isRunning = false, boolean triggeredByCi = false) {
+    javaexec {
+        if (!isRunning) {
+            main = 'uk.gov.dvsa.mot.browserstack.StartBrowserStackLocal'
+        } else {
+            main = 'uk.gov.dvsa.mot.browserstack.StopBrowserStackLocal'
+        }
+
+        classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+        if (!triggeredByCi) {
+            systemProperty "target_config", target_config
+        } else {
+            systemProperty "configuration", configuration
+        }
+    }
+}
+
 task serverTest(type: Test) {
     testClassesDir = sourceSets.serverTest.output.classesDir
     classpath = sourceSets.serverTest.runtimeClasspath
@@ -77,14 +95,16 @@ task('testsuite') {
             main = 'uk.gov.dvsa.mot.runner.StartDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
         }
-        if (project.hasProperty('target_config')) {
-            javaexec {
-                main = 'uk.gov.dvsa.mot.browserstack.StartBrowserStackLocal'
-                classpath = configurations.cucumberRuntime + sourceSets.main.output
 
-                systemProperty "target_config", target_config
-            }
+        //This will be used to provide a config //.properties// file to use when runnig the testsuite locally.
+        if (project.hasProperty('target_config')) {
+            browserstack();
+        } else if (project.hasProperty('configuration')) {
+            browserstack(false, true);
+        } else {
+            throw new Exception("The command must include either '-Pconfiguration=...' or '-Ptarget_config=...'.")
         }
+
         try {
             javaexec {
                 args = cucumberOptions
@@ -103,20 +123,24 @@ task('testsuite') {
 
                 if (project.hasProperty('target_config')) {
                     systemProperty "target_config", target_config
+                } else if(project.hasProperty('configuration')) {
+                    systemProperty "configuration", configuration
                 }
 
                 main = "cucumber.api.cli.Main"
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
             }
         } finally {
-            if (project.hasProperty('target_config')) {
-                javaexec {
-                    main = 'uk.gov.dvsa.mot.browserstack.StopBrowserStackLocal'
-                    classpath = configurations.cucumberRuntime + sourceSets.main.output
 
-                    systemProperty "target_config", target_config
-                }
+            //This will be used to provide a config //.properties// file to use when runnig the testsuite locally.
+            if (project.hasProperty('target_config')) {
+                browserstack(true);
+            } else if (project.hasProperty('configuration')) {
+                browserstack(true, true);
+            } else {
+                throw new Exception("The command must include either '-Pconfiguration=...' or '-Ptarget_config=...'.")
             }
+
             javaexec {
                 main = 'uk.gov.dvsa.mot.runner.StopDataServer'
                 classpath = configurations.cucumberRuntime + sourceSets.main.output

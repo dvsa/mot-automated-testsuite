@@ -5,6 +5,7 @@ import groovy.lang.MissingPropertyException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.Properties;
 
 public class TestsuiteConfig extends Properties {
@@ -99,5 +100,16 @@ public class TestsuiteConfig extends Properties {
      */
     public boolean isUsingBrowserStack() {
         return System.getProperty("target_config") != null;
+    }
+
+    public static TestsuiteConfig loadCurrentConfigFromString(String configuration) {
+        try {
+            final TestsuiteConfig config = new TestsuiteConfig();
+            config.load(new StringReader(configuration));
+            return config;
+        } catch (IOException io) {
+            throw new RuntimeException(String.format("Failed to load the TestsuiteConfig from a key=value string. "
+                    + "Stacktrace:\n%s", io.getMessage()));
+        }
     }
 }

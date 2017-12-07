@@ -24,11 +24,14 @@ public class SpringConfiguration {
 
     static {
         String targetConfig = System.getProperty("target_config");
+        String configuration = System.getProperty("configuration");
 
         if (targetConfig != null) {
             testsuiteConfig = TestsuiteConfig.loadCurrentConfig("testsuite",
                     "browserstack",
                     targetConfig);
+        } else if (configuration != null) {
+            testsuiteConfig = TestsuiteConfig.loadCurrentConfigFromString(configuration);
         } else {
             testsuiteConfig = TestsuiteConfig.loadCurrentConfig("testsuite");
         }
