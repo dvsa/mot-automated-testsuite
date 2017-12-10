@@ -10,4 +10,5 @@ and length(ma.name) > 0
 and length(mo.name) > 0
 and ma.name = 'MERCEDES' -- show results where the manufacture is MERCEDES, as this is set to return a non participating manufacture
 and length(veh.vin) > 5 -- the VIN number needs to be at least 5 chars long
+and veh.registration not like "%-%" -- exclude dodgy test data on ACPT
 limit 10
