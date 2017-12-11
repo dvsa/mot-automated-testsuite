@@ -1510,24 +1510,24 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Get the value of a specific field.
+     * Find the label in the PDF document, and check if it c
      *
-     * @param target document to search through.
-     * @param fieldLabel name of the label to search for in the document.
-     * @param valueRegex regex to extract the information from the document.
-     * @return value of the field as a string.
+     * @param target document to check.
+     * @param label label used to locate the text.
+     * @param textPattern to look for in the document.
+     * @return
      */
-    public String getPdfFieldValueBelowLabel(PDDocument target, String fieldLabel, String valueRegex) {
+    public String getValueBelowLabel(PDDocument target, String label, String textPattern) {
         try {
             PDFTextStripper textStripper = new PDFTextStripper();
             textStripper.setSortByPosition(true);
 
             String document = textStripper.getText(target);
             String[] lines = document.split(System.getProperty("line.separator"));
-            Pattern regex = Pattern.compile(valueRegex);
+            Pattern regex = Pattern.compile(textPattern);
 
             for (int i = 0; i < lines.length; ++i) {
-                if (lines[i].contains(fieldLabel)) {
+                if (lines[i].contains(label)) {
                     if (lines.length >= i + 1) {
                         Matcher matcher = regex.matcher(lines[i + 1]);
                         if (matcher.find()) {
@@ -1537,31 +1537,31 @@ public class WebDriverWrapper {
                 }
             }
         } catch (IOException io) {
-            logger.error(String.format("Failed to match '%s' pattern for the %s label.", valueRegex, fieldLabel));
+            logger.error(String.format("Failed to match '%s' pattern for the %s label.", textPattern, label));
         }
 
         return null;
     }
 
     /**
-     * Get the value of a specific field.
+     * Find the label in the PDF document, and check if it c
      *
-     * @param target document to search through.
-     * @param fieldLabel name of the label to search for in the document.
-     * @param valueRegex regex to extract the information from the document.
-     * @return value of the field as a string.
+     * @param target document to check.
+     * @param label label used to locate the text.
+     * @param textPattern to look for in the document.
+     * @return
      */
-    public String getPdfFieldValueNextToLabel(PDDocument target, String fieldLabel, String valueRegex) {
+    public String getValueNextToLabel(PDDocument target, String label, String textPattern) {
         try {
             PDFTextStripper textStripper = new PDFTextStripper();
             textStripper.setSortByPosition(true);
 
             String document = textStripper.getText(target);
             String[] lines = document.split(System.getProperty("line.separator"));
-            Pattern regex = Pattern.compile(valueRegex);
+            Pattern regex = Pattern.compile(textPattern);
 
             for (int i = 0; i < lines.length; ++i) {
-                if (lines[i].contains(fieldLabel)) {
+                if (lines[i].contains(label)) {
                     Matcher matcher = regex.matcher(lines[i]);
                     if (matcher.find()) {
                         return matcher.group();
@@ -1569,7 +1569,7 @@ public class WebDriverWrapper {
                 }
             }
         } catch (IOException io) {
-            logger.error(String.format("Failed to match '%s' pattern for the %s label.", valueRegex, fieldLabel));
+            logger.error(String.format("Failed to find '%s' next to %s label.", textPattern, label));
         }
 
         return null;
@@ -1594,6 +1594,36 @@ public class WebDriverWrapper {
             for (int i = 0; i < lines.length; ++i) {
                 if (lines[i].contains(label) && lines[i].contains(text)) {
                     return true;
+                }
+            }
+        } catch (IOException io) {
+            logger.error(String.format("Failed to find '%s' pattern for the %s label.", text, label));
+        }
+
+        return false;
+    }
+
+    /**
+     * Find the label in the PDF document, and check if it c
+     *
+     * @param target document to check.
+     * @param label label used to locate the text.
+     * @param text to look for in the document.
+     * @return
+     */
+    public boolean containsValueBelowTheLabel(PDDocument target, String label, String text) {
+        try {
+            PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setSortByPosition(true);
+
+            String document = textStripper.getText(target);
+            String[] lines = document.split(System.getProperty("line.separator"));
+
+            for (int i = 0; i < lines.length; ++i) {
+                if (lines[i].contains(label)) {
+                    if (lines.length >= i + 1 && lines[i + 1].contains(text)) {
+                        return true;
+                    }
                 }
             }
         } catch (IOException io) {
