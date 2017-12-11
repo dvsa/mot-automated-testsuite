@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Properties;
 
+/**
+ * This is a class to store testsuite config. Provides some testsuite specific functionality.
+ */
 public class TestsuiteConfig extends Properties {
     /**
      * Creates a new empty instance, without default values.
