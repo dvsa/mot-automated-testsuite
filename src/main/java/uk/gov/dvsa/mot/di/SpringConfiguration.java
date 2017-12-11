@@ -26,7 +26,8 @@ public class SpringConfiguration {
         String targetConfig = System.getProperty("target_config");
         String configuration = System.getProperty("configuration");
 
-        if (targetConfig != null) {
+        if (targetConfig != null ) {
+            System.out.println("target config" + targetConfig);
             testsuiteConfig = TestsuiteConfig.loadCurrentConfig("testsuite",
                     "browserstack",
                     targetConfig);
