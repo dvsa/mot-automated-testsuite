@@ -1,6 +1,7 @@
 package uk.gov.dvsa.mot.fixtures.generic;
 
 
+import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
@@ -46,7 +47,19 @@ public class PdfStepDefinitions  implements En {
 
         And("^I check if PDF line containing \"([^\"]+)\" label, also contains \"([^\"]+)\".$",
                 (String label, String text) ->
-                        assertTrue(driverWrapper.getPdfFieldValueNextToLabel(pdfDocument))
+                        assertTrue(driverWrapper.containsValueNextToLabel(pdfDocument, label, text))
         );
+
+        And("^I check if PDF line below \"([^\"]+)\" label, also contains \"([^\"]+)\" pattern.$",
+                (String label, String text) -> {
+                    String value = driverWrapper.getValueBelowLabel(pdfDocument, label, text);
+                    assertNotNull(value);
+                });
+
+        And("^I check if PDF line containing \"([^\"]+)\" label, also contains \"([^\"]+)\" pattern.$",
+                (String label, String text) -> {
+                    String value = driverWrapper.getValueNextToLabel(pdfDocument, label, text);
+                    assertNotNull(value);
+                });
     }
 }
