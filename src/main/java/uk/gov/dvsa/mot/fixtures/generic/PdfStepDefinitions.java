@@ -35,13 +35,18 @@ public class PdfStepDefinitions  implements En {
             assertFalse(pdfDocument == null);
         });
 
-        And("^I check if the downloaded PDF contains \"([^\"]+)\"$", (String text) ->
-                assertTrue(driverWrapper.contains(pdfDocument, text)));
+        And("^I check if the PDF contains \"([^\"]+)\"$", (String text) ->
+                assertTrue(driverWrapper.contains(pdfDocument, text))
+        );
 
-        And("^PDF field value below \"([^\"]+)\" label, equals \"([^\"]+)\".$", (String label, String text) ->
-        {});
+        And("^I check if PDF line below \"([^\"]+)\" label, contains \"([^\"]+)\".$",
+                (String label, String text) ->
+                        assertTrue(driverWrapper.containsValueBelowLabel(pdfDocument, label, text))
+        );
 
-        And("^I get PDF field value next to \"([^\"]+)\" label$", (String buttonText) ->
-                assertTrue(driverWrapper.isButtonDisabled(buttonText)));
+        And("^I check if PDF line containing \"([^\"]+)\" label, also contains \"([^\"]+)\".$",
+                (String label, String text) ->
+                        assertTrue(driverWrapper.containsValueBelowLabel(pdfDocument, label, text))
+        );
     }
 }
