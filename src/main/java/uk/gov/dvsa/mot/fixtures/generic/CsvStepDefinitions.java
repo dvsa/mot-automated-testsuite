@@ -23,7 +23,7 @@ public class CsvStepDefinitions implements En {
     public CsvStepDefinitions(WebDriverWrapper driverWrapper) {
         this.driverWrapper = driverWrapper;
 
-        Then("^I download PDF file from \"([^\"]+)\" url$", (String url) -> {
+        Then("^I download CSV file from \"([^\"]+)\" url$", (String url) -> {
             csvDocument = driverWrapper.getCsvFromUrl(url);
             assertFalse(csvDocument == null);
         });
@@ -32,7 +32,7 @@ public class CsvStepDefinitions implements En {
                 assertTrue(csvDocument.contains(text))
         );
 
-        And("^I check if the ([0-9]+)th column of the CSV file contains \"([^\"]+)\"$", (String text) ->
+        And("^I check if the ([0-9]+)th row of the CSV file contains \"([^\"]+)\"$", (String text) ->
                 assertTrue(csvDocument.contains(text))
         );
 

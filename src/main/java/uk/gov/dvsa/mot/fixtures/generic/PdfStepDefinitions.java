@@ -46,7 +46,7 @@ public class PdfStepDefinitions  implements En {
 
         And("^I check if PDF line containing \"([^\"]+)\" label, also contains \"([^\"]+)\".$",
                 (String label, String text) ->
-                        assertTrue(driverWrapper.containsValueBelowLabel(pdfDocument, label, text))
+                        assertTrue(driverWrapper.getPdfFieldValueNextToLabel(pdfDocument))
         );
     }
 }

@@ -1611,7 +1611,7 @@ public class WebDriverWrapper {
      * @param text to look for in the document.
      * @return
      */
-    public boolean containsValueBelowTheLabel(PDDocument target, String label, String text) {
+    public boolean containsValueBelowLabel(PDDocument target, String label, String text) {
         try {
             PDFTextStripper textStripper = new PDFTextStripper();
             textStripper.setSortByPosition(true);
