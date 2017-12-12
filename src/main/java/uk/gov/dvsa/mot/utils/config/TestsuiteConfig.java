@@ -42,7 +42,7 @@ public class TestsuiteConfig extends Properties {
      * @param configFileNames to load the files from.
      * @return loaded and assembled config.
      */
-    public static TestsuiteConfig loadCurrentConfig(String... configFileNames) {
+    public static TestsuiteConfig loadConfig(String... configFileNames) {
         if (configFileNames == null) {
             throw new MissingPropertyException(
                     "To run the application locally you must create a testsuite.properties file."
@@ -102,23 +102,27 @@ public class TestsuiteConfig extends Properties {
      * @return whether the config is defined to run on BrowserStack or not.
      */
     public boolean isUsingBrowserStack() {
-        return System.getProperty("target_config") != null;
+        return System.getProperty("target_config") != null || System.getProperty("configuration") != null;
     }
 
     /**
      * Loads a config from a string formatted as key=value\n ...
-     * 
+     *
      * @param configuration string containing the configuration to load
      * @return new TestsuiteConfig object.
      */
-    public static TestsuiteConfig loadCurrentConfigFromString(String configuration) {
+    public static TestsuiteConfig loadConfigFromString(String configuration) {
         try {
             final TestsuiteConfig config = new TestsuiteConfig();
-            config.load(new StringReader(configuration));
+            config.load(new StringReader(swapColonSignsToEqualSigns(configuration)));
             return config;
         } catch (IOException io) {
             throw new RuntimeException(String.format("Failed to load the TestsuiteConfig from a key=value string. "
                     + "Stacktrace:\n%s", io.getMessage()));
         }
+    }
+
+    private static String swapColonSignsToEqualSigns(String configuration) {
+        return configuration.substring(1, configuration.length() - 2);
     }
 }

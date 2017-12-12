@@ -106,9 +106,20 @@ public class BrowserStackManager {
      * This method initialises the config for the BrowserStackLocal.
      */
     private static TestsuiteConfig initialiseConfig() {
-        TestsuiteConfig temporaryConfig = TestsuiteConfig.loadCurrentConfig("testsuite",
-                "browserstack",
-                System.getProperty("target_config"));
+        TestsuiteConfig temporaryConfig;
+
+        String targetConfig = System.getProperty("target_config");
+        String configuration = System.getProperty("configuration");
+
+        if (targetConfig != null) {
+            temporaryConfig = TestsuiteConfig.loadConfig("testsuite",
+                    "browserstack",
+                    targetConfig);
+        } else if (configuration != null) {
+            temporaryConfig = TestsuiteConfig.loadConfigFromString(configuration);
+        } else {
+            return null;
+        }
 
 
         commandParameters.put("key", temporaryConfig.getProperty("automateKey"));

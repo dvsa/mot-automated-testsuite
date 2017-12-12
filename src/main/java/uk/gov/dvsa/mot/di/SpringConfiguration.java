@@ -26,15 +26,14 @@ public class SpringConfiguration {
         String targetConfig = System.getProperty("target_config");
         String configuration = System.getProperty("configuration");
 
-        if (targetConfig != null ) {
-            System.out.println("target config" + targetConfig);
-            testsuiteConfig = TestsuiteConfig.loadCurrentConfig("testsuite",
+        if (targetConfig != null) {
+            testsuiteConfig = TestsuiteConfig.loadConfig("testsuite",
                     "browserstack",
                     targetConfig);
         } else if (configuration != null) {
-            testsuiteConfig = TestsuiteConfig.loadCurrentConfigFromString(configuration);
+            testsuiteConfig = TestsuiteConfig.loadConfigFromString(configuration);
         } else {
-            testsuiteConfig = TestsuiteConfig.loadCurrentConfig("testsuite");
+            testsuiteConfig = TestsuiteConfig.loadConfig("testsuite");
         }
 
         // using a static initialisation block so this is instantiated as early as possible
