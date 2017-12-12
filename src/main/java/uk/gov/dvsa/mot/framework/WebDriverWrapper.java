@@ -1,6 +1,5 @@
 package uk.gov.dvsa.mot.framework;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -28,6 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.framework.csv.CsvDocument;
+import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
+import uk.gov.dvsa.mot.framework.pdf.PdfException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -1477,160 +1478,50 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Parse PDF document into a string.
-     * @param url to the target document.
+     * Creates a new PDF document from the request handler and the url.
+     * @param requestHandler            the request handler
+     * @param url                       the URL of the PDF document
+     * @return                          the PDF Document
+     * @throws PdfException             error loading PDF document
      */
-    public String parsePdfFromUrl(String url) {
+    private PdfDocument createPdfDocument(RequestHandler requestHandler, String url)
+            throws PdfException {
         try {
             PDFTextStripper textStripper = new PDFTextStripper();
             textStripper.setSortByPosition(true);
 
-            PDDocument pdf = requestHandler.getPdfDocument(url);
-
-            return textStripper.getText(pdf);
+            return new PdfDocument(requestHandler.getPdfDocument(url));
         } catch (IOException ioException) {
-            logger.error(String.format("Failed to load PDF document from %s.", url));
+            throw new PdfException("Unable to find or open PDF", ioException);
         }
-
-        return null;
     }
 
     /**
-     * Get PDF document.
-     * @param url to the target document.
+     * Checks whether a PDF contains an expected value.
+     * @param linkText  The link to the PDF
+     * @param values    Array of values to check are contained
+     * @return          Whether the PDF contains all expected values
      */
-    public PDDocument getPdfFromUrl(String url) {
-        try {
-            return requestHandler.getPdfDocument(url);
-        } catch (IOException ioException) {
-            logger.error(String.format("Failed to load PDF document from %s.", url));
-        }
+    public boolean pdfContains(String linkText, List<String> values) {
+        // find any "a" elements with text containing the link text
+        List<WebElement> links = findLinks(linkText);
 
-        return null;
-    }
+        if (links.size() == 0) {
+            String message = "No links found with text: " + linkText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
 
-    /**
-     * Find the label in the PDF document, and check if it c
-     *
-     * @param target document to check.
-     * @param label label used to locate the text.
-     * @param textPattern to look for in the document.
-     * @return
-     */
-    public String getValueBelowLabel(PDDocument target, String label, String textPattern) {
-        try {
-            PDFTextStripper textStripper = new PDFTextStripper();
-            textStripper.setSortByPosition(true);
+        } else {
+            try {
+                PdfDocument pdfDocument = createPdfDocument(requestHandler,
+                        links.get(0).getAttribute("href"));
 
-            String document = textStripper.getText(target);
-            String[] lines = document.split(System.getProperty("line.separator"));
-            Pattern regex = Pattern.compile(textPattern);
-
-            for (int i = 0; i < lines.length; ++i) {
-                if (lines[i].contains(label)) {
-                    if (lines.length >= i + 1) {
-                        Matcher matcher = regex.matcher(lines[i + 1]);
-                        if (matcher.find()) {
-                            return matcher.group();
-                        }
-                    }
-                }
+                return pdfDocument.contains(values);
+            } catch (PdfException ex) {
+                logger.error("Unable to load PDF document", ex);
+                throw new RuntimeException("Error processing PDF document", ex);
             }
-        } catch (IOException io) {
-            logger.error(String.format("Failed to match '%s' pattern for the %s label.", textPattern, label));
         }
-
-        return null;
-    }
-
-    /**
-     * Find the label in the PDF document, and check if it c
-     *
-     * @param target document to check.
-     * @param label label used to locate the text.
-     * @param textPattern to look for in the document.
-     * @return
-     */
-    public String getValueNextToLabel(PDDocument target, String label, String textPattern) {
-        try {
-            PDFTextStripper textStripper = new PDFTextStripper();
-            textStripper.setSortByPosition(true);
-
-            String document = textStripper.getText(target);
-            String[] lines = document.split(System.getProperty("line.separator"));
-            Pattern regex = Pattern.compile(textPattern);
-
-            for (int i = 0; i < lines.length; ++i) {
-                if (lines[i].contains(label)) {
-                    Matcher matcher = regex.matcher(lines[i]);
-                    if (matcher.find()) {
-                        return matcher.group();
-                    }
-                }
-            }
-        } catch (IOException io) {
-            logger.error(String.format("Failed to find '%s' next to %s label.", textPattern, label));
-        }
-
-        return null;
-    }
-
-    /**
-     * Find the label in the PDF document, and check if it c
-     *
-     * @param target document to check.
-     * @param label label used to locate the text.
-     * @param text to look for in the document.
-     * @return
-     */
-    public boolean containsValueNextToLabel(PDDocument target, String label, String text) {
-        try {
-            PDFTextStripper textStripper = new PDFTextStripper();
-            textStripper.setSortByPosition(true);
-
-            String document = textStripper.getText(target);
-            String[] lines = document.split(System.getProperty("line.separator"));
-
-            for (int i = 0; i < lines.length; ++i) {
-                if (lines[i].contains(label) && lines[i].contains(text)) {
-                    return true;
-                }
-            }
-        } catch (IOException io) {
-            logger.error(String.format("Failed to find '%s' pattern for the %s label.", text, label));
-        }
-
-        return false;
-    }
-
-    /**
-     * Find the label in the PDF document, and check if it c
-     *
-     * @param target document to check.
-     * @param label label used to locate the text.
-     * @param text to look for in the document.
-     * @return
-     */
-    public boolean containsValueBelowTheLabel(PDDocument target, String label, String text) {
-        try {
-            PDFTextStripper textStripper = new PDFTextStripper();
-            textStripper.setSortByPosition(true);
-
-            String document = textStripper.getText(target);
-            String[] lines = document.split(System.getProperty("line.separator"));
-
-            for (int i = 0; i < lines.length; ++i) {
-                if (lines[i].contains(label)) {
-                    if (lines.length >= i + 1 && lines[i + 1].contains(text)) {
-                        return true;
-                    }
-                }
-            }
-        } catch (IOException io) {
-            logger.error(String.format("Failed to find '%s' pattern for the %s label.", text, label));
-        }
-
-        return false;
     }
 
     /**
@@ -1649,25 +1540,4 @@ public class WebDriverWrapper {
         return null;
     }
 
-    /**
-     * Check if a target document contains a specified value.
-     *
-     * @param target document to search through.
-     * @param value to search for.
-     * @return whether target document contains the value or not.
-     */
-    public boolean contains(PDDocument target, String value) {
-        try {
-            PDFTextStripper textStripper = new PDFTextStripper();
-            textStripper.setSortByPosition(true);
-
-            String document = textStripper.getText(target);
-
-            return document.contains(value);
-        } catch (IOException io) {
-            logger.debug(io.getMessage());
-        }
-
-        return false;
-    }
 }

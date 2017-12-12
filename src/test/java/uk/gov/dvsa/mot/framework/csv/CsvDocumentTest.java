@@ -30,7 +30,7 @@ public class CsvDocumentTest {
                     + "/src/test/resources/exampleCsv/invalidCSV.csv";
 
             csvDocument = loadDocument(fileName);
-        } catch (FailedToLoadCsvException failedToLoadCsv) {
+        } catch (CsvException failedToLoadCsv) {
             throw new RuntimeException(failedToLoadCsv.getMessage());
         }
     }
@@ -47,7 +47,7 @@ public class CsvDocumentTest {
             csvDocument = loadDocument(fileName);
 
             assertTrue(csvDocument.getValue(0, 0).equals("column1"));
-        } catch (FailedToLoadCsvException failedToLoadCsv) {
+        } catch (CsvException failedToLoadCsv) {
             throw new RuntimeException(failedToLoadCsv.getMessage());
         }
     }
@@ -70,7 +70,7 @@ public class CsvDocumentTest {
             assertFalse(csvDocument.contains("d098sdf"));
             assertFalse(csvDocument.contains("X"));
             assertFalse(csvDocument.contains("123"));
-        } catch (FailedToLoadCsvException failedToLoadCsv) {
+        } catch (CsvException failedToLoadCsv) {
             throw new RuntimeException(failedToLoadCsv.getMessage());
         }
     }
@@ -81,7 +81,7 @@ public class CsvDocumentTest {
      * @param filePath path to the target file.
      * @return loaded document.
      */
-    private static CsvDocument loadDocument(String filePath) throws FailedToLoadCsvException {
+    private static CsvDocument loadDocument(String filePath) throws CsvException {
         try {
             BufferedReader file = new BufferedReader(new FileReader(filePath));
 

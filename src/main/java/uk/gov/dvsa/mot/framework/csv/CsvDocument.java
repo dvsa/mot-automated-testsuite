@@ -31,7 +31,7 @@ public class CsvDocument {
      * @param document raw CSV string.
      * @return a new, populated, CsvDocument.
      */
-    public static CsvDocument load(String document) throws FailedToLoadCsvException {
+    public static CsvDocument load(String document) throws CsvException {
         CsvDocument output = new CsvDocument();
 
         output.csvData = parse(document);
@@ -45,7 +45,7 @@ public class CsvDocument {
      * @param document raw CSV string.
      * @return output as 2D string array.
      */
-    public static ArrayList<ArrayList<String>> parse(String document) throws FailedToLoadCsvException {
+    public static ArrayList<ArrayList<String>> parse(String document) throws CsvException {
         try {
             boolean usesDoubleQuotes = false;
 
@@ -73,7 +73,7 @@ public class CsvDocument {
             }
             return mappedCsv;
         } catch (Exception exception) {
-            throw new FailedToLoadCsvException("Unable to parse CSV document.");
+            throw new CsvException("Unable to parse CSV document.", exception);
         }
     }
 

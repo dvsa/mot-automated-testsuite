@@ -14,7 +14,7 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.csv.CsvDocument;
-import uk.gov.dvsa.mot.framework.csv.FailedToLoadCsvException;
+import uk.gov.dvsa.mot.framework.csv.CsvException;
 
 import java.io.IOException;
 
@@ -92,7 +92,7 @@ public class RequestHandler {
         
         try {
             return CsvDocument.load(document);
-        } catch (FailedToLoadCsvException failedToLoadCsv) {
+        } catch (CsvException failedToLoadCsv) {
             logger.debug(failedToLoadCsv.getMessage());
             return null;
         }
