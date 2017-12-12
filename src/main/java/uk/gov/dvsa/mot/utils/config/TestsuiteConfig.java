@@ -105,6 +105,12 @@ public class TestsuiteConfig extends Properties {
         return System.getProperty("target_config") != null;
     }
 
+    /**
+     * Loads a config from a string formatted as key=value\n ...
+     * 
+     * @param configuration string containing the configuration to load
+     * @return new TestsuiteConfig object.
+     */
     public static TestsuiteConfig loadCurrentConfigFromString(String configuration) {
         try {
             final TestsuiteConfig config = new TestsuiteConfig();
