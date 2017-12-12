@@ -6,12 +6,12 @@ Feature: 18 -  Existing user logging in with 2FA card
     Then The page title contains "Your home"
 
     Examples:
-      | drift |
-      | -2    |
-      | -1    |
-      | +0    |
-      | +1    |
-      | +2    |
+      | drift  |
+      | -20    |
+      | -10    |
+      | +0     |
+      | +10    |
+      | +20    |
 
 
   @browserstack
@@ -20,10 +20,10 @@ Feature: 18 -  Existing user logging in with 2FA card
     Then The page title contains "Your security card PIN"
 
     Examples:
-      | drift |
-      | -5    |
-      | -4    |
-      | -3    |
-      | +3    |
-      | +4    |
-      | +5    |
+      | drift  |
+      | -30    |
+      | -25    |
+      | -21    |
+      | +21    |
+      | +25    |
+      | +30    |

@@ -62,5 +62,5 @@ Feature: 12a - Vehicle Examiner
     And I click the "View MOT history" link
     And The page contains "Vehicle MOT test history"
     And I click the first "View" link
-    And The page contains "MOT test summary"
+    And The page contains "MOT test summary" or "MOT re-test summary"
     And I check there is a "Print certificate" link
