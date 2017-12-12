@@ -123,6 +123,6 @@ public class TestsuiteConfig extends Properties {
     }
 
     private static String swapColonSignsToEqualSigns(String configuration) {
-        return configuration.substring(1, configuration.length() - 2);
+        return configuration.substring(1, configuration.length() - 1);
     }
 }
