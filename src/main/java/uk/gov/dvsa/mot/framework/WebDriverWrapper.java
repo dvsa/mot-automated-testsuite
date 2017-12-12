@@ -1414,7 +1414,7 @@ public class WebDriverWrapper {
 
     /**
      * Enters the specified text into the field.
-     * @param text  The text to enterd
+     * @param text  The text to enter
      */
     public void enterIntoFieldWithLabel(String labelText, String text) {
         // find the input associated with the specified label...
