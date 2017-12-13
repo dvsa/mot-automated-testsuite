@@ -1,4 +1,4 @@
-select veh.registration, concat(ma.name, ' ', mo.name) as make
+select veh.registration, concat(ma.name, ' ', mo.name) as make, DATE_FORMAT(veh.first_registration_date, "%e %M %Y")
 from vehicle veh, model_detail md, model mo, make ma,
   (select max(id) as id, vehicle_id  from mot_test_current
    group by vehicle_id
