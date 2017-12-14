@@ -56,6 +56,7 @@ public class DatabaseDataProvider {
      */
     @Transactional
     public List<String> getCachedDatasetEntry(String dataSetName) {
+        System.out.println("SErver sending cached data set");
         Dataset dataset = getDataset(dataSetName);
 
         if (!dataset.isCachePopulated()) {
@@ -78,6 +79,7 @@ public class DatabaseDataProvider {
      */
     @Transactional
     public List<String> getUncachedDatasetEntry(String dataSetName) {
+        System.out.println("SErver sending uncached data set");
         Dataset dataset = getDataset(dataSetName);
         DatasetMetrics metrics = dataset.getMetrics();
 
@@ -91,6 +93,7 @@ public class DatabaseDataProvider {
         metrics.setTimingMilliseconds(stop - start);
 
         if (results.size() < 1) {
+            System.out.println("SErver no more data");
             String message = "No more data available for dataset: " + dataSetName;
             logger.error(message);
             throw new IllegalStateException(message);
@@ -110,6 +113,7 @@ public class DatabaseDataProvider {
      */
     @Transactional
     public List<List<String>> getUncachedDataset(String dataSetName, int length) {
+        System.out.println("SErver sending uncached dataset");
         Dataset dataset = getDataset(dataSetName);
         DatasetMetrics metrics = dataset.getMetrics();
 
@@ -124,6 +128,7 @@ public class DatabaseDataProvider {
         metrics.setTimingMilliseconds(stop - start);
 
         if (results.size() < 1) {
+            System.out.println("SErver no more data");
             String message = "No more data available for dataset: " + dataSetName;
             logger.error(message);
             throw new IllegalStateException(message);
@@ -152,6 +157,7 @@ public class DatabaseDataProvider {
      * @return The dataset details
      */
     private Dataset getDataset(String datasetName) {
+        System.out.println("SErver sending dataset");
         if (datasets.containsKey(datasetName)) {
             return datasets.get(datasetName);
 

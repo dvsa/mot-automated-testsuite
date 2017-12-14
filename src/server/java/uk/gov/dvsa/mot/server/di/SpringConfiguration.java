@@ -1,7 +1,7 @@
 package uk.gov.dvsa.mot.server.di;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.MDC;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -16,8 +16,10 @@ import uk.gov.dvsa.mot.server.data.DataDao;
 import uk.gov.dvsa.mot.server.data.DatabaseDataProvider;
 import uk.gov.dvsa.mot.server.data.QueryFileLoader;
 import uk.gov.dvsa.mot.server.reporting.DataUsageReportGenerator;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import javax.sql.DataSource;
+import java.lang.management.ManagementFactory;
 
 /**
  * Spring configuration class for the data server.
@@ -27,8 +29,31 @@ import javax.sql.DataSource;
 @PropertySource("file:configuration/testsuite.properties")
 public class SpringConfiguration {
 
-    @Autowired
-    Environment env;
+
+    public static TestsuiteConfig env;
+
+    static {
+        String targetConfig = System.getProperty("target_config");
+        String configuration = System.getProperty("configuration");
+
+        if (targetConfig != null) {
+            env = TestsuiteConfig.loadConfig("testsuite",
+                    "browserstack",
+                    targetConfig);
+        } else if (configuration != null) {
+            env = TestsuiteConfig.loadConfigFromString(configuration);
+        } else {
+            env = TestsuiteConfig.loadConfig("testsuite");
+        }
+
+        // using a static initialisation block so this is instantiated as early as possible
+
+        // often of the form: <pid>@<hostname>.<domain> (but not guaranteed to be!)
+        String jmxName = ManagementFactory.getRuntimeMXBean().getName();
+
+        // set the "pid" MDC variable, used by logback
+        MDC.put("pid", jmxName);
+    }
 
     /**
      * Creates the database data source.
@@ -86,7 +111,7 @@ public class SpringConfiguration {
     }
 
     @Bean
-    public DataUsageReportGenerator dataUsageReportGenerator(Environment env) {
+    public DataUsageReportGenerator dataUsageReportGenerator(TestsuiteConfig env) {
         return new DataUsageReportGenerator(env);
     }
 }

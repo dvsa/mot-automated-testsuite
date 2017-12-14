@@ -13,6 +13,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.mock.env.MockEnvironment;
 import uk.gov.dvsa.mot.server.model.Dataset;
 import uk.gov.dvsa.mot.server.model.Filter;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 /**
  * Tests the <code>QueryFileLoader</code> class.
@@ -147,7 +148,8 @@ public class QueryFileLoaderTest {
      * @return The class under test
      */
     private QueryFileLoader createLoader(boolean filter) {
-        Environment env = new MockEnvironment().withProperty("dataFiltering", String.valueOf(filter));
+        TestsuiteConfig env = new TestsuiteConfig();
+        env.setProperty("dataFiltering", String.valueOf(filter));
         return new QueryFileLoader(new PathMatchingResourcePatternResolver(), env);
     }
 }

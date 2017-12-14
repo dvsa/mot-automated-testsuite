@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.server.model.DatasetMetrics;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -28,7 +29,7 @@ public class DataUsageReportGenerator {
      * Creates a new instance.
      * @param env       The environment settings
      */
-    public DataUsageReportGenerator(Environment env) {
+    public DataUsageReportGenerator(TestsuiteConfig env) {
         this.reportFilename = env.getRequiredProperty("dataUsageReport");
     }
 

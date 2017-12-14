@@ -7,6 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import uk.gov.dvsa.mot.server.model.Dataset;
 import uk.gov.dvsa.mot.server.model.Filter;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class QueryFileLoader {
      * Creates a new instance.
      * @param classpathScanner      The scanner to use
      */
-    public QueryFileLoader(ResourcePatternResolver classpathScanner, Environment env) {
+    public QueryFileLoader(ResourcePatternResolver classpathScanner, TestsuiteConfig env) {
         this.classpathScanner = classpathScanner;
         this.filters = new HashMap<>();
         this.isFilteringEnabled = Boolean.parseBoolean(env.getProperty("dataFiltering", "false"));
