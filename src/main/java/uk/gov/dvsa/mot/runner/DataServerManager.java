@@ -54,6 +54,7 @@ public class DataServerManager {
             Thread.sleep(5000L);
 
             logger.info("Wait completed, starting testing...");
+            System.out.println("Server running");
 
         } catch (IOException ex) {
             System.out.println("Failed to start data server 1");
