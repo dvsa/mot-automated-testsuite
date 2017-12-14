@@ -31,6 +31,7 @@ public class ClientDataProvider implements DataProvider {
      * Creates a new instance.
      */
     public ClientDataProvider(TestsuiteConfig env, RestTemplate restTemplate) {
+        System.out.println("Creating new ClientDataProvider...");
         logger.debug("Creating ClientDataProvider...");
         this.dataserverUrl = env.getRequiredProperty("dataserverUrl");
         this.restTemplate = restTemplate;
@@ -43,6 +44,7 @@ public class ClientDataProvider implements DataProvider {
      */
     @Override
     public List<String> getCachedDatasetEntry(String dataSetName) {
+        System.out.println(String.format("Querying Data Server for cached dataset %s.", dataSetName));
         logger.info("Querying Data Server for cached dataset entry, for dataset {}", dataSetName);
         restTemplate.setErrorHandler(new ErrorHandler(dataSetName));
 
@@ -60,6 +62,7 @@ public class ClientDataProvider implements DataProvider {
      */
     @Override
     public List<String> getUncachedDatasetEntry(String dataSetName) {
+        System.out.println(String.format("Querying Data Server for uncached dataset %s.", dataSetName));
         logger.info("Querying Data Server for uncached dataset entry, for dataset {}", dataSetName);
         restTemplate.setErrorHandler(new ErrorHandler(dataSetName));
 
@@ -79,6 +82,8 @@ public class ClientDataProvider implements DataProvider {
      */
     @Override
     public List<List<String>> getUncachedDataset(String dataSetName, int length) {
+        System.out.println(String.format("Querying Data Server for uncached dataset %s, length %s.",
+                dataSetName, length));
         logger.info("Querying Data Server for uncached dataset {}, length {}", dataSetName, length);
         restTemplate.setErrorHandler(new ErrorHandler(dataSetName));
 
@@ -102,6 +107,7 @@ public class ClientDataProvider implements DataProvider {
          * @param datasetName   The dataset name
          */
         ErrorHandler(String datasetName) {
+            System.out.println("New Error Handler.");
             this.datasetName = datasetName;
         }
 
@@ -113,6 +119,7 @@ public class ClientDataProvider implements DataProvider {
          */
         @Override
         public boolean hasError(ClientHttpResponse response) throws IOException {
+            System.out.println("Has Error.");
             return response.getStatusCode() != HttpStatus.OK;
         }
 
@@ -124,11 +131,14 @@ public class ClientDataProvider implements DataProvider {
          */
         @Override
         public void handleError(ClientHttpResponse response) throws IOException {
+            System.out.println("hadnle error.");
             if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
+                System.out.println("no more data.");
                 String message = "No more data for dataset: " + datasetName;
                 logger.error(message);
                 throw new IllegalStateException(message);
             } else {
+                System.out.println("Error when querying.");
                 // if 500 error then response contains error JSON object rather than List of data
                 String errorMessage = readResponseBodyAsString(response.getBody());
                 String message = "Error querying Data Server for cached dataset entry for dataset:" + datasetName

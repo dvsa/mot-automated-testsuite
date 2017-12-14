@@ -15,6 +15,7 @@ public class StopDataServer {
      * Stops the data server.
      */
     public static void main(String[] args) {
+        System.out.println("Stopping data server.");
         logger.info("In StopDataServer.main");
         DataServerManager.stopServer();
     }

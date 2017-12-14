@@ -15,6 +15,7 @@ public class StartDataServer {
      * Starts the data server.
      */
     public static void main(String[] args) {
+        System.out.println("Staring data server.");
         logger.info("In StartDataServer.main");
         DataServerManager.startServer();
     }
