@@ -101,8 +101,6 @@ task('testsuite') {
             browserstack();
         } else if (project.hasProperty('configuration')) {
             browserstack(false, true);
-        } else {
-            throw new Exception("The command must include either '-Pconfiguration=...' or '-Ptarget_config=...'.")
         }
 
         try {
@@ -137,8 +135,6 @@ task('testsuite') {
                 browserstack(true);
             } else if (project.hasProperty('configuration')) {
                 browserstack(true, true);
-            } else {
-                throw new Exception("The command must include either '-Pconfiguration=...' or '-Ptarget_config=...'.")
             }
 
             javaexec {
