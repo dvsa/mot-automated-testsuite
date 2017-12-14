@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.framework.csv.CsvDocument;
+import uk.gov.dvsa.mot.framework.csv.CsvException;
 import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
 import uk.gov.dvsa.mot.framework.pdf.PdfException;
 
@@ -82,7 +83,7 @@ public class WebDriverWrapper {
         this.env = env;
         this.data = new HashMap<>();
         this.webDriver = createWebDriver();
-        this.requestHandler = new RequestHandler(this.webDriver);
+        this.requestHandler = new RequestHandler(this.webDriver, env);
 
         // amount of time (in milliseconds) to wait for browser clicks to happen, before page refresh logic
         // this is a mandatory delay, to accommodate any browser/environment/network latency
@@ -1479,13 +1480,11 @@ public class WebDriverWrapper {
 
     /**
      * Creates a new PDF document from the request handler and the url.
-     * @param requestHandler            the request handler
      * @param url                       the URL of the PDF document
      * @return                          the PDF Document
      * @throws PdfException             error loading PDF document
      */
-    private PdfDocument createPdfDocument(RequestHandler requestHandler, String url)
-            throws PdfException {
+    private PdfDocument createPdfDocument(String url) throws PdfException {
         try {
             PDFTextStripper textStripper = new PDFTextStripper();
             textStripper.setSortByPosition(true);
@@ -1497,7 +1496,7 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Checks whether a PDF contains an expected value.
+     * Checks whether a PDF contains expected values.
      * @param linkText  The link to the PDF
      * @param values    Array of values to check are contained
      * @return          Whether the PDF contains all expected values
@@ -1513,8 +1512,7 @@ public class WebDriverWrapper {
 
         } else {
             try {
-                PdfDocument pdfDocument = createPdfDocument(requestHandler,
-                        links.get(0).getAttribute("href"));
+                PdfDocument pdfDocument = createPdfDocument(links.get(0).getAttribute("href"));
 
                 return pdfDocument.contains(values);
             } catch (PdfException ex) {
@@ -1525,19 +1523,38 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Get a CSV as a parsed CsvDocument.
-     *
-     * @param url of the target document.
-     * @return parsed CSV containing the url output.
+     * Creates a CSV document from the URL provided.
+     * @param       url of the target document
+     * @return      parsed CSV containing the url output
      */
-    public CsvDocument getCsvFromUrl(String url) {
+    private CsvDocument createCsvDocument(String url) {
         try {
             return requestHandler.getCsvDocument(url);
-        } catch (IOException ioException) {
-            logger.error(String.format("Failed to load CSV document from %s.", url));
+        } catch (CsvException ex) {
+            logger.error(String.format("Failed to load CSV document from %s.", url), ex);
+            throw new RuntimeException("Error processing CSV document", ex);
         }
-
-        return null;
     }
 
+    /**
+     * Checks whether a CSV contains expected values.
+     * @param linkText  The link to the PDF
+     * @param values    Array of values to check are contained
+     * @return          Whether the CSV contains all expected values
+     */
+    public boolean csvContains(String linkText, List<String> values) {
+        // find any "a" elements with text containing the link text
+        List<WebElement> links = findLinks(linkText);
+
+        if (links.size() == 0) {
+            String message = "No links found with text: " + linkText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            CsvDocument csvDocument = createCsvDocument(links.get(0).getAttribute("href"));
+
+            return csvDocument.contains(values);
+        }
+    }
 }

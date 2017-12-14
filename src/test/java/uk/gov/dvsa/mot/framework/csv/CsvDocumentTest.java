@@ -3,50 +3,66 @@ package uk.gov.dvsa.mot.framework.csv;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.After;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CsvDocumentTest {
 
-    private static CsvDocument csvDocument = null;
-
-    @After
-    public void clean() {
-        csvDocument = null;
-    }
-
     /**
-     * Tests <code>CsvDocument.load()</code> and <code>CsvDocument.parse()</code> with an invalid CSV file.
+     * Test <code>contains()</code> function with valid data.
      */
-    @Test(expected = RuntimeException.class)
-    public void loadInvalidCsv() {
+    @Test
+    public void contains() {
         try {
             String fileName = new File("").getAbsolutePath()
-                    + "/src/test/resources/exampleCsv/invalidCSV.csv";
+                    + "/src/test/resources/exampleCsv/validCSV.csv";
 
-            csvDocument = loadDocument(fileName);
+            CsvDocument csvDocument = loadDocument(fileName);
+
+            assertTrue(csvDocument.contains("column2"));
+
+            List<String> containsList = new ArrayList<String>();
+            containsList.add("column3");
+            containsList.add("4");
+            containsList.add("a");
+            containsList.add("10%");
+            containsList.add("a,b,c");
+
+            assertTrue(csvDocument.contains(containsList));
+
         } catch (CsvException failedToLoadCsv) {
             throw new RuntimeException(failedToLoadCsv.getMessage());
         }
     }
 
     /**
-     * Tests <code>CsvDocument.load()</code> and <code>CsvDocument.parse()</code> with an invalid CSV file.
+     * Test <code>contains()</code> function with invalid data.
      */
     @Test
-    public void loadValidCsv() {
+    public void notContains() {
         try {
             String fileName = new File("").getAbsolutePath()
                     + "/src/test/resources/exampleCsv/validCSV.csv";
 
-            csvDocument = loadDocument(fileName);
+            CsvDocument csvDocument = loadDocument(fileName);
 
-            assertTrue(csvDocument.getValue(0, 0).equals("column1"));
+            assertFalse(csvDocument.contains("column5")); // Should not exist
+
+            List<String> containsList = new ArrayList<String>();
+            containsList.add("column3");
+            containsList.add("9"); // Should not exist
+            containsList.add("a");
+
+            assertFalse(csvDocument.contains(containsList));
+
         } catch (CsvException failedToLoadCsv) {
             throw new RuntimeException(failedToLoadCsv.getMessage());
         }
@@ -55,21 +71,13 @@ public class CsvDocumentTest {
     /**
      * Test <code>contains()</code> function with valid and invalid data.
      */
-    @Test
-    public void contains() {
+    @Test(expected = RuntimeException.class)
+    public void invalidFile() {
         try {
             String fileName = new File("").getAbsolutePath()
-                    + "/src/test/resources/exampleCsv/validCSV.csv";
+                    + "/src/test/resources/exampleCsv/invalidCSV.csv";
 
-            csvDocument = loadDocument(fileName);
-
-            assertTrue(csvDocument.contains("column2"));
-            assertTrue(csvDocument.contains("4asdfads"));
-            assertTrue(csvDocument.contains("W"));
-
-            assertFalse(csvDocument.contains("d098sdf"));
-            assertFalse(csvDocument.contains("X"));
-            assertFalse(csvDocument.contains("123"));
+            CsvDocument csvDocument = loadDocument(fileName);
         } catch (CsvException failedToLoadCsv) {
             throw new RuntimeException(failedToLoadCsv.getMessage());
         }
@@ -97,7 +105,7 @@ public class CsvDocumentTest {
                 rawDocument.append("\n");
             }
 
-            return CsvDocument.load(rawDocument.toString());
+            return new CsvDocument(CSVParser.parse(rawDocument.toString(), CSVFormat.DEFAULT));
         } catch (IOException io) {
             throw new RuntimeException(io.getMessage());
         }
