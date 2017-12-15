@@ -26,7 +26,6 @@ import java.lang.management.ManagementFactory;
  */
 @Configuration
 @EnableTransactionManagement
-@PropertySource("file:configuration/testsuite.properties")
 public class SpringConfiguration {
 
 
