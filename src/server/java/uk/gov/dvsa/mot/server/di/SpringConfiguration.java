@@ -4,8 +4,6 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.MDC;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,10 +14,10 @@ import uk.gov.dvsa.mot.server.data.DataDao;
 import uk.gov.dvsa.mot.server.data.DatabaseDataProvider;
 import uk.gov.dvsa.mot.server.data.QueryFileLoader;
 import uk.gov.dvsa.mot.server.reporting.DataUsageReportGenerator;
-import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
+import uk.gov.dvsa.mot.server.utils.config.TestsuiteConfig;
 
-import javax.sql.DataSource;
 import java.lang.management.ManagementFactory;
+import javax.sql.DataSource;
 
 /**
  * Spring configuration class for the data server.
@@ -32,14 +30,9 @@ public class SpringConfiguration {
     public static TestsuiteConfig env;
 
     static {
-        String targetConfig = System.getProperty("target_config");
         String configuration = System.getProperty("configuration");
 
-        if (targetConfig != null) {
-            env = TestsuiteConfig.loadConfig("testsuite",
-                    "browserstack",
-                    targetConfig);
-        } else if (configuration != null) {
+        if (configuration != null) {
             env = TestsuiteConfig.loadConfigFromString(configuration);
         } else {
             env = TestsuiteConfig.loadConfig("testsuite");

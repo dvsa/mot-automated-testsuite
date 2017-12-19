@@ -1,6 +1,4 @@
-package uk.gov.dvsa.mot.utils.config;
-
-import groovy.lang.MissingPropertyException;
+package uk.gov.dvsa.mot.server.utils.config;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

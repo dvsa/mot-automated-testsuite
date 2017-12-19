@@ -2,9 +2,8 @@ package uk.gov.dvsa.mot.server.reporting;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.server.model.DatasetMetrics;
-import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
+import uk.gov.dvsa.mot.server.utils.config.TestsuiteConfig;
 
 import java.io.BufferedWriter;
 import java.io.File;

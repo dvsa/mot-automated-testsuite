@@ -8,12 +8,10 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.mock.env.MockEnvironment;
 import uk.gov.dvsa.mot.server.model.Dataset;
 import uk.gov.dvsa.mot.server.model.Filter;
-import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
+import uk.gov.dvsa.mot.server.utils.config.TestsuiteConfig;
 
 /**
  * Tests the <code>QueryFileLoader</code> class.

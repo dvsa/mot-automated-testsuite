@@ -94,13 +94,17 @@ task('testsuite') {
         javaexec {
             main = 'uk.gov.dvsa.mot.runner.StartDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+            if(project.hasProperty('configuration')) {
+                systemProperty "configuration", configuration
+            }
         }
 
         //This will be used to provide a config //.properties// file to use when runnig the testsuite locally.
         if (project.hasProperty('target_config')) {
-            browserstack();
+            browserstack()
         } else if (project.hasProperty('configuration')) {
-            browserstack(false, true);
+            browserstack(false, true)
         }
 
         try {
@@ -132,9 +136,9 @@ task('testsuite') {
 
             //This will be used to provide a config //.properties// file to use when runnig the testsuite locally.
             if (project.hasProperty('target_config')) {
-                browserstack(true);
+                browserstack(true)
             } else if (project.hasProperty('configuration')) {
-                browserstack(true, true);
+                browserstack(true, true)
             }
 
             javaexec {
