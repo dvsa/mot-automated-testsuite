@@ -279,3 +279,4 @@ These steps are specific to the DVSA MOT application screens.
 * I go to the next tab
 * I close extra tabs
 * I click the accordion section with the id ```..text..```
+* I click the ```..text..``` help link

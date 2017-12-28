@@ -1239,6 +1239,20 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Wait javascript events to complete.
+    */
+    protected void waitForJStoEnd() {
+        // wait until JQuery processing to be completed...
+        new WebDriverWait(webDriver, pageWaitSeconds)
+                .pollingEvery(pollFrequencyMilliseconds, TimeUnit.MILLISECONDS).until(
+                (ExpectedCondition<Boolean>) wd ->
+                        ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+
+        logger.debug("Page loaded, ready and JQuery activity complete.");
+    }
+
+
+    /**
      * Wait for the web page to fully re-load, and any onload javascript events to complete.
      * Failure to do this between page transitions can result in intermittent failures, such as
      * Selenium still being on the previous page, or failure to find page element in the new page.
@@ -1473,7 +1487,16 @@ public class WebDriverWrapper {
      * @param time  The amount of seconds to wait
      */
     public void timeWait(Integer time) {
-        webDriver.manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);
+        try {
+            Thread.sleep(time * 1000);
+        } catch (InterruptedException ex) {
+            // called if trying to shutdown the test suite
+            String message = "Wait for the web browser was interrupted";
+            logger.error(message, ex);
+
+            // propagate a fatal error so testsuite shuts down
+            throw new RuntimeException(message, ex);
+        }
     }
 
     /**
@@ -1493,8 +1516,34 @@ public class WebDriverWrapper {
             throw new IllegalArgumentException(message);
 
         } else {
-            accordions.get(0).click();
-            waitForFullPageLoad();
+            clickAndWaitForPageLoad(accordions.get(0));
+        }
+    }
+
+    /**
+     * Clicks the last help text dropdown specified.
+     * @param helpText The text for the help dropdown
+     */
+    public void helptextClick(String helpText) {
+        // Need to slow down the test so the browser can click on the correct element.
+        try {
+            Thread.sleep(400);
+        } catch (InterruptedException ex) {
+            // called if trying to shutdown the test suite
+            String message = "Wait for the web browser was interrupted";
+            logger.error(message, ex);
+
+            // propagate a fatal error so testsuite shuts down
+            throw new RuntimeException(message, ex);
+        }
+
+        List<WebElement> spans = findSpans(helpText);
+        if (spans.size() == 0) {
+            String message = "No span elements found with text: " + helpText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+        } else {
+            clickAndWaitForPageLoad(spans.get(spans.size() - 1));
         }
     }
 }

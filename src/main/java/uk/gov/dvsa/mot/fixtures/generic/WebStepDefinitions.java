@@ -201,5 +201,8 @@ public class WebStepDefinitions implements En {
 
         And("^I click the accordion section with the id \"([^\"]+)\"$", (String accordionId) ->
                 driverWrapper.accordionClick(accordionId));
+
+        When("^I click the \"([^\"]+)\" help link$", (String helpText) ->
+                driverWrapper.helptextClick(helpText));
     }
 }
