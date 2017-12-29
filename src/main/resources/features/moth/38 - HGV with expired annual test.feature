@@ -44,6 +44,8 @@ Feature: 38 - Check HGV with an expired Annual Test
     #    And The page contains "unavailable until further notice" <-- uncomment later once locale testing is complete
     And The page contains "Pass"
     And The page contains "Expiry date"
+    And The page does not contain "MOT test number"
+    And The page does not contain "Mileage"
 
     And The page contains "21 April 2016"
     And The page contains "Fail"

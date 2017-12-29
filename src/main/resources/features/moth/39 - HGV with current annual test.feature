@@ -48,6 +48,8 @@ Feature: 39 - Check HGV with a current Annual Test
     And The page contains "Fail"
     And The page contains "Reason(s) for failure"
     And The page contains "Advisory notice item(s)"
+    And The page does not contain "MOT test number"
+    And The page does not contain "Mileage"
 
     And The page contains "What are failures?"
     And I click the "What are failures?" help link
