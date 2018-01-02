@@ -1133,12 +1133,12 @@ public class WebDriverWrapper {
      */
     public void checkCurrentPageTitle(String expected) {
         String actual = webDriver.getTitle();
-        logger.debug("Checking current page title for '{}' contains '{}'", actual, expected);
-        if (!actual.contains(expected)) {
+        logger.debug("Checking current page title for '{}' contains '{}'", actual, expandDataKeys(expected));
+        if (!actual.contains(expandDataKeys(expected))) {
             String message = "Wrong page title, on wrong page perhaps? "
-                    + "Expected the title to contain " + expected + ", but the title was " + actual;
+                    + "Expected the title to contain " + expandDataKeys(expected) + ", but the title was " + actual;
             logger.error(message);
-            throw new WrongPageException(expected, actual);
+            throw new WrongPageException(expandDataKeys(expected), actual);
         }
     }
 

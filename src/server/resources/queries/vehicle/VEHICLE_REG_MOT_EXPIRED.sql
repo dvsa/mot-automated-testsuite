@@ -1,4 +1,4 @@
-select veh.registration, concat(ma.name, ' ', mo.name) as make, DATE_FORMAT(veh.first_registration_date, "%e %M %Y")
+select veh.registration, concat(ma.name, ' ', mo.name) as make, DATE_FORMAT(veh.first_registration_date, "%e %M %Y"), DATE_FORMAT(mtc.expiry_date, "%e %M %Y")
 from vehicle veh, model_detail md, model mo, make ma,
   (select max(id) as id, vehicle_id  from mot_test_current
    group by vehicle_id
@@ -10,6 +10,10 @@ and veh.id = latest_mot.vehicle_id
 and md.model_id = mo.id
 and mo.make_id = ma.id
 and mtc.id = latest_mot.id
+and ma.name is not null
+and mo.name is not null
+and md.fuel_type_id = 1 -- petrol only
+and veh.primary_colour_id = 7 -- colour green only
 and mtc.status_id not in (4,5) -- exclude vehicles whose latest status is under test or failed
 and odometer_result_type = 'OK'
 and veh.registration not like "%-%" -- exclude dodgy test data on ACPT

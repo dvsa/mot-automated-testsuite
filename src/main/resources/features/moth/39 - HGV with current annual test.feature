@@ -41,7 +41,7 @@ Feature: 39 - Check HGV with a current Annual Test
     And The page contains "Date tested"
     And The page contains "7 March 2017"
     And The page contains "Test location"
-    #    And The page contains "unavailable until further notice" <-- uncomment later once locale testing is complete
+    #    And The page contains "unavailable until further notice" <-- uncomment later once local testing is complete
     And The page contains "Pass"
     And The page contains "Expiry date"
     And The page contains "16 March 2018"
