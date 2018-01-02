@@ -23,4 +23,4 @@ Feature: 01 - Check vehicle with expired MOT
     And The page contains "MOT History"
     And The page contains "Mileage recorded at test, parts failed or had minor problems"
     And I click the accordion section with the id "mot-history-description"
-    #    And The page contains "unavailable until further notice" <-- uncomment later once local testing is complete"
+    And The page contains "unavailable until further notice"
