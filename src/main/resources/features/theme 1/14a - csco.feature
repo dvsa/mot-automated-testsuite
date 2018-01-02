@@ -3,7 +3,7 @@ Feature: 14a - CSCO
 
   Scenario: CSCO user performs AE search, then views AE details
     Given I login without 2FA using "CSCO_USER" as {cscouser}
-    And I load "AUTHORISED_EXAMINER" as {aeNumber}, {aeName}, {slotUsage}
+    And I load "AE_NOT_REJECTED" as {aeNumber}, {aeName}
     And I click the "AE information" link
     When I enter {aeNumber} in the "AE Number" field
     And I press the "Search" button
