@@ -20,6 +20,11 @@ Feature: 06a - duplicate and replacement certificates
 
     Then The page title contains "Test Results Updated Successfully"
     And I check there is a "Print" link
+    And I click "Print" and check the PDF contains:
+      | VT20            |
+      | {reg}           |
+      | {vin}           |
+      | {siteName}      |
 
 
   Scenario Outline: <user> user issues duplicate certificate
@@ -28,6 +33,8 @@ Feature: 06a - duplicate and replacement certificates
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
     And I check there is a "Print certificate" link
+    And I click "Print certificate" and check the PDF contains:
+      | Duplicate certificate            |
 
   Examples:
   |user        |dataScript       |
@@ -54,6 +61,11 @@ Feature: 06a - duplicate and replacement certificates
     And I check the fails section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT20            |
+      | {registration1} |
+      | {vin1}          |
+      | {site}          |
     And I click the "Back to user home" link
 
     And I search for certificates with reg {registration1}
@@ -68,6 +80,12 @@ Feature: 06a - duplicate and replacement certificates
     And I press the "Finish changes and print certificate" button
     Then The page title contains "Test Results Updated Successfully"
     And I check there is a "Print" link
+    And I click "Print" and check the PDF contains:
+      | VT20                  |
+      | {registration1}       |
+      | {vin1}                |
+      | {site}                |
+
 
   Scenario: Tester issues duplicate certificate and cannot edit another sites tests
     Given I login with 2FA using "MOT_TESTER_CLASS_4_WITH_OTHER_SITE_TEST" as {tester}, {site}, {reg}
@@ -75,6 +93,8 @@ Feature: 06a - duplicate and replacement certificates
     And I click the first "View certificate" link
     And I check there is a "Print certificate" link
     And I check there is no "Edit this MOT test result" button
+    And I click "Print certificate" and check the PDF contains:
+      | Duplicate certificate            |
 
   @smoke
   Scenario: AO1 user edits vehicle details on latest certificate
@@ -97,3 +117,8 @@ Feature: 06a - duplicate and replacement certificates
     Then I press the "Finish changes and print certificate" button
     And The page title contains "Test Results Updated Successfully"
     And I check there is a "Print" link
+    And I click "Print" and check the PDF contains:
+      | R3GHAU5               |
+      | VINR3V0L              |
+      | FORD                  |
+      | FOCUS                 |
