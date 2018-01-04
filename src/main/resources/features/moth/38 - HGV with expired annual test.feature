@@ -10,7 +10,7 @@ Feature: 38 - Check HGV with an expired Annual Test
     And The page contains "You can be fined up to £1000 for driving without a valid MOT"
     And The page contains "M5H4S20"
     And The page contains "CONVERSION"
-    And The page title contains "CONVERSION - Check MOT history"
+    And The page title contains "CONVERSION - Check annual test history"
 #    And The page contains "Check another vehicle" <-- this doesn't work due to the text being on 2 lines in the html code
     And The page contains "Check another"
     And The page does not contain "Colour"
@@ -55,12 +55,12 @@ Feature: 38 - Check HGV with an expired Annual Test
 
     And The page contains "What are failures and advisories?"
     And I click the "What are failures and advisories?" help link
-    And The page contains "Failure items must be fixed before the vehicle can pass its MOT."
+    And The page contains "Failure items must be fixed before the vehicle can pass its annual test."
     And The page contains "Advisory items are provided for advice. For some of these, if they became more serious, your vehicle may no longer be roadworthy and could require immediate attention."
 
     And The page contains "What are failures?"
     And I click the "What are failures?" help link
-    And The page contains "Failure items must be fixed before the vehicle can pass its MOT."
+    And The page contains "Failure items must be fixed before the vehicle can pass its annual test."
 
     And The page contains "What are advisories?"
     And I click the "What are advisories?" help link
