@@ -41,12 +41,17 @@ public class BrowserStackManager {
 
         logger.debug(String.format("Starting BrowserStackLocal %s local instance...",
                 testsuiteConfig.getProperty("localIdentifier")));
+        System.out.println(String.format("Starting BrowserStackLocal %s local instance...",
+                testsuiteConfig.getProperty("localIdentifier")));
 
         try {
             localBrowserStackInstance.start(commandParameters);
+            System.out.println("Started new browserstack local instance...");
         } catch (Exception exception) {
             logger.error(String.format("Unable to start BrowserStackLocal instance. Stacktrace:\n %s",
-                    exception.getMessage()));
+                    exception.toString()));
+            System.out.println("Failed to start BS local..." );
+            exception.printStackTrace();
             throw new RuntimeException(exception.getMessage());
         }
     }
@@ -78,10 +83,17 @@ public class BrowserStackManager {
         StringBuilder localIdentifier = new StringBuilder();
 
         if (testsuiteConfig.isMobileConfig()) {
+            System.out.println("Mobile");
+            System.out.println("device " + testsuiteConfig.getProperty("device"));
+            System.out.println("os_version " + testsuiteConfig.getProperty("os_version"));
             localIdentifier.append(testsuiteConfig.getProperty("device"));
             localIdentifier.append('_');
             localIdentifier.append(testsuiteConfig.getProperty("os_version"));
         } else {
+            System.out.println("PC");
+            System.out.println("os " + testsuiteConfig.getProperty("os"));
+            System.out.println("browser " + testsuiteConfig.getProperty("browser"));
+            System.out.println("browser_version " + testsuiteConfig.getProperty("browser_version"));
             localIdentifier.append(testsuiteConfig.getProperty("os"));
             localIdentifier.append('_');
             localIdentifier.append(testsuiteConfig.getProperty("browser"));
@@ -89,6 +101,7 @@ public class BrowserStackManager {
             localIdentifier.append(testsuiteConfig.getProperty("browser_version"));
         }
 
+        System.out.println(localIdentifier.toString());
         return swapSpaces(localIdentifier.toString());
     }
 
@@ -99,6 +112,7 @@ public class BrowserStackManager {
      * @return processed value.
      */
     private static String swapSpaces(String value) {
+        System.out.println(value.replace(' ', '-'));
         return value.replace(' ', '-');
     }
 
@@ -112,12 +126,16 @@ public class BrowserStackManager {
         String configuration = System.getProperty("configuration");
 
         if (targetConfig != null) {
+            System.out.println("Target config...");
             temporaryConfig = TestsuiteConfig.loadConfig("testsuite",
                     "browserstack",
                     targetConfig);
         } else if (configuration != null) {
+            System.out.println("Configuration...");
             temporaryConfig = TestsuiteConfig.loadConfigFromString(configuration);
+            System.out.println("Configuration..." + temporaryConfig.getProperty("browser"));
         } else {
+            System.out.println("NULL...");
             return null;
         }
 
@@ -125,6 +143,7 @@ public class BrowserStackManager {
         commandParameters.put("key", temporaryConfig.getProperty("automateKey"));
 
         String localIdentifier = getLocalIdentifier(temporaryConfig);
+        System.out.println("localIdentifier, " + localIdentifier);
         commandParameters.put("localIdentifier", localIdentifier);
 
         // NOTE: this argument forces the BrowserStackLocal to start even if there is an instance running with the same

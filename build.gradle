@@ -150,6 +150,25 @@ task('testsuite') {
     }
 }
 
+task('data-server') {
+    description 'Debug only...'
+    dependsOn assemble, compileJava, check
+    doLast {
+        copy {
+            into "build/server-libs"
+            from configurations.serverRuntime + sourceSets.server.output
+        }
+        javaexec {
+            main = 'uk.gov.dvsa.mot.runner.StartDataServer'
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+            if (project.hasProperty('configuration')) {
+                systemProperty "configuration", configuration
+            }
+        }
+    }
+}
+
 task('run-server') {
     description 'Use to test/debug the data server'
     dependsOn assemble, compileJava, check
