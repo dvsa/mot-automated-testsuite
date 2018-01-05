@@ -36,7 +36,6 @@ public class QueryFileLoader {
      * @param classpathScanner      The scanner to use
      */
     public QueryFileLoader(ResourcePatternResolver classpathScanner, TestsuiteConfig env) {
-        System.out.println("Query loader");
         this.classpathScanner = classpathScanner;
         this.filters = new HashMap<>();
         this.isFilteringEnabled = Boolean.parseBoolean(env.getProperty("dataFiltering", "false"));
@@ -50,7 +49,6 @@ public class QueryFileLoader {
      * @throws IllegalStateException Error reading the file
      */
     public Dataset loadFromFile(String datasetName) throws IllegalStateException {
-        System.out.println("Loading form file");
         Resource[] resources;
         try {
             // scan the classpath for the query file
@@ -115,7 +113,6 @@ public class QueryFileLoader {
      * @return The query
      */
     private String loadQuery(Resource resource) {
-        System.out.println("Loading query");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
 
             StringBuilder builder = new StringBuilder();

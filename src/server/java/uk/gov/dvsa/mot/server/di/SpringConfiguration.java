@@ -4,6 +4,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.MDC;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,19 +25,10 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableTransactionManagement
+@PropertySource("file:configuration/testsuite.properties")
 public class SpringConfiguration {
 
-
-    public static TestsuiteConfig env;
-
     static {
-        String configuration = System.getProperty("configuration");
-
-        if (configuration != null) {
-            env = TestsuiteConfig.loadConfigFromString(configuration);
-        } else {
-            env = TestsuiteConfig.loadConfig("testsuite");
-        }
 
         // using a static initialisation block so this is instantiated as early as possible
 
@@ -52,15 +44,17 @@ public class SpringConfiguration {
      * @return A connection pool based data source
      */
     @Bean
-    public DataSource dataSource() {
+    public DataSource dataSource(TestsuiteConfig env) {
         // use connection pool so that the connection gets re-used between scenarios in a feature
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl(env.getRequiredProperty("jdbc.url")
-                // useful mysql JDBC driver properties for debugging and logging
-                // if switch to mariadb JDBC driver then change these
-                + "?logSlowQueries=true&slowQueryThresholdMillis=500&dumpQueriesOnException=true"
-                + "&gatherPerfMetrics=true&useUsageAdvisor=true&explainSlowQueries=true"
-                + "&reportMetricsIntervalMillis=60000&logger=Slf4JLogger");
+        dataSource.setUrl(env.getRequiredProperty("jdbc.url"));
+
+        // useful mysql JDBC driver properties for debugging and logging
+        // if switch to mariadb JDBC driver then change these
+        //                + "?logSlowQueries=true&slowQueryThresholdMillis=500&dumpQueriesOnException=true"
+        //                + "&gatherPerfMetrics=true&useUsageAdvisor=true&explainSlowQueries=true"
+        //                + "&reportMetricsIntervalMillis=60000&logger=Slf4JLogger"
+
         dataSource.setUsername(env.getRequiredProperty("jdbc.username"));
         dataSource.setPassword(env.getRequiredProperty("jdbc.password"));
         dataSource.setDefaultAutoCommit(false);
@@ -75,6 +69,12 @@ public class SpringConfiguration {
         return new DataSourceTransactionManager(dataSource);
     }
 
+    /**
+     * Creates a new JdbcTemplate to use for handling the connection to the database.
+     *
+     * @param dataSource to build the template from.
+     * @return new instance of JdbcTemplate
+     */
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -93,7 +93,7 @@ public class SpringConfiguration {
     }
 
     @Bean
-    public QueryFileLoader queryFileLoader(ResourcePatternResolver classpathScanner) {
+    public QueryFileLoader queryFileLoader(ResourcePatternResolver classpathScanner, TestsuiteConfig env) {
         return new QueryFileLoader(classpathScanner, env);
     }
 
@@ -105,5 +105,21 @@ public class SpringConfiguration {
     @Bean
     public DataUsageReportGenerator dataUsageReportGenerator(TestsuiteConfig env) {
         return new DataUsageReportGenerator(env);
+    }
+
+    /**
+     * Bean to provide TestsuiteConfig.
+     *
+     * @return  testsuiteconfig to use.
+     */
+    @Bean
+    public TestsuiteConfig env() {
+        String configuration = System.getProperty("configuration");
+
+        if (configuration != null) {
+            return TestsuiteConfig.loadConfigFromString(configuration);
+        } else {
+            return TestsuiteConfig.loadConfig("testsuite");
+        }
     }
 }

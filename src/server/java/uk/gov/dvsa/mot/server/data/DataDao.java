@@ -28,7 +28,6 @@ public class DataDao {
      */
     @Inject
     public DataDao(JdbcTemplate jdbcTemplate) {
-        System.out.println("Creating Dao");
         logger.debug("Creating DataDao...");
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -40,7 +39,6 @@ public class DataDao {
      * @return The results
      */
     public List<List<String>> loadDataset(Dataset dataset, int length) {
-        System.out.println("Loading dataset");
         if (length > 0) {
             jdbcTemplate.setMaxRows(length);
         } else {

@@ -20,22 +20,7 @@ import java.lang.management.ManagementFactory;
 @Configuration
 public class SpringConfiguration {
 
-    public static TestsuiteConfig testsuiteConfig;
-
     static {
-        String targetConfig = System.getProperty("target_config");
-        String configuration = System.getProperty("configuration");
-
-        if (targetConfig != null) {
-            testsuiteConfig = TestsuiteConfig.loadConfig("testsuite",
-                    "browserstack",
-                    targetConfig);
-        } else if (configuration != null) {
-            testsuiteConfig = TestsuiteConfig.loadConfigFromString(configuration);
-        } else {
-            testsuiteConfig = TestsuiteConfig.loadConfig("testsuite");
-        }
-
         // using a static initialisation block so this is instantiated as early as possible
 
         // often of the form: <pid>@<hostname>.<domain> (but not guaranteed to be!)
@@ -60,8 +45,24 @@ public class SpringConfiguration {
         return new WebDriverWrapper(testsuiteConfig());
     }
 
+    /**
+     * Bean to provide TestsuiteConfig.
+     *
+     * @return  testsuiteconfig to use.
+     */
     @Bean
     public TestsuiteConfig testsuiteConfig() {
-        return testsuiteConfig;
+        String targetConfig = System.getProperty("target_config");
+        String configuration = System.getProperty("configuration");
+
+        if (targetConfig != null) {
+            return TestsuiteConfig.loadConfig("testsuite",
+                    "browserstack",
+                    targetConfig);
+        } else if (configuration != null) {
+            return TestsuiteConfig.loadConfigFromString(configuration);
+        } else {
+            return TestsuiteConfig.loadConfig("testsuite");
+        }
     }
 }

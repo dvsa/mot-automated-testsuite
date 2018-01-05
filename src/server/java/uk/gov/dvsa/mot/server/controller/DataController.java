@@ -32,7 +32,6 @@ public class DataController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<List<String>>> getUncachedDataset(
             @PathVariable String datasetName, @PathVariable int length) {
-        System.out.println("Getting uncached dataset");
         logger.info("getUncachedDataset: name {} length {}", datasetName, length);
         return ResponseEntity.ok(dataProvider.getUncachedDataset(datasetName, length));
     }
@@ -44,7 +43,6 @@ public class DataController {
     @RequestMapping(value = "/entry/uncached/{datasetName}", method = GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<String>> getUncachedDatasetEntry(@PathVariable String datasetName) {
-        System.out.println("Getting uncached dataset");
         logger.info("getUncachedDatasetEntry: name {}", datasetName);
         return ResponseEntity.ok(dataProvider.getUncachedDatasetEntry(datasetName));
     }
@@ -56,7 +54,6 @@ public class DataController {
     @RequestMapping(value = "/entry/cached/{datasetName}", method = GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<String>> getCachedDatasetEntry(@PathVariable String datasetName) {
-        System.out.println("Getting cached dataset");
         logger.info("getCachedDatasetEntry: name {}", datasetName);
         return ResponseEntity.ok(dataProvider.getCachedDatasetEntry(datasetName));
     }
