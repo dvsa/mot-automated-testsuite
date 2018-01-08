@@ -6,8 +6,8 @@ Feature: 38 - Check HGV with an expired Annual Test
     And I enter "M5H4S20" in the registration field
     When I press the "Continue" button
 
-    Then The page contains "This vehicle's MOT has expired"
-    And The page contains "You can be fined up to £1000 for driving without a valid MOT"
+    Then The page contains "This vehicle’s annual test has expired"
+    And The page contains "You will receive a fixed penalty charge for driving this vehicle without a valid annual test and could also face regulatory action"
     And The page contains "M5H4S20"
     And The page contains "CONVERSION"
     And The page title contains "CONVERSION - Check annual test history"
