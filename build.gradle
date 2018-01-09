@@ -142,6 +142,8 @@ task('testsuite') {
                 browserstack(true, true)
             }
 
+            checkServer()
+
             javaexec {
                 main = 'uk.gov.dvsa.mot.runner.StopDataServer'
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
@@ -154,7 +156,7 @@ task('testsuite') {
 task('cucumber-rerun') {
     description 'Reruns all failed tests as listed within target/rerun.txt'
     dependsOn assemble, compileJava, check
-    finalizedBy 'cucumber-reporting'
+    finalizedBy 'cucumber-reporting', 'check-server'
     doLast {
         copy {
             into "build/server-libs"
@@ -224,6 +226,10 @@ task('run-server') {
             classpath = configurations.serverRuntime + sourceSets.server.output
         }
     }
+}
+
+def checkServer() {
+    commandLine 'sh', 'curl localhost:9999'
 }
 
 clean.doFirst {
