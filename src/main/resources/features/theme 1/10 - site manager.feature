@@ -67,6 +67,11 @@ Feature: 10 - Site Manager and Site Admin
 
     Then The page contains "You have successfully aborted MOT test"
     And The page contains "Vehicle registered in error"
+    And I click "Print VT30" and check the PDF contains:
+      | VT30            |
+      | {registration1} |
+      | {vin1}          |
+      | {sitename1}     |
 
 
   Scenario: Site Admin updates VTS details
@@ -96,5 +101,15 @@ Feature: 10 - Site Manager and Site Admin
     When I click the "Test quality information" link
     And The page contains "This information will help you manage the quality of testing at your site."
     And I check there is a "Download the group B report as a CSV (spreadsheet) file" link
+    And I click "Download the group B report as a CSV (spreadsheet) file" and check the CSV contains:
+      | {siteName}           |
+      | {testerUsername}     |
+      | Group B              |
+      | Class 3, 4, 5 and 7  |
+      | Site average         |
+      | National average     |
+      | Tests done           |
+      | Average vehicle age  |
+      | Failures by category |
     And I click the TQI link for tester {testerUsername}
     Then The page contains "{testerName}"
