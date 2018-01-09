@@ -2,6 +2,7 @@ package uk.gov.dvsa.mot.server.di;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -25,7 +26,6 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableTransactionManagement
-@PropertySource("file:configuration/testsuite.properties")
 public class SpringConfiguration {
 
     static {
@@ -40,6 +40,22 @@ public class SpringConfiguration {
     }
 
     /**
+     * Bean to provide TestsuiteConfig.
+     *
+     * @return  testsuiteconfig to use.
+     */
+    @Bean
+    public TestsuiteConfig env() {
+        String configuration = System.getProperty("configuration");
+
+        if (configuration != null) {
+            return TestsuiteConfig.loadConfigFromString(configuration);
+        } else {
+            return TestsuiteConfig.loadConfig("testsuite");
+        }
+    }
+
+    /**
      * Creates the database data source.
      * @return A connection pool based data source
      */
@@ -47,13 +63,12 @@ public class SpringConfiguration {
     public DataSource dataSource(TestsuiteConfig env) {
         // use connection pool so that the connection gets re-used between scenarios in a feature
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl(env.getRequiredProperty("jdbc.url"));
-
-        // useful mysql JDBC driver properties for debugging and logging
-        // if switch to mariadb JDBC driver then change these
-        //                + "?logSlowQueries=true&slowQueryThresholdMillis=500&dumpQueriesOnException=true"
-        //                + "&gatherPerfMetrics=true&useUsageAdvisor=true&explainSlowQueries=true"
-        //                + "&reportMetricsIntervalMillis=60000&logger=Slf4JLogger"
+        dataSource.setUrl(env.getRequiredProperty("jdbc.url")
+                // useful mysql JDBC driver properties for debugging and logging
+                // if switch to mariadb JDBC driver then change these
+                + "?logSlowQueries=true&slowQueryThresholdMillis=500&dumpQueriesOnException=true"
+                + "&gatherPerfMetrics=true&useUsageAdvisor=true&explainSlowQueries=true"
+                + "&reportMetricsIntervalMillis=60000&logger=Slf4JLogger");
 
         dataSource.setUsername(env.getRequiredProperty("jdbc.username"));
         dataSource.setPassword(env.getRequiredProperty("jdbc.password"));
@@ -105,21 +120,5 @@ public class SpringConfiguration {
     @Bean
     public DataUsageReportGenerator dataUsageReportGenerator(TestsuiteConfig env) {
         return new DataUsageReportGenerator(env);
-    }
-
-    /**
-     * Bean to provide TestsuiteConfig.
-     *
-     * @return  testsuiteconfig to use.
-     */
-    @Bean
-    public TestsuiteConfig env() {
-        String configuration = System.getProperty("configuration");
-
-        if (configuration != null) {
-            return TestsuiteConfig.loadConfigFromString(configuration);
-        } else {
-            return TestsuiteConfig.loadConfig("testsuite");
-        }
     }
 }

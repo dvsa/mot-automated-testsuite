@@ -42,9 +42,12 @@ public class DataServerManager {
             String classpath = calculateServerClasspath("./build/server-libs");
             logger.info("Using classpath {}", classpath);
 
+            String config = System.getProperty("configuration");
+
             // start the server
             serverProcess = new ProcessBuilder(
-                    "java", "-cp", classpath, "uk.gov.dvsa.mot.server.ServerApplication").start();
+                    "java", config != null ? "-Dconfiguration=\"" + config : "",
+                    "-cp", classpath, "uk.gov.dvsa.mot.server.ServerApplication").start();
             logger.info("Started server process, waiting for it to startup");
 
             // wait 5 seconds for the server to start up

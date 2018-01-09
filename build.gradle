@@ -224,6 +224,10 @@ task('run-server') {
         javaexec {
             main = 'uk.gov.dvsa.mot.server.ServerApplication'
             classpath = configurations.serverRuntime + sourceSets.server.output
+
+            if(project.hasProperty('configuration')) {
+                systemProperty "configuration", configuration
+            }
         }
     }
 }
