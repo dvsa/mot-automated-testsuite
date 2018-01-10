@@ -142,8 +142,6 @@ task('testsuite') {
                 browserstack(true, true)
             }
 
-            checkServer()
-
             javaexec {
                 main = 'uk.gov.dvsa.mot.runner.StopDataServer'
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
@@ -230,10 +228,6 @@ task('run-server') {
             }
         }
     }
-}
-
-def checkServer() {
-    commandLine 'sh', 'curl localhost:9999'
 }
 
 clean.doFirst {
