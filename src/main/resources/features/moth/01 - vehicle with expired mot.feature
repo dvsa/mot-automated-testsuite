@@ -13,7 +13,6 @@ Feature: 01 - Check vehicle with expired MOT
     And The page contains "This vehicle's MOT has expired"
     And The page contains "You can be fined up to £1000 for driving without a valid MOT"
     And The page contains "Colour"
-    And The page contains "Green"
     And The page contains "Fuel type"
     And The page contains "Petrol"
     And The page contains "Date registered"

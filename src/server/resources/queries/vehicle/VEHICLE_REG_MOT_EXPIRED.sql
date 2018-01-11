@@ -13,7 +13,6 @@ and mtc.id = latest_mot.id
 and ma.name is not null
 and mo.name is not null
 and md.fuel_type_id = 1 -- petrol only
-and veh.primary_colour_id = 7 -- colour green only
 and mtc.status_id not in (4,5) -- exclude vehicles whose latest status is under test or failed
 and odometer_result_type = 'OK'
 and veh.registration not like "%-%" -- exclude dodgy test data on ACPT
