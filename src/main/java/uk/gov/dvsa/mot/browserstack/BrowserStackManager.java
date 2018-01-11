@@ -39,6 +39,8 @@ public class BrowserStackManager {
     public static void start() {
         TestsuiteConfig testsuiteConfig = initialiseConfig();
 
+        setCommandParameters(testsuiteConfig);
+
         logger.debug(String.format("Starting BrowserStackLocal %s local instance...",
                 testsuiteConfig.getProperty("localIdentifier")));
 
@@ -75,7 +77,8 @@ public class BrowserStackManager {
      *
      * @return string representing unique local identifier for the session.
      */
-    public static String getLocalIdentifier(TestsuiteConfig testsuiteConfig) {
+    public static String getLocalIdentifier() {
+        TestsuiteConfig testsuiteConfig = initialiseConfig();
         StringBuilder localIdentifier = new StringBuilder();
 
         if (testsuiteConfig.isMobileConfig()) {
@@ -119,13 +122,20 @@ public class BrowserStackManager {
         } else if (configuration != null) {
             temporaryConfig = TestsuiteConfig.loadConfigFromString(configuration);
         } else {
-            return null;
+            temporaryConfig = TestsuiteConfig.loadConfig("testsuite");
         }
 
+        return temporaryConfig;
+    }
 
-        commandParameters.put("key", temporaryConfig.getProperty("automateKey"));
+    /**
+     * This method sets all command parameters for running BrowserStackLocal.
+     * @param env to use.
+     */
+    private static void setCommandParameters(TestsuiteConfig env) {
+        commandParameters.put("key", env.getProperty("automateKey"));
 
-        String localIdentifier = getLocalIdentifier(temporaryConfig);
+        String localIdentifier = getLocalIdentifier();
         commandParameters.put("localIdentifier", localIdentifier);
 
         // NOTE: this argument forces the BrowserStackLocal to start even if there is an instance running with the same
@@ -134,8 +144,6 @@ public class BrowserStackManager {
 
         // NOTE: this argument forces the BrowserStack instance to tunnel all requests through BrowserStackLocal.
         commandParameters.put("forcelocal", "true");
-
-        return temporaryConfig;
     }
 
     /**

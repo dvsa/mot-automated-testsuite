@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import uk.gov.dvsa.mot.browserstack.BrowserStackManager;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
+import javax.inject.Inject;
 
 /**
  * Provides static methods for the various runners to control the data server.
@@ -66,6 +69,19 @@ public class DataServerManager {
             throw new IllegalStateException(message, ex);
         }
 
+        try {
+            // POST to Spring Boot to add a new client.
+            // (it returns a short JSON reply message)
+            RestTemplate restTemplate = new RestTemplate();
+            String result = restTemplate.postForObject(
+                    "http://localhost:9999/testsuite/start",
+                    BrowserStackManager.getLocalIdentifier(), String.class);
+            logger.info("Added new client to the server, received: {}", result);
+
+        } catch (RestClientException ex) {
+            String message = "Failed to add a new client: " + ex.getMessage();
+            logger.error(message, ex);
+        }
     }
 
     /**
@@ -75,25 +91,42 @@ public class DataServerManager {
         logger.info("In DataServerManager.stopServer");
 
         try {
-            // POST to Spring Boot shutdown handler to trigger a clean shutdown...
+            // POST to Spring Boot to add a new client.
             // (it returns a short JSON reply message)
             RestTemplate restTemplate = new RestTemplate();
             String result = restTemplate.postForObject(
-                    "http://localhost:9999/shutdown", null, String.class);
-            logger.info("Server shutdown triggered, received {}", result);
+                    "http://localhost:9999/testsuite/stop",
+                    BrowserStackManager.getLocalIdentifier(), String.class);
+            logger.info("Removed client from the server, received: {}", result);
 
-        } catch (RestClientException ex) {
-            String message = "Failed to post server shutdown message: " + ex.getMessage();
-            logger.error(message, ex);
 
-            if (serverProcess != null) {
-                // attempt to kill the server process as a last resort...
-                // not possible if using Courgette runner (as start and stop is in different processes)
-                serverProcess.destroy();
-                logger.info("Server process killed");
+            Integer clientCount = restTemplate.getForObject(
+                    "http://localhost:9999/testsuite/count", Integer.class);
+
+            if (clientCount <= 0) {
+                try {
+                    // POST to Spring Boot shutdown handler to trigger a clean shutdown...
+                    // (it returns a short JSON reply message)
+                    result = restTemplate.postForObject(
+                            "http://localhost:9999/shutdown", null, String.class);
+                    logger.info("Server shutdown triggered, received {}", result);
+
+                } catch (RestClientException ex) {
+                    String message = "Failed to post server shutdown message: " + ex.getMessage();
+                    logger.error(message, ex);
+
+                    if (serverProcess != null) {
+                        // attempt to kill the server process as a last resort...
+                        // not possible if using Courgette runner (as start and stop is in different processes)
+                        serverProcess.destroy();
+                        logger.info("Server process killed");
+                    }
+                }
             }
 
-            // swallow exception
+        } catch (RestClientException ex) {
+            String message = "Failed to remove client: " + ex.getMessage();
+            logger.error(message, ex);
         }
     }
 

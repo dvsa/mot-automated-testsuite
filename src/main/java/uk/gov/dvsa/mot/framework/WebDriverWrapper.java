@@ -128,7 +128,7 @@ public class WebDriverWrapper {
             capabilities.setCapability("browser", env.getRequiredProperty("browser"));
             capabilities.setCapability("browser_version", env.getProperty("browser_version"));
 
-            String localIdentifier = BrowserStackManager.getLocalIdentifier(env);
+            String localIdentifier = BrowserStackManager.getLocalIdentifier();
             capabilities.setCapability("browserstack.localIdentifier",
                     localIdentifier);
             capabilities.setCapability("browserstack.debug", env.getProperty("debug"));
