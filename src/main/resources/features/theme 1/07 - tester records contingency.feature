@@ -132,13 +132,12 @@ Feature: 07 - Tester records Contingency Test
     And I enter {code} in the "Contingency code" field
     And I press the "Confirm contingency test" button
 
-    And I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration}, {vin}, {mileage}
+    And I load uniquely "VEHICLE_CLASS_4_BEFORE_2010" as {registration}, {vin}, {mileage}
     And I enter {registration} in the "Registration mark" field
     And I enter {vin} in the "VIN" field
     And I press the "Search" button
     And I click the "Select vehicle" link
     And I press the "Confirm and start test" button
-    
 
     And I enter an odometer reading in miles of {mileage} plus 5000
     And I enter decelerometer results of service brake 51 and parking brake 10
