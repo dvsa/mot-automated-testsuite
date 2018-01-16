@@ -8,7 +8,6 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.params.CoreConnectionPNames;
@@ -17,11 +16,15 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.dvsa.mot.framework.csv.CsvDocument;
-import uk.gov.dvsa.mot.framework.csv.CsvException;
+import org.springframework.core.env.Environment;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class RequestHandler {
 
@@ -35,12 +38,18 @@ public class RequestHandler {
     /** The web driver to use. */
     private final WebDriver webDriver;
 
+    /** The configuration settings to use. */
+    private final Environment env;
+
+    private boolean saveDocuments;
+
     /**
      * Creates new RequestHandler instance.
      * @param webDriver Web driver to use for retrieving the cookies.
      */
-    public RequestHandler(WebDriver webDriver) {
+    public RequestHandler(WebDriver webDriver, Environment env) {
         this.webDriver = webDriver;
+        this.env = env;
 
         RestAssured.useRelaxedHTTPSValidation();
         int timeout = 60000;
@@ -50,6 +59,8 @@ public class RequestHandler {
                         .setParam(ClientPNames.CONN_MANAGER_TIMEOUT, timeout)
                         .setParam(CoreConnectionPNames.CONNECTION_TIMEOUT, timeout)
                         .setParam(CoreConnectionPNames.SO_TIMEOUT, timeout));
+
+        saveDocuments = Boolean.parseBoolean(env.getProperty("saveDocuments", "false"));
     }
 
     /**
@@ -70,12 +81,18 @@ public class RequestHandler {
         Cookie session = getCookie(DEFAULT_SESSION_COOKIE_NAME);
         Cookie token = getCookie(DEFAULT_TOKEN_COOKIE_NAME);
 
-        Response serverRespone = with()
+        Response serverResponse = with()
                 .cookie(session.getName(), session.getValue())
                 .cookie(token.getName(), token.getValue())
                 .get(url);
 
-        return PDDocument.load(serverRespone.asInputStream());
+        String filename = url.replaceFirst("https://", "").replaceAll("/", "-") + ".pdf";
+        writeFile(filename, url);
+
+        PDDocument pdDocument = PDDocument.load(serverResponse.asInputStream());
+        serverResponse.asInputStream().close();
+
+        return pdDocument;
     }
 
     /**
@@ -87,12 +104,15 @@ public class RequestHandler {
         Cookie session = getCookie(DEFAULT_SESSION_COOKIE_NAME);
         Cookie token = getCookie(DEFAULT_TOKEN_COOKIE_NAME);
 
-        Response serverRespone = with()
+        Response serverResponse = with()
                 .cookie(session.getName(), session.getValue())
                 .cookie(token.getName(), token.getValue())
                 .get(url);
 
-        String document = new String(serverRespone.asByteArray());
+        String filename = url.replaceFirst("https://", "").replaceAll("/", "-") + ".csv";
+        writeFile(filename, url);
+
+        String document = new String(serverResponse.asByteArray());
 
         return CSVParser.parse(document, CSVFormat.DEFAULT).getRecords();
     }
@@ -112,8 +132,45 @@ public class RequestHandler {
                 .cookie(token.getName(), token.getValue())
                 .get(url);
 
+        String filename = url.replaceFirst("https://", "").replaceAll("/", "-") + ".csv";
+        writeFile(filename, url);
+
         String document = new String(serverRespone.asByteArray());
 
         return CSVParser.parse(document, csvFormat).getRecords();
+    }
+
+    /**
+     * Used to save a copy of the document for auditing and verification purposes.
+     * @param filename      The filename to save the document as
+     * @param fileUrl       The URL of the file to save
+     */
+    private void writeFile(String filename, String fileUrl) {
+        // Check whether we should save documents
+        if (this.saveDocuments) {
+            Cookie session = getCookie(DEFAULT_SESSION_COOKIE_NAME);
+            Cookie token = getCookie(DEFAULT_TOKEN_COOKIE_NAME);
+            try {
+                File dir = new File("target/documents");
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+
+                File file = new File(dir + File.separator + filename);
+                file.createNewFile();
+
+                URL url = new URL(fileUrl);
+                Response serverResponse = with()
+                        .cookie(session.getName(), session.getValue())
+                        .cookie(token.getName(), token.getValue())
+                        .get(url);
+
+                Files.copy(serverResponse.asInputStream(), Paths.get(file.getPath()),
+                        StandardCopyOption.REPLACE_EXISTING);
+                serverResponse.asInputStream().close();
+            } catch (Exception ex) {
+                logger.error("Error saving document", ex);
+            }
+        }
     }
 }

@@ -83,7 +83,7 @@ public class WebDriverWrapper {
         this.env = env;
         this.data = new HashMap<>();
         this.webDriver = createWebDriver();
-        this.requestHandler = new RequestHandler(this.webDriver);
+        this.requestHandler = new RequestHandler(this.webDriver, env);
 
         // amount of time (in milliseconds) to wait for browser clicks to happen, before page refresh logic
         // this is a mandatory delay, to accommodate any browser/environment/network latency
@@ -1480,13 +1480,11 @@ public class WebDriverWrapper {
 
     /**
      * Creates a new PDF document from the request handler and the url.
-     * @param requestHandler            the request handler
      * @param url                       the URL of the PDF document
      * @return                          the PDF Document
      * @throws PdfException             error loading PDF document
      */
-    private PdfDocument createPdfDocument(RequestHandler requestHandler, String url)
-            throws PdfException {
+    private PdfDocument createPdfDocument(String url) throws PdfException {
         try {
             PDFTextStripper textStripper = new PDFTextStripper();
             textStripper.setSortByPosition(true);
@@ -1498,7 +1496,7 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Checks whether a PDF contains an expected value.
+     * Checks whether a PDF contains expected values.
      * @param linkText  The link to the PDF
      * @param values    Array of values to check are contained
      * @return          Whether the PDF contains all expected values
@@ -1514,8 +1512,7 @@ public class WebDriverWrapper {
 
         } else {
             try {
-                PdfDocument pdfDocument = createPdfDocument(requestHandler,
-                        links.get(0).getAttribute("href"));
+                PdfDocument pdfDocument = createPdfDocument(links.get(0).getAttribute("href"));
 
                 return pdfDocument.contains(values);
             } catch (PdfException ex) {
@@ -1568,5 +1565,4 @@ public class WebDriverWrapper {
 
         return true;
     }
-
 }

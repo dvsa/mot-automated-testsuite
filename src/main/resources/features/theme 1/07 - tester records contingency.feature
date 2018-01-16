@@ -34,6 +34,13 @@ Feature: 07 - Tester records Contingency Test
     And I check the brake results section of the test summary is "Pass"
     And I check the fails section of the test summary has "None recorded"
     And I press the "Save test result" button
+     And The page title contains "MOT test complete"
+     And I click "Print documents" and check the PDF contains:
+       | VT20            |
+       | {registration1} |
+       | {vin1}          |
+       | {site}          |
+     And I click the "Back to user home" link
 
 
   Scenario: A tester records a fail contingency test
@@ -68,6 +75,12 @@ Feature: 07 - Tester records Contingency Test
     And I check the brake results section of the test summary is "Fail"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT30            |
+      | {registration1} |
+      | {vin1}          |
+      | {site}          |
+    And I click the "Back to user home" link
 
 
   # This test can not be automated because the data in the anonymised dataset would not contain in the last 7 days even after database reset
@@ -145,6 +158,11 @@ Feature: 07 - Tester records Contingency Test
 
     And I click the "Aborted by VE" radio button
     And I press the "Cancel test" button
+    And I click "Print documents" and check the PDF contains:
+      | VT30            |
+      | {registration} |
+      | {vin}          |
+      | {site}          |
     And I click the "Finish" link
 
 

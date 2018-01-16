@@ -7,6 +7,8 @@ Feature: 14b - CSCO
     And I search for certificates with vin {vin}
     And I click the first "View certificate" link
     And I check there is a "Print certificate" link
+    And I click "Print certificate" and check the PDF contains:
+      | Duplicate certificate          |
 
 
   Scenario: CSCO user performs MOT test search by site, and is able to view test certificates
@@ -17,6 +19,8 @@ Feature: 14b - CSCO
     And I click the first "View" link
     Then The page contains "MOT test summary" or "MOT re-test summary"
     And I check there is a "Print certificate" link
+    And I click "Print certificate" and check the PDF contains:
+      | Duplicate certificate          |
 
 
   Scenario: CSCO user performs MOT test search by tester, and is able to view test certificates
@@ -27,6 +31,8 @@ Feature: 14b - CSCO
     And I click the first "View" link
     Then The page contains "MOT test summary" or "MOT re-test summary"
     And I check there is a "Print certificate" link
+    And I click "Print certificate" and check the PDF contains:
+      | Duplicate certificate          |
 
 
   Scenario: CSCO user performs MOT test search by vin, and view the test details
@@ -37,6 +43,9 @@ Feature: 14b - CSCO
     And I click the first "View" link
     Then The page contains "MOT test summary" or "MOT re-test summary"
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin}
+    And I check there is a "Print certificate" link
+    And I click "Print certificate" and check the PDF contains:
+      | Duplicate certificate          |
 
 
   Scenario: CSCO user performs MOT test search by vrm/registration, and view the test details
@@ -47,3 +56,6 @@ Feature: 14b - CSCO
     And I click the first "View" link
     Then The page contains "MOT test summary" or "MOT re-test summary"
     And I check the vehicle summary section of the test summary has "Registration number" of {reg}
+    And I check there is a "Print certificate" link
+    And I click "Print certificate" and check the PDF contains:
+      | Duplicate certificate          |
