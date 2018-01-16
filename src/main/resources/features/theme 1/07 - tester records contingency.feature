@@ -3,7 +3,7 @@ Feature: 07 - Tester records Contingency Test
 
    Scenario: A tester record a pass contingency test
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
-    Then I click the "Record contingency test" link
+    Then I start a contingency MOT test at site {site}
     And I enter "01" in the "Day" field
     And I enter "01" in the "Month" field
     And I enter "2017" in the "Year" field
@@ -38,7 +38,7 @@ Feature: 07 - Tester records Contingency Test
 
   Scenario: A tester records a fail contingency test
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
-    Then I click the "Record contingency test" link
+    Then I start a contingency MOT test at site {site}
     And I enter "18" in the "Day" field
     And I enter "09" in the "Month" field
     And I enter "2017" in the "Year" field
@@ -117,8 +117,7 @@ Feature: 07 - Tester records Contingency Test
 
   Scenario: A tester record contingency test and then cancels the contingency test
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
-
-    And I click the "Record contingency test" link
+    Then I start a contingency MOT test at site {site}
     And I set today as {day}, {month}, {year}
     And I enter {day} in the "Day" field
     And I enter {month} in the "Month" field
@@ -132,13 +131,12 @@ Feature: 07 - Tester records Contingency Test
     And I enter {code} in the "Contingency code" field
     And I press the "Confirm contingency test" button
 
-    And I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration}, {vin}, {mileage}
+    And I load uniquely "VEHICLE_CLASS_4_BEFORE_2010" as {registration}, {vin}, {mileage}
     And I enter {registration} in the "Registration mark" field
     And I enter {vin} in the "VIN" field
     And I press the "Search" button
     And I click the "Select vehicle" link
     And I press the "Confirm and start test" button
-    
 
     And I enter an odometer reading in miles of {mileage} plus 5000
     And I enter decelerometer results of service brake 51 and parking brake 10

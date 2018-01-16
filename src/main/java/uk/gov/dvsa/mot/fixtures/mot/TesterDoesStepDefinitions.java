@@ -55,6 +55,9 @@ public class TesterDoesStepDefinitions implements En {
                    driverWrapper.getData(siteNameKey),false, Optional.empty(), Optional.empty(),
                         Optional.empty(), Optional.empty()));
 
+        When("^I start a contingency MOT test at site \\{([^\\}]+)\\}$",
+                (String siteNameKey) -> startContingencyMotTest(driverWrapper.getData(siteNameKey)));
+
         When("^I start an MOT retest for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String regKey, String vinKey, String siteNameKey) ->
                 startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
@@ -294,6 +297,21 @@ public class TesterDoesStepDefinitions implements En {
 
         //And I click the "Continue to home" link
         driverWrapper.clickLink("Continue to home");
+    }
+
+    /**
+     * Starting a contingency for a specific site where the user has multiple sites.
+     * @param siteName  the site to perform the contingency test against
+     */
+    private void startContingencyMotTest(String siteName) {
+        // When I click the "Record contingency test" link
+        driverWrapper.clickLink("Record contingency test");
+
+        // if page requires a site to be selected
+        if (driverWrapper.containsMessage("Location where the test was performed")) {
+            // select the site
+            driverWrapper.selectRadio(siteName);
+        }
     }
 
     /**
