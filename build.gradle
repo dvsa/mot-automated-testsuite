@@ -12,7 +12,8 @@ ext {
     logbackVersion = '1.2.3'
     checkstyleVersion = '6.19'
     cucumberOptions = ['--plugin', 'pretty', '--plugin', 'json:build/reports/selenium/selenium.json',
-                       '--plugin', 'html:build/reports/selenium', '--glue', 'uk.gov.dvsa.mot']
+                       '--plugin', 'html:build/reports/selenium', '--glue', 'uk.gov.dvsa.mot',
+                       '--plugin', 'rerun:target/rerun.txt']
 }
 
 sourceCompatibility = javaVersion
@@ -158,6 +159,51 @@ task('cucumber-tag') {
 
                 // Cucumber configuration
                 args = cucumberOptions + ['--tags', tag, 'src/main/resources/features']
+            }
+        } finally {
+            javaexec {
+                main = 'uk.gov.dvsa.mot.runner.StopDataServer'
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
+                ignoreExitValue = true
+            }
+        }
+    }
+}
+
+task('cucumber-rerun') {
+    description 'Reruns all failed tests as listed within target/rerun.txt'
+    dependsOn assemble, compileJava, check
+    finalizedBy 'cucumber-reporting'
+    doLast {
+        copy {
+            into "build/server-libs"
+            from configurations.serverRuntime + sourceSets.server.output
+        }
+        javaexec {
+            main = 'uk.gov.dvsa.mot.runner.StartDataServer'
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
+        }
+        try {
+            javaexec {
+                main = "cucumber.api.cli.Main"
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+                // Find all the features to be rerun
+                String fileContents = new File('target/rerun.txt').text
+                fileContents = fileContents.replaceAll('src/main/resources/features/', '')
+                String[] features = fileContents.split('(?=theme)|(?=smoke)|(?=moth)')
+
+                if (features.length == 0 || "".equals(features[0])) {
+                    throw new GradleException('No scenarios to rerun')
+                }
+
+                // Add all the rerun features to the cucumber options
+                for (int i = 0; i < features.length; i++) {
+                    println 'Feature: ' + features[i].trim()
+                    cucumberOptions = cucumberOptions + ['src/main/resources/features/' + features[i].trim()]
+                }
+
+                args = cucumberOptions
             }
         } finally {
             javaexec {

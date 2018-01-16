@@ -42,7 +42,7 @@ Feature: 06a - duplicate and replacement certificates
   |DVLA Manager|DVLA_MANAGER_USER|
 
   Scenario: Tester completes a test then issues duplicate certificate and can edit test
-    Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
+    Given I load uniquely "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
     When I start an MOT test for {registration1}, {vin1}, {site}

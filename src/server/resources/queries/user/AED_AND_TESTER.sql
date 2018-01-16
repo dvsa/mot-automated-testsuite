@@ -12,7 +12,7 @@ join person tester_person
 left join auth_for_testing_mot aftm on tester_person.id = aftm.person_id
 where aed.username is not null
 and sc.security_card_status_lookup_id = 1 -- only assigned cards
-and scd.last_observed_drift between -60 and 60 -- has security_card with acceptable drift
+and (scd.last_observed_drift is null or scd.last_observed_drift between -60 and 60) -- has security_card with acceptable drift
 and obrm.business_role_id = 2
 and obrm.status_id = 1 -- active
 and ae.organisation_type_id = 7
