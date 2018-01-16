@@ -1,5 +1,6 @@
 package uk.gov.dvsa.mot.framework;
 
+import org.apache.commons.csv.CSVRecord;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -26,7 +27,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
-import uk.gov.dvsa.mot.framework.csv.CsvDocument;
+import sun.plugin.javascript.navig.Array;
 import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
 import uk.gov.dvsa.mot.framework.pdf.PdfException;
 
@@ -1519,25 +1520,53 @@ public class WebDriverWrapper {
                 return pdfDocument.contains(values);
             } catch (PdfException ex) {
                 logger.error("Unable to load PDF document", ex);
-                throw new RuntimeException("Error processing PDF document", ex);
+                throw new RuntimeException("Error processing PDF document");
             }
         }
     }
 
     /**
-     * Get a CSV as a parsed CsvDocument.
-     *
-     * @param url of the target document.
-     * @return parsed CSV containing the url output.
+     * Get the row from CSV document.
+     * @param index of the row to get.
+     * @param csvRecords representing the CSV document.
+     * @return the row at a specified location.
      */
-    public CsvDocument getCsvFromUrl(String url) {
-        try {
-            return requestHandler.getCsvDocument(url);
-        } catch (IOException ioException) {
-            logger.error(String.format("Failed to load CSV document from %s.", url));
+    public List<String> getCsvRow(int index, List<CSVRecord> csvRecords) {
+        return new ArrayList<>(csvRecords.get(index).toMap().values());
+    }
+
+    /**
+     * Get value at a given location.
+     * @param rowIndex of the value.
+     * @param columnIndex of the value.
+     * @param csvRecords representing the CSV document.
+     * @return the value stored at the specified location.
+     */
+    public String getCsvValue(int rowIndex, int columnIndex, List<CSVRecord> csvRecords) {
+        return csvRecords.get(rowIndex).get(columnIndex);
+    }
+
+    /**
+     * Check if CSV document contains the specified values.
+     * @param csvRecords representing the CSV document.
+     * @param values to look for.
+     * @return whether the CSV document contains the values or not.
+     */
+    public boolean csvContains(List<CSVRecord> csvRecords, List<String> values) {
+        for (String value : values) {
+            boolean foundValue = false;
+            for (CSVRecord csvRecord : csvRecords) {
+                if (csvRecord.toMap().containsValue(value)) {
+                    foundValue = true;
+                }
+            }
+
+            if (!foundValue) {
+                return false;
+            }
         }
 
-        return null;
+        return true;
     }
 
 }

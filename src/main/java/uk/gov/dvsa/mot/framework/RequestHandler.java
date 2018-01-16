@@ -6,6 +6,10 @@ import static com.jayway.restassured.config.HttpClientConfig.httpClientConfig;
 
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -17,6 +21,7 @@ import uk.gov.dvsa.mot.framework.csv.CsvDocument;
 import uk.gov.dvsa.mot.framework.csv.CsvException;
 
 import java.io.IOException;
+import java.util.List;
 
 public class RequestHandler {
 
@@ -40,7 +45,6 @@ public class RequestHandler {
         RestAssured.useRelaxedHTTPSValidation();
         int timeout = 60000;
 
-        //TODO: Check for a recommended way to create a config.
         RestAssured.config()
                 .httpClient(httpClientConfig()
                         .setParam(ClientPNames.CONN_MANAGER_TIMEOUT, timeout)
@@ -77,9 +81,9 @@ public class RequestHandler {
     /**
      * Get CSV document.
      * @param url of the file to load.
-     * @return csv document as a string.
+     * @return csv document.
      */
-    public CsvDocument getCsvDocument(String url) throws IOException {
+    public List<CSVRecord> getCsvDocument(String url) throws IOException {
         Cookie session = getCookie(DEFAULT_SESSION_COOKIE_NAME);
         Cookie token = getCookie(DEFAULT_TOKEN_COOKIE_NAME);
 
@@ -89,12 +93,27 @@ public class RequestHandler {
                 .get(url);
 
         String document = new String(serverRespone.asByteArray());
-        
-        try {
-            return CsvDocument.load(document);
-        } catch (CsvException failedToLoadCsv) {
-            logger.debug(failedToLoadCsv.getMessage());
-            return null;
-        }
+
+        return CSVParser.parse(document, CSVFormat.DEFAULT).getRecords();
+    }
+
+    /**
+     * Get CSV document.
+     * @param url of the file to load.
+     * @param csvFormat of the file to load.
+     * @return csv document.
+     */
+    public List<CSVRecord> getCsvDocument(String url, CSVFormat csvFormat) throws IOException {
+        Cookie session = getCookie(DEFAULT_SESSION_COOKIE_NAME);
+        Cookie token = getCookie(DEFAULT_TOKEN_COOKIE_NAME);
+
+        Response serverRespone = with()
+                .cookie(session.getName(), session.getValue())
+                .cookie(token.getName(), token.getValue())
+                .get(url);
+
+        String document = new String(serverRespone.asByteArray());
+
+        return CSVParser.parse(document, csvFormat).getRecords();
     }
 }
