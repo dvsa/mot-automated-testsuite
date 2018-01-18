@@ -40,6 +40,12 @@ To run a specific scenario within one feature, run the following at the command 
 ./gradlew cucumber-scenario '-Pfeature=<the .feature file>' '-Pscenario=<the scenario regex>'
 ```
 
+To rerun failed tests from the last run (identified by target/rerun.txt):
+
+```
+./gradlew cucumber-rerun
+```
+
 ## Feature Tags
 The following tags are used:
 
