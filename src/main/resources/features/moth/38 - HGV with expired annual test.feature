@@ -10,7 +10,7 @@ Feature: 38 - Check HGV with an expired Annual Test
     And The page contains "You will receive a fixed penalty charge for driving this vehicle without a valid annual test and could also face regulatory action"
     And The page contains "M5H4S20"
     And The page contains "CONVERSION"
-    And The page title contains "CONVERSION - Check annual test history"
+    And The page title contains "Check annual test history"
 #    And The page contains "Check another vehicle" <-- this doesn't work due to the text being on 2 lines in the html code
     And The page contains "Check another"
     And The page does not contain "Colour"

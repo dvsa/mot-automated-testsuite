@@ -9,7 +9,7 @@ Feature: 01 - Check vehicle with expired MOT
 
     Then The page contains "{registration}"
     And The page contains "{model}"
-    And The page title contains "{model} - Check MOT history"
+    And The page title contains "Check MOT history"
     And The page contains "This vehicle's MOT has expired"
     And The page contains "You can be fined up to £1000 for driving without a valid MOT"
     And The page contains "Colour"
