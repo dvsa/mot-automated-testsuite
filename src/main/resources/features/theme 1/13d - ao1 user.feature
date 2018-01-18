@@ -27,15 +27,15 @@ Feature: 13d - A01 user
     Given I login without 2FA using "AO1_USER" as {ao1User}
 
     When I click the "Create an Authorised Examiner" link
-    And I enter "Example MOT Testers" in the "Business name" field
-    And I enter "Example MOT Testers Ltd" in the "Trading name" field
+    And I enter "Example MOT Testers" in the field with id "organisationName"
+    And I enter "Example MOT Testers Ltd" in the field with id "tradingAs"
     And I select "Sole trader" in the "Business type" field
-    And I enter "10 Example Street" in the "Address line" field
-    And I enter "Example Town" in the "Town or city" field
-    And I enter "AB1 2CD" in the "Postcode" field
-    And I enter "01234567890" in the "Phone number" field
-    And I enter "no_one@example.com" in the "Email address" field
-    And I enter "no_one@example.com" in the "Re-type email address" field
+    And I enter "10 Example Street" in the field with id "REGCaddressLine1"
+    And I enter "Example Town" in the field with id "REGCaddressTown"
+    And I enter "AB1 2CD" in the field with id "REGCaddressPostCode"
+    And I enter "01234567890" in the field with id "REGCphoneNumber"
+    And I enter "no_one@example.com" in the field with id "REGCemail"
+    And I enter "no_one@example.com" in the field with id "REGCemailConfirmation"
     And I click the "Yes" radio button in fieldset "Are they the same as the business contact details?"
     And I select "01" in the "DVSA Area Office" field
     And I press the "Continue" button
