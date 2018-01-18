@@ -60,6 +60,8 @@ public class BrowserStackManager {
     public static void stop() {
         TestsuiteConfig testsuiteConfig = initialiseConfig();
 
+        setCommandParameters(testsuiteConfig);
+
         logger.debug(String.format("Stopping BrowserStackLocal %s local instance...",
                 testsuiteConfig.getProperty("localIdentifier")));
 
