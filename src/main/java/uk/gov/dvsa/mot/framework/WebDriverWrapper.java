@@ -349,7 +349,7 @@ public class WebDriverWrapper {
             throw new IllegalArgumentException(message);
 
         } else {
-            buttons.get(0).submit();
+            buttons.get(0).click();
             waitForFullPageLoad();
         }
     }
