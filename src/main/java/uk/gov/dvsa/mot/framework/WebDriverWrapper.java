@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -148,8 +149,8 @@ public class WebDriverWrapper {
         }
     }
 
-    public void addTestResult(String dateTime, String result) {
-        this.recordedTests.put(dateTime, result);
+    public void addTestResult(String testNumber, String result) {
+        this.recordedTests.put(testNumber, result);
     }
     
     /**
@@ -232,7 +233,7 @@ public class WebDriverWrapper {
             throw new IllegalArgumentException(message);
 
         } else if (buttons.size() > 1) {
-            String message = "Several buttons found with text: " + buttonText;
+            String message = "Several buttons found wit                                                                                                                                h text: " + buttonText;
             logger.error(message);
             throw new IllegalArgumentException(message);
 
@@ -1473,6 +1474,26 @@ public class WebDriverWrapper {
 
         } else {
             clickAndWaitForPageLoad(spans.get(spans.size() - 1));
+        }
+    }
+
+    private void saveTestResults() {
+        File dir = new File("target/vehicle-test-results");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        File jsonFile = new File("target/moth/results.json");
+
+        try {
+            FileWriter resultJson = new FileWriter("target/moth/results.json");
+
+            for (String testNumber : recordedTests.keySet()) {
+                resultJson.write(String.format("%s=%s\n", testNumber, recordedTests.get(testNumber)));
+            }
+        } catch (IOException io) {
+            logger.error("Unable to save vehicle tests results, for the MOTH test.");
+            throw new RuntimeException(io.getMessage());
         }
     }
 }

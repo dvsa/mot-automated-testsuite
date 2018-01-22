@@ -4,7 +4,6 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
-import cucumber.api.PendingException;
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -293,6 +292,7 @@ public class TesterDoesStepDefinitions implements En {
 
             //And The page title contains "MOT test started"
             driverWrapper.checkCurrentPageTitle("MOT test started");
+
         }
 
         //And I click the "Continue to home" link
