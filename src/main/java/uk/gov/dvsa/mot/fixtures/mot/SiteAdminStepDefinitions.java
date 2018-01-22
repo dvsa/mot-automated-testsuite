@@ -43,6 +43,28 @@ public class SiteAdminStepDefinitions implements En {
 
         And("^I choose different brake defaults for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\} "
                 + "as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$", this::chooseAllDifferentBrakeDefaults);
+
+        When("^I select the site \\{([^\\}]+)\\} - \\{([^\\}]+)\\} at AE \\{([^\\}]+)\\}",
+                (String siteNumber, String siteName, String aeName) -> selectSite(driverWrapper.getData(siteNumber),
+                        driverWrapper.getData(siteName), driverWrapper.getData(aeName)));
+    }
+
+    /**
+     * Selects a site either directly from the homepage if a link exists else through the AE details.
+     * @param siteNumber    the site number
+     * @param siteName      the site name
+     * @param aeName        the AE name
+     */
+    private void selectSite(String siteNumber, String siteName, String aeName) {
+        if (driverWrapper.hasLink("(" + siteNumber + ") " + siteName)) {
+            // If there is a direct link to the site select it
+            driverWrapper.clickLink("(" + siteNumber + ") " + siteName);
+        } else {
+            // Else select the AE
+            driverWrapper.clickLink(aeName);
+            // And select the site from there
+            driverWrapper.clickLink(siteName);
+        }
     }
 
     /**

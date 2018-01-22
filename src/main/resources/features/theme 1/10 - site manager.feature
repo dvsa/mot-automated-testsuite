@@ -50,13 +50,13 @@ Feature: 10 - Site Manager and Site Admin
   Scenario: Site Manager views and aborts an active MOT
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
 
-    And I login with 2FA using "SITE_MGR_AND_TESTER_CLASS_4" as {testerUsername1}, {testerName}, {managerUsername1}, {sitename1}, {sitenumber1}
-    And I start an MOT test for {registration1}, {vin1}, {sitename1}
+    And I login with 2FA using "SITE_MGR_AND_TESTER_CLASS_4" as {testerUsername1}, {testerName}, {managerUsername}, {siteName}, {siteNumber}, {aeName}
+    And I start an MOT test for {registration1}, {vin1}, {siteName}
     And The page title contains "Your home"
     And I click the "Sign out" link
 
-    When I login with 2FA as {managerUsername1}
-    And I click the "({sitenumber1}) {sitename1}" link
+    When I login with 2FA as {managerUsername}
+    And I select the site {siteNumber} - {siteName} at AE {aeName}
     And The page title contains "Vehicle Testing Station"
     And I click the {registration1} link
     And The page title contains "Vehicle Testing Station"
@@ -71,7 +71,7 @@ Feature: 10 - Site Manager and Site Admin
       | VT30            |
       | {registration1} |
       | {vin1}          |
-      | {sitename1}     |
+      | {siteName}      |
 
 
   Scenario: Site Admin updates VTS details
@@ -94,9 +94,9 @@ Feature: 10 - Site Manager and Site Admin
 
 
   Scenario: Site Manager can view TQI statistics for testers associated with VTS
-    Given I load uniquely "SITE_MGR_AND_TESTER_CLASS_4" as {testerUsername}, {testerName}, {managerUsername}, {siteName}, {siteNumber}
+    Given I load uniquely "SITE_MGR_AND_TESTER_CLASS_4" as {testerUsername}, {testerName}, {managerUsername}, {siteName}, {siteNumber}, {aeName}
     And I login with 2FA as {managerUsername}
-    And I click the "({siteNumber}) {siteName}" link
+    And I select the site {siteNumber} - {siteName} at AE {aeName}
     And The page title contains "Vehicle Testing Station"
     When I click the "Test quality information" link
     And The page contains "This information will help you manage the quality of testing at your site."

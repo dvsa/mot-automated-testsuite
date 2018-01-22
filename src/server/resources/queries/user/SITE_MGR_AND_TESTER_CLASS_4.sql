@@ -1,7 +1,7 @@
 select distinct(person_tester.username) as tester_username,
   concat_ws(' ', person_tester.first_name,
      person_tester.middle_name, person_tester.family_name) as tester_name,
-  person_mgr.username as mgr_username, s.name as site_name, s.site_number as site_number
+  person_mgr.username as mgr_username, s.name as site_name, s.site_number as site_number, o.name as auth_name
 from person person_mgr, person person_tester, auth_for_testing_mot aftm, organisation o,
   organisation_site_map osm, site s, auth_for_testing_mot_at_site afts,
   site_business_role_map sbrm_mgr, site_business_role_map sbrm_tester,
@@ -10,6 +10,7 @@ where s.id = sbrm_mgr.site_id
 and sbrm_mgr.person_id = person_mgr.id
 and sbrm_mgr.site_business_role_id = 2 -- site manager
 and sbrm_mgr.status_id = 1 -- site manager role accepted
+and osm.status_id = 2 -- active AE/Site association
 and not exists (
   select 1 from site_business_role_map sbrm
   where s.id = sbrm.site_id
