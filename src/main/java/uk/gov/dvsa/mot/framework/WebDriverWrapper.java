@@ -1478,7 +1478,7 @@ public class WebDriverWrapper {
     }
 
     private void saveTestResults() {
-        File dir = new File("target/vehicle-test-results");
+        File dir = new File("target/moth");
         if (!dir.exists()) {
             dir.mkdirs();
         }
