@@ -8,6 +8,15 @@ Feature: 09b - AEDM and AED
     And I click the {siteName} site link with status "<status>" on the service reports
     Then The page contains "This information will help you manage the quality of testing at your site."
     And I check there is a "Download the group B report as a CSV (spreadsheet) file" link
+    And I click "Download the group B report as a CSV (spreadsheet) file" and check the CSV contains:
+    | {siteName}           |
+    | Group B              |
+    | Class 3, 4, 5 and 7  |
+    | Site average         |
+    | National average     |
+    | Tests done           |
+    | Average vehicle age  |
+    | Failures by category |
 
   Examples:
   |status|dataSource         |
@@ -22,6 +31,15 @@ Feature: 09b - AEDM and AED
     When I click the "Test quality information" link
     Then The page contains "This information will help you manage the quality of testing at your site."
     And I check there is a "Download the group A report as a CSV (spreadsheet) file" link
+    And I click "Download the group A report as a CSV (spreadsheet) file" and check the CSV contains:
+      | {siteName}           |
+      | Group A              |
+      | Class 1 and 2        |
+      | Site average         |
+      | National average     |
+      | Tests done           |
+      | Average vehicle age  |
+      | Failures by category |
 
 
   Scenario: AEDM can view TQI for each VTS tester

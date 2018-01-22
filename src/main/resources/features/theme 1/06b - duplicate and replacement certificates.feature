@@ -14,7 +14,11 @@ Feature: 06b - duplicate and replacement certificates
     And I check the vin on the confirmation page is "DVLA304050921020"
     Then I press the "Finish changes and print certificate" button
     And The page title contains "Test Results Updated Successfully"
-    And I check there is a "Print" link
+    And I click "Print" and check the PDF contains:
+      | VT20                            |
+      | DVLA903                         |
+      | DVLA304050921020                |
+
 
   Scenario: DVLA Manager edits VRM / VIN on historic certificate
     Given I login without 2FA using "DVLA_MANAGER_USER" as {DVLAManager}
@@ -30,6 +34,10 @@ Feature: 06b - duplicate and replacement certificates
     Then I press the "Finish changes and print certificate" button
     And The page title contains "Test Results Updated Successfully"
     And I check there is a "Print" link
+    And I click "Print" and check the PDF contains:
+      | VT20                            |
+      | DVLA903                         |
+      | DVLA304050921020                |
 
   Scenario: AO1 edits vehicle details on history certificate
     Given I login without 2FA using "AO1_USER" as {AO1}
@@ -52,6 +60,11 @@ Feature: 06b - duplicate and replacement certificates
     Then I press the "Finish changes and print certificate" button
     And The page title contains "Test Results Updated Successfully"
     And I check there is a "Print" link
+    And I click "Print" and check the PDF contains:
+      | R3GHAU5                         |
+      | VINR3V0L                        |
+      | FORD                            |
+      | FOCUS                           |
 
   Scenario: Tester edits odometer and vehicle colour on certificate
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {tester}, {site}
@@ -72,6 +85,11 @@ Feature: 06b - duplicate and replacement certificates
     And I check the fails section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT20                  |
+      | {reg}                 |
+      | {vin}                 |
+      | {site}                |
     And I click the "Back to user home" link
 
     When I search for certificates with reg {reg}
@@ -85,3 +103,8 @@ Feature: 06b - duplicate and replacement certificates
     Then I press the "Finish changes and print certificate" button
     And The page title contains "Test Results Updated Successfully"
     And I check there is a "Print" link
+    And I click "Print" and check the PDF contains:
+      | VT20                  |
+      | {reg}                 |
+      | {vin}                 |
+      | {site}                |
