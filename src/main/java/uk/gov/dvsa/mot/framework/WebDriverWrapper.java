@@ -26,16 +26,13 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-<<<<<<< HEAD
+import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.browserstack.BrowserStackManager;
 import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
-=======
-import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.framework.csv.CsvDocument;
 import uk.gov.dvsa.mot.framework.csv.CsvException;
 import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
 import uk.gov.dvsa.mot.framework.pdf.PdfException;
->>>>>>> 63ed6ef04ff967d59a2f848efc9f3ebe970285c6
 
 import java.io.IOException;
 import java.net.MalformedURLException;
