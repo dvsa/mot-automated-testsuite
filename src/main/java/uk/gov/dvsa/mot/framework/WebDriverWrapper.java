@@ -166,6 +166,7 @@ public class WebDriverWrapper {
         } else {
             DesiredCapabilities capabilities = DesiredCapabilities.chrome();
 
+
             capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
             capabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
 
@@ -173,7 +174,21 @@ public class WebDriverWrapper {
 
             System.setProperty("webdriver.chrome.driver", env.getRequiredProperty("driver"));
 
-            return new ChromeDriver(chromeOptions);
+            //If gridURL is set create a remote webdriver instance
+            String gridUrl = env.getProperty("gridURL");
+            if (gridUrl != null && gridUrl != "") {
+                try {
+                    return new RemoteWebDriver(new URL(gridUrl), capabilities);
+
+                } catch (MalformedURLException malformedUrlException) {
+                    String message = "Error while creating remote driver: " + malformedUrlException.getMessage();
+                    logger.error(message);
+
+                    throw new IllegalArgumentException(message);
+                }
+            } else {
+                return new ChromeDriver(chromeOptions);
+            }
         }
     }
 
