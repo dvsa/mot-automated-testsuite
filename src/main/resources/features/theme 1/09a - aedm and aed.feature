@@ -74,6 +74,11 @@ Feature: 09a - AEDM and AED
     And The page title contains "MOT test summary"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT20            |
+      | {reg}           |
+      | {vin}           |
+      | {siteName}      |
     And I click the "Sign out" link
 
     When I login with 2FA as {aedm}

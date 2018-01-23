@@ -246,6 +246,8 @@ task('cucumber-reporting') {
 
 dependencies {
     compile 'com.browserstack:browserstack-local-java:1.0.2'
+    compile 'org.apache.pdfbox:pdfbox:2.0.7'
+    compile 'org.apache.commons:commons-csv:1.5'
     compile 'com.jayway.restassured:rest-assured:2.9.0'
     compile "junit:junit:$junitVersion"
     compile "info.cukes:cucumber-java8:$cucumberVersion"

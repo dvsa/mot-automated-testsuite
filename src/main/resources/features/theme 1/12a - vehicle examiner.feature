@@ -20,6 +20,10 @@ Feature: 12a - Vehicle Examiner
     And I check the fails section of the test summary has "None recorded"
     And I press the "Finish reinspection" button
     And The page title contains "MOT reinspection complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT32            |
+      | {registration1} |
+      | {vin1}          |
     And I click the "Compare test results" link
     And I perform a test comparison with outcome "No further action" and justification "Test was satisfactory"
     And I check the case outcome "No further action" is saved
@@ -43,6 +47,11 @@ Feature: 12a - Vehicle Examiner
     And I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
     When I search for Site information by site number with {siteNumber}
     And I abort the active mot test at site for reg {reg}, vin {vin}
+    And I click "Print VT30" and check the PDF contains:
+      | VT30            |
+      | {reg}           |
+      | {vin}           |
+      | {site}          |
 
   Scenario: Vehicle examiner searches for user by username
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
@@ -64,3 +73,5 @@ Feature: 12a - Vehicle Examiner
     And I click the first "View" link
     And The page contains "MOT test summary" or "MOT re-test summary"
     And I check there is a "Print certificate" link
+    And I click "Print certificate" and check the PDF contains:
+      | Duplicate certificate          |

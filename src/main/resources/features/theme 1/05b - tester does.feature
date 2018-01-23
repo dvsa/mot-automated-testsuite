@@ -33,6 +33,20 @@ Feature: 05b - Tester does...
 
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT20                                                  |
+      | Adjustable towbar bracket excessively worn            |
+      | Electrical wiring damaged, likely to cause a short    |
+      | Test prs 1                                            |
+      | Test prs 2                                            |
+      | Obligatory mirror obscured but not seriously affecting the rear view |
+      | Body has slight corrosion                             |
+      | Test advisory 1                                       |
+      | Test advisory 2                                       |
+      | {registration1}                                       |
+      | {vin1}                                                |
+      | {site}                                                |
+    And I click the "Back to user home" link
 
 
   Scenario: Tester enters a class 4 MOT test fail, add edit and remove advisory, PRS and failure defects
@@ -87,6 +101,18 @@ Feature: 05b - Tester does...
 
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT30                                                                 |
+      | Battery leaking electrolyte                                          |
+      | Edited failure 2                                                     |
+      | Adjustable towbar bracket excessively worn                           |
+      | Edited prs 1                                                         |
+      | Body has slight corrosion                                            |
+      | Edited advisory 2                                                    |
+      | {registration1}                                                      |
+      | {vin1}                                                               |
+      | {site}                                                               |
+    And I click the "Back to user home" link
 
 
   Scenario: Tester aborts an MOT test
@@ -104,7 +130,11 @@ Feature: 05b - Tester does...
     And I click the "Aborted by VE" radio button
     And I press the "Cancel test" button
     Then The page title contains "MOT test aborted"
-
+    And I click "Print documents" and check the PDF contains:
+      | VT30            |
+      | {registration1} |
+      | {vin1}          |
+      | {site}          |
 
   @smoke
   Scenario: Tester enters a class 4 MOT retest pass, all failures repaired, no need to repeat brake test
@@ -132,6 +162,14 @@ Feature: 05b - Tester does...
     And I check the fails section of the test summary has "Wheel insecure"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT30                                       |
+      | Engine mounting missing                    |
+      | Anti-lock braking system component missing |
+      | Wheel insecure                             |
+      | {registration1}                            |
+      | {vin1}                                     |
+      | {site}                                     |
 
     When I click the "Back to user home" link
     And I start an MOT retest for {registration1}, {vin1}, {site}
@@ -152,6 +190,12 @@ Feature: 05b - Tester does...
     And I check the fails section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT20            |
+      | {registration1} |
+      | {vin1}          |
+      | {site}          |
+    And I click the "Back to user home" link
 
 
   Scenario: Tester enters a class 4 MOT retest fail, with brake test re-entry
@@ -179,6 +223,14 @@ Feature: 05b - Tester does...
     And I check the fails section of the test summary has "Wheel insecure"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT30                                       |
+      | Engine mounting missing                    |
+      | Anti-lock braking system component missing |
+      | Wheel insecure                             |
+      | {registration1}                            |
+      | {vin1}                                     |
+      | {site}                                     |
 
     When I click the "Back to user home" link
     And I start an MOT retest for {registration1}, {vin1}, {site}
@@ -201,3 +253,9 @@ Feature: 05b - Tester does...
     And I check the fails section of the test summary has "Wheel insecure"
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT30            |
+      | Wheel insecure  |
+      | {registration1} |
+      | {vin1}          |
+      | {site}          |

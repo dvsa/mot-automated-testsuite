@@ -24,6 +24,13 @@ Feature: 05c - Tester does...
     And I check the fails section of the test summary has "Anti-lock braking system component missing"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT30                                       |
+      | Engine mounting missing                    |
+      | Anti-lock braking system component missing |
+      | {registration1}                            |
+      | {vin1}                                     |
+      | {site}                                     |
 
     When I click the "Back to user home" link
     And I start an MOT retest for {registration1}, {vin1}, {site}
@@ -47,6 +54,12 @@ Feature: 05c - Tester does...
     And I check the fails section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT20            |
+      | {registration1} |
+      | {vin1}          |
+      | {site}          |
+    And I click the "Back to user home" link
 
 
   Scenario: Tester enters a class 1 MOT test pass
@@ -69,6 +82,12 @@ Feature: 05c - Tester does...
     And I check the fails section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT20            |
+      | {registration1} |
+      | {vin1}          |
+      | {site}          |
+    And I click the "Back to user home" link
 
 
   Scenario: Tester enters a class 2 MOT test fail, with colour change
@@ -95,6 +114,14 @@ Feature: 05c - Tester does...
     And I check the fails section of the test summary has "Decelerometer brake test neither brake control achieves an efficiency of 25%"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT30                                                                         |
+      | Blue                                                                         |
+      | Throttle operating incorrectly                                               |
+      | Test defect 1                                                                |
+      | {registration1}                                                              |
+      | {vin1}                                                                       |
+      | {site}                                                                       |
 
 
   Scenario: Tester enters a class 5 MOT test pass, with engine capacity change
@@ -120,6 +147,13 @@ Feature: 05c - Tester does...
     And I check the advisory section of the test summary has "Test advisory 1"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT20                                                                         |
+      | Nail in tyre                                                                 |
+      | Test advisory 1                                                              |
+      | {registration1}                                                              |
+      | {vin1}                                                                       |
+      | {site}                                                                       |
 
 
   Scenario: Tester enters a class 7 MOT test fail
@@ -146,3 +180,8 @@ Feature: 05c - Tester does...
     And I check the fails section of the test summary does not have "Test failure 1"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT30                                                                         |
+      | {registration1}                                                              |
+      | {vin1}                                                                       |
+      | {site}                                                                       |

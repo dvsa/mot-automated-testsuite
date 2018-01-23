@@ -10,6 +10,8 @@ Feature: 12b - Vehicle Examiner
     And I click the first "View" link
     Then The page contains "summary"
     And I check there is a "Print certificate" link
+    And I click "Print certificate" and check the PDF contains:
+      | Duplicate certificate          |
 
   Scenario: MOT test search by VRM
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
@@ -19,6 +21,8 @@ Feature: 12b - Vehicle Examiner
     And I click the first "View" link
     Then The page contains "summary"
     And I check there is a "Print certificate" link
+    And I click "Print certificate" and check the PDF contains:
+      | Duplicate certificate          |
 
   Scenario: MOT test search by site
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
@@ -28,6 +32,8 @@ Feature: 12b - Vehicle Examiner
     And I click the first "View" link
     Then The page contains "summary"
     And I check there is a "Print certificate" link
+    And I click "Print certificate" and check the PDF contains:
+      | Duplicate certificate          |
 
   Scenario: MOT test search by tester
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
@@ -37,3 +43,5 @@ Feature: 12b - Vehicle Examiner
     And I click the first "View" link
     Then The page contains "summary"
     And I check there is a "Print certificate" link
+    And I click "Print certificate" and check the PDF contains:
+      | Duplicate certificate          |

@@ -68,7 +68,7 @@ Feature: 13b - A01 user
 
 
   Scenario: AO1 user performs site search, then removes a role
-    Given I load uniquely "SITE_MGR_AND_TESTER_CLASS_4" as {testerUsername}, {testerName}, {mgrUsername}, {siteName}, {siteReference}
+    Given I load uniquely "SITE_MGR_AND_TESTER_CLASS_4" as {testerUsername}, {testerName}, {mgrUsername}, {siteName}, {siteReference}, {aeName}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I search for site by reference {siteReference}
     And I click the remove site role link for {testerName}, {testerUsername}
