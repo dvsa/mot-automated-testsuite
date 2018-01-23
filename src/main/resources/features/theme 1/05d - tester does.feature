@@ -19,6 +19,11 @@ Feature: 05d - Tester does...
     And I enter "Test reason" in the "How might this be dangerous or cause damage?" field
     And I press the "Cancel test" button
     Then The page title contains "MOT test abandoned"
+    And I click "Print documents" and check the PDF contains:
+      | VT30                                                                         |
+      | {registration1}                                                              |
+      | {vin1}                                                                       |
+      | {site}                                                                       |
 
 
   Scenario: Tester enters a class 4 MOT test pass, for a DVLA vehicle
@@ -41,6 +46,11 @@ Feature: 05d - Tester does...
     And I check the fails section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT20                                                                         |
+      | {registration1}                                                              |
+      | {vin1}                                                                       |
+      | {site}                                                                       |
 
 
   Scenario: Tester enters a class 4 MOT test pass, for a new vehicle
@@ -78,3 +88,8 @@ Feature: 05d - Tester does...
     And I check the fails section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT20                                                                         |
+      | ANDY1                                                                        |
+      | 111111                                                                       |
+      | {site}                                                                       |
