@@ -165,9 +165,10 @@ Feature: 05b - Tester does...
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
       | VT30                                       |
-      | Engine mounting missing                    |
-      | Anti-lock braking system component missing |
-      | Wheel insecure                             |
+      | Engine mounting/bracket missing            |
+      | Component missing                          |
+      | DANGEROUS                                  |
+      | Wheel bearing has excessive play           |
       | {registration1}                            |
       | {vin1}                                     |
       | {site}                                     |

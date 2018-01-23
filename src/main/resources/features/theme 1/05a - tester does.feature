@@ -90,16 +90,16 @@ Feature: 05a - Tester does...
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
-      | VT30                                      |
-      | {registration1}                           |
-      | {vin1}                                    |
-      | {site}                                    |
-      | Steering system excessively tight         |
-      | Exhaust has a major leak of exhaust gases |
-      | Battery leaking electrolyte               |
-      | Test defect 1                             |
-      | Test defect 2                             |
-      | Test defect 3                             |
+      | VT30                                                   |
+      | {registration1}                                        |
+      | {vin1}                                                 |
+      | {site}                                                 |
+      | Modified such that the steering is adversely affected  |
+      | Exhaust system insecure                                |
+      | Battery leaking                                        |
+      | Test defect 1                                          |
+      | Test defect 2                                          |
+      | Test defect 3                                          |
 
 
   Scenario: Tester enters a class 4 MOT test fail, with brake performance not tested
