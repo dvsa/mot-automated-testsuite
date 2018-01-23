@@ -83,6 +83,28 @@ public class BrowserStackManager {
         TestsuiteConfig testsuiteConfig = initialiseConfig();
         StringBuilder localIdentifier = new StringBuilder();
 
+        localIdentifier.append(testsuiteConfig.getProperty("name"));
+        localIdentifier.append('_');
+
+        String tag = System.getProperty("tag");
+        String feature = System.getProperty("feature");
+        String scenario = System.getProperty("scenario");
+
+        if (tag != null && tag != "") {
+            localIdentifier.append(tag);
+            localIdentifier.append('_');
+        }
+
+        if (feature != null && feature != "") {
+            localIdentifier.append(feature);
+            localIdentifier.append('_');
+        }
+
+        if (scenario != null && scenario != "") {
+            localIdentifier.append(scenario);
+            localIdentifier.append('_');
+        }
+
         if (testsuiteConfig.isMobileConfig()) {
             localIdentifier.append(testsuiteConfig.getProperty("device"));
             localIdentifier.append('_');
