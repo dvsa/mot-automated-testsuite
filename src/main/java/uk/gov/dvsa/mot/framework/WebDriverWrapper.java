@@ -27,11 +27,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.browserstack.BrowserStackManager;
-import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 import uk.gov.dvsa.mot.framework.csv.CsvDocument;
 import uk.gov.dvsa.mot.framework.csv.CsvException;
 import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
 import uk.gov.dvsa.mot.framework.pdf.PdfException;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
