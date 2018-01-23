@@ -26,7 +26,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.browserstack.BrowserStackManager;
 import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 import uk.gov.dvsa.mot.framework.csv.CsvDocument;
@@ -1621,7 +1620,8 @@ public class WebDriverWrapper {
     public SessionId getSessionId() {
         return ((RemoteWebDriver) webDriver).getSessionId();
     }
-    
+
+    /**
      * Creates a new PDF document from the request handler and the url.
      * @return                          the PDF Document
      * @throws PdfException             error loading PDF document

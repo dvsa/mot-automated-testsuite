@@ -15,9 +15,9 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.framework.csv.CsvDocument;
 import uk.gov.dvsa.mot.framework.csv.CsvException;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +39,7 @@ public class RequestHandler {
     private final WebDriver webDriver;
 
     /** The configuration settings to use. */
-    private final Environment env;
+    private final TestsuiteConfig env;
 
     private boolean saveDocuments;
 
@@ -47,7 +47,7 @@ public class RequestHandler {
      * Creates new RequestHandler instance.
      * @param webDriver Web driver to use for retrieving the cookies.
      */
-    public RequestHandler(WebDriver webDriver, Environment env) {
+    public RequestHandler(WebDriver webDriver, TestsuiteConfig env) {
         this.webDriver = webDriver;
         this.env = env;
 
