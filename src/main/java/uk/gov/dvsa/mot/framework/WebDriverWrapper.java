@@ -108,6 +108,8 @@ public class WebDriverWrapper {
 
         // ensure all previous sessions are invalidated
         this.webDriver.manage().deleteAllCookies();
+
+        writeTimestamp();
     }
 
     /**
