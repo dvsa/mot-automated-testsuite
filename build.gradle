@@ -146,6 +146,10 @@ task('testsuite') {
                 main = 'uk.gov.dvsa.mot.runner.StopDataServer'
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
                 ignoreExitValue = true
+
+                if(project.hasProperty('configuration')) {
+                    systemProperty "configuration", configuration
+                }
             }
         }
     }
