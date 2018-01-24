@@ -38,6 +38,9 @@ public class TesterDoesStepDefinitions implements En {
                     enterOdometerReading(OdometerJourney.EnterInMiles, startingMileage + amount);
             });
 
+        And("^I enter an odometer reading in miles of (\\d+)$", (Integer amount) ->
+                enterOdometerReading(OdometerJourney.EnterInMiles, amount));
+
         And("^I enter an odometer reading in kilometres of (\\d+)$", (Integer amount) ->
                 enterOdometerReading(OdometerJourney.EnterInKilometres, amount));
 
@@ -777,12 +780,15 @@ public class TesterDoesStepDefinitions implements En {
                 // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle2"
                 driverWrapper.enterIntoFieldWithId(
                         journey.serviceBrakeOffsideAxle2, "serviceBrakeEffortOffsideAxle2");
+
                 // And I enter <n> in the field with id "parkingBrakeEffortNearside"
                 driverWrapper.enterIntoFieldWithId(
                         journey.parkingBrakeNearside, "parkingBrakeEffortNearside");
                 // And I enter <n> in the field with id "parkingBrakeEffortOffside"
                 driverWrapper.enterIntoFieldWithId(
                         journey.parkingBrakeOffside, "parkingBrakeEffortOffside");
+                // And I set the first axle as the steered axle
+                //driverWrapper.selectCheckboxById("serviceBrake1SteeredAxle1");
                 break;
 
             default:
