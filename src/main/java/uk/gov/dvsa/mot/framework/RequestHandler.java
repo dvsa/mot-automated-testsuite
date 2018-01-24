@@ -132,7 +132,7 @@ public class RequestHandler {
             Cookie session = getCookie(DEFAULT_SESSION_COOKIE_NAME);
             Cookie token = getCookie(DEFAULT_TOKEN_COOKIE_NAME);
             try {
-                File dir = new File("target/documents");
+                File dir = new File("target/documents/" + WebDriverWrapper.getTimestamp());
                 if (!dir.exists()) {
                     dir.mkdirs();
                 }

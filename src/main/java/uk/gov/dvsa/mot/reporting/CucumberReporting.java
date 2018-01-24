@@ -2,6 +2,10 @@ package uk.gov.dvsa.mot.reporting;
 
 import com.github.mkolisnyk.cucumber.reporting.CucumberDetailedResults;
 import com.github.mkolisnyk.cucumber.reporting.CucumberResultsOverview;
+import uk.gov.dvsa.mot.framework.WebDriverWrapper;
+
+import java.io.File;
+import java.io.FileWriter;
 
 /**
  * Reporting class used to generate HTML reports based on the Cucumber json report.
@@ -18,10 +22,13 @@ public class CucumberReporting {
         String sourceFile = "build/reports/selenium/selenium.json";
         String outputName = "cucumber";
         String screenShotLocation = "screenshots/";
+        String documentLocation = "documents/" + WebDriverWrapper.getTimestamp();
 
         generateOverviewReport(outputDirectory, sourceFile, outputName);
 
         generateFeatureReport(outputDirectory, sourceFile, outputName, screenShotLocation);
+
+        generateDocumentList(outputDirectory, outputName, documentLocation);
     }
 
     /**
@@ -56,5 +63,32 @@ public class CucumberReporting {
         cucumberResultsOverview.setOutputName(outputName);
         cucumberResultsOverview.setSourceFile(sourceFile);
         cucumberResultsOverview.execute();
+    }
+
+    /**
+     * Generate HTML to view list of documents.
+     * @param outputName            The prefix given to the report
+     * @param documentLocation      The directory where all documents are located
+     * @throws Exception            Error producing the report
+     */
+    private static void generateDocumentList(String outputDirectory, String outputName, String documentLocation)
+            throws Exception {
+        File folder = new File(documentLocation);
+        File[] files = folder.listFiles();
+
+        StringBuilder html = new StringBuilder();
+
+        html.append("<html><head><title>Document List</title></head><body><ul>");
+        for (File file : files) {
+            html.append("<li>");
+            html.append("<a target='_blank' href='" + file.getPath() + "'>");
+            html.append(file.getName() + "</a>");
+            html.append("</li>");
+        }
+        html.append("</ul></body></html>");
+
+        File outputFile = new File(outputDirectory + outputName + "-document-report.html");
+        FileWriter fileWriter = new FileWriter(outputFile);
+        fileWriter.write(html.toString());
     }
 }

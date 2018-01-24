@@ -1,6 +1,7 @@
 package uk.gov.dvsa.mot.framework;
 
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.joda.time.DateTime;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -76,6 +77,9 @@ public class WebDriverWrapper {
 
     /** Request handler to process HTTP requests. **/
     private final RequestHandler requestHandler;
+
+    /** Time stamp, of when the testsuite was started. */
+    private static final String timestamp = DateTime.now().toString("dd-MM-yyyy_HH-mm-ss");
 
     /**
      * Creates a new instance.
@@ -1698,5 +1702,13 @@ public class WebDriverWrapper {
 
             return csvDocument.contains(values);
         }
+    }
+
+    /**
+     * Get the timestamp of when the testsuite was started.
+     * @return the stored tiemstamp
+     */
+    public static String getTimestamp() {
+        return timestamp;
     }
 }
