@@ -4,7 +4,9 @@ import com.github.mkolisnyk.cucumber.reporting.CucumberDetailedResults;
 import com.github.mkolisnyk.cucumber.reporting.CucumberResultsOverview;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 
 /**
@@ -22,7 +24,14 @@ public class CucumberReporting {
         String sourceFile = "build/reports/selenium/selenium.json";
         String outputName = "cucumber";
         String screenShotLocation = "screenshots/";
-        String documentLocation = "documents/" + WebDriverWrapper.getTimestamp();
+
+        BufferedReader bufferedReader = new BufferedReader(
+                new FileReader(new File(outputDirectory + "timestamp.txt")));
+
+        String timestamp = bufferedReader.readLine();
+        bufferedReader.close();
+
+        String documentLocation = "documents/" + timestamp;
 
         generateOverviewReport(outputDirectory, sourceFile, outputName);
 

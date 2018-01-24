@@ -34,6 +34,8 @@ import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
 import uk.gov.dvsa.mot.framework.pdf.PdfException;
 import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -1710,5 +1712,22 @@ public class WebDriverWrapper {
      */
     public static String getTimestamp() {
         return timestamp;
+    }
+
+    private static void writeTimestamp() {
+        try {
+            File file = new File("target/timestamp.txt");
+
+            file.delete();
+            file.createNewFile();
+
+            FileWriter fileWriter = new FileWriter(file);
+
+            fileWriter.write(timestamp);
+
+            fileWriter.close();
+        } catch (IOException io) {
+            logger.error(io.getMessage());
+        }
     }
 }
