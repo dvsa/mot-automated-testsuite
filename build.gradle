@@ -120,7 +120,7 @@ task('testsuite') {
                 } else {
                     args += ['src/main/resources/features/']
                 }
-                
+
                 if (project.hasProperty('scenario')) {
                     args += ['--name', scenario]
                 }

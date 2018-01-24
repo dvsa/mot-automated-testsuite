@@ -34,6 +34,7 @@ import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
 import uk.gov.dvsa.mot.framework.pdf.PdfException;
 import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -1723,13 +1724,14 @@ public class WebDriverWrapper {
             file.delete();
             file.createNewFile();
 
-            FileWriter fileWriter = new FileWriter(file);
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
 
-            fileWriter.write(timestamp);
+            bufferedWriter.write(timestamp);
 
-            fileWriter.close();
+            bufferedWriter.close();
         } catch (IOException io) {
-            logger.error(io.getMessage());
+            logger.error("Failed to write the timestamp: " + io.getMessage());
+            throw new RuntimeException("Failed to write the timestamp: " + io.getMessage());
         }
     }
 }
