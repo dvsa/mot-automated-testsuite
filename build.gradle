@@ -113,15 +113,16 @@ task('testsuite') {
                 args = cucumberOptions
                 if (project.hasProperty('tag')) {
                     args += ['--tags', tag, 'src/main/resources/features']
+                }
+
+                if (project.hasProperty('feature')) {
+                    args += ['src/main/resources/features/' + feature]
                 } else {
-                    if (project.hasProperty('feature')) {
-                        args += ['src/main/resources/features/' + feature]
-                    } else {
-                        args += ['src/main/resources/features/']
-                    }
-                    if (project.hasProperty('scenario')) {
-                        args += ['--name', scenario]
-                    }
+                    args += ['src/main/resources/features/']
+                }
+                
+                if (project.hasProperty('scenario')) {
+                    args += ['--name', scenario]
                 }
 
                 if (project.hasProperty('target_config')) {
