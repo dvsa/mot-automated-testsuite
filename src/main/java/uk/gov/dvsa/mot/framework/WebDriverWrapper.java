@@ -40,6 +40,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -1718,20 +1721,30 @@ public class WebDriverWrapper {
     }
 
     private static void writeTimestamp() {
+        BufferedWriter bufferedWriter = null;
+
         try {
             File file = new File("target/timestamp.txt");
 
-            file.delete();
+            if (file.exists()) {
+                file.delete();
+            }
+
             file.createNewFile();
 
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+            bufferedWriter = new BufferedWriter(new FileWriter(file));
 
             bufferedWriter.write(timestamp);
-
-            bufferedWriter.close();
         } catch (IOException io) {
             logger.error("Failed to write the timestamp: " + io.getMessage());
             throw new RuntimeException("Failed to write the timestamp: " + io.getMessage());
+        } finally {
+            try {
+                bufferedWriter.close();
+            } catch (IOException io) {
+                logger.error("Failed to close the buffered writer: " + io.getMessage());
+                throw new RuntimeException("Failed to close the buffered writer: " + io.getMessage());
+            }
         }
     }
 }
