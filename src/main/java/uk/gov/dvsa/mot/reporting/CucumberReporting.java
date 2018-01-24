@@ -28,7 +28,7 @@ public class CucumberReporting {
 
         generateFeatureReport(outputDirectory, sourceFile, outputName, screenShotLocation);
 
-        generateDocumentList(outputDirectory, outputName, documentLocation);
+        generateDocumentList(outputDirectory, documentLocation);
     }
 
     /**
@@ -67,27 +67,50 @@ public class CucumberReporting {
 
     /**
      * Generate HTML to view list of documents.
-     * @param outputName            The prefix given to the report
      * @param documentLocation      The directory where all documents are located
      * @throws Exception            Error producing the report
      */
-    private static void generateDocumentList(String outputDirectory, String outputName, String documentLocation)
+    private static void generateDocumentList(String outputDirectory, String documentLocation)
             throws Exception {
         File folder = new File(documentLocation);
         File[] files = folder.listFiles();
 
         StringBuilder html = new StringBuilder();
 
-        html.append("<html><head><title>Document List</title></head><body><ul>");
+        html.append("<html><head>style type=\"text/css\">h1 {background-color:#9999CC}\n"
+                + "h2 {background-color:#BBBBCC}\n"
+                + "h3 {background-color:#DDDDFF}\n"
+                + "OL { counter-reset: item }\n"
+                + "OL>LI { display: block }\n"
+                + "OL>LI:before { content: counters(item, \".\") \" \"; counter-increment: item }\n"
+                + "@page {\n"
+                + "\t size: auto;\n"
+                + "     @top-center {\n"
+                + "     \tcontent: \"Detailed Results Report\";\n"
+                + "\t    color: silver;\n"
+                + "\t    font-size: 14px;\n"
+                + "     }\n"
+                + "     @top-right {\n"
+                + "     \tcontent: date(\"dd MMM, yyyy hh:mm\");\n"
+                + "\t    color: silver;\n"
+                + "\t    font-size: 8px;\n"
+                + "     }\n"
+                + "    @bottom-right {\n"
+                + "    \tcontent: \"Page \" counter(page) \" of \" counter(pages) ;\n"
+                + "\t    color: silver;\n"
+                + "\t    font-size: 8px;\n"
+                + "    }\n"
+                + "}\n"
+                + "</style><title>Document List</title></head><body><h1>Document List</h1><ol>");
         for (File file : files) {
             html.append("<li>");
             html.append("<a target='_blank' href='" + file.getPath() + "'>");
             html.append(file.getName() + "</a>");
             html.append("</li>");
         }
-        html.append("</ul></body></html>");
+        html.append("</ol></body></html>");
 
-        File outputFile = new File(outputDirectory + outputName + "-document-report.html");
+        File outputFile = new File(outputDirectory + "document-report.html");
         FileWriter fileWriter = new FileWriter(outputFile);
         fileWriter.write(html.toString());
     }
