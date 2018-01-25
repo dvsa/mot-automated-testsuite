@@ -187,6 +187,9 @@ public class TesterDoesStepDefinitions implements En {
         And("^I check the prs section of the test summary has \"([^\"]+)\"$", (String text) ->
                 assertTrue(driverWrapper.getTextFromUnorderedList("PRS").contains(text)));
 
+        And("^I check the minors section of the test summary has \"([^\"]+)\"$", (String text) ->
+                assertTrue(driverWrapper.getTextFromUnorderedList("Minors").contains(text)));
+
         And("^I check the advisory section of the test summary has \"([^\"]+)\"$", (String text) ->
                 assertTrue(driverWrapper.getTextFromUnorderedList("Advisory text").contains(text)));
 
@@ -1025,7 +1028,7 @@ public class TesterDoesStepDefinitions implements En {
     private enum DefectType {
         Dangerous("Dangerous", "failure"),
         Major("Major", "failure"),
-        Minor("Minor", "failure"),
+        Minor("Minor", "minor"),
         PRS("PRS", "PRS"),
         Advisory("Advisory", "advisory");
 
