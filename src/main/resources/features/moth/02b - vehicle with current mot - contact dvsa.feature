@@ -14,7 +14,7 @@ Feature: 02b - Check vehicle with current MOT - contact DVSA
     And The page contains "{model}"
     And The page contains "MOT valid until"
     And The page contains "If you think the MOT expiry date or any of the vehicle details are wrong,"
-    And I click the "contact DVSA" link
+    And I click the "contact" link
     And I go to the next tab
 
     Then The page title contains "Contact DVSA"

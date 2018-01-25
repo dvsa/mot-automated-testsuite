@@ -10,7 +10,10 @@ Feature: 26 - Dangerous failures are shown
     When I press the "Continue" button
 
     Then The page contains "{registration}"
+    And I click the accordion section with the id "mot-history-description"
     And The page contains "Fail"
     And The page contains "Dangerous"
-    And The page contains "What are failures and advisories?"
+    And The page contains "What are failures?"
+    And I click the "What are failures?" help link
+    And The page contains "Failure items must be fixed before the vehicle can pass its MOT."
     And The page title contains "Check MOT history"

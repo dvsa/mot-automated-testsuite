@@ -1,6 +1,8 @@
 select d.registration as registration, date_format(date_sub(adddate(d.first_registration_date, INTERVAL 3 YEAR), INTERVAL 1 DAY), "%d %M %Y") as motdue
 from dvla_vehicle d
 where d.vehicle_id is null -- vehicle not used in MOT application yet
+and d.registration != "PE12FCE" -- broken data in PP/INT due to new HGV test data, removed to test correctly
+and d.registration != "JU57OFH" -- broken data in PP/INT due to new HGV test data, removed to test correctly
 and d.eu_classification = "M1"
 and d.registration is not null -- nullable in PP/Prod
 and d.vin is not null -- nullable in PP/Prod
