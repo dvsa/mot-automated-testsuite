@@ -1143,12 +1143,12 @@ public class WebDriverWrapper {
      */
     public void checkCurrentPageTitle(String expected) {
         String actual = webDriver.getTitle();
-        logger.debug("Checking current page title for '{}' contains '{}'", actual, expandDataKeys(expected));
-        if (!actual.contains(expandDataKeys(expected))) {
+        logger.debug("Checking current page title for '{}' contains '{}'", actual, expected);
+        if (!actual.contains(expected)) {
             String message = "Wrong page title, on wrong page perhaps? "
-                    + "Expected the title to contain " + expandDataKeys(expected) + ", but the title was " + actual;
+                    + "Expected the title to contain " + expected + ", but the title was " + actual;
             logger.error(message);
-            throw new WrongPageException(expandDataKeys(expected), actual);
+            throw new WrongPageException(expected, actual);
         }
     }
 
@@ -1247,20 +1247,6 @@ public class WebDriverWrapper {
             logger.debug("Short wait completed...");
         }
     }
-
-    /**
-     * Wait javascript events to complete.
-    */
-    protected void waitForJStoEnd() {
-        // wait until JQuery processing to be completed...
-        new WebDriverWait(webDriver, pageWaitSeconds)
-                .pollingEvery(pollFrequencyMilliseconds, TimeUnit.MILLISECONDS).until(
-                (ExpectedCondition<Boolean>) wd ->
-                        ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-
-        logger.debug("Page loaded, ready and JQuery activity complete.");
-    }
-
 
     /**
      * Wait for the web page to fully re-load, and any onload javascript events to complete.
