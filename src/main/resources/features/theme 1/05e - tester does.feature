@@ -75,7 +75,7 @@ Feature: 05e - Tester does...
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
-    And I enter an odometer reading in miles of 12345
+    And I enter an odometer reading in miles of 55555
     And I enter class 4 roller results for vehicle weight of 1000 as service brake 200,200,200,130 and parking brake 100,100
     And The page contains "Brakes imbalanced across an axle"
     And The page contains "Rear"
@@ -99,7 +99,7 @@ Feature: 05e - Tester does...
       | Brakes imbalanced across an axle |
       | Rear                             |
       | Axle 2                           |
-      | 12345 mi                         |
+      | 55555 mi                         |
 
 
   Scenario: Tester enters a class 4 MOT test fail, with steered axle imbalance (dangerous)
@@ -112,10 +112,10 @@ Feature: 05e - Tester does...
 
     And I enter an odometer reading in kilometres of 99999
     And I enter class 4 roller results for vehicle weight of 1000 as service brake 200,99,200,200 and parking brake 100,100
-    And The page contains "Brakes imbalanced across an axle"
+    And The page contains "Brakes imbalanced across an axle by more than 50%"
     And The page contains "Front"
     And The page contains "Axle 1"
-    #And The page contains "Dangerous"
+    And The page contains "Dangerous"
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
@@ -123,21 +123,22 @@ Feature: 05e - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Fail"
-    And I check the fails section of the test summary has "Brakes imbalanced across an axle"
+    And I check the fails section of the test summary has "Brakes imbalanced across an axle by more than 50%"
     And I check the fails section of the test summary has "Axle 1"
-    #And I check the fails section of the test summary has "Dangerous"
+    And I check the fails section of the test summary has "Dangerous"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
-      | VT30                             |
-      | {registration1}                  |
-      | {vin1}                           |
-      | {site}                           |
-      | Brakes imbalanced across an axle |
-      | Front                            |
-      | Axle 1                           |
-      #| * DANGEROUS *                    |
-      | 99999 km                         |
+      | VT30                                              |
+      | {registration1}                                   |
+      | {vin1}                                            |
+      | {site}                                            |
+      | Brakes imbalanced across an axle by more than 50% |
+      | Front                                             |
+      | Axle 1                                            |
+      | * DANGEROUS *                                     |
+      | 99999 km                                          |
+
 
   Scenario: Tester enters a class 4 MOT test pass, with brake imbalance 40kg rule
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
@@ -165,4 +166,4 @@ Feature: 05e - Tester does...
       | {site}                           |
       | 100000 mi                        |
 
-#  Scenario: Tester enters a class 4 MOT test pass, with brake imbalance as a result of wheel lock - NOT RELATED TO EURW
+    
