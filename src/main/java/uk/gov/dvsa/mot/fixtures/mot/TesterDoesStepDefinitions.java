@@ -788,7 +788,7 @@ public class TesterDoesStepDefinitions implements En {
                 driverWrapper.enterIntoFieldWithId(
                         journey.parkingBrakeOffside, "parkingBrakeEffortOffside");
                 // And I set the first axle as the steered axle
-                //driverWrapper.selectCheckboxById("serviceBrake1SteeredAxle1");
+                driverWrapper.selectCheckboxById("serviceBrake1SteeredAxle1");
                 break;
 
             default:
