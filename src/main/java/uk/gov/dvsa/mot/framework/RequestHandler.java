@@ -54,7 +54,6 @@ public class RequestHandler {
         RestAssured.useRelaxedHTTPSValidation();
         int timeout = 60000;
 
-        //TODO: Check for a recommended way to create a config.
         RestAssured.config()
                 .httpClient(httpClientConfig()
                         .setParam(ClientPNames.CONN_MANAGER_TIMEOUT, timeout)
@@ -87,9 +86,6 @@ public class RequestHandler {
                 .cookie(token.getName(), token.getValue())
                 .get(url);
 
-        String filename = url.replaceFirst("https://", "").replaceAll("/", "-") + ".pdf";
-        writeFile(filename, url);
-
         PDDocument pdDocument = PDDocument.load(serverResponse.asInputStream());
         serverResponse.asInputStream().close();
 
@@ -112,8 +108,6 @@ public class RequestHandler {
 
         String document = new String(serverResponse.asByteArray());
         try {
-            String filename = url.replaceFirst("https://", "").replaceAll("/", "-") + ".csv";
-            writeFile(filename, url);
 
             return new CsvDocument(CSVParser.parse(document, CSVFormat.DEFAULT));
         } catch (IOException ex) {
@@ -123,12 +117,12 @@ public class RequestHandler {
 
     /**
      * Used to save a copy of the document for auditing and verification purposes.
-     * @param filename      The filename to save the document as
      * @param fileUrl       The URL of the file to save
      */
-    private void writeFile(String filename, String fileUrl) {
+    public String writeFile(String filename, String fileUrl) {
         // Check whether we should save documents
         if (this.saveDocuments) {
+
             Cookie session = getCookie(DEFAULT_SESSION_COOKIE_NAME);
             Cookie token = getCookie(DEFAULT_TOKEN_COOKIE_NAME);
             try {
@@ -151,7 +145,12 @@ public class RequestHandler {
                 serverResponse.asInputStream().close();
             } catch (Exception ex) {
                 logger.error("Error saving document", ex);
+                System.out.println(String.format("Failed to save document: %s", ex.getMessage()));
             }
+
+            return filename;
         }
+
+        return null;
     }
 }

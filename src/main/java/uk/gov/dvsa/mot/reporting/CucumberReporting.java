@@ -2,12 +2,19 @@ package uk.gov.dvsa.mot.reporting;
 
 import com.github.mkolisnyk.cucumber.reporting.CucumberDetailedResults;
 import com.github.mkolisnyk.cucumber.reporting.CucumberResultsOverview;
-import uk.gov.dvsa.mot.framework.WebDriverWrapper;
+import groovy.lang.Tuple2;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.HashMap;
+import java.util.Map;
+import javax.imageio.ImageIO;
 
 /**
  * Reporting class used to generate HTML reports based on the Cucumber json report.
@@ -25,19 +32,11 @@ public class CucumberReporting {
         String outputName = "cucumber";
         String screenShotLocation = "screenshots/";
 
-        BufferedReader bufferedReader = new BufferedReader(
-                new FileReader(new File(outputDirectory + "timestamp.txt")));
-
-        String timestamp = bufferedReader.readLine();
-        bufferedReader.close();
-
-        String documentLocation = "documents/" + timestamp;
-
         generateOverviewReport(outputDirectory, sourceFile, outputName);
 
         generateFeatureReport(outputDirectory, sourceFile, outputName, screenShotLocation);
 
-        generateDocumentList(outputDirectory, documentLocation);
+        generateDocumentList(outputDirectory);
     }
 
     /**
@@ -76,51 +75,144 @@ public class CucumberReporting {
 
     /**
      * Generate HTML to view list of documents.
-     * @param documentLocation      The directory where all documents are located
      * @throws Exception            Error producing the report
      */
-    private static void generateDocumentList(String outputDirectory, String documentLocation)
+    private static void generateDocumentList(String outputDirectory)
             throws Exception {
+        BufferedReader bufferedReader = new BufferedReader(
+                new FileReader(new File(outputDirectory + "timestamp.txt")));
+        String timestamp = bufferedReader.readLine();
+        bufferedReader.close();
+        String documentLocation = "target/documents/" + timestamp + "/";
+
         File folder = new File(documentLocation);
-        File[] files = folder.listFiles();
 
         StringBuilder html = new StringBuilder();
 
-        html.append("<html><head>style type=\"text/css\">h1 {background-color:#9999CC}\n"
+        html.append("<html><head><style type=\"text/css\">"
+                + "h1 {background-color:#9999CC}\n"
                 + "h2 {background-color:#BBBBCC}\n"
                 + "h3 {background-color:#DDDDFF}\n"
+                + "th {border:1px solid black;background-color:#CCCCDD;}\n"
+                + "td{border:1px solid black;}\n"
+                + "table {border:1px solid black;border-collapse: collapse;}\n"
+                + ".passed {background-color:lightgreen;font-weight:bold;color:darkgreen}\n"
+                + ".skipped {background-color:silver;font-weight:bold;color:darkgray}\n"
+                + ".failed {background-color:tomato;font-weight:bold;color:darkred}\n"
+                + ".undefined {background-color:gold;font-weight:bold;color:goldenrod}\n"
+                + ".known {background-color:goldenrod;font-weight:bold;color:darkred}\n"
                 + "OL { counter-reset: item }\n"
                 + "OL>LI { display: block }\n"
                 + "OL>LI:before { content: counters(item, \".\") \" \"; counter-increment: item }\n"
-                + "@page {\n"
-                + "\t size: auto;\n"
-                + "     @top-center {\n"
-                + "     \tcontent: \"Detailed Results Report\";\n"
-                + "\t    color: silver;\n"
-                + "\t    font-size: 14px;\n"
-                + "     }\n"
-                + "     @top-right {\n"
-                + "     \tcontent: date(\"dd MMM, yyyy hh:mm\");\n"
-                + "\t    color: silver;\n"
-                + "\t    font-size: 8px;\n"
-                + "     }\n"
-                + "    @bottom-right {\n"
-                + "    \tcontent: \"Page \" counter(page) \" of \" counter(pages) ;\n"
-                + "\t    color: silver;\n"
-                + "\t    font-size: 8px;\n"
-                + "    }\n"
-                + "}\n"
-                + "</style><title>Document List</title></head><body><h1>Document List</h1><ol>");
-        for (File file : files) {
-            html.append("<li>");
-            html.append("<a target='_blank' href='" + file.getPath() + "'>");
-            html.append(file.getName() + "</a>");
-            html.append("</li>");
-        }
-        html.append("</ol></body></html>");
+                + "</style><title>Document List</title></head><body><h1>Document List</h1>"
+                + "<h2>Results</h2>");
 
-        File outputFile = new File(outputDirectory + "document-report.html");
-        FileWriter fileWriter = new FileWriter(outputFile);
-        fileWriter.write(html.toString());
+        File[] files = folder.listFiles();
+
+        Map<String, Tuple2<String, String>> documentResults = getPdfResults(documentLocation);
+
+        for (String key : documentResults.keySet()) {
+            System.out.println(key + "=" + documentResults.get(key).getFirst()
+                    + ";" + documentResults.get(key).getSecond());
+        }
+
+        if (files == null || files.length == 0) {
+            html.append("<li>");
+            html.append("<h3>No documents saved during test.</h3>");
+            html.append("</li>");
+        } else {
+            html.append("<table width='700px'><tbody>");
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    continue;
+                }
+
+                String name = file.getName();
+                int pos = name.lastIndexOf(".");
+                if (pos > 0) {
+                    name = name.substring(0, pos);
+                }
+
+                String extension = file.getName();
+                pos = extension.lastIndexOf(".");
+                if (pos > 0) {
+                    extension = extension.substring(pos + 1, extension.length());
+                    System.out.println("." + extension + ".");
+                }
+
+                if (!extension.equals("pdf") && !extension.equals("csv")) {
+                    System.out.println(extension.equals("pdf"));
+                    continue;
+                }
+
+                File image = new File(documentLocation + "thumbnails/" + name + ".jpg");
+                image.mkdirs();
+                image.delete();
+                image.createNewFile();
+
+                PDDocument document = PDDocument.load(file);
+                PDFRenderer renderer = new PDFRenderer(document);
+                BufferedImage bufferedImage = renderer.renderImage(0);
+                ImageIO.write(bufferedImage,  "jpg", image);
+
+                System.out.println(file.getName());
+                String scenario = (documentResults == null)
+                        ? "unknown" : documentResults.get(file.getName()).getFirst();
+                String result = (documentResults == null)
+                        ? "unknown" : documentResults.get(file.getName()).getSecond();
+
+                html.append("<tr class ='" + result + "'>"
+                        + "<td class='" + result + "'>Scenario: "
+                        + scenario + "</td>"
+                        + "<td class='" + result + "'>Result: "
+                        + result + "</td>"
+                        + "</tr>");
+                html.append("<tr class='" + result + "'>");
+                html.append( "<td colspan='2' class='" + result + "><a target='_blank' href='../"
+                        + documentLocation + file.getName() + "'>");
+                html.append("<img width='100%' src='../"
+                        + documentLocation + "thumbnails/" + image.getName() + "'/></a></td>");
+                html.append("</tr>");
+            }
+            html.append("</tbody></table>");
+        }
+
+        html.append("</body></html>");
+
+
+        File file = new File(outputDirectory + "document-report.html");
+
+        if (file.exists()) {
+            file.delete();
+        }
+
+        file.createNewFile();
+
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+        bufferedWriter.write(html.toString());
+        bufferedWriter.close();
+    }
+
+    private static Map<String, Tuple2<String, String>> getPdfResults(String documentLocation) throws Exception {
+        File file = new File(documentLocation + "pdf_file_results.txt");
+
+        if (!file.exists()) {
+            return null;
+        }
+
+        Map<String, Tuple2<String, String>> documentMap = new HashMap<>();
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            System.out.println(line);
+            String filename = line.split("=")[0];
+            String tuple = line.split("=")[1];
+            String scenario = tuple.split(";")[0];
+            String result = tuple.split(";")[1];
+            documentMap.put(filename, new Tuple2<>(scenario, result));
+        }
+
+        return documentMap;
     }
 }

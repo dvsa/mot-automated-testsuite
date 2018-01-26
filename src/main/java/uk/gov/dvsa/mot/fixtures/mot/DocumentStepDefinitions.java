@@ -3,6 +3,7 @@ package uk.gov.dvsa.mot.fixtures.mot;
 import static junit.framework.TestCase.assertTrue;
 
 import cucumber.api.DataTable;
+import cucumber.api.Scenario;
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,10 +34,16 @@ public class DocumentStepDefinitions implements En {
         this.driverWrapper = driverWrapper;
 
         And("^I click \"([^\"]+)\" and check the PDF contains:$",
-                (String link, DataTable table) -> assertTrue(pdfContainsData(link, table)));
+                (String link, DataTable table) -> {
+                    assertTrue(pdfContainsData(link, table));
+                    driverWrapper.writeDocument(link, "pdf");
+            });
 
         And("^I click \"([^\"]+)\" and check the CSV contains:$",
-                (String link, DataTable table) -> assertTrue(csvContainsData(link, table)));
+                (String link, DataTable table) -> {
+                    assertTrue(csvContainsData(link, table));
+                    driverWrapper.writeDocument(link, "csv");
+            });
     }
 
     /**

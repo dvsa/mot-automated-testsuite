@@ -102,7 +102,7 @@ public class TestsuiteConfig extends Properties {
      * @return whether the config is defined to run on BrowserStack or not.
      */
     public boolean isUsingBrowserStack() {
-        return this.getProperty("automateKey", null) != null || this.getProperty("automateKey") != "";
+        return this.getProperty("automateKey", null) != null && this.getProperty("automateKey") != "";
     }
 
     /**

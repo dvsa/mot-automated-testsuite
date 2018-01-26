@@ -1,5 +1,6 @@
 package uk.gov.dvsa.mot.framework;
 
+import groovy.lang.Tuple2;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.joda.time.DateTime;
 import org.openqa.selenium.Alert;
@@ -40,9 +41,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -81,6 +79,12 @@ public class WebDriverWrapper {
     /** The data map to use. */
     private final Map<String, String> data;
 
+    /** The map to store pdf test results. */
+    private final Map<String, Tuple2<String, String>> pdfResults;
+
+    /** String to store last scenario added to scenario results. */
+    private Tuple2<String, String> lastScenario;
+
     /** Request handler to process HTTP requests. **/
     private final RequestHandler requestHandler;
 
@@ -96,6 +100,7 @@ public class WebDriverWrapper {
         logger.debug("Creating WebDriverWrapper...");
         this.env = env;
         this.data = new HashMap<>();
+        this.pdfResults = new HashMap<>();
         this.webDriver = createWebDriver();
         this.requestHandler = new RequestHandler(this.webDriver, env);
 
@@ -112,8 +117,6 @@ public class WebDriverWrapper {
 
         // ensure all previous sessions are invalidated
         this.webDriver.manage().deleteAllCookies();
-
-        writeTimestamp();
     }
 
     /**
@@ -123,6 +126,14 @@ public class WebDriverWrapper {
      */
     protected WebDriver createWebDriver() {
         logger.debug("Creating new web driver");
+
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            public void run() {
+                writePdfResults();
+            }
+        }, "Run-writePdfResults-on-shutdown"));
+
+        writeTimestamp();
 
         ChromeOptions chromeOptions = new ChromeOptions();
         if (env.getProperty("headless").equals("true")) {
@@ -182,7 +193,7 @@ public class WebDriverWrapper {
                 return new RemoteWebDriver(new URL("https://" + env.getProperty("username") + ":"
                         + env.getProperty("automateKey") + "@" + env.getProperty("server")),
                         capabilities);
-            } catch (MalformedURLException malformedUrl) {
+            } catch (Exception exception) {
                 return new ChromeDriver(chromeOptions);
             }
         } else {
@@ -1720,31 +1731,91 @@ public class WebDriverWrapper {
         return timestamp;
     }
 
-    private static void writeTimestamp() {
+    private void writeTimestamp() {
+        writeFile("target/timestamp.txt", timestamp, false);
+    }
+
+    private void writePdfResults() {
+        StringBuilder pdfResultsContent = new StringBuilder();
+
+        for (String key : pdfResults.keySet()) {
+            pdfResultsContent.append(key + "=");
+            pdfResultsContent.append(pdfResults.get(key).getFirst() + ";" + pdfResults.get(key).getSecond());
+        }
+
+        writeFile("target/documents/" + timestamp + "/pdf_file_results.txt", pdfResultsContent.toString(), true);
+    }
+
+    private void writeFile(String filename, String content, boolean append) {
         BufferedWriter bufferedWriter = null;
 
         try {
-            File file = new File("target/timestamp.txt");
+            File file = new File(filename);
 
             if (file.exists()) {
-                file.delete();
+                if (!append) {
+                    file.delete();
+                    file.createNewFile();
+                }
+            } else {
+                file.createNewFile();
             }
-
-            file.createNewFile();
 
             bufferedWriter = new BufferedWriter(new FileWriter(file));
 
-            bufferedWriter.write(timestamp);
+            if (!append) {
+                bufferedWriter.write(content);
+            } else {
+                bufferedWriter.append(content);
+            }
         } catch (IOException io) {
-            logger.error("Failed to write the timestamp: " + io.getMessage());
-            throw new RuntimeException("Failed to write the timestamp: " + io.getMessage());
+            logger.error("Failed to write the file: " + io.getMessage());
+            throw new RuntimeException("Failed to write the file: " + io.getMessage());
         } finally {
             try {
                 bufferedWriter.close();
-            } catch (IOException io) {
-                logger.error("Failed to close the buffered writer: " + io.getMessage());
-                throw new RuntimeException("Failed to close the buffered writer: " + io.getMessage());
+            } catch (Exception exception) {
+                logger.error("Failed to close the buffered writer: " + exception.getMessage());
+                throw new RuntimeException("Failed to close the buffered writer: " + exception.getMessage());
             }
         }
+    }
+
+    /**
+     * Write file and save the result.
+     * @param url of the file to download.
+     */
+    public void writeDocument(String url, String extension) {
+        if (env.getProperty("saveDocuments") != null && env.getProperty("saveDocuments").equals("true")) {
+            // find any "a" elements with text containing the link text
+            List<WebElement> links = findLinks(url);
+
+            if (links.size() == 0) {
+                String message = "No links found with text: " + url;
+                logger.error(message);
+                throw new IllegalArgumentException(message);
+
+            } else {
+                try {
+                    System.out.println(url);
+                    String filename = requestHandler.writeFile(lastScenario.getFirst().replaceAll("[\\s\\\\/]",
+                            "_") + "." + extension, links.get(0).getAttribute("href"));
+
+                    pdfResults.put(filename, new Tuple2<>(lastScenario.getFirst(), lastScenario.getSecond()));
+                } catch (Exception ex) {
+                    logger.error("Unable to load PDF document", ex);
+                    throw new RuntimeException("Error processing PDF document", ex);
+                }
+            }
+        }
+    }
+
+    /**
+     * Save the last scenario.
+     * @param name of the scenario
+     * @param result of the scenario
+     */
+    public void addScenarioStatus(String name, String result) {
+        lastScenario = new Tuple2<>(name, result);
     }
 }
