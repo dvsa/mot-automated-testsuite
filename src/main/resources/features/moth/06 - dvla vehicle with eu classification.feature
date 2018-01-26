@@ -1,4 +1,4 @@
-@mothpp
+@mothpp  @mothint
 Feature: 06 - DVLA vehicle with EU classification
 
   Scenario: A MOTH user searches for a vehicle with a 3 year due date

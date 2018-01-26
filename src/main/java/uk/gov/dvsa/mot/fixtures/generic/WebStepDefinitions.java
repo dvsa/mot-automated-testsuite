@@ -196,5 +196,13 @@ public class WebStepDefinitions implements En {
                         driverWrapper.isCookieSet(cookieName)));
 
         And("^I delete the \"([^\"]+)\" cookie$", (String cookieName) -> driverWrapper.deleteCookie(cookieName));
+
+        And("^I wait for \"(\\d+)\" seconds$", (Integer time) -> driverWrapper.timeWait(time));
+
+        And("^I click the accordion section with the id \"([^\"]+)\"$", (String accordionId) ->
+                driverWrapper.accordionClick(accordionId));
+
+        When("^I click the \"([^\"]+)\" help link$", (String helpText) ->
+                driverWrapper.helptextClick(helpText));
     }
 }

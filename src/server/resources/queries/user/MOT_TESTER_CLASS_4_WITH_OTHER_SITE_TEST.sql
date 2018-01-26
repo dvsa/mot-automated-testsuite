@@ -25,6 +25,7 @@ and sc.id = pscm.security_card_id
 and sc.security_card_status_lookup_id = 1 -- only assigned cards
 and mtc.site_id <> s.id
 and mtc.status_id = 6 -- Passed tests only
+and mtc.mot_test_type_id = 1  -- Normal tests only
 and mtc.vehicle_id = v.id
 and mtc.document_id IS NOT NULL  -- exclude where there are no MOT certificates
 and mtc.id = (select max(lmtc.id) from mot_test_current lmtc where lmtc.vehicle_id = v.id) -- Checking only the latest test for vehicle
