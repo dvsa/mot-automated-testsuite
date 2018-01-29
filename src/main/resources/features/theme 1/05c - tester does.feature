@@ -167,9 +167,9 @@ Feature: 05c - Tester does...
     And I click the "Enter test results" link
 
     And I enter an odometer reading in kilometres of 30000
-    And I search for a "Failure" defect of "Steering system excessively tight" with comment "Test failure 1"
-    And I edit the "Failure" defect of "Steering system excessively tight" with comment "Edited failure 1" and is dangerous
-    And I remove the "Failure" defect of "Steering system excessively tight"
+    And I search for a "Major" defect of "Steering system excessively rough" with comment "Test failure 1"
+    And I edit the "Major" defect of "Steering system excessively rough" with comment "Edited failure 1" and not dangerous
+    And I remove the "Failure" defect of "Steering system excessively rough"
     And I enter class 7 roller results for vehicle weight of 1000 as service brake 350,50,50,350 and parking brake 350,50
     And I press the "Review test" button
 
@@ -178,7 +178,7 @@ Feature: 05c - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Fail"
-    And I check the fails section of the test summary does not have "Steering system excessively tight"
+    And I check the fails section of the test summary does not have "Steering system excessively rough"
     And I check the fails section of the test summary does not have "Test failure 1"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"

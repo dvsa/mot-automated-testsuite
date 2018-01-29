@@ -1029,6 +1029,7 @@ public class TesterDoesStepDefinitions implements En {
         Dangerous("Dangerous", "failure"),
         Major("Major", "failure"),
         Minor("Minor", "minor"),
+        Failure("Failure", "failure"),
         PRS("PRS", "PRS"),
         Advisory("Advisory", "advisory");
 
@@ -1064,6 +1065,9 @@ public class TesterDoesStepDefinitions implements En {
 
                 case "Minor":
                     return Minor;
+
+                case "Failure":
+                    return Failure;
 
                 case "PRS":
                     return PRS;
