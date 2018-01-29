@@ -78,6 +78,7 @@ High level:
 * I check the ```"..name.."``` cookie is set
 * I delete the ```"..name.."``` cookie
    * Note: allows partial match of the cookie name
+* I wait for ```"..number.."``` seconds
 
 Lower level, only use if higher level steps can't be used:
 
@@ -277,3 +278,5 @@ These steps are specific to the DVSA MOT application screens.
 * I click the last text ```..text..```
 * I go to the next tab
 * I close extra tabs
+* I click the accordion section with the id ```..text..```
+* I click the ```..text..``` help link

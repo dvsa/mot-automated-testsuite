@@ -1570,4 +1570,69 @@ public class WebDriverWrapper {
             return csvDocument.contains(values);
         }
     }
+
+    /**
+     * Pauses the tests for the required amount of seconds.
+     * @param time  The amount of seconds to wait
+     */
+    public void timeWait(Integer time) {
+        try {
+            Thread.sleep(time * 1000);
+        } catch (InterruptedException ex) {
+            // called if trying to shutdown the test suite
+            String message = "Wait for the web browser was interrupted";
+            logger.error(message, ex);
+
+            // propagate a fatal error so testsuite shuts down
+            throw new RuntimeException(message, ex);
+        }
+    }
+
+    /**
+     * Clicks the specified accordion.
+     * @param accordionId  The accordion ID
+     */
+    public void accordionClick(String accordionId) {
+        List<WebElement> accordions =  webDriver.findElements(By.xpath("//p[@id = '" + accordionId + "']"));
+        if (accordions.size() == 0) {
+            String message = "No accordions found with ID name: " + accordionId;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else if (accordions.size() > 1) {
+            String message = "Several accordions found with ID name: " + accordionId;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            clickAndWaitForPageLoad(accordions.get(0));
+        }
+    }
+
+    /**
+     * Clicks the last help text dropdown specified.
+     * @param helpText The text for the help dropdown
+     */
+    public void helptextClick(String helpText) {
+        // Need to slow down the test so the browser can click on the correct element.
+        try {
+            Thread.sleep(400);
+        } catch (InterruptedException ex) {
+            // called if trying to shutdown the test suite
+            String message = "Wait for the web browser was interrupted";
+            logger.error(message, ex);
+
+            // propagate a fatal error so testsuite shuts down
+            throw new RuntimeException(message, ex);
+        }
+
+        List<WebElement> spans = findSpans(helpText);
+        if (spans.size() == 0) {
+            String message = "No span elements found with text: " + helpText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+        } else {
+            clickAndWaitForPageLoad(spans.get(spans.size() - 1));
+        }
+    }
 }
