@@ -157,17 +157,23 @@ Feature: 05b - Tester does...
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
     And I check the fails section of the test summary has "Engine mounting/bracket missing"
+    And I check the fails section of the test summary has "Test defect 1"
     And I check the fails section of the test summary has "Dangerous"
     And I check the fails section of the test summary has "component missing"
+    And I check the fails section of the test summary has "Test defect 2"
     And I check the fails section of the test summary has "Wheel bearing has excessive play"
+    And I check the fails section of the test summary has "Test defect 3"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
       | VT30                                       |
       | Engine mounting/bracket missing            |
+      | Test defect 1                              |
       | Component missing                          |
+      | Test defect 2                              |
       | DANGEROUS                                  |
       | Wheel bearing has excessive play           |
+      | Test defect 3                              |
       | {registration1}                            |
       | {vin1}                                     |
       | {site}                                     |
@@ -220,15 +226,22 @@ Feature: 05b - Tester does...
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Fail"
     And I check the fails section of the test summary has "Engine mounting/bracket missing"
+    And I check the fails section of the test summary has "Test defect 1"
+    And I check the fails section of the test summary has "Dangerous"
     And I check the fails section of the test summary has "component missing"
+    And I check the fails section of the test summary has "Test defect 2"
     And I check the fails section of the test summary has "Wheel bearing has excessive play"
+    And I check the fails section of the test summary has "Test defect 3"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
       | VT30                                       |
       | Engine mounting/bracket missing            |
+      | Test defect 1                              |
       | Component missing                          |
+      | Test defect 2                              |
       | Wheel bearing has excessive play           |
+      | Test defect 3                              |
       | {registration1}                            |
       | {vin1}                                     |
       | {site}                                     |
@@ -251,13 +264,17 @@ Feature: 05b - Tester does...
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
     And I check the fails section of the test summary has "component missing"
+    And I check the fails section of the test summary has "Test defect 2"
     And I check the fails section of the test summary has "Wheel bearing has excessive play"
+    And I check the fails section of the test summary has "Test defect 3"
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
     And I click "Print documents" and check the PDF contains:
       | VT30                              |
-      | component missing                 |
+      | Component missing                 |
+      | Test defect 2                     |
       | Wheel bearing has excessive play  |
+      | Test defect 3                     |
       | {registration1}                   |
       | {vin1}                            |
       | {site}                            |
