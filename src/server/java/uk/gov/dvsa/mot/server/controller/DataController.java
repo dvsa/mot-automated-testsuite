@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.dvsa.mot.server.data.DatabaseDataProvider;
+import uk.gov.dvsa.mot.server.reporting.DocumentListReportGenerator;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.inject.Inject;
 
 @RestController()
@@ -28,47 +27,6 @@ public class DataController {
     /** The data provider to delegate to. */
     @Inject
     private DatabaseDataProvider dataProvider;
-
-    Set<String> clients = new HashSet<>();
-
-    /**
-     * Add a new client to the server application.
-     *
-     * @return confirmation that the action has been completed.
-     */
-    @ResponseBody
-    @RequestMapping(value = "/testsuite/start", method = POST,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> startTestsuite(@RequestBody String clientLocalId) {
-        clients.add(clientLocalId);
-
-        return ResponseEntity.ok(String.format("Added %s.", clientLocalId));
-    }
-
-    /**
-     * Remove a client to the server application.
-     *
-     * @return confirmation that the action has been completed.
-     */
-    @ResponseBody
-    @RequestMapping(value = "/testsuite/stop", method = POST,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<String> stopTestsuite(@RequestBody String clientLocalId) {
-        clients.remove(clientLocalId);
-
-        return ResponseEntity.ok(String.format("Removed %s.", clientLocalId));
-    }
-
-    /**
-     * Get the client count running on the application server.
-     *
-     * @return the count of clients running on thse server.
-     */
-    @RequestMapping(value = "/testsuite/count", method = GET,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Integer> testsuiteCount() {
-        return ResponseEntity.ok(clients.size());
-    }
 
     /**
      * Get an uncached dataset.
@@ -102,5 +60,41 @@ public class DataController {
     public ResponseEntity<List<String>> getCachedDatasetEntry(@PathVariable String datasetName) {
         logger.info("getCachedDatasetEntry: name {}", datasetName);
         return ResponseEntity.ok(dataProvider.getCachedDatasetEntry(datasetName));
+    }
+
+    /**
+     * Get the timestamp used by DocumentListReportGenerator.
+     * @return timestamp
+     */
+    @RequestMapping(value = "/timestamp", method = GET,
+            produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> getTimestamp() {
+        logger.info("getTimestamp");
+        return ResponseEntity.ok(DocumentListReportGenerator.getTimestamp());
+    }
+
+    /**
+     * Add a document result.
+     * @param result to add.
+     * @return confirmation
+     */
+    @ResponseBody
+    @RequestMapping(value = "/documents/results", method = POST,
+            produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> addDocumentResults(@RequestBody String result) {
+        DocumentListReportGenerator.addDocumentResult(result);
+
+        return ResponseEntity.ok(String.format("Added document result: %s.", result));
+    }
+
+    /**
+     * Get all document results.
+     * @return document results.
+     */
+    @ResponseBody
+    @RequestMapping(value = "/documents/results", method = GET,
+            produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> getDocumentResults() {
+        return ResponseEntity.ok(DocumentListReportGenerator.getDocumentResults());
     }
 }

@@ -4,10 +4,8 @@ import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 
 import cucumber.api.java8.En;
-import junit.framework.TestSuite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.data.DataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 import uk.gov.dvsa.mot.otp.Generator;

@@ -51,7 +51,7 @@ public class LifecycleHooks {
         logger.debug("Before cucumber scenario: ********** {} **********", scenario.getName());
 
         //This initial call to addScenarioStatus adds a scenario so that a document can be named after it.
-        driverWrapper.addScenarioStatus(scenario.getName(), scenario.getStatus());
+        driverWrapper.addScenarioStatus(scenario.getId(), scenario.getStatus());
     }
 
     /**
@@ -74,7 +74,7 @@ public class LifecycleHooks {
         }
 
         //The second call to addScenarioStatus updates the result with fail/pass.
-        driverWrapper.addScenarioStatus(scenario.getName(), scenario.getStatus());
+        driverWrapper.addScenarioStatus(scenario.getId(), scenario.getStatus());
 
         // log the current user out, if they are logged in
         if (driverWrapper.hasLink("Sign out")) {

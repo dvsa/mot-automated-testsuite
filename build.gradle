@@ -86,7 +86,6 @@ checkstyle {
 task('testsuite') {
     description 'Run a testsuite with optional arguments...'
     dependsOn assemble, compileJava, check
-    finalizedBy 'cucumber-reporting'
     doLast {
         copy {
             into "build/server-libs"
@@ -109,34 +108,58 @@ task('testsuite') {
         }
 
         try {
-            javaexec {
-                args = cucumberOptions
-                if (project.hasProperty('tag')) {
-                    args += ['--tags', tag, 'src/main/resources/features']
-                }
+            if (project.hasProperty("parallel") && parallel == "true") {
+                javaexec {
+                    main = 'org.junit.runner.JUnitCore'
+                    classpath = configurations.cucumberRuntime + sourceSets.main.output
+                    args = ['uk.gov.dvsa.mot.runner.CourgetteJUnitRunner']
 
-                if (project.hasProperty('feature')) {
-                    args += ['src/main/resources/features/' + feature]
-                } else {
-                    args += ['src/main/resources/features/']
-                }
+                    systemProperties = ['cucumber.options': '--tags ' + tag]
 
-                if (project.hasProperty('scenario')) {
-                    args += ['--name', scenario]
+                    if (project.hasProperty('target_config')) {
+                        systemProperty "target_config", target_config
+                    } else if(project.hasProperty('configuration')) {
+                        systemProperty "configuration", configuration
+                    }
                 }
+            } else {
+                javaexec {
+                    args = cucumberOptions
+                    if (project.hasProperty('tag')) {
+                        args += ['--tags', tag, 'src/main/resources/features']
+                    }
 
-                if (project.hasProperty('target_config')) {
-                    systemProperty "target_config", target_config
-                } else if(project.hasProperty('configuration')) {
-                    systemProperty "configuration", configuration
+                    if (project.hasProperty('feature')) {
+                        args += ['src/main/resources/features/' + feature]
+                    } else {
+                        args += ['src/main/resources/features/']
+                    }
+
+                    if (project.hasProperty('scenario')) {
+                        args += ['--name', scenario]
+                    }
+
+                    if (project.hasProperty('target_config')) {
+                        systemProperty "target_config", target_config
+                    } else if(project.hasProperty('configuration')) {
+                        systemProperty "configuration", configuration
+                    }
+
+                    main = "cucumber.api.cli.Main"
+                    classpath = configurations.cucumberRuntime + sourceSets.main.output
                 }
-
-                main = "cucumber.api.cli.Main"
-                classpath = configurations.cucumberRuntime + sourceSets.main.output
             }
         } finally {
+            javaexec {
+                main = "uk.gov.dvsa.mot.reporting.CucumberReporting"
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
 
-            //This will be used to provide a config //.properties// file to use when runnig the testsuite locally.
+                if(project.hasProperty('configuration')) {
+                    systemProperty "configuration", configuration
+                }
+            }
+
+            //This will be used to provide a config //.properties// file to use when running the testsuite locally.
             if (project.hasProperty('target_config')) {
                 browserstack(true)
             } else if (project.hasProperty('configuration')) {
@@ -193,28 +216,18 @@ task('cucumber-rerun') {
             }
         } finally {
             javaexec {
+                main = "uk.gov.dvsa.mot.reporting.CucumberReporting"
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+                if(project.hasProperty('configuration')) {
+                    systemProperty "configuration", configuration
+                }
+            }
+
+            javaexec {
                 main = 'uk.gov.dvsa.mot.runner.StopDataServer'
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
                 ignoreExitValue = true
-            }
-        }
-    }
-}
-
-task('parallel') {
-    description 'Runs all features matching the tag(s) (specified using -Ptag=...) in parallel'
-    dependsOn assemble, compileJava, check
-    doLast {
-        copy {
-            into "build/server-libs"
-            from configurations.serverRuntime + sourceSets.server.output
-        }
-        javaexec {
-            main = 'uk.gov.dvsa.mot.runner.StartDataServer'
-            classpath = configurations.cucumberRuntime + sourceSets.main.output
-
-            if (project.hasProperty('configuration')) {
-                systemProperty "configuration", configuration
             }
         }
     }
@@ -227,6 +240,33 @@ task('run-server') {
         javaexec {
             main = 'uk.gov.dvsa.mot.server.ServerApplication'
             classpath = configurations.serverRuntime + sourceSets.server.output
+        }
+    }
+}
+
+
+task('start') {
+    description 'Use to test/debug the data server'
+    dependsOn assemble, compileJava, check
+    doLast {
+        javaexec {
+            main = 'uk.gov.dvsa.mot.runner.StartDataServer'
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+            if(project.hasProperty('configuration')) {
+                systemProperty "configuration", configuration
+            }
+        }
+    }
+}
+
+task('stop-server') {
+    dependsOn assemble, compileJava, check
+    doLast {
+        javaexec {
+            main = 'uk.gov.dvsa.mot.runner.StopDataServer'
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
+            ignoreExitValue = true
 
             if(project.hasProperty('configuration')) {
                 systemProperty "configuration", configuration
@@ -286,6 +326,7 @@ dependencies {
     serverCompile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     serverCompile("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
     serverCompile "javax.inject:javax.inject:1"
+    serverCompile 'joda-time:joda-time:2.9.9'
     serverCompile "mysql:mysql-connector-java:5.1.44"
     serverCompile"commons-dbcp:commons-dbcp:1.4"
     serverRuntime ("xml-apis:xml-apis:1.4.01") {

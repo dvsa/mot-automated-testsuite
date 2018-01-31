@@ -2,10 +2,8 @@ package uk.gov.dvsa.mot.server.di;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,7 +27,6 @@ import javax.sql.DataSource;
 public class SpringConfiguration {
 
     static {
-
         // using a static initialisation block so this is instantiated as early as possible
 
         // often of the form: <pid>@<hostname>.<domain> (but not guaranteed to be!)

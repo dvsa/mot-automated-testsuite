@@ -7,12 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.data.DataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
-import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Properties;
 import javax.inject.Inject;
 
 /**

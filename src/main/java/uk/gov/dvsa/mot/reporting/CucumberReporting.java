@@ -2,9 +2,10 @@ package uk.gov.dvsa.mot.reporting;
 
 import com.github.mkolisnyk.cucumber.reporting.CucumberDetailedResults;
 import com.github.mkolisnyk.cucumber.reporting.CucumberResultsOverview;
-import groovy.lang.Tuple2;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
+import uk.gov.dvsa.mot.framework.RequestHandler;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -12,8 +13,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.imageio.ImageIO;
 
 /**
@@ -79,113 +82,184 @@ public class CucumberReporting {
      */
     private static void generateDocumentList(String outputDirectory)
             throws Exception {
-        BufferedReader bufferedReader = new BufferedReader(
-                new FileReader(new File(outputDirectory + "timestamp.txt")));
-        String timestamp = bufferedReader.readLine();
-        bufferedReader.close();
-        String documentLocation = "target/documents/" + timestamp + "/";
+        // Get the results from the server
+        writeDocumentResults();
 
-        File folder = new File(documentLocation);
+        List<String> allowedExtensions = Arrays.asList("pdf", "csv");
+        String documentsRoot = "target/documents/";
+
+        // Read the results as an ordered map (TreeMap)
+        Map<String, String[]> documentResults = getDocumentResults(documentsRoot);
+        String timestamp = documentResults.get("timestamp")[0];
+        documentResults.remove("timestamp");
+
+        String documentLocation = documentsRoot + timestamp + "/";
 
         StringBuilder html = new StringBuilder();
+        html.append("<html><head><style type='text/css'>")
+                .append("h1 {background-color:#9999CC}")
+                .append("h2 {background-color:#BBBBCC}")
+                .append("h3 {background-color:#DDDDFF}")
+                .append("th {border:1px solid black;background-color:#CCCCDD;}")
+                .append("td{text-transform: capitalize; border:1px solid black;}")
+                .append("table {border:1px solid black;border-collapse: collapse;}")
+                .append("table table {width:98%; float:right; margin-bottom:0.3em; }")
+                .append(".passed {background-color:lightgreen;font-weight:bold;color:darkgreen}")
+                .append(".skipped {background-color:silver;font-weight:bold;color:darkgray}")
+                .append(".failed {background-color:tomato;font-weight:bold;color:darkred}")
+                .append(".undefined {background-color:gold;font-weight:bold;color:goldenrod}")
+                .append(".known {background-color:goldenrod;font-weight:bold;color:darkred}")
+                .append("img {width:100%;")
+                .append("OL { counter-reset: item }")
+                .append("OL>LI { display: block }")
+                .append("OL>LI:before { content: counters(item, '.') ' '; counter-increment: item }</style>")
+                .append("<title>Document List</title></head><")
 
-        html.append("<html><head><style type=\"text/css\">"
-                + "h1 {background-color:#9999CC}\n"
-                + "h2 {background-color:#BBBBCC}\n"
-                + "h3 {background-color:#DDDDFF}\n"
-                + "th {border:1px solid black;background-color:#CCCCDD;}\n"
-                + "td{border:1px solid black;}\n"
-                + "table {border:1px solid black;border-collapse: collapse;}\n"
-                + ".passed {background-color:lightgreen;font-weight:bold;color:darkgreen}\n"
-                + ".skipped {background-color:silver;font-weight:bold;color:darkgray}\n"
-                + ".failed {background-color:tomato;font-weight:bold;color:darkred}\n"
-                + ".undefined {background-color:gold;font-weight:bold;color:goldenrod}\n"
-                + ".known {background-color:goldenrod;font-weight:bold;color:darkred}\n"
-                + "OL { counter-reset: item }\n"
-                + "OL>LI { display: block }\n"
-                + "OL>LI:before { content: counters(item, \".\") \" \"; counter-increment: item }\n"
-                + "</style><title>Document List</title></head><body><h1>Document List</h1>"
-                + "<h2>Results</h2>");
+                .append("body><h1>Document List</h1>")
+                .append("<h2>Results</h2>");
 
-        File[] files = folder.listFiles();
+        // Get list of all files in the directory
+        File[] files = new File(documentLocation).listFiles();
 
-        Map<String, Tuple2<String, String>> documentResults = getPdfResults(documentLocation);
-
-        for (String key : documentResults.keySet()) {
-            System.out.println(key + "=" + documentResults.get(key).getFirst()
-                    + ";" + documentResults.get(key).getSecond());
-        }
-
-        if (files == null || files.length == 0) {
-            html.append("<li>");
-            html.append("<h3>No documents saved during test.</h3>");
-            html.append("</li>");
+        if (documentResults == null || files == null || files.length == 0) {
+            html.append("<li>")
+                    .append("<h3>No documents saved during test.</h3>")
+                    .append("</li>");
         } else {
-            html.append("<table width='700px'><tbody>");
-            for (File file : files) {
-                if (file.isDirectory()) {
+            html.append("<table width='700px'>")
+                    .append("<tbody>");
+
+            String previousFeature = ""; // Store previous feature to see if the next scenario should start in a new row
+            boolean usingFeature = false;
+
+            for (String key : documentResults.keySet()) {
+                String[] documentResult = documentResults.get(key);
+
+                if (usingFeature == false && documentResult.length == 4) {
+                    usingFeature = true;
+                }
+
+                int featureIndex = -1;
+                int scenarioIndex = -1;
+                int filenameIndex = -1;
+                int testResultIndex = -1;
+
+                // This is the order the data was added in, in the getDocumentsResults
+                if (usingFeature) {
+                    filenameIndex = 0;
+                    featureIndex = 1;
+                    scenarioIndex = 2;
+                    testResultIndex = 3;
+                } else {
+                    filenameIndex = 0;
+                    scenarioIndex = 1;
+                    testResultIndex = 2;
+                }
+
+                File file = new File(documentLocation + documentResult[filenameIndex]);
+
+                String fileFullName = file.getName();
+                String name = "";
+                String extension = "";
+
+                // get file name without the extension and the extension as separate variables
+                int pos = fileFullName.lastIndexOf(".");
+                if (pos > 0) {
+                    name = fileFullName.substring(0, pos);
+                    extension = fileFullName.substring(pos + 1, fileFullName.length());
+                }
+
+                if (!allowedExtensions.contains(extension)) {
                     continue;
                 }
 
-                String name = file.getName();
-                int pos = name.lastIndexOf(".");
-                if (pos > 0) {
-                    name = name.substring(0, pos);
+                String feature = "unknown";
+                String scenario = "unknown";
+                String result = "unknown";
+
+                // Populate variables. If there is no feature specified, "unknown" will be used instead
+                if (usingFeature) {
+                    feature = documentResult[featureIndex];
+                    scenario = documentResult[scenarioIndex];
+                    result = documentResult[testResultIndex];
+                } else {
+                    scenario = documentResult[scenarioIndex];
+                    result = documentResult[testResultIndex];
                 }
 
-                String extension = file.getName();
-                pos = extension.lastIndexOf(".");
-                if (pos > 0) {
-                    extension = extension.substring(pos + 1, extension.length());
-                    System.out.println("." + extension + ".");
+                // If current feature is different than previous one
+                if (!previousFeature.equals(feature)) {
+                    html.append("<tr class ='").append(result).append("'>")
+                            .append("<td colspan='2' class='").append(result).append("'>Feature: ")
+                            .append(feature.replace("-", " "))
+                            .append("</td>")
+                            .append("</tr>");
                 }
 
-                if (!extension.equals("pdf") && !extension.equals("csv")) {
-                    System.out.println(extension.equals("pdf"));
-                    continue;
+                html.append("<tr>")
+                        .append("<td colspan='2' class='").append(result).append("'>")
+                        .append("<table width='100%'>")
+                        .append("<tbody>")
+                        .append("<tr class ='").append(result).append("'>")
+                        .append("<td class='").append(result).append("'>")
+                        .append("<small>Scenario: ")
+                        .append(scenario.replace("-", " ")).append("</small>")
+                        .append("</td>")
+                        .append("<td class='").append(result).append("'>")
+                        .append("<small>Result: ").append(result).append("</small>")
+                        .append("</td>")
+                        .append("</tr>")
+                        .append("<tr class='").append(result).append("'>")
+                        .append("<td colspan='2' class='").append(result).append("'>");
+
+                // If PDF then add a thumbnail, else just add a link with file name
+                if (extension.equals("pdf")) {
+                    File thumbnail = new File(documentLocation + "thumbnails/" + name + ".jpg");
+
+                    thumbnail.mkdirs();
+                    thumbnail.delete();
+                    thumbnail.createNewFile();
+
+                    PDDocument document = PDDocument.load(file);
+                    PDFRenderer renderer = new PDFRenderer(document);
+
+                    BufferedImage bufferedImage = renderer.renderImage(0);
+                    ImageIO.write(bufferedImage,  "jpg", thumbnail);
+
+                    html.append("<a target='_blank' href='../")
+                            .append(documentLocation).append(fileFullName).append("'>")
+                            .append("<img src='../").append(documentLocation).append("thumbnails/")
+                            .append(thumbnail.getName()).append("'/>")
+                            .append("</a>");
+                } else {
+                    html.append("<a target='_blank' href='../")
+                            .append(documentLocation).append(fileFullName).append("'>")
+                            .append(fileFullName)
+                            .append("</a>");
                 }
 
-                File image = new File(documentLocation + "thumbnails/" + name + ".jpg");
-                image.mkdirs();
-                image.delete();
-                image.createNewFile();
+                html.append("</td>")
+                        .append("</tr>")
+                        .append("</tbody>")
+                        .append("</table>");
 
-                PDDocument document = PDDocument.load(file);
-                PDFRenderer renderer = new PDFRenderer(document);
-                BufferedImage bufferedImage = renderer.renderImage(0);
-                ImageIO.write(bufferedImage,  "jpg", image);
-
-                System.out.println(file.getName());
-                String scenario = (documentResults == null)
-                        ? "unknown" : documentResults.get(file.getName()).getFirst();
-                String result = (documentResults == null)
-                        ? "unknown" : documentResults.get(file.getName()).getSecond();
-
-                html.append("<tr class ='" + result + "'>"
-                        + "<td class='" + result + "'>Scenario: "
-                        + scenario + "</td>"
-                        + "<td class='" + result + "'>Result: "
-                        + result + "</td>"
-                        + "</tr>");
-                html.append("<tr class='" + result + "'>");
-                html.append( "<td colspan='2' class='" + result + "><a target='_blank' href='../"
-                        + documentLocation + file.getName() + "'>");
-                html.append("<img width='100%' src='../"
-                        + documentLocation + "thumbnails/" + image.getName() + "'/></a></td>");
-                html.append("</tr>");
+                // End row if previous feature is different than current one
+                if (!previousFeature.equals(feature)) {
+                    html.append("</td>")
+                            .append("</tr>");
+                    previousFeature = feature;
+                }
             }
-            html.append("</tbody></table>");
         }
 
-        html.append("</body></html>");
+        html.append("</td>")
+                .append("</tr>")
+                .append("</body>")
+                .append("</html>");
 
+        File file = new File(outputDirectory + "document-list.html");
 
-        File file = new File(outputDirectory + "document-report.html");
-
-        if (file.exists()) {
-            file.delete();
-        }
-
+        file.delete();
         file.createNewFile();
 
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
@@ -193,26 +267,64 @@ public class CucumberReporting {
         bufferedWriter.close();
     }
 
-    private static Map<String, Tuple2<String, String>> getPdfResults(String documentLocation) throws Exception {
-        File file = new File(documentLocation + "pdf_file_results.txt");
+    private static Map<String, String[]> getDocumentResults(String documentLocation) throws Exception {
+        File file = new File(documentLocation + "document_results.txt");
 
         if (!file.exists()) {
             return null;
         }
 
-        Map<String, Tuple2<String, String>> documentMap = new HashMap<>();
+        Map<String, String[]> documentResults = new TreeMap<>();
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 
+        // Load the document into a TreeMap
         String line;
         while ((line = bufferedReader.readLine()) != null) {
-            System.out.println(line);
-            String filename = line.split("=")[0];
-            String tuple = line.split("=")[1];
-            String scenario = tuple.split(";")[0];
-            String result = tuple.split(";")[1];
-            documentMap.put(filename, new Tuple2<>(scenario, result));
+            String[] result = line.split(";");
+
+            if (result.length  < 3) {
+                documentResults.put("timestamp", new String[]{line});
+            } else if (result.length == 4) {
+                documentResults.put(result[0],
+                        new String[]{result[0], result[1], result[2], result[3]});
+            } else if (result.length == 3) {
+                documentResults.put(result[0], result);
+            } else {
+                throw new Exception("Failed to read document results. Invalid data format.");
+            }
         }
 
-        return documentMap;
+        return documentResults;
+    }
+
+    private static void writeDocumentResults() throws Exception {
+        String configuration = System.getProperty("configuration");
+
+        TestsuiteConfig env;
+        if (configuration != null) {
+            env = TestsuiteConfig.loadConfigFromString(configuration);
+        } else {
+            env = TestsuiteConfig.loadConfig("testsuite");
+        }
+
+        RequestHandler requestHandler = new RequestHandler(env);
+
+        String results = requestHandler.getDocumentResults();
+
+        writeFile("target/documents/document_results.txt", results);
+    }
+
+    private static void writeFile(String filename, String content) throws Exception {
+        BufferedWriter bufferedWriter = null;
+
+        File file = new File(filename);
+
+        file.delete();
+        file.createNewFile();
+
+        bufferedWriter = new BufferedWriter(new FileWriter(file));
+        bufferedWriter.write(content);
+
+        bufferedWriter.close();
     }
 }

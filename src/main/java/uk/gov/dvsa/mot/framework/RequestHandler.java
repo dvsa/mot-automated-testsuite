@@ -11,6 +11,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.joda.time.DateTime;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -36,19 +37,20 @@ public class RequestHandler {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     /** The web driver to use. */
-    private final WebDriver webDriver;
+    private WebDriver webDriver;
 
     /** The configuration settings to use. */
-    private final TestsuiteConfig env;
+    private TestsuiteConfig env;
 
     private boolean saveDocuments;
 
+    private String timestamp;
+
     /**
      * Creates new RequestHandler instance.
-     * @param webDriver Web driver to use for retrieving the cookies.
+     * @param env config to use
      */
-    public RequestHandler(WebDriver webDriver, TestsuiteConfig env) {
-        this.webDriver = webDriver;
+    public RequestHandler(TestsuiteConfig env) {
         this.env = env;
 
         RestAssured.useRelaxedHTTPSValidation();
@@ -59,8 +61,19 @@ public class RequestHandler {
                         .setParam(ClientPNames.CONN_MANAGER_TIMEOUT, timeout)
                         .setParam(CoreConnectionPNames.CONNECTION_TIMEOUT, timeout)
                         .setParam(CoreConnectionPNames.SO_TIMEOUT, timeout));
+    }
 
+    /**
+     * Creates new RequestHandler instance.
+     * @param webDriver Web driver to use for retrieving the cookies.
+     */
+    public RequestHandler(WebDriver webDriver, TestsuiteConfig env) {
+        this(env);
+        this.webDriver = webDriver;
+        this.env = env;
         saveDocuments = Boolean.parseBoolean(env.getProperty("saveDocuments", "false"));
+
+        timestamp = getTimestamp();
     }
 
     /**
@@ -126,7 +139,7 @@ public class RequestHandler {
             Cookie session = getCookie(DEFAULT_SESSION_COOKIE_NAME);
             Cookie token = getCookie(DEFAULT_TOKEN_COOKIE_NAME);
             try {
-                File dir = new File("target/documents/" + WebDriverWrapper.getTimestamp());
+                File dir = new File("target/documents/" + timestamp);
                 if (!dir.exists()) {
                     dir.mkdirs();
                 }
@@ -145,12 +158,70 @@ public class RequestHandler {
                 serverResponse.asInputStream().close();
             } catch (Exception ex) {
                 logger.error("Error saving document", ex);
-                System.out.println(String.format("Failed to save document: %s", ex.getMessage()));
             }
 
             return filename;
         }
 
         return null;
+    }
+
+    /**
+     * Get the timestamp from the server.
+     * @return the timestamp as a string
+     */
+    public String getTimestamp() {
+        if (timestamp == null || timestamp == "") {
+            try {
+                URL url = new URL(env.getProperty("dataserverUrl"));
+                Response serverResponse = with().get(url + "/timestamp");
+
+                timestamp = serverResponse.asString();
+
+                serverResponse.asInputStream().close();
+            } catch (Exception ex) {
+                timestamp = DateTime.now().toString("dd-MM-yyyy_HH-mm-ss");
+                logger.error("Error getting timestamp ", ex);
+            }
+        }
+
+        return timestamp;
+    }
+
+    /**
+     * Get document results.
+     * @return document results for the current session
+     */
+    public String getDocumentResults() {
+        String documentResults = "";
+
+        try {
+            URL url = new URL(env.getProperty("dataserverUrl"));
+            Response serverResponse = with().get(url + "/documents/results");
+
+            documentResults = serverResponse.asString();
+
+            serverResponse.asInputStream().close();
+        } catch (Exception ex) {
+            logger.error("Error getting timestamp ", ex);
+        }
+
+        return documentResults;
+    }
+
+    /**
+     * Send result/s to the server.
+     * @param result to send
+     */
+    public void sendDocumentResult(String result) {
+        try {
+            URL url = new URL(env.getProperty("dataserverUrl") + "/documents/results");
+
+            Response serverResponse = with().body(result).post(url);
+
+            serverResponse.asInputStream().close();
+        } catch (Exception ex) {
+            logger.error("Error sending document result", ex);
+        }
     }
 }
