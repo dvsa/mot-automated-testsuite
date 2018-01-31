@@ -13,7 +13,9 @@ import uk.gov.dvsa.mot.otp.Generator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.inject.Inject;
 
@@ -36,6 +38,9 @@ public class AuthenticationStepDefinitions implements En {
 
     /** Whether we are filtering data. */
     private final boolean isFilteringEnabled;
+
+    /** User cache. */
+    private static Map<String, String> userCache;
 
     /**
      * Creates a new instance.
@@ -325,16 +330,28 @@ public class AuthenticationStepDefinitions implements En {
      */
     private void loginWithout2fa(String dataSetName, String usernameKey, String password, int maxLoginRetries)  {
         int loginAttempts = 0;
+
+        if (userCache == null) {
+            userCache = new HashMap<String, String>();
+        }
+
         while (loginAttempts < maxLoginRetries) {
             loginAttempts++;
 
-            // load username from the dataset, populate the data keys and values
-            List<String> dataKeys = new ArrayList<>();
-            dataKeys.add(usernameKey);
-            loadData(dataSetName, dataKeys, loginAttempts > 1, maxLoginRetries);
+            String username = null;
 
-            // get the loaded username
-            String username = driverWrapper.getData(usernameKey);
+            if (userCache.containsKey(dataSetName)) {
+                //Reuse the current user
+                username = userCache.get(dataSetName);
+
+            } else {
+                // load username from the dataset, populate the data keys and values
+                List<String> dataKeys = new ArrayList<>();
+                dataKeys.add(usernameKey);
+                loadData(dataSetName, dataKeys, loginAttempts > 1, maxLoginRetries);
+                username = driverWrapper.getData(usernameKey);
+
+            }
 
             // try to login
             switch (handlePasswordScreen(username, password)) {
@@ -349,6 +366,7 @@ public class AuthenticationStepDefinitions implements En {
                     }
 
                     // all successful
+                    userCache.put(dataSetName, username);
                     return;
             }
         }
