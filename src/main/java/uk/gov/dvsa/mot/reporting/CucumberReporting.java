@@ -100,6 +100,7 @@ public class CucumberReporting {
                 .append("h1 {background-color:#9999CC}")
                 .append("h2 {background-color:#BBBBCC}")
                 .append("h3 {background-color:#DDDDFF}")
+                .append("a {text-transform: capitalize;}")
                 .append("th {border:1px solid black;background-color:#CCCCDD;}")
                 .append("td{text-transform: capitalize; border:1px solid black;}")
                 .append("table {border:1px solid black;border-collapse: collapse;}")
@@ -111,28 +112,35 @@ public class CucumberReporting {
                 .append(".known {background-color:goldenrod;font-weight:bold;color:darkred}")
                 .append("img {width:100%;")
                 .append("OL { counter-reset: item }")
-                .append("OL>LI { display: block }")
-                .append("OL>LI:before { content: counters(item, '.') ' '; counter-increment: item }</style>")
-                .append("<title>Document List</title></head><")
+                .append("LI { display: block }")
+                .append("LI:before { content: counters(item, \".\") ' '; counter-increment: item }</style>")
+                .append("<title>Document List</title></head>")
 
-                .append("body><h1>Document List</h1>")
-                .append("<h2>Results</h2>");
+                .append("<body><h1>Document List</h1>")
+                .append("<h2>Overview</h2>");
+
+
+        StringBuilder overview = new StringBuilder();
+        StringBuilder table = new StringBuilder();
 
         // Get list of all files in the directory
         File[] files = new File(documentLocation).listFiles();
 
+        overview.append("<ol>");
+
         if (documentResults == null || files == null || files.length == 0) {
-            html.append("<li>")
-                    .append("<h3>No documents saved during test.</h3>")
-                    .append("</li>");
+            table.append("<h3>No documents saved during test.</h3>");
         } else {
-            html.append("<table width='700px'>")
+            table.append("<table width='700px'>")
                     .append("<tbody>");
 
             String previousFeature = ""; // Store previous feature to see if the next scenario should start in a new row
             boolean usingFeature = false;
 
-            for (String key : documentResults.keySet()) {
+            for (int i = 0; i < documentResults.size(); ++i) {
+                String[] keyArray = documentResults.keySet().toArray(new String[documentResults.size()]);
+                String key = keyArray[i];
+
                 String[] documentResult = documentResults.get(key);
 
                 if (usingFeature == false && documentResult.length == 4) {
@@ -189,18 +197,26 @@ public class CucumberReporting {
 
                 // If current feature is different than previous one
                 if (!previousFeature.equals(feature)) {
-                    html.append("<tr class ='").append(result).append("'>")
+                    table.append("<tr id='").append(feature).append("' class ='").append(result).append("'>")
                             .append("<td colspan='2' class='").append(result).append("'>Feature: ")
                             .append(feature.replace("-", " "))
                             .append("</td>")
                             .append("</tr>");
+
+                    overview.append("<li><span class='").append(result)
+                            .append("'><a href='#").append(feature).append("'>").append(feature.replace("-", " "))
+                            .append("</a></span><ol>");
                 }
 
-                html.append("<tr>")
-                        .append("<td colspan='2' class='").append(result).append("'>")
-                        .append("<table width='100%'>")
+                overview.append("<li><span class='").append(result)
+                        .append("'><a href='#").append(name).append("'>").append(scenario.replace("-", " "))
+                        .append("</a></span></li>");
+
+                table.append("<tr class='").append(result)
+                        .append("'><td colspan='2' class='").append(result).append("'>")
+                        .append("<table id='").append(name).append("' width='100%'>")
                         .append("<tbody>")
-                        .append("<tr class ='").append(result).append("'>")
+                        .append("<tr  class ='").append(result).append("'>")
                         .append("<td class='").append(result).append("'>")
                         .append("<small>Scenario: ")
                         .append(scenario.replace("-", " ")).append("</small>")
@@ -226,34 +242,44 @@ public class CucumberReporting {
                     BufferedImage bufferedImage = renderer.renderImage(0);
                     ImageIO.write(bufferedImage,  "jpg", thumbnail);
 
-                    html.append("<a target='_blank' href='../")
+                    table.append("<a target='_blank' href='../")
                             .append(documentLocation).append(fileFullName).append("'>")
                             .append("<img src='../").append(documentLocation).append("thumbnails/")
                             .append(thumbnail.getName()).append("'/>")
                             .append("</a>");
                 } else {
-                    html.append("<a target='_blank' href='../")
+                    table.append("<a target='_blank' href='../")
                             .append(documentLocation).append(fileFullName).append("'>")
                             .append(fileFullName)
                             .append("</a>");
                 }
 
-                html.append("</td>")
+                table.append("</td>")
                         .append("</tr>")
                         .append("</tbody>")
                         .append("</table>");
 
                 // End row if previous feature is different than current one
                 if (!previousFeature.equals(feature)) {
-                    html.append("</td>")
+                    table.append("</td>")
                             .append("</tr>");
                     previousFeature = feature;
+                }
+
+                if (keyArray.length > i + 1 && !feature.equals(documentResults.get(keyArray[i + 1])[featureIndex])) {
+                    overview.append("</ol></li>");
                 }
             }
         }
 
-        html.append("</td>")
-                .append("</tr>")
+        overview.append("</ol></li></ol>");
+
+        table.append("</td>")
+                .append("</tr>");
+
+        html.append(overview.toString())
+                .append("<h2>Results</h2>")
+                .append(table.toString())
                 .append("</body>")
                 .append("</html>");
 
