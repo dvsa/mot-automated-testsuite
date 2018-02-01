@@ -110,7 +110,7 @@ public class CucumberReporting {
                 .append(".failed {background-color:tomato;font-weight:bold;color:darkred}")
                 .append(".undefined {background-color:gold;font-weight:bold;color:goldenrod}")
                 .append(".known {background-color:goldenrod;font-weight:bold;color:darkred}")
-                .append("img {width:100%;")
+                .append("img {width:100%;}")
                 .append("OL { counter-reset: item }")
                 .append("LI { display: block }")
                 .append("LI:before { content: counters(item, \".\") ' '; counter-increment: item }</style>")
