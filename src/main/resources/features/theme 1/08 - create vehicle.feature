@@ -31,12 +31,18 @@ Feature: 08 - Create Vehicle
     And I press the "Confirm and start test" button
     Then The page title contains "MOT test started"
     And I cancel the mot test after creating the vehicle
+    And I click "Print documents" and check the PDF contains:
+      | VT30            |
+      | <reg>           |
+      | <vin>           |
+      | <primaryColour> |
+      | {site}          |
 
     Examples:
     |User              |reg         |vin               |make   |model  |fuelType|cylinderCapacity|class|primaryColour|secondaryColour|Country of reg                            |years|
-    |MOT_TESTER_CLASS_4|N3WR4G      |Not provided      |AUDI   |A5     |Diesel  |2600            |4    |Red          |Black          |GB, UK, ENG, CYM, SCO (UK) - Great Britain|4    |
+    |MOT_TESTER_CLASS_4|N3WR4G      |NOTPROVIDED       |AUDI   |A5     |Diesel  |2600            |4    |Red          |Black          |GB, UK, ENG, CYM, SCO (UK) - Great Britain|4    |
     |MOT_TESTER_CLASS_5|N3WR5G      |N3WV1N54TOIEOD1234|FORD   |GT     |Steam   |0               |5    |Blue         |No other colour|GB, NI (UK) - Northern Ireland            |3    |
     |MOT_TESTER_CLASS_7|N3WR7G      |N3WV1N7TGL045AFW41|Other  |Other  |Petrol  |3400            |7    |Silver       |No other colour|GB, UK, ENG, CYM, SCO (UK) - Great Britain|5    |
-    |MOT_TESTER_CLASS_3|Not provided|N3WV1N3FLLE321ASDC|FORD   |Other  |Electric|0               |3    |Pink         |Yellow         |F (FR) - France                           |3    |
+    |MOT_TESTER_CLASS_3|NOTPROVIDED |N3WV1N3FLLE321ASDC|FORD   |Other  |Electric|0               |3    |Pink         |Yellow         |F (FR) - France                           |3    |
     |MOT_TESTER_CLASS_2|N3WR2G      |N3WV1N2FLOP42ADWE9|DUCATI |M900   |Other   |1200            |2    |Blue         |No other colour|D (DE) - Germany                          |2    |
     |MOT_TESTER_CLASS_1|N3WR1G      |N3WV1N1L0RT42LKO3D|APRILIA|125    |Gas     |1400            |1    |Gold         |Silver         |GBM (IM) - Isle of Man                    |7    |

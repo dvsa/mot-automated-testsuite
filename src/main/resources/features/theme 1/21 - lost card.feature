@@ -83,6 +83,8 @@ Feature: 21 - Existing user has lost 2FA card
     # Login via security questions, activate the new card
     And I load immediately "2FA_CARD_UNUSED" as {serialNumber}
     And I login without 2FA as {username}
+    #And The page contains "You have ordered a new card.  Until you receive and activate the card, sign in with your security questions."
+    #And I click the "Continue" link
     And The page title contains "Your security questions"
     And I enter "answer" in the {question1} field
     And I enter "answer" in the {question2} field

@@ -1,5 +1,6 @@
 package uk.gov.dvsa.mot.framework;
 
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -25,8 +26,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import uk.gov.dvsa.mot.framework.csv.CsvDocument;
+import uk.gov.dvsa.mot.framework.csv.CsvException;
+import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
+import uk.gov.dvsa.mot.framework.pdf.PdfException;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -66,8 +71,8 @@ public class WebDriverWrapper {
     /** The data map to use. */
     private final Map<String, String> data;
 
-    /** All test results performed when running the testsuite. */
-    private static Map<String, String> recordedTests;
+    /** Request handler to process HTTP requests. **/
+    private final RequestHandler requestHandler;
 
     /**
      * Creates a new instance.
@@ -78,7 +83,7 @@ public class WebDriverWrapper {
         this.env = env;
         this.data = new HashMap<>();
         this.webDriver = createWebDriver();
-        this.recordedTests = new HashMap<>();
+        this.requestHandler = new RequestHandler(this.webDriver, env);
 
         // amount of time (in milliseconds) to wait for browser clicks to happen, before page refresh logic
         // this is a mandatory delay, to accommodate any browser/environment/network latency
@@ -1494,6 +1499,151 @@ public class WebDriverWrapper {
         } catch (IOException io) {
             logger.error("Unable to save vehicle tests results, for the MOTH test.");
             throw new RuntimeException(io.getMessage());
+        }
+    }
+    
+    /**
+     * Creates a new PDF document from the request handler and the url.
+     * @param url                       the URL of the PDF document
+     * @return                          the PDF Document
+     * @throws PdfException             error loading PDF document
+     */
+    private PdfDocument createPdfDocument(String url) throws PdfException {
+        try {
+            PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setSortByPosition(true);
+
+            return new PdfDocument(requestHandler.getPdfDocument(url));
+        } catch (IOException ioException) {
+            throw new PdfException("Unable to find or open PDF", ioException);
+        }
+    }
+
+    /**
+     * Checks whether a PDF contains expected values.
+     * @param linkText  The link to the PDF
+     * @param values    Array of values to check are contained
+     * @return          Whether the PDF contains all expected values
+     */
+    public boolean pdfContains(String linkText, List<String> values) {
+        // find any "a" elements with text containing the link text
+        List<WebElement> links = findLinks(linkText);
+
+        if (links.size() == 0) {
+            String message = "No links found with text: " + linkText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            try {
+                PdfDocument pdfDocument = createPdfDocument(links.get(0).getAttribute("href"));
+
+                return pdfDocument.contains(values);
+            } catch (PdfException ex) {
+                logger.error("Unable to load PDF document", ex);
+                throw new RuntimeException("Error processing PDF document", ex);
+            }
+        }
+    }
+
+    /**
+     * Creates a CSV document from the URL provided.
+     * @param       url of the target document
+     * @return      parsed CSV containing the url output
+     */
+    private CsvDocument createCsvDocument(String url) {
+        try {
+            return requestHandler.getCsvDocument(url);
+        } catch (CsvException ex) {
+            logger.error(String.format("Failed to load CSV document from %s.", url), ex);
+            throw new RuntimeException("Error processing CSV document", ex);
+        }
+    }
+
+    /**
+     * Checks whether a CSV contains expected values.
+     * @param linkText  The link to the PDF
+     * @param values    Array of values to check are contained
+     * @return          Whether the CSV contains all expected values
+     */
+    public boolean csvContains(String linkText, List<String> values) {
+        // find any "a" elements with text containing the link text
+        List<WebElement> links = findLinks(linkText);
+
+        if (links.size() == 0) {
+            String message = "No links found with text: " + linkText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            CsvDocument csvDocument = createCsvDocument(links.get(0).getAttribute("href"));
+
+            return csvDocument.contains(values);
+        }
+    }
+
+    /**
+     * Pauses the tests for the required amount of seconds.
+     * @param time  The amount of seconds to wait
+     */
+    public void timeWait(Integer time) {
+        try {
+            Thread.sleep(time * 1000);
+        } catch (InterruptedException ex) {
+            // called if trying to shutdown the test suite
+            String message = "Wait for the web browser was interrupted";
+            logger.error(message, ex);
+
+            // propagate a fatal error so testsuite shuts down
+            throw new RuntimeException(message, ex);
+        }
+    }
+
+    /**
+     * Clicks the specified accordion.
+     * @param accordionId  The accordion ID
+     */
+    public void accordionClick(String accordionId) {
+        List<WebElement> accordions =  webDriver.findElements(By.xpath("//p[@id = '" + accordionId + "']"));
+        if (accordions.size() == 0) {
+            String message = "No accordions found with ID name: " + accordionId;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else if (accordions.size() > 1) {
+            String message = "Several accordions found with ID name: " + accordionId;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            clickAndWaitForPageLoad(accordions.get(0));
+        }
+    }
+
+    /**
+     * Clicks the last help text dropdown specified.
+     * @param helpText The text for the help dropdown
+     */
+    public void helptextClick(String helpText) {
+        // Need to slow down the test so the browser can click on the correct element.
+        try {
+            Thread.sleep(400);
+        } catch (InterruptedException ex) {
+            // called if trying to shutdown the test suite
+            String message = "Wait for the web browser was interrupted";
+            logger.error(message, ex);
+
+            // propagate a fatal error so testsuite shuts down
+            throw new RuntimeException(message, ex);
+        }
+
+        List<WebElement> spans = findSpans(helpText);
+        if (spans.size() == 0) {
+            String message = "No span elements found with text: " + helpText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+        } else {
+            clickAndWaitForPageLoad(spans.get(spans.size() - 1));
         }
     }
 }

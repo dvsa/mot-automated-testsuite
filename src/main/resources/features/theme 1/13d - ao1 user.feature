@@ -27,15 +27,15 @@ Feature: 13d - A01 user
     Given I login without 2FA using "AO1_USER" as {ao1User}
 
     When I click the "Create an Authorised Examiner" link
-    And I enter "Example MOT Testers" in the "Business name" field
-    And I enter "Example MOT Testers Ltd" in the "Trading name" field
+    And I enter "Example MOT Testers" in the field with id "organisationName"
+    And I enter "Example MOT Testers Ltd" in the field with id "tradingAs"
     And I select "Sole trader" in the "Business type" field
-    And I enter "10 Example Street" in the "Address line" field
-    And I enter "Example Town" in the "Town or city" field
-    And I enter "AB1 2CD" in the "Postcode" field
-    And I enter "01234567890" in the "Phone number" field
-    And I enter "no_one@example.com" in the "Email address" field
-    And I enter "no_one@example.com" in the "Re-type email address" field
+    And I enter "10 Example Street" in the field with id "REGCaddressLine1"
+    And I enter "Example Town" in the field with id "REGCaddressTown"
+    And I enter "AB1 2CD" in the field with id "REGCaddressPostCode"
+    And I enter "01234567890" in the field with id "REGCphoneNumber"
+    And I enter "no_one@example.com" in the field with id "REGCemail"
+    And I enter "no_one@example.com" in the field with id "REGCemailConfirmation"
     And I click the "Yes" radio button in fieldset "Are they the same as the business contact details?"
     And I select "01" in the "DVSA Area Office" field
     And I press the "Continue" button
@@ -53,15 +53,15 @@ Feature: 13d - A01 user
     Given I login without 2FA using "AO1_USER" as {ao1User}
 
     When I click the "Create a site" link
-    And I enter "Example Site" in the "Site name" field
+    And I enter "Example Site" in the field with id "name"
     And I select "Vehicle Testing Station" in the "Site type" field
-    And I enter "10 Example Street" in the "Address line" field
-    And I enter "Example Town" in the "Town or city" field
-    And I enter "AB1 2CD" in the "Postcode" field
+    And I enter "10 Example Street" in the field with id "BUSaddressLine1"
+    And I enter "Example Town" in the field with id "BUSaddressTown"
+    And I enter "AB1 2CD" in the field with id "BUSaddressPostCode"
     And I click the "England" radio button in fieldset "Country"
-    And I enter "no_one@example.com" in the "Email address" field
-    And I enter "no_one@example.com" in the "Re-type email address" field
-    And I enter "01234567890" in the "Telephone number" field
+    And I enter "no_one@example.com" in the field with id "BUSemail"
+    And I enter "no_one@example.com" in the field with id "BUSemailConfirmation"
+    And I enter "01234567890" in the field with id "BUSphoneNumber"
     And I select "2" in the "How many two-person test lanes (TPTL) does the site have?" field
     And I select "3" in the "How many one-person test lanes (OPTL) does the site have?" field
     And I click the "Class 1" checkbox

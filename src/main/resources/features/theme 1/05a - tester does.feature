@@ -23,6 +23,11 @@ Feature: 05a - Tester does...
     And I check the fails section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT20            |
+      | {registration1} |
+      | {vin1}          |
+      | {site}          |
     And I click the "Back to user home" link
     And I check a slot was successfully used for site {site}
 
@@ -46,6 +51,12 @@ Feature: 05a - Tester does...
     And I check the brake results section of the test summary is "Fail"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT30                                         |
+      | {registration1}                              |
+      | {vin1}                                       |
+      | {site}                                       |
+      | Parking brake: efficiency below requirements |
 
 
   @smoke
@@ -77,6 +88,17 @@ Feature: 05a - Tester does...
     And I check the fails section of the test summary has "Test defect 3"
     And I save the test result by clicking "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT30                                      |
+      | {registration1}                           |
+      | {vin1}                                    |
+      | {site}                                    |
+      | Steering system excessively tight         |
+      | Exhaust has a major leak of exhaust gases |
+      | Battery leaking electrolyte               |
+      | Test defect 1                             |
+      | Test defect 2                             |
+      | Test defect 3                             |
 
 
   Scenario: Tester enters a class 4 MOT test fail, with brake performance not tested
@@ -100,6 +122,12 @@ Feature: 05a - Tester does...
     And I check the fails section of the test summary has "Brake performance not tested"
     And I save the test result by clicking "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT30                         |
+      | {registration1}              |
+      | {vin1}                       |
+      | {site}                       |
+      | Brake performance not tested |
 
 
   Scenario: Tester enters a class 4 MOT test pass, with advisory defects
@@ -135,4 +163,18 @@ Feature: 05a - Tester does...
     And I check the advisory section of the test summary has "Test manual advisory"
     And I save the test result by clicking "Save test result" button
     And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+    | VT20                                                                 |
+    | {registration1}                                                      |
+    | {vin1}                                                               |
+    | {site}                                                               |
+    | Obligatory mirror obscured but not seriously affecting the rear view |
+    | Adjustable towbar bracket slightly worn                              |
+    | Body has slight corrosion                                            |
+    | Electrical wiring damaged, but not likely to cause a short           |
+    | Test advisory 1                                                      |
+    | Test advisory 2                                                      |
+    | Test advisory 3                                                      |
+    | Test advisory 4                                                      |
+    | Test manual advisory                                                 |
 
