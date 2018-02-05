@@ -1207,7 +1207,8 @@ public class WebDriverWrapper {
      */
     public String getRelativeTextFromHeading(String headingText) {
         return webDriver.findElement(
-                By.xpath("//h2[contains(text(),'" + headingText + "')]/../following-sibling::div[1]/p")).getText();
+                By.xpath("//h2[contains(text(),'" + headingText + "')]/../following-sibling::div[1]/p"))
+                .getText().trim();
     }
 
     /**
