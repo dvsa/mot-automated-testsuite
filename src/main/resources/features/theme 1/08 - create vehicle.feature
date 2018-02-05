@@ -1,6 +1,7 @@
 @regression
 Feature: 08 - Create Vehicle
 
+  @browserstack
   Scenario Outline: Tester Creates a new vehicle with class <class>
     Given I login with 2FA using "<User>" as {username1}, {site}
 

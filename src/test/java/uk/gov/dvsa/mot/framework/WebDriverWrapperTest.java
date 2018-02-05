@@ -14,12 +14,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.springframework.core.env.Environment;
-import org.springframework.mock.env.MockEnvironment;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Unit tests for any thorny logic in the <code>WebDriverWrapper</code> class.
@@ -40,11 +40,10 @@ public class WebDriverWrapperTest {
         // the current working directory as a full path
         String home = Paths.get(".").toAbsolutePath().normalize().toString();
 
-        // mocked testsuite.properties values
-        Environment env = new MockEnvironment()
-                .withProperty("startingUrl", "file:/" + home + "/src/test/resources/exampleHtml")
-                .withProperty("pageWait", "1")
-                .withProperty("clickWait", "1");
+        TestsuiteConfig env = new TestsuiteConfig();
+        env.setProperty("startingUrl", "file:/" + home + "/src/test/resources/exampleHtml");
+        env.setProperty("pageWait", "1");
+        env.setProperty("clickWait", "1");
 
         driverWrapper = new HtmlUnitWebDriverWrapper(env);
     }
@@ -1343,7 +1342,7 @@ public class WebDriverWrapperTest {
          *
          * @param env The mocked testsuite.properties
          */
-        HtmlUnitWebDriverWrapper(Environment env) {
+        HtmlUnitWebDriverWrapper(TestsuiteConfig env) {
             super(env);
         }
 

@@ -6,7 +6,6 @@ import cucumber.api.java8.En;
 
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import javax.inject.Inject;

@@ -1,6 +1,7 @@
 @regression
 Feature: 07 - Tester records Contingency Test
 
+  @browserstack
    Scenario: A tester record a pass contingency test
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     Then I start a contingency MOT test at site {site}

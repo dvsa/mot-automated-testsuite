@@ -1,17 +1,25 @@
 package uk.gov.dvsa.mot.server.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.dvsa.mot.server.data.DatabaseDataProvider;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 
 @RestController()
@@ -28,7 +36,7 @@ public class DataController {
      * Get an uncached dataset.
      * @return The dataset
      */
-    @RequestMapping(value = "/dataset/uncached/{datasetName}/{length}", method = GET,
+    @RequestMapping(value = "/data/dataset/uncached/{datasetName}/{length}", method = GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<List<String>>> getUncachedDataset(
             @PathVariable String datasetName, @PathVariable int length) {
@@ -40,7 +48,7 @@ public class DataController {
      * Get an entry from an uncached dataset.
      * @return The entry
      */
-    @RequestMapping(value = "/entry/uncached/{datasetName}", method = GET,
+    @RequestMapping(value = "/data/entry/uncached/{datasetName}", method = GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<String>> getUncachedDatasetEntry(@PathVariable String datasetName) {
         logger.info("getUncachedDatasetEntry: name {}", datasetName);
@@ -51,7 +59,7 @@ public class DataController {
      * Get an entry from a cached dataset.
      * @return The entry
      */
-    @RequestMapping(value = "/entry/cached/{datasetName}", method = GET,
+    @RequestMapping(value = "/data/entry/cached/{datasetName}", method = GET,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<List<String>> getCachedDatasetEntry(@PathVariable String datasetName) {
         logger.info("getCachedDatasetEntry: name {}", datasetName);

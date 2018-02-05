@@ -24,6 +24,7 @@ Feature: 10 - Site Manager and Site Admin
     And I check there is pending "Site admin" role listed for {otherName1}
 
 
+  @browserstack
   Scenario: Site Admin assigns Tester role
     Given I login with 2FA using "SITE_MGR_AND_OTHER_TESTER" as {managerUsername1}, {sitename1}, {sitenumber1}, {otherUsername1}, {otherName1}
     And I click the "({sitenumber1}) {sitename1}" link
@@ -47,6 +48,7 @@ Feature: 10 - Site Manager and Site Admin
     And I check there is pending "Tester" role listed for {otherName1}
 
 
+  @browserstack
   Scenario: Site Manager views and aborts an active MOT
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
 
@@ -74,6 +76,7 @@ Feature: 10 - Site Manager and Site Admin
       | {siteName}      |
 
 
+  @browserstack
   Scenario: Site Admin updates VTS details
     Given I login with 2FA using "SITE_ADMIN" as {username1}, {sitename1}, {sitenumber1}, {startingGroupABrakeDefault}, {startingGroupBServiceBrakeDefault}, {startingGroupBParkingBrakeDefault}
     And I choose different brake defaults for {startingGroupABrakeDefault}, {startingGroupBServiceBrakeDefault}, {startingGroupBParkingBrakeDefault} as {newGroupABrakeDefault}, {newGroupBServiceBrakeDefault}, {newGroupBParkingBrakeDefault}

@@ -12,14 +12,13 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.mock.env.MockEnvironment;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.ResponseCreator;
 import org.springframework.web.client.RestTemplate;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +47,8 @@ public class ClientDataProviderTest {
     public void setUp() {
         RestTemplate restTemplate = new RestTemplate();
         server = MockRestServiceServer.bindTo(restTemplate).build();
-        Environment env = new MockEnvironment().withProperty("dataserverUrl", URL);
+        TestsuiteConfig env = new TestsuiteConfig();
+        env.setProperty("dataserverUrl", URL);
         dataProvider = new ClientDataProvider(env, restTemplate);
     }
 
@@ -73,7 +73,7 @@ public class ClientDataProviderTest {
         expected.add("XYZ");
         expected.add("01-12-2017");
 
-        mockServerRequest(URL + "/entry/cached/" + DATA_SET,
+        mockServerRequest(URL + "/data/entry/cached/" + DATA_SET,
                 withSuccess("[ \"54321\", \"XYZ\", \"01-12-2017\" ]", MediaType.APPLICATION_JSON_UTF8));
 
         List<String> actual = dataProvider.getCachedDatasetEntry(DATA_SET);
@@ -85,7 +85,7 @@ public class ClientDataProviderTest {
      */
     @Test
     public void getCachedDatasetEntry_NoData() {
-        mockServerRequest(URL + "/entry/cached/" + DATA_SET, withStatus(HttpStatus.NOT_FOUND));
+        mockServerRequest(URL + "/data/entry/cached/" + DATA_SET, withStatus(HttpStatus.NOT_FOUND));
 
         try {
             dataProvider.getCachedDatasetEntry(DATA_SET);
@@ -102,7 +102,7 @@ public class ClientDataProviderTest {
      */
     @Test
     public void getCachedDatasetEntry_Error() {
-        mockServerRequest(URL + "/entry/cached/" + DATA_SET, withServerError().body("{ \"error\": \"Oops\" }"));
+        mockServerRequest(URL + "/data/entry/cached/" + DATA_SET, withServerError().body("{ \"error\": \"Oops\" }"));
 
         try {
             dataProvider.getCachedDatasetEntry(DATA_SET);
@@ -123,7 +123,7 @@ public class ClientDataProviderTest {
         expected.add("XYZ");
         expected.add("01-12-2017");
 
-        mockServerRequest(URL + "/entry/uncached/" + DATA_SET,
+        mockServerRequest(URL + "/data/entry/uncached/" + DATA_SET,
                 withSuccess("[ \"54321\", \"XYZ\", \"01-12-2017\" ]", MediaType.APPLICATION_JSON_UTF8));
 
         List<String> actual = dataProvider.getUncachedDatasetEntry(DATA_SET);
@@ -135,7 +135,7 @@ public class ClientDataProviderTest {
      */
     @Test
     public void getUncachedDatasetEntry_NoData() {
-        mockServerRequest(URL + "/entry/uncached/" + DATA_SET, withStatus(HttpStatus.NOT_FOUND));
+        mockServerRequest(URL + "/data/entry/uncached/" + DATA_SET, withStatus(HttpStatus.NOT_FOUND));
 
         try {
             dataProvider.getUncachedDatasetEntry(DATA_SET);
@@ -152,7 +152,7 @@ public class ClientDataProviderTest {
      */
     @Test
     public void getUncachedDatasetEntry_Error() {
-        mockServerRequest(URL + "/entry/uncached/" + DATA_SET, withServerError().body("{ \"error\": \"Oops\" }"));
+        mockServerRequest(URL + "/data/entry/uncached/" + DATA_SET, withServerError().body("{ \"error\": \"Oops\" }"));
 
         try {
             dataProvider.getUncachedDatasetEntry(DATA_SET);
@@ -182,7 +182,7 @@ public class ClientDataProviderTest {
         expected.add(entry1);
         expected.add(entry2);
 
-        mockServerRequest(URL + "/dataset/uncached/" + DATA_SET + "/10",
+        mockServerRequest(URL + "/data/dataset/uncached/" + DATA_SET + "/10",
                 withSuccess("[ [ \"54321\", \"XYZ\", \"01-12-2017\" ],[ \"67890\", \"abc\", null ] ]",
                         MediaType.APPLICATION_JSON_UTF8));
 
@@ -195,7 +195,7 @@ public class ClientDataProviderTest {
      */
     @Test
     public void getUncachedDataset_NoData() {
-        mockServerRequest(URL + "/dataset/uncached/" + DATA_SET + "/10", withStatus(HttpStatus.NOT_FOUND));
+        mockServerRequest(URL + "/data/dataset/uncached/" + DATA_SET + "/10", withStatus(HttpStatus.NOT_FOUND));
 
         try {
             dataProvider.getUncachedDataset(DATA_SET, 10);
@@ -212,7 +212,7 @@ public class ClientDataProviderTest {
      */
     @Test
     public void getUncachedDataset_Error() {
-        mockServerRequest(URL + "/dataset/uncached/" + DATA_SET + "/10",
+        mockServerRequest(URL + "/data/dataset/uncached/" + DATA_SET + "/10",
                 withServerError().body("{ \"error\": \"Oops\" }"));
 
         try {

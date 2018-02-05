@@ -1,14 +1,12 @@
 package uk.gov.dvsa.mot.di;
 
 import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.dvsa.mot.data.ClientDataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.lang.management.ManagementFactory;
 
@@ -20,7 +18,6 @@ import java.lang.management.ManagementFactory;
  * with Spring dependencies injected from the current Spring application.</p>
  */
 @Configuration
-@PropertySource("file:configuration/testsuite.properties")
 public class SpringConfiguration {
 
     static {
@@ -33,9 +30,6 @@ public class SpringConfiguration {
         MDC.put("pid", jmxName);
     }
 
-    @Autowired
-    Environment env;
-
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
@@ -43,11 +37,32 @@ public class SpringConfiguration {
 
     @Bean
     public ClientDataProvider dataProvider() {
-        return new ClientDataProvider(env, restTemplate());
+        return new ClientDataProvider(testsuiteConfig(), restTemplate());
     }
 
     @Bean
     public WebDriverWrapper webDriverWrapper() {
-        return new WebDriverWrapper(env);
+        return new WebDriverWrapper(testsuiteConfig());
+    }
+
+    /**
+     * Bean to provide TestsuiteConfig.
+     *
+     * @return  testsuiteconfig to use.
+     */
+    @Bean
+    public TestsuiteConfig testsuiteConfig() {
+        String targetConfig = System.getProperty("target_config");
+        String configuration = System.getProperty("configuration");
+
+        if (targetConfig != null) {
+            return TestsuiteConfig.loadConfig("testsuite",
+                    "browserstack",
+                    targetConfig);
+        } else if (configuration != null) {
+            return TestsuiteConfig.loadConfigFromString(configuration);
+        } else {
+            return TestsuiteConfig.loadConfig("testsuite");
+        }
     }
 }

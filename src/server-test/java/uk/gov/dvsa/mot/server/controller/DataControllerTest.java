@@ -33,7 +33,7 @@ public class DataControllerTest {
     private DatabaseDataProvider dataProvider;
 
     /**
-     * Tests the GET /dataset/uncached endpoint, with a successful scenario.
+     * Tests the GET /data/dataset/uncached endpoint, with a successful scenario.
      * @throws Exception    Test failed
      */
     @Test
@@ -56,14 +56,14 @@ public class DataControllerTest {
         given(dataProvider.getUncachedDataset("TEST_DATASET", 5)).willReturn(dataset);
 
         // should return 200 response with JSON response
-        mvc.perform(get("/dataset/uncached/TEST_DATASET/5").accept(MediaType.APPLICATION_JSON_UTF8))
+        mvc.perform(get("/data/dataset/uncached/TEST_DATASET/5").accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().string("[[\"1\",\"aaa\",\"\"],[\"2\",\"bbb\",null]]"));
     }
 
     /**
-     * Tests the GET /dataset/uncached endpoint, for an unknown dataset.
+     * Tests the GET /data/dataset/uncached endpoint, for an unknown dataset.
      * @throws Exception    Test failed
      */
     @Test
@@ -73,12 +73,12 @@ public class DataControllerTest {
                 .willThrow(new IllegalStateException("No such dataset!"));
 
         // should return 404 response with no response body
-        mvc.perform(get("/dataset/uncached/NO_SUCH_DATASET/10").accept(MediaType.APPLICATION_JSON_UTF8))
+        mvc.perform(get("/data/dataset/uncached/NO_SUCH_DATASET/10").accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNotFound());
     }
 
     /**
-     * Tests the GET /dataset/uncached endpoint, for an other error.
+     * Tests the GET /data/dataset/uncached endpoint, for an other error.
      * @throws Exception    Test failed
      */
     @Test
@@ -88,14 +88,14 @@ public class DataControllerTest {
                 .willThrow(new DataSourceLookupFailureException("Fatal error!")); // example Spring runtime exception
 
         // should return 500 response with JSON respponse
-        mvc.perform(get("/dataset/uncached/ERROR_DATASET/2").accept(MediaType.APPLICATION_JSON_UTF8))
+        mvc.perform(get("/data/dataset/uncached/ERROR_DATASET/2").accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().string("{\"message\":\"Fatal error!\"}"));
     }
 
     /**
-     * Tests the GET /entry/uncached endpoint, with a successful scenario.
+     * Tests the GET /data/entry/uncached endpoint, with a successful scenario.
      * @throws Exception    Test failed
      */
     @Test
@@ -109,14 +109,14 @@ public class DataControllerTest {
         given(dataProvider.getUncachedDatasetEntry("TEST_DATASET")).willReturn(entry);
 
         // should return 200 response with JSON response
-        mvc.perform(get("/entry/uncached/TEST_DATASET").accept(MediaType.APPLICATION_JSON_UTF8))
+        mvc.perform(get("/data/entry/uncached/TEST_DATASET").accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().string("[\"2\",\"bbb\",null]"));
     }
 
     /**
-     * Tests the GET /entry/uncached endpoint, for an unknown dataset.
+     * Tests the GET /data/entry/uncached endpoint, for an unknown dataset.
      * @throws Exception    Test failed
      */
     @Test
@@ -126,12 +126,12 @@ public class DataControllerTest {
                 .willThrow(new IllegalStateException("No such dataset!"));
 
         // should return 404 response with no response body
-        mvc.perform(get("/entry/uncached/NO_SUCH_DATASET").accept(MediaType.APPLICATION_JSON_UTF8))
+        mvc.perform(get("/data/entry/uncached/NO_SUCH_DATASET").accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNotFound());
     }
 
     /**
-     * Tests the GET /entry/uncached endpoint, for an other error.
+     * Tests the GET /data/entry/uncached endpoint, for an other error.
      * @throws Exception    Test failed
      */
     @Test
@@ -141,14 +141,14 @@ public class DataControllerTest {
                 .willThrow(new DataSourceLookupFailureException("Fatal error!")); // example Spring runtime exception
 
         // should return 500 response with JSON respponse
-        mvc.perform(get("/entry/uncached/ERROR_DATASET").accept(MediaType.APPLICATION_JSON_UTF8))
+        mvc.perform(get("/data/entry/uncached/ERROR_DATASET").accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().string("{\"message\":\"Fatal error!\"}"));
     }
 
     /**
-     * Tests the GET /entry/cached endpoint, with a successful scenario.
+     * Tests the GET /data/entry/cached endpoint, with a successful scenario.
      * @throws Exception    Test failed
      */
     @Test
@@ -162,14 +162,14 @@ public class DataControllerTest {
         given(dataProvider.getCachedDatasetEntry("TEST_DATASET")).willReturn(entry);
 
         // should return 200 response with JSON response
-        mvc.perform(get("/entry/cached/TEST_DATASET").accept(MediaType.APPLICATION_JSON_UTF8))
+        mvc.perform(get("/data/entry/cached/TEST_DATASET").accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().string("[\"2\",\"bbb\",null]"));
     }
 
     /**
-     * Tests the GET /entry/cached endpoint, for an unknown dataset.
+     * Tests the GET /data/entry/cached endpoint, for an unknown dataset.
      * @throws Exception    Test failed
      */
     @Test
@@ -179,12 +179,12 @@ public class DataControllerTest {
                 .willThrow(new IllegalStateException("No such dataset!"));
 
         // should return 404 response with no response body
-        mvc.perform(get("/entry/cached/NO_SUCH_DATASET").accept(MediaType.APPLICATION_JSON_UTF8))
+        mvc.perform(get("/data/entry/cached/NO_SUCH_DATASET").accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNotFound());
     }
 
     /**
-     * Tests the GET /entry/cached endpoint, for an other error.
+     * Tests the GET /data/entry/cached endpoint, for an other error.
      * @throws Exception    Test failed
      */
     @Test
@@ -194,7 +194,7 @@ public class DataControllerTest {
                 .willThrow(new DataSourceLookupFailureException("Fatal error!")); // example Spring runtime exception
 
         // should return 500 response with JSON respponse
-        mvc.perform(get("/entry/cached/ERROR_DATASET").accept(MediaType.APPLICATION_JSON_UTF8))
+        mvc.perform(get("/data/entry/cached/ERROR_DATASET").accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().string("{\"message\":\"Fatal error!\"}"));

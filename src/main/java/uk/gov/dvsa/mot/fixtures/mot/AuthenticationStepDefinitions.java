@@ -6,10 +6,10 @@ import static org.junit.Assert.assertEquals;
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.data.DataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 import uk.gov.dvsa.mot.otp.Generator;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,14 +41,13 @@ public class AuthenticationStepDefinitions implements En {
      * Creates a new instance.
      * @param driverWrapper     The driver wrapper to use
      * @param dataProvider      The data provider to use
-     * @param env               The config settings to use
      */
     @Inject
-    public AuthenticationStepDefinitions(WebDriverWrapper driverWrapper, DataProvider dataProvider,
-                                         Environment env) {
+    public AuthenticationStepDefinitions(WebDriverWrapper driverWrapper, DataProvider dataProvider) {
         logger.debug("Creating AuthenticationStepDefinitions...");
         this.driverWrapper = driverWrapper;
         this.dataProvider = dataProvider;
+        TestsuiteConfig env = driverWrapper.getConfig();
         this.isFilteringEnabled = Boolean.parseBoolean(env.getProperty("dataFiltering", "false"));
         logger.info("Filtering enabled: {}", isFilteringEnabled);
 
@@ -57,14 +56,14 @@ public class AuthenticationStepDefinitions implements En {
                     loginWith2fa(dataSetName, usernameKey,
                             env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
                             Optional.empty(), Optional.empty(),
-                            env.getRequiredProperty("maxLoginRetries", Integer.class), key2));
+                            Integer.parseInt(env.getRequiredProperty("maxLoginRetries")), key2));
 
         Given("^I login with 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String dataSetName, String usernameKey, String key2, String key3) ->
                     loginWith2fa(dataSetName, usernameKey,
                             env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
                             Optional.empty(), Optional.empty(),
-                            env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3));
+                            Integer.parseInt(env.getRequiredProperty("maxLoginRetries")), key2, key3));
 
         Given("^I login with 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\},"
                 + " \\{([^\\}]+)\\}$",
@@ -72,7 +71,7 @@ public class AuthenticationStepDefinitions implements En {
                     loginWith2fa(dataSetName, usernameKey,
                             env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
                             Optional.empty(), Optional.empty(),
-                            env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3, key4));
+                            Integer.parseInt(env.getRequiredProperty("maxLoginRetries")), key2, key3, key4));
 
         Given("^I login with 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\},"
                         + " \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
@@ -80,7 +79,7 @@ public class AuthenticationStepDefinitions implements En {
                     loginWith2fa(dataSetName, usernameKey,
                             env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
                             Optional.empty(), Optional.empty(),
-                            env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3, key4, key5));
+                            Integer.parseInt(env.getRequiredProperty("maxLoginRetries")), key2, key3, key4, key5));
 
         Given("^I login with 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\},"
                         + " \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
@@ -88,7 +87,7 @@ public class AuthenticationStepDefinitions implements En {
                  String key6) -> loginWith2fa(dataSetName, usernameKey,
                         env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
                         Optional.empty(), Optional.empty(),
-                        env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3, key4, key5, key6));
+                        Integer.parseInt(env.getRequiredProperty("maxLoginRetries")), key2, key3, key4, key5, key6));
 
         Given("^I login with 2FA as \\{([^\\}]+)\\}$", (String usernameKey) ->
                 loginWith2fa(usernameKey, env.getRequiredProperty("password"),
@@ -97,7 +96,7 @@ public class AuthenticationStepDefinitions implements En {
         Given("^I login without 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}$",
                 (String dataSetName, String usernameKey) ->
                     loginWithout2fa(dataSetName, usernameKey, env.getRequiredProperty("password"),
-                            env.getRequiredProperty("maxLoginRetries", Integer.class)));
+                            Integer.parseInt(env.getRequiredProperty("maxLoginRetries"))));
 
         Given("^I login without 2FA as \\{([^\\}]+)\\}$", (String usernameKey) ->
                         loginWithout2fa(usernameKey, env.getRequiredProperty("password")));
@@ -108,13 +107,13 @@ public class AuthenticationStepDefinitions implements En {
                     loginWith2fa(dataSetName, usernameKey,
                             env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
                             Optional.of(Integer.parseInt(drift)), Optional.of(lastDriftKey),
-                            env.getRequiredProperty("maxLoginRetries", Integer.class), key3, key4));
+                            Integer.parseInt(env.getRequiredProperty("maxLoginRetries")), key3, key4));
 
         Given("^I login and click forgotten card using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, "
                         + "\\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String dataSetName, String usernameKey, String key2, String key3, String key4) ->
                         loginAndClickForgottenCard(dataSetName, usernameKey, env.getRequiredProperty("password"),
-                                env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3, key4));
+                                Integer.parseInt(env.getRequiredProperty("maxLoginRetries")), key2, key3, key4));
 
         Given("^I generate 2FA PIN with drift ([\\+|\\-]\\d+) as \\{([^\\}]+)\\}$",
                 (String drift, String pinKey) ->

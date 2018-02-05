@@ -60,6 +60,7 @@ Feature: 05a - Tester does...
 
 
   @smoke
+  @browserstack
   Scenario: Tester enters a class 4 MOT test fail, with failure defects
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}

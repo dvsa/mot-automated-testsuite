@@ -6,7 +6,6 @@ import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 import javax.inject.Inject;
 
 
-
 /**
  * Step definitions specific to the <i>Tester does...</i> feature.
  */

@@ -2,11 +2,11 @@ package uk.gov.dvsa.mot.data;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class ClientDataProvider implements DataProvider {
     /**
      * Creates a new instance.
      */
-    public ClientDataProvider(Environment env, RestTemplate restTemplate) {
+    public ClientDataProvider(TestsuiteConfig env, RestTemplate restTemplate) {
         logger.debug("Creating ClientDataProvider...");
         this.dataserverUrl = env.getRequiredProperty("dataserverUrl");
         this.restTemplate = restTemplate;
@@ -48,7 +48,7 @@ public class ClientDataProvider implements DataProvider {
 
         @SuppressWarnings("unchecked")
         List<String> entry = (List<String>) (restTemplate.getForObject(
-                dataserverUrl + "/entry/cached/{dataSetName}", List.class, dataSetName));
+                dataserverUrl + "/data/entry/cached/{dataSetName}", List.class, dataSetName));
 
         return entry;
     }
@@ -65,7 +65,7 @@ public class ClientDataProvider implements DataProvider {
 
         @SuppressWarnings("unchecked")
         List<String> entry = (List<String>) (restTemplate.getForObject(
-                dataserverUrl + "/entry/uncached/{dataSetName}", List.class, dataSetName));
+                dataserverUrl + "/data/entry/uncached/{dataSetName}", List.class, dataSetName));
 
         return entry;
     }
@@ -84,7 +84,7 @@ public class ClientDataProvider implements DataProvider {
 
         @SuppressWarnings("unchecked")
         List<List<String>> entry = (List<List<String>>) (restTemplate.getForObject(
-                dataserverUrl + "/dataset/uncached/{dataSetName}/{length}", List.class, dataSetName, length));
+                dataserverUrl + "/data/dataset/uncached/{dataSetName}/{length}", List.class, dataSetName, length));
 
         return entry;
     }
