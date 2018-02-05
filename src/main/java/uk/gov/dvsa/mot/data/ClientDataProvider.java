@@ -48,7 +48,7 @@ public class ClientDataProvider implements DataProvider {
 
         @SuppressWarnings("unchecked")
         List<String> entry = (List<String>) (restTemplate.getForObject(
-                dataserverUrl + "/entry/cached/{dataSetName}", List.class, dataSetName));
+                dataserverUrl + "/data/entry/cached/{dataSetName}", List.class, dataSetName));
 
         return entry;
     }
@@ -65,7 +65,7 @@ public class ClientDataProvider implements DataProvider {
 
         @SuppressWarnings("unchecked")
         List<String> entry = (List<String>) (restTemplate.getForObject(
-                dataserverUrl + "/entry/uncached/{dataSetName}", List.class, dataSetName));
+                dataserverUrl + "/data/entry/uncached/{dataSetName}", List.class, dataSetName));
 
         return entry;
     }
@@ -84,7 +84,7 @@ public class ClientDataProvider implements DataProvider {
 
         @SuppressWarnings("unchecked")
         List<List<String>> entry = (List<List<String>>) (restTemplate.getForObject(
-                dataserverUrl + "/dataset/uncached/{dataSetName}/{length}", List.class, dataSetName, length));
+                dataserverUrl + "/data/dataset/uncached/{dataSetName}/{length}", List.class, dataSetName, length));
 
         return entry;
     }

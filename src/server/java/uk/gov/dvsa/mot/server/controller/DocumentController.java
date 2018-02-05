@@ -38,7 +38,7 @@ public class DocumentController {
     @ResponseBody
     @RequestMapping(value = "/documents/results", method = POST,
             produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> addTestResults(@RequestBody String result) {
+    public ResponseEntity<String> addDocumentResults(@RequestBody String result) {
         DocumentListReportGenerator.addDocumentResult(result);
 
         return ResponseEntity.ok(String.format("Added document result: %s.", result));
@@ -51,7 +51,7 @@ public class DocumentController {
     @ResponseBody
     @RequestMapping(value = "/documents/results", method = GET,
             produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> getTestResults() {
+    public ResponseEntity<String> getDocumentResults() {
         return ResponseEntity.ok(DocumentListReportGenerator.getDocumentResults());
     }
 }
