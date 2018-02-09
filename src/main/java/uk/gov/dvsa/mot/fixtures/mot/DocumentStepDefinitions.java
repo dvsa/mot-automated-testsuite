@@ -7,9 +7,15 @@ import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
+import uk.gov.dvsa.mot.framework.document.csv.CsvDocument;
+import uk.gov.dvsa.mot.framework.document.pdf.PdfDocument;
+import uk.gov.dvsa.mot.framework.document.pdf.PdfException;
+import uk.gov.dvsa.mot.framework.document.xml.XmlDocument;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.inject.Inject;
 
 /**
@@ -34,47 +40,42 @@ public class DocumentStepDefinitions implements En {
 
         And("^I click \"([^\"]+)\" and check the PDF contains:$",
                 (String link, DataTable table) -> {
-                    assertTrue(pdfContainsData(link, table));
-                    driverWrapper.writeDocument(link, "pdf");
+                    try {
+                        PdfDocument pdfDocument = driverWrapper.createPdfDocument(link);
+
+                        assertTrue(pdfDocument.contains(getList(table)));
+
+                        driverWrapper.writeDocument(pdfDocument, Optional.of(false));
+                    } catch (Exception exception) {
+                        logger.error("Unable to load PDF document: %s", exception);
+                    }
             });
 
         And("^I click \"([^\"]+)\" and check the CSV contains:$",
                 (String link, DataTable table) -> {
-                    assertTrue(csvContainsData(link, table));
-                    driverWrapper.writeDocument(link, "csv");
-            });
-    }
+                    try {
+                        CsvDocument csvDocument = driverWrapper.createCsvDocument(link);
 
-    /**
-     * Converts the raw data array and verifies all values are contained within the PDF.
-     * @param link      The link to the PDF
-     * @param rawData   The raw list of data items to check for
-     * @return          Whether all data items were present in the PDF
-     */
-    private boolean pdfContainsData(String link, DataTable rawData) {
-        List<String> rawDataRows = rawData.asList(String.class);
-        List<String> processedDataRows = new ArrayList<String>();
-        for (String dataItem : rawDataRows) {
-            processedDataRows.add(getStringValue(dataItem));
-        }
+                        assertTrue(csvDocument.contains(getList(table)));
 
-        return driverWrapper.pdfContains(link, processedDataRows);
-    }
+                        driverWrapper.writeDocument(csvDocument, Optional.of(false));
+                    } catch (Exception exception) {
+                        logger.error("Unable to load CSV document: %s", exception);
+                    }
+                });
 
-    /**
-     * Converts the raw data array and verifies all values are contained within the CSV.
-     * @param link      The link to the CSV
-     * @param rawData   The raw list of data items to check for
-     * @return          Whether all data items were present in the CSV
-     */
-    private boolean csvContainsData(String link, DataTable rawData) {
-        List<String> rawDataRows = rawData.asList(String.class);
-        List<String> processedDataRows = new ArrayList<String>();
-        for (String dataItem : rawDataRows) {
-            processedDataRows.add(getStringValue(dataItem));
-        }
+        And("^I click \"([^\"]+)\" and check the XML contains:$",
+                (String link, DataTable table) -> {
+                    try {
+                        XmlDocument csvDocument = driverWrapper.createXmlDocument(link);
 
-        return driverWrapper.csvContains(link, processedDataRows);
+                        assertTrue(csvDocument.contains(getList(table)));
+
+                        driverWrapper.writeDocument(csvDocument, Optional.of(false));
+                    } catch (Exception exception) {
+                        logger.error("Unable to load XML document: %s", exception);
+                    }
+                });
     }
 
     /**
@@ -87,5 +88,15 @@ public class DocumentStepDefinitions implements En {
             return driverWrapper.getData(text.substring(1, text.length() - 1));
         }
         return text;
+    }
+
+    private List<String> getList(DataTable dataTable) {
+        List<String> processedDataRows = new ArrayList<>();
+
+        for (String dataItem : dataTable.asList(String.class)) {
+            processedDataRows.add(getStringValue(dataItem));
+        }
+
+        return processedDataRows;
     }
 }

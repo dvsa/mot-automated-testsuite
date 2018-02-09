@@ -13,7 +13,7 @@ ext {
     checkstyleVersion = '6.19'
     cucumberOptions = ['--plugin', 'pretty', '--plugin', 'json:build/reports/selenium/selenium.json',
                        '--plugin', 'html:build/reports/selenium', '--glue', 'uk.gov.dvsa.mot',
-                       '--plugin', 'rerun:target/rerun.txt']
+                       '--plugin', 'rerun:target/rerun.plain']
 }
 
 sourceCompatibility = javaVersion
@@ -165,7 +165,7 @@ task('testsuite') {
 }
 
 task('cucumber-rerun') {
-    description 'Reruns all failed tests as listed within target/rerun.txt'
+    description 'Reruns all failed tests as listed within target/rerun.plain'
     dependsOn assemble, compileJava, check
     finalizedBy 'cucumber-reporting', 'check-server'
     doLast {
@@ -183,7 +183,7 @@ task('cucumber-rerun') {
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
 
                 // Find all the features to be rerun
-                String fileContents = new File('target/rerun.txt').text
+                String fileContents = new File('target/rerun.plain').text
                 fileContents = fileContents.replaceAll('src/main/resources/features/', '')
                 String[] features = fileContents.split('(?=theme)|(?=smoke)|(?=moth)')
 

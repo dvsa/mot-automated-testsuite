@@ -28,21 +28,22 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.browserstack.BrowserStackManager;
-import uk.gov.dvsa.mot.framework.csv.CsvDocument;
-import uk.gov.dvsa.mot.framework.csv.CsvException;
-import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
-import uk.gov.dvsa.mot.framework.pdf.PdfException;
+import uk.gov.dvsa.mot.framework.document.Document;
+import uk.gov.dvsa.mot.framework.document.Document.IDocument;
+import uk.gov.dvsa.mot.framework.document.Document.Type;
+import uk.gov.dvsa.mot.framework.document.csv.CsvDocument;
+import uk.gov.dvsa.mot.framework.document.csv.CsvException;
+import uk.gov.dvsa.mot.framework.document.pdf.PdfDocument;
+import uk.gov.dvsa.mot.framework.document.pdf.PdfException;
+import uk.gov.dvsa.mot.framework.document.xml.XmlDocument;
+import uk.gov.dvsa.mot.framework.document.xml.XmlException;
 import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
@@ -107,6 +108,10 @@ public class WebDriverWrapper {
 
         // ensure all previous sessions are invalidated
         this.webDriver.manage().deleteAllCookies();
+
+        if (env.getProperty("saveDocuments") != null && env.getProperty("saveDocuments").equals("true")) {
+            System.setProperty("SAVE_DOCUMENTS", "true");
+        }
     }
 
     /**
@@ -291,10 +296,6 @@ public class WebDriverWrapper {
      */
     public TestsuiteConfig getConfig() {
         return env;
-    }
-
-    public void addTestResult(String testNumber, String result) {
-        this.recordedTests.put(testNumber, result);
     }
     
     /**
@@ -1620,26 +1621,6 @@ public class WebDriverWrapper {
             clickAndWaitForPageLoad(spans.get(spans.size() - 1));
         }
     }
-
-    private void saveTestResults() {
-        File dir = new File("target/moth");
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        File jsonFile = new File("target/moth/results.json");
-
-        try {
-            FileWriter resultJson = new FileWriter("target/moth/results.json");
-
-            for (String testNumber : recordedTests.keySet()) {
-                resultJson.write(String.format("%s=%s\n", testNumber, recordedTests.get(testNumber)));
-            }
-        } catch (IOException io) {
-            logger.error("Unable to save vehicle tests results, for the MOTH test.");
-            throw new RuntimeException(io.getMessage());
-        }
-    }
     
     /**
      *
@@ -1654,41 +1635,14 @@ public class WebDriverWrapper {
      * @return                          the PDF Document
      * @throws PdfException             error loading PDF document
      */
-    private PdfDocument createPdfDocument(String url) throws PdfException {
+    public PdfDocument createPdfDocument(String url) throws PdfException{
         try {
             PDFTextStripper textStripper = new PDFTextStripper();
             textStripper.setSortByPosition(true);
 
-            return new PdfDocument(requestHandler.getPdfDocument(url));
-        } catch (IOException ioException) {
+            return (PdfDocument) requestHandler.getDocument(url, Type.PDF);
+        } catch (Exception ioException) {
             throw new PdfException("Unable to find or open PDF", ioException);
-        }
-    }
-
-    /**
-     * Checks whether a PDF contains expected values.
-     * @param linkText  The link to the PDF
-     * @param values    Array of values to check are contained
-     * @return          Whether the PDF contains all expected values
-     */
-    public boolean pdfContains(String linkText, List<String> values) {
-        // find any "a" elements with text containing the link text
-        List<WebElement> links = findLinks(linkText);
-
-        if (links.size() == 0) {
-            String message = "No links found with text: " + linkText;
-            logger.error(message);
-            throw new IllegalArgumentException(message);
-
-        } else {
-            try {
-                PdfDocument pdfDocument = createPdfDocument(links.get(0).getAttribute("href"));
-
-                return pdfDocument.contains(values);
-            } catch (PdfException ex) {
-                logger.error("Unable to load PDF document", ex);
-                throw new RuntimeException("Error processing PDF document", ex);
-            }
         }
     }
 
@@ -1697,34 +1651,26 @@ public class WebDriverWrapper {
      * @param       url of the target document
      * @return      parsed CSV containing the url output
      */
-    private CsvDocument createCsvDocument(String url) {
+    public CsvDocument createCsvDocument(String url) throws CsvException {
         try {
-            return requestHandler.getCsvDocument(url);
-        } catch (CsvException ex) {
+            return (CsvDocument) requestHandler.getDocument(url, Type.CSV);
+        } catch (Exception ex) {
             logger.error(String.format("Failed to load CSV document from %s.", url), ex);
-            throw new RuntimeException("Error processing CSV document", ex);
+            throw new CsvException("Error processing CSV document", ex);
         }
     }
 
     /**
-     * Checks whether a CSV contains expected values.
-     * @param linkText  The link to the PDF
-     * @param values    Array of values to check are contained
-     * @return          Whether the CSV contains all expected values
+     * Creates a XML document from the URL provided.
+     * @param       url of the target document
+     * @return      parsed CSV containing the url output
      */
-    public boolean csvContains(String linkText, List<String> values) {
-        // find any "a" elements with text containing the link text
-        List<WebElement> links = findLinks(linkText);
-
-        if (links.size() == 0) {
-            String message = "No links found with text: " + linkText;
-            logger.error(message);
-            throw new IllegalArgumentException(message);
-
-        } else {
-            CsvDocument csvDocument = createCsvDocument(links.get(0).getAttribute("href"));
-
-            return csvDocument.contains(values);
+    public XmlDocument createXmlDocument(String url) throws XmlException {
+        try {
+            return (XmlDocument) requestHandler.getDocument(url, Type.XML);
+        } catch (Exception ex) {
+            logger.error(String.format("Failed to load XML document from %s.", url), ex);
+            throw new XmlException("Error processing XML document", ex);
         }
     }
 
@@ -1742,43 +1688,6 @@ public class WebDriverWrapper {
 
             // propagate a fatal error so testsuite shuts down
             throw new RuntimeException(message, ex);
-        }
-    }
-
-    /**
-     * Write file and save the result.
-     * @param url of the file to download.
-     */
-    public void writeDocument(String url, String extension) {
-        if (env.getProperty("saveDocuments") != null && env.getProperty("saveDocuments").equals("true")) {
-            // find any "a" elements with text containing the link text
-            List<WebElement> links = findLinks(url);
-
-            if (links.size() == 0) {
-                String message = "No links found with text: " + url;
-                logger.error(message);
-                throw new IllegalArgumentException(message);
-
-            } else {
-                try {
-                    String filename = lastScenario.getFirst();
-                    for (int i = 1; new File("target/documents/"
-                            + requestHandler.getTimestamp() + "/" + filename + "." + extension).exists(); i++) {
-                        filename = filename + "-" + i;
-                    }
-
-                    filename += "." + extension;
-
-                    requestHandler.writeFile(filename , links.get(0).getAttribute("href"));
-
-                    requestHandler.sendDocumentResult(filename
-                            + ";" + lastScenario.getFirst()
-                            + ";" + lastScenario.getSecond());
-                } catch (Exception ex) {
-                    logger.error("Unable to load PDF document", ex);
-                    throw new RuntimeException("Error processing PDF document", ex);
-                }
-            }
         }
     }
 
@@ -1837,6 +1746,45 @@ public class WebDriverWrapper {
             throw new IllegalArgumentException(message);
         } else {
             clickAndWaitForPageLoad(spans.get(spans.size() - 1));
+        }
+    }
+
+    /**
+     * Add mot test result.
+     * @param testNumber test number to add
+     * @param result of the test to add
+     */
+    public void addTestResult(String testNumber, String result) {
+        requestHandler.sendTestResult(testNumber + "=" + result + "\n");
+    }
+
+    /**
+     * Write a document.
+     * @param document to write
+     * @param overwrite optional boolean to check if file can be overwritten
+     */
+    public void writeDocument(IDocument document, Optional<Boolean> overwrite) {
+        String filename = lastScenario.getFirst();
+
+        try {
+            if (System.getProperty("SAVE_DOCUMENTS") != null && System.getProperty("SAVE_DOCUMENTS").equals("true")) {
+
+                for (int i = 1;
+                     new File("target/documents/" + filename + "." + document.getExtension()).exists();
+                     i++) {
+                    filename = filename + "-" + i;
+                }
+
+                filename += "." + document.getExtension();
+
+                document.write(filename, overwrite);
+
+                requestHandler.sendDocumentResult(filename
+                        + ";" + lastScenario.getFirst()
+                        + ";" + lastScenario.getSecond());
+            }
+        } catch (Exception exception) {
+            logger.error("Failed to write document %s.", filename);
         }
     }
 }

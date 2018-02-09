@@ -86,14 +86,10 @@ public class CucumberReporting {
         writeDocumentResults();
 
         List<String> allowedExtensions = Arrays.asList("pdf", "csv");
-        String documentsRoot = "target/documents/";
+        String documentLocation = "target/documents/";
 
         // Read the results as an ordered map (TreeMap)
-        Map<String, String[]> documentResults = getDocumentResults(documentsRoot);
-        String timestamp = documentResults.get("timestamp")[0];
-        documentResults.remove("timestamp");
-
-        String documentLocation = documentsRoot + timestamp + "/";
+        Map<String, String[]> documentResults = getDocumentResults(documentLocation);
 
         StringBuilder html = new StringBuilder();
         html.append("<html><head><style type='text/css'>")
@@ -104,7 +100,6 @@ public class CucumberReporting {
                 .append("th {border:1px solid black;background-color:#CCCCDD;}")
                 .append("td{text-transform: capitalize; border:1px solid black;}")
                 .append("table {border:1px solid black;border-collapse: collapse;}")
-                .append("table table {width:98%; float:right; margin-bottom:0.3em; }")
                 .append(".passed {background-color:lightgreen;font-weight:bold;color:darkgreen}")
                 .append(".skipped {background-color:silver;font-weight:bold;color:darkgray}")
                 .append(".failed {background-color:tomato;font-weight:bold;color:darkred}")
@@ -117,7 +112,7 @@ public class CucumberReporting {
                 .append("<title>Document List</title></head>")
 
                 .append("<body><h1>Document List</h1>")
-                .append("<h2>Overview</h2>");
+                .append("<h1>Overview</h1>");
 
 
         StringBuilder overview = new StringBuilder();
@@ -213,7 +208,7 @@ public class CucumberReporting {
                         .append("</a></span></li>");
 
                 table.append("<tr class='").append(result)
-                        .append("'><td colspan='2' class='").append(result).append("'>")
+                        .append("'><td style='padding-left:20px; padding-bottom:5px;' colspan='2' class='").append(result).append("'>")
                         .append("<table id='").append(name).append("' width='100%'>")
                         .append("<tbody>")
                         .append("<tr  class ='").append(result).append("'>")
@@ -278,7 +273,7 @@ public class CucumberReporting {
                 .append("</tr>");
 
         html.append(overview.toString())
-                .append("<h2>Results</h2>")
+                .append("<h1>Results</h1>")
                 .append(table.toString())
                 .append("</body>")
                 .append("</html>");
@@ -293,8 +288,34 @@ public class CucumberReporting {
         bufferedWriter.close();
     }
 
-    private static Map<String, String[]> getDocumentResults(String documentLocation) throws Exception {
-        File file = new File(documentLocation + "document_results.txt");
+    private static void generateTestResults() throws Exception {
+        writeTestResults();
+
+        String testResultsLocation = "/target/moth/";
+
+        StringBuilder html = new StringBuilder();
+        html.append("<html><head><style type='text/css'>")
+                .append("h1 {background-color:#9999CC}")
+                .append("<title>Test Results Report</title></head>")
+
+                .append("<body><h1>Front-End Test Results</h1><table><tbody>")
+                .append("<tr><th>Test number</th><th>Result</th></tr></tr>");
+
+        Map<String, String> testResults = getFrontEndTestResults(testResultsLocation);
+
+        for (String key : testResults.keySet()) {
+            String result = testResults.get(key);
+            html.append("<tr class='").append(result).append("'>")
+                    .append("<td class='").append(result).append("'>").append(key)
+                    .append("</td><td class='").append(result).append("'>").append(result)
+                    .append("</td></tr>");
+        }
+
+        html.append("</tbody></table></body></html>");
+    }
+
+    private static Map<String, String[]> getDocumentResults(String documentResultsLocation) throws Exception {
+        File file = new File(documentResultsLocation + "document_results.plain");
 
         if (!file.exists()) {
             return null;
@@ -308,9 +329,7 @@ public class CucumberReporting {
         while ((line = bufferedReader.readLine()) != null) {
             String[] result = line.split(";");
 
-            if (result.length  < 3) {
-                documentResults.put("timestamp", new String[]{line});
-            } else if (result.length == 4) {
+            if (result.length == 4) {
                 documentResults.put(result[0],
                         new String[]{result[0], result[1], result[2], result[3]});
             } else if (result.length == 3) {
@@ -321,6 +340,44 @@ public class CucumberReporting {
         }
 
         return documentResults;
+    }
+
+    private static Map<String, String> getFrontEndTestResults(String testResultsLocation) throws Exception {
+        File file = new File(testResultsLocation + "front-end_test_results.plain");
+
+        if (!file.exists()) {
+            return null;
+        }
+
+        Map<String, String> testResults = new TreeMap<>();
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+
+        // Load the document into a TreeMap
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            String[] result = line.split("=");
+
+            testResults.put(result[0], result[1]);
+        }
+
+        return testResults;
+    }
+
+    private static void writeTestResults() throws Exception {
+        String configuration = System.getProperty("configuration");
+
+        TestsuiteConfig env;
+        if (configuration != null) {
+            env = TestsuiteConfig.loadConfigFromString(configuration);
+        } else {
+            env = TestsuiteConfig.loadConfig("testsuite");
+        }
+
+        RequestHandler requestHandler = new RequestHandler(env);
+
+        String results = requestHandler.getTestResults();
+
+        writeFile("target/moth/front-end_test_results.plain", results);
     }
 
     private static void writeDocumentResults() throws Exception {
@@ -337,7 +394,7 @@ public class CucumberReporting {
 
         String results = requestHandler.getDocumentResults();
 
-        writeFile("target/documents/document_results.txt", results);
+        writeFile("target/documents/document_results.plain", results);
     }
 
     private static void writeFile(String filename, String content) throws Exception {
@@ -345,6 +402,7 @@ public class CucumberReporting {
 
         File file = new File(filename);
 
+        file.mkdirs();
         file.delete();
         file.createNewFile();
 

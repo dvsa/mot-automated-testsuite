@@ -1,4 +1,4 @@
-package uk.gov.dvsa.mot.framework.csv;
+package uk.gov.dvsa.mot.framework.document.csv;
 
 /**
  * Exception class for loading CSV files.

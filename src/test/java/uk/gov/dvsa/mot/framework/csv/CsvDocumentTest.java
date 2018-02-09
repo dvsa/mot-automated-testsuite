@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.junit.Test;
+import uk.gov.dvsa.mot.framework.document.csv.CsvDocument;
+import uk.gov.dvsa.mot.framework.document.csv.CsvException;
 
 import java.io.BufferedReader;
 import java.io.File;

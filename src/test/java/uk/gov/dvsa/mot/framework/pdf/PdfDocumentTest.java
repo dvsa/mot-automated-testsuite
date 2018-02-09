@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.junit.Test;
+import uk.gov.dvsa.mot.framework.document.pdf.PdfDocument;
+import uk.gov.dvsa.mot.framework.document.pdf.PdfException;
 
 import java.io.File;
 import java.io.FileInputStream;

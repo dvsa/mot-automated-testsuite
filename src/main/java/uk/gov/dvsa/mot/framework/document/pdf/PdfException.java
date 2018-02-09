@@ -1,4 +1,4 @@
-package uk.gov.dvsa.mot.framework.pdf;
+package uk.gov.dvsa.mot.framework.document.pdf;
 
 /**
  * Exception class for loading PDF files.
