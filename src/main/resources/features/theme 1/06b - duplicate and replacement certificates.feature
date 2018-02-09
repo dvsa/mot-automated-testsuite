@@ -82,7 +82,11 @@ Feature: 06b - duplicate and replacement certificates
     And I check the vehicle summary section of the test summary has "Registration number" of {reg}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin}
     And I check the brake results section of the test summary is "Pass"
-    And I check the fails section of the test summary has "None recorded"
+    And I check the dangerous failures section of the test summary has "None recorded"
+    And I check the major failures section of the test summary has "None recorded"
+    And I check the minors section of the test summary has "None recorded"
+    And I check the prs section of the test summary has "None recorded"
+    And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:

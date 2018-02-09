@@ -30,6 +30,9 @@ Feature: 05b - Tester does...
     And I check the advisory section of the test summary has "Exhaust emits excessive smoke or vapour but not likely to obscure the vision of other road users"
     And I check the advisory section of the test summary has "Test advisory 1"
     And I check the advisory section of the test summary has "Test advisory 2"
+    And I check the dangerous failures section of the test summary has "None recorded"
+    And I check the major failures section of the test summary has "None recorded"
+    And I check the minors section of the test summary has "None recorded"
 
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
@@ -60,9 +63,9 @@ Feature: 05b - Tester does...
     And I enter an odometer reading in miles of {mileage1} plus 5000
 
     And I browse for a "Advisory" defect of ("Brakes", "Anti-lock braking system", "Wiring excessively damaged") with comment "Test advisory 1"
-    And I search for a "Advisory" defect of "Axle has excessive vertical movement between stub axle and axle beam" with comment "Test advisory 2"
+    And I search for a "Advisory" defect of "Stub axle has excessive vertical movement between stub axle and axle beam" with comment "Test advisory 2"
     And I edit the "Advisory" defect of "wiring damaged but not excessively" with comment "Edited advisory 1" and not dangerous
-    And I remove the "Advisory" defect of "Axle has slight vertical movement between stub axle and axle beam"
+    And I remove the "Advisory" defect of "Stub axle has slight vertical movement between stub axle and axle beam"
 
     And I browse for a "PRS" defect of ("Brakes", "Additional braking device", "Additional braking device obviously defective") with comment "Test prs 1"
     And I search for a "PRS" defect of "Handlebar fractured to the extent that steering is adversely affected" with comment "Test prs 2"
@@ -83,10 +86,10 @@ Feature: 05b - Tester does...
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
 
-    And I check the fails section of the test summary has "Exhaust system insecure"
-    And I check the fails section of the test summary has "Edited failure 2"
-    And I check the fails section of the test summary does not have "modified such that the steering is adversely affected"
-    And I check the fails section of the test summary does not have "Test defect 1"
+    And I check the major failures section of the test summary has "Exhaust system insecure"
+    And I check the major failures section of the test summary has "Edited failure 2"
+    And I check the major failures section of the test summary does not have "modified such that the steering is adversely affected"
+    And I check the major failures section of the test summary does not have "Test defect 1"
 
     And I check the prs section of the test summary has "Additional braking device obviously defective"
     And I check the prs section of the test summary has "Edited prs 1"
@@ -95,8 +98,11 @@ Feature: 05b - Tester does...
 
     And I check the advisory section of the test summary has "wiring damaged but not excessively"
     And I check the advisory section of the test summary has "Edited advisory 1"
-    And I check the advisory section of the test summary does not have "Axle has slight vertical movement between stub axle and axle beam"
+    And I check the advisory section of the test summary does not have "Stub axle has slight vertical movement between stub axle and axle beam"
     And I check the advisory section of the test summary does not have "Test advisory 2"
+
+    And I check the dangerous failures section of the test summary has "None recorded"
+    And I check the minors section of the test summary has "None recorded"
 
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
@@ -156,13 +162,15 @@ Feature: 05b - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
-    And I check the fails section of the test summary has "Engine mounting/bracket missing"
-    And I check the fails section of the test summary has "Test defect 1"
-    And I check the fails section of the test summary has "Dangerous"
-    And I check the fails section of the test summary has "component missing"
-    And I check the fails section of the test summary has "Test defect 2"
-    And I check the fails section of the test summary has "Wheel bearing has excessive play"
-    And I check the fails section of the test summary has "Test defect 3"
+    And I check the dangerous failures section of the test summary has "Engine mounting/bracket missing"
+    And I check the dangerous failures section of the test summary has "Test defect 1"
+    And I check the major failures section of the test summary has "component missing"
+    And I check the major failures section of the test summary has "Test defect 2"
+    And I check the major failures section of the test summary has "Wheel bearing has excessive play"
+    And I check the major failures section of the test summary has "Test defect 3"
+    And I check the minors section of the test summary has "None recorded"
+    And I check the prs section of the test summary has "None recorded"
+    And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
@@ -194,7 +202,11 @@ Feature: 05b - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "None Recorded"
-    And I check the fails section of the test summary has "None recorded"
+    And I check the dangerous failures section of the test summary has "None recorded"
+    And I check the major failures section of the test summary has "None recorded"
+    And I check the minors section of the test summary has "None recorded"
+    And I check the prs section of the test summary has "None recorded"
+    And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
     And I click "Print documents" and check the PDF contains:
@@ -225,26 +237,37 @@ Feature: 05b - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Fail"
-    And I check the fails section of the test summary has "Engine mounting/bracket missing"
-    And I check the fails section of the test summary has "Test defect 1"
-    And I check the fails section of the test summary has "Dangerous"
-    And I check the fails section of the test summary has "component missing"
-    And I check the fails section of the test summary has "Test defect 2"
-    And I check the fails section of the test summary has "Wheel bearing has excessive play"
-    And I check the fails section of the test summary has "Test defect 3"
+    And I check the dangerous failures section of the test summary has "Engine mounting/bracket missing"
+    And I check the dangerous failures section of the test summary has "Test defect 1"
+    And I check the major failures section of the test summary has "component missing"
+    And I check the major failures section of the test summary has "Test defect 2"
+    And I check the major failures section of the test summary has "Wheel bearing has excessive play"
+    And I check the major failures section of the test summary has "Test defect 3"
+    And I check the major failures section of the test summary has "Service brake: efficiency below requirements"
+    And I check the major failures section of the test summary has "Parking brake efficiency below requirements"
+    And I check the major failures section of the test summary has "Brakes imbalanced across an axle"
+    And I check the major failures section of the test summary has "Front (Axle 1)"
+    And I check the major failures section of the test summary has "Rear (Axle 2)"
+    And I check the minors section of the test summary has "None recorded"
+    And I check the prs section of the test summary has "None recorded"
+    And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
-      | VT30                                       |
-      | Engine mounting/bracket missing            |
-      | Test defect 1                              |
-      | Component missing                          |
-      | Test defect 2                              |
-      | Wheel bearing has excessive play           |
-      | Test defect 3                              |
-      | {registration1}                            |
-      | {vin1}                                     |
-      | {site}                                     |
+      | VT30                                            |
+      | Engine mounting/bracket missing                 |
+      | Test defect 1                                   |
+      | Component missing                               |
+      | Test defect 2                                   |
+      | Wheel bearing has excessive play                |
+      | Test defect 3                                   |
+      | Service brake: efficiency below requirements    |
+      | Parking brake efficiency below requirements     |
+      | Brakes imbalanced across an axle Front (Axle 1) |
+      | Brakes imbalanced across an axle Rear (Axle 2)  |
+      | {registration1}                                 |
+      | {vin1}                                          |
+      | {site}                                          |
 
     When I click the "Back to user home" link
     And I start an MOT retest for {registration1}, {vin1}, {site}
@@ -263,10 +286,20 @@ Feature: 05b - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
-    And I check the fails section of the test summary has "component missing"
-    And I check the fails section of the test summary has "Test defect 2"
-    And I check the fails section of the test summary has "Wheel bearing has excessive play"
-    And I check the fails section of the test summary has "Test defect 3"
+    And I check the major failures section of the test summary has "component missing"
+    And I check the major failures section of the test summary has "Test defect 2"
+    And I check the major failures section of the test summary has "Wheel bearing has excessive play"
+    And I check the major failures section of the test summary has "Test defect 3"
+    And I check the major failures section of the test summary does not have "Service brake: efficiency below requirements"
+    And I check the major failures section of the test summary does not have "Parking brake efficiency below requirements"
+    And I check the major failures section of the test summary does not have "Brakes imbalanced across an axle"
+    And I check the major failures section of the test summary does not have "Front (Axle 1)"
+    And I check the major failures section of the test summary does not have "Rear (Axle 2)"
+
+    And I check the dangerous failures section of the test summary has "None recorded"
+    And I check the minors section of the test summary has "None recorded"
+    And I check the prs section of the test summary has "None recorded"
+    And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
     And I click "Print documents" and check the PDF contains:

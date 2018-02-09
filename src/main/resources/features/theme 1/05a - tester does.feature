@@ -20,7 +20,11 @@ Feature: 05a - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
-    And I check the fails section of the test summary has "None recorded"
+    And I check the dangerous failures section of the test summary has "None recorded"
+    And I check the major failures section of the test summary has "None recorded"
+    And I check the minors section of the test summary has "None recorded"
+    And I check the prs section of the test summary has "None recorded"
+    And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
@@ -49,6 +53,11 @@ Feature: 05a - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Fail"
+    And I check the dangerous failures section of the test summary has "None recorded"
+    And I check the major failures section of the test summary has "Parking brake efficiency below requirements"
+    And I check the minors section of the test summary has "None recorded"
+    And I check the prs section of the test summary has "None recorded"
+    And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
@@ -80,13 +89,21 @@ Feature: 05a - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
-    And I check the fails section of the test summary has "modified such that the steering is adversely affected"
-    And I check the fails section of the test summary has "Dangerous"
-    And I check the fails section of the test summary has "Exhaust system insecure"
-    And I check the fails section of the test summary has "Battery leaking"
-    And I check the fails section of the test summary has "Test defect 1"
-    And I check the fails section of the test summary has "Test defect 2"
-    And I check the fails section of the test summary has "Test defect 3"
+    And I check the dangerous failures section of the test summary has "modified such that the steering is adversely affected"
+    And I check the dangerous failures section of the test summary has "Test defect 1"
+    And I check the dangerous failures section of the test summary does not have "Exhaust system insecure"
+    And I check the dangerous failures section of the test summary does not have "Test defect 2"
+    And I check the dangerous failures section of the test summary does not have "Battery leaking"
+    And I check the dangerous failures section of the test summary does not have "Test defect 3"
+    And I check the major failures section of the test summary has "Exhaust system insecure"
+    And I check the major failures section of the test summary has "Test defect 2"
+    And I check the major failures section of the test summary has "Battery leaking"
+    And I check the major failures section of the test summary has "Test defect 3"
+    And I check the major failures section of the test summary does not have "modified such that the steering is adversely affected"
+    And I check the major failures section of the test summary does not have "Test defect 1"
+    And I check the minors section of the test summary has "None recorded"
+    And I check the prs section of the test summary has "None recorded"
+    And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
@@ -120,7 +137,11 @@ Feature: 05a - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Not tested"
-    And I check the fails section of the test summary has "Brake performance not tested"
+    And I check the major failures section of the test summary has "Brake performance not tested"
+    And I check the dangerous failures section of the test summary has "None recorded"
+    And I check the minors section of the test summary has "None recorded"
+    And I check the prs section of the test summary has "None recorded"
+    And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
@@ -142,7 +163,7 @@ Feature: 05a - Tester does...
     And I enter an odometer reading in miles of {mileage1} plus 5000
     And I browse for a "Advisory" defect of ("Brakes", "Anti-lock braking system", "Wiring excessively damaged") with comment "Test advisory 1"
     And I browse for a "Advisory" defect of ("Non-component advisories", "Oil leak") with comment "Test advisory 2"
-    And I search for a "Advisory" defect of "Axle has excessive vertical movement between stub axle and axle beam" with comment "Test advisory 3"
+    And I search for a "Advisory" defect of "Stub axle has excessive vertical movement between stub axle and axle beam" with comment "Test advisory 3"
     And I search for a "Advisory" defect of "Exhaust emits excessive smoke or vapour likely to obscure the vision of other road users" with comment "Test advisory 4"
     And I add a manual advisory of "Test manual advisory"
     And I enter class 4 roller results for vehicle weight of 1000 as service brake 200,200,200,200 and parking brake 100,100
@@ -155,13 +176,17 @@ Feature: 05a - Tester does...
     And I check the brake results section of the test summary is "Pass"
     And I check the advisory section of the test summary has "wiring damaged but not excessively"
     And I check the advisory section of the test summary has "Oil leak"
-    And I check the advisory section of the test summary has "Axle has slight vertical movement between stub axle and axle beam"
+    And I check the advisory section of the test summary has "Stub axle has slight vertical movement between stub axle and axle beam"
     And I check the advisory section of the test summary has "Exhaust emits excessive smoke or vapour but not likely to obscure the vision of other road users"
     And I check the advisory section of the test summary has "Test advisory 1"
     And I check the advisory section of the test summary has "Test advisory 2"
     And I check the advisory section of the test summary has "Test advisory 3"
     And I check the advisory section of the test summary has "Test advisory 4"
     And I check the advisory section of the test summary has "Test manual advisory"
+    And I check the dangerous failures section of the test summary has "None recorded"
+    And I check the major failures section of the test summary has "None recorded"
+    And I check the minors section of the test summary has "None recorded"
+    And I check the prs section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
@@ -171,7 +196,7 @@ Feature: 05a - Tester does...
     | {site}                                                                                           |
     | Wiring damaged but not excessively                                                               |
     | Oil leak                                                                                         |
-    | Axle has slight vertical movement between stub axle and axle beam                                |
+    | Stub axle has slight vertical movement between stub axle and axle bea                         |
     | Exhaust emits excessive smoke or vapour                                                          |
     | Test advisory 1                                                                                  |
     | Test advisory 2                                                                                  |

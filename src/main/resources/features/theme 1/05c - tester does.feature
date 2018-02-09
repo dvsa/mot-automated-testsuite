@@ -20,9 +20,15 @@ Feature: 05c - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Not tested"
-    And I check the fails section of the test summary has "Engine mounting/bracket missing"
-    And I check the fails section of the test summary has "Brake performance not tested"
-    And I check the fails section of the test summary has "Wheel bearing has excessive play"
+    And I check the dangerous failures section of the test summary has "Engine mounting/bracket missing"
+    And I check the dangerous failures section of the test summary has "Test defect 1"
+    And I check the major failures section of the test summary has "Brake performance not tested"
+    And I check the major failures section of the test summary has "Test defect 2"
+    And I check the major failures section of the test summary has "Wheel bearing has excessive play"
+    And I check the major failures section of the test summary has "Test defect 3"
+    And I check the minors section of the test summary has "None recorded"
+    And I check the prs section of the test summary has "None recorded"
+    And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
@@ -53,7 +59,11 @@ Feature: 05c - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
-    And I check the fails section of the test summary has "None recorded"
+    And I check the dangerous failures section of the test summary has "None recorded"
+    And I check the major failures section of the test summary has "None recorded"
+    And I check the minors section of the test summary has "None recorded"
+    And I check the prs section of the test summary has "None recorded"
+    And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
     And I click "Print documents" and check the PDF contains:
@@ -81,7 +91,9 @@ Feature: 05c - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
-    And I check the fails section of the test summary has "None recorded"
+    And I check the major failures section of the test summary has "None recorded"
+    And I check the prs section of the test summary has "None recorded"
+    And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
@@ -111,9 +123,11 @@ Feature: 05c - Tester does...
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the vehicle summary section of the test summary has "Colour" of "Blue"
     And I check the brake results section of the test summary is "Fail"
-    And I check the fails section of the test summary has "Throttle operating incorrectly"
-    And I check the fails section of the test summary has "Test defect 1"
-    And I check the fails section of the test summary has "Decelerometer brake test neither brake control achieves an efficiency of 25%"
+    And I check the major failures section of the test summary has "Throttle operating incorrectly"
+    And I check the major failures section of the test summary has "Test defect 1"
+    And I check the major failures section of the test summary has "Decelerometer brake test neither brake control achieves an efficiency of 25%"
+    And I check the prs section of the test summary has "None recorded"
+    And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
@@ -147,6 +161,10 @@ Feature: 05c - Tester does...
     And I check the brake results section of the test summary is "Pass"
     And I check the advisory section of the test summary has "Nail in tyre"
     And I check the advisory section of the test summary has "Test advisory 1"
+    And I check the dangerous failures section of the test summary has "None recorded"
+    And I check the major failures section of the test summary has "None recorded"
+    And I check the minors section of the test summary has "None recorded"
+    And I check the prs section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
@@ -169,7 +187,7 @@ Feature: 05c - Tester does...
     And I enter an odometer reading in kilometres of 30000
     And I search for a "Major" defect of "Steering system excessively rough" with comment "Test failure 1"
     And I edit the "Major" defect of "Steering system excessively rough" with comment "Edited failure 1" and not dangerous
-    And I remove the "Failure" defect of "Steering system excessively rough"
+    And I remove the "Major" defect of "Steering system excessively rough"
     And I enter class 7 roller results for vehicle weight of 1000 as service brake 350,50,50,350 and parking brake 350,50
     And I press the "Review test" button
 
@@ -178,12 +196,20 @@ Feature: 05c - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Fail"
-    And I check the fails section of the test summary does not have "Steering system excessively rough"
-    And I check the fails section of the test summary does not have "Test failure 1"
+    And I check the dangerous failures section of the test summary has "Brakes imbalanced across an axle by more than 50%"
+    And I check the major failures section of the test summary has "Brakes imbalanced across an axle"
+    And I check the major failures section of the test summary does not have "Steering system excessively rough"
+    And I check the major failures section of the test summary does not have "Test failure 1"
+    And I check the minors section of the test summary has "None recorded"
+    And I check the prs section of the test summary has "None recorded"
+    And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
       | VT30                                                                         |
+      | Brakes imbalanced across an axle by more than 50% Front (Axle 1)             |
+      | * DANGEROUS *                                                                |
+      | Brakes imbalanced across an axle Rear (Axle 2)                               |
       | {registration1}                                                              |
       | {vin1}                                                                       |
       | {site}                                                                       |
