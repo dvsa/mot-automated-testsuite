@@ -1,5 +1,8 @@
 package uk.gov.dvsa.mot.server.utils.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,6 +13,7 @@ import java.util.Properties;
  * This is a class to store testsuite config. Provides some testsuite specific functionality.
  */
 public class TestsuiteConfig extends Properties {
+    private static Logger logger = LoggerFactory.getLogger(TestsuiteConfig.class);
     /**
      * Creates a new empty instance, without default values.
      */
@@ -113,6 +117,8 @@ public class TestsuiteConfig extends Properties {
         try {
             final TestsuiteConfig config = new TestsuiteConfig();
             config.load(new StringReader(swapColonSignsToEqualSigns(configuration)));
+            logger.debug("\n\nConfiguration: " + configuration + "\n\n");
+            logger.debug("\n\nConfiguration w/0 \": " + swapColonSignsToEqualSigns(configuration) + "\n\n");
             return config;
         } catch (IOException io) {
             throw new RuntimeException(String.format("Failed to load the TestsuiteConfig from a key=value string. "

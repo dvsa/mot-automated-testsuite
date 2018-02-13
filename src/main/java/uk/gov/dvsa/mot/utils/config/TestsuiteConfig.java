@@ -113,7 +113,6 @@ public class TestsuiteConfig extends Properties {
         try {
             final TestsuiteConfig config = new TestsuiteConfig();
             config.load(new StringReader(swapColonSignsToEqualSigns(configuration)));
-            System.out.println(swapColonSignsToEqualSigns(configuration));
             return config;
         } catch (IOException io) {
             throw new RuntimeException(String.format("Failed to load the TestsuiteConfig from a key=value string. "
@@ -122,7 +121,6 @@ public class TestsuiteConfig extends Properties {
     }
 
     private static String swapColonSignsToEqualSigns(String configuration) {
-        System.out.println(configuration);
         return configuration.substring(1, configuration.length() - 1);
     }
 }
