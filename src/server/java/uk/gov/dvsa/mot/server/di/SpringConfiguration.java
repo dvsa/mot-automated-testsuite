@@ -67,8 +67,14 @@ public class SpringConfiguration {
                 + "&gatherPerfMetrics=true&useUsageAdvisor=true&explainSlowQueries=true"
                 + "&reportMetricsIntervalMillis=60000&logger=Slf4JLogger");
 
-        dataSource.setUsername(env.getRequiredProperty("jdbc.username"));
-        dataSource.setPassword(env.getRequiredProperty("jdbc.password"));
+        String uname = env.getRequiredProperty("jdbc.username");
+        String pwd = env.getRequiredProperty("jdbc.password");
+
+        System.out.println("Username: " + uname);
+        System.out.println("Password: " + pwd);
+
+        dataSource.setUsername(uname);
+        dataSource.setPassword(pwd);
         dataSource.setDefaultAutoCommit(false);
         dataSource.setDefaultReadOnly(true);
         dataSource.setInitialSize(0);
