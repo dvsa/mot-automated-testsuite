@@ -96,7 +96,7 @@ task('testsuite') {
             classpath = configurations.cucumberRuntime + sourceSets.main.output
 
             if(project.hasProperty('configuration')) {
-                systemProperty "configuration", configuration
+                systemProperty 'configuration', configuration
             }
         }
 
@@ -125,9 +125,9 @@ task('testsuite') {
                 }
 
                 if (project.hasProperty('target_config')) {
-                    systemProperty "target_config", target_config
+                    systemProperty 'target_config', target_config
                 } else if(project.hasProperty('configuration')) {
-                    systemProperty "configuration", configuration
+                    systemProperty 'configuration', configuration
                 }
 
                 main = "cucumber.api.cli.Main"
@@ -139,7 +139,7 @@ task('testsuite') {
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
 
                 if(project.hasProperty('configuration')) {
-                    systemProperty "configuration", configuration
+                    systemProperty 'configuration', configuration
                 }
             }
 
@@ -157,7 +157,7 @@ task('testsuite') {
                 ignoreExitValue = true
 
                 if(project.hasProperty('configuration')) {
-                    systemProperty "configuration", configuration
+                    systemProperty 'configuration', configuration
                 }
             }
         }
@@ -205,7 +205,7 @@ task('cucumber-rerun') {
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
 
                 if(project.hasProperty('configuration')) {
-                    systemProperty "configuration", configuration
+                    systemProperty 'configuration', configuration
                 }
             }
 

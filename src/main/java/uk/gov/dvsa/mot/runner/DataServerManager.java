@@ -68,7 +68,7 @@ public class DataServerManager {
             serverProcess = new ProcessBuilder(
                     "java",
                     "-Dserver.address=" + address, "-Dserver.port=" + port,
-                    config != null ? "-Dconfiguration=\"" + config + "\"" : "",
+                    config != null ? "-Dconfiguration=" + config : "",
                     "-cp", classpath, "uk.gov.dvsa.mot.server.ServerApplication").start();
             logger.info("Started server process, waiting for it to startup");
 
