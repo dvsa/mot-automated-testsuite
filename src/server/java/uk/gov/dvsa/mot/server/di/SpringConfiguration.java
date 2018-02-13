@@ -28,8 +28,6 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class SpringConfiguration {
 
-    private static Logger logger = LoggerFactory.getLogger(SpringConfiguration.class);
-
     static {
         // using a static initialisation block so this is instantiated as early as possible
 
@@ -71,14 +69,11 @@ public class SpringConfiguration {
                 + "&gatherPerfMetrics=true&useUsageAdvisor=true&explainSlowQueries=true"
                 + "&reportMetricsIntervalMillis=60000&logger=Slf4JLogger");
 
-        String uname = env.getRequiredProperty("jdbc.username");
-        String pwd = env.getRequiredProperty("jdbc.password");
+        String username = env.getRequiredProperty("jdbc.username");
+        String password = env.getRequiredProperty("jdbc.password");
 
-        logger.debug("Username: " + uname);
-        logger.debug("Password: " + pwd);
-
-        dataSource.setUsername(uname);
-        dataSource.setPassword(pwd);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
         dataSource.setDefaultAutoCommit(false);
         dataSource.setDefaultReadOnly(true);
         dataSource.setInitialSize(0);
