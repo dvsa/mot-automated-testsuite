@@ -1,6 +1,8 @@
 package uk.gov.dvsa.mot.server.di;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +27,8 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 public class SpringConfiguration {
+
+    private static Logger logger = LoggerFactory.getLogger(SpringConfiguration.class);
 
     static {
         // using a static initialisation block so this is instantiated as early as possible
@@ -70,8 +74,8 @@ public class SpringConfiguration {
         String uname = env.getRequiredProperty("jdbc.username");
         String pwd = env.getRequiredProperty("jdbc.password");
 
-        System.out.println("Username: " + uname);
-        System.out.println("Password: " + pwd);
+        logger.debug("Username: " + uname);
+        logger.debug("Password: " + pwd);
 
         dataSource.setUsername(uname);
         dataSource.setPassword(pwd);
