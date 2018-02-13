@@ -14,6 +14,7 @@ import java.util.Properties;
  */
 public class TestsuiteConfig extends Properties {
     private static Logger logger = LoggerFactory.getLogger(TestsuiteConfig.class);
+
     /**
      * Creates a new empty instance, without default values.
      */
