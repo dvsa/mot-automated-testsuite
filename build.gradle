@@ -49,7 +49,7 @@ configurations {
     all*.exclude group: 'commons-logging', module: 'commons-logging'
 }
 
-void browserstack(boolean isRunning = false, boolean triggeredByCi = false) {
+void browserstack(boolean isRunning = false) {
     javaexec {
         if (!isRunning) {
             main = 'uk.gov.dvsa.mot.browserstack.StartBrowserStackLocal'
@@ -59,9 +59,9 @@ void browserstack(boolean isRunning = false, boolean triggeredByCi = false) {
 
         classpath = configurations.cucumberRuntime + sourceSets.main.output
 
-        if (!triggeredByCi) {
+        if (project.hasProperty("target_config")) {
             systemProperty "target_config", target_config
-        } else {
+        } else if (project.hasProperty("configuration")) {
             systemProperty "configuration", configuration
         }
     }
@@ -95,18 +95,10 @@ task('testsuite') {
             main = 'uk.gov.dvsa.mot.runner.StartDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
 
-            if(project.hasProperty('configuration')) {
-                systemProperty 'configuration', configuration
+            if (project.hasProperty("configuration")) {
+                systemProperty "configuration", configuration
             }
         }
-
-        //This will be used to provide a config //.properties// file to use when runnig the testsuite locally.
-        if (project.hasProperty('target_config')) {
-            browserstack()
-        } else if (project.hasProperty('configuration')) {
-            browserstack(false, true)
-        }
-
         try {
             javaexec {
                 args = cucumberOptions
@@ -124,10 +116,10 @@ task('testsuite') {
                     args += ['--name', scenario]
                 }
 
-                if (project.hasProperty('target_config')) {
-                    systemProperty 'target_config', target_config
-                } else if(project.hasProperty('configuration')) {
-                    systemProperty 'configuration', configuration
+                if (project.hasProperty("target_config")) {
+                    systemProperty "target_config", target_config
+                } else if (project.hasProperty("configuration")) {
+                    systemProperty "configuration", configuration
                 }
 
                 main = "cucumber.api.cli.Main"
@@ -141,14 +133,6 @@ task('testsuite') {
                 if(project.hasProperty('configuration')) {
                     systemProperty 'configuration', configuration
                 }
-            }
-
-
-            //This will be used to provide a config //.properties// file to use when running the testsuite locally.
-            if (project.hasProperty('target_config')) {
-                browserstack(true)
-            } else if (project.hasProperty('configuration')) {
-                browserstack(true, true)
             }
 
             javaexec {
@@ -167,7 +151,7 @@ task('testsuite') {
 task('cucumber-rerun') {
     description 'Reruns all failed tests as listed within target/rerun.txt'
     dependsOn assemble, compileJava, check
-    finalizedBy 'cucumber-reporting', 'check-server'
+    finalizedBy 'check-server'
     doLast {
         copy {
             into "build/server-libs"
@@ -176,6 +160,10 @@ task('cucumber-rerun') {
         javaexec {
             main = 'uk.gov.dvsa.mot.runner.StartDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+            if (project.hasProperty("target_config")) {
+                systemProperty "configuration", configuration
+            }
         }
         try {
             javaexec {
@@ -198,6 +186,12 @@ task('cucumber-rerun') {
                 }
 
                 args = cucumberOptions
+
+                if (project.hasProperty("target_config")) {
+                    systemProperty "target_config", target_config
+                } else if (project.hasProperty("configuration")) {
+                    systemProperty "configuration", configuration
+                }
             }
         } finally {
             javaexec {
@@ -213,6 +207,10 @@ task('cucumber-rerun') {
                 main = 'uk.gov.dvsa.mot.runner.StopDataServer'
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
                 ignoreExitValue = true
+
+                if(project.hasProperty('configuration')) {
+                    systemProperty 'configuration', configuration
+                }
             }
         }
     }
@@ -232,6 +230,10 @@ task('parallel') {
         javaexec {
             main = 'uk.gov.dvsa.mot.runner.StartDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+            if (project.hasProperty("configuration")) {
+                systemProperty "configuration", configuration
+            }
         }
         try {
             javaexec {
@@ -241,6 +243,12 @@ task('parallel') {
 
                 // Cucumber configuration
                 systemProperties = ['cucumber.options': '--tags ' + tag]
+
+                if (project.hasProperty("target_config")) {
+                    systemProperty "target_config", target_config
+                } else if (project.hasProperty("configuration")) {
+                    systemProperty "configuration", configuration
+                }
             }
         } finally {
             javaexec {
@@ -256,6 +264,10 @@ task('parallel') {
                 main = 'uk.gov.dvsa.mot.runner.StopDataServer'
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
                 ignoreExitValue = true
+
+                if (project.hasProperty("configuration")) {
+                    systemProperty "configuration", configuration
+                }
             }
         }
     }
