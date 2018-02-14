@@ -118,7 +118,7 @@ public class CucumberReporting {
                 .append("<title>Document List</title></head>")
 
                 .append("<body><h1>Document List</h1>")
-                .append("<h2>Overview</h2>");
+                .append("<h2>Table of Contents</h2>");
 
 
         StringBuilder overview = new StringBuilder();
