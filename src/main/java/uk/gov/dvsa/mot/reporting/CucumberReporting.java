@@ -86,14 +86,15 @@ public class CucumberReporting {
         writeDocumentResults();
 
         List<String> allowedExtensions = Arrays.asList("pdf", "csv");
-        String documentsRoot = "target/documents/";
+        String root = "target/";
+        String documents = "documents/";
 
         // Read the results as an ordered map (TreeMap)
-        Map<String, String[]> documentResults = getDocumentResults(documentsRoot);
+        Map<String, String[]> documentResults = getDocumentResults( root + documents);
         String timestamp = documentResults.get("timestamp")[0];
         documentResults.remove("timestamp");
 
-        String documentLocation = documentsRoot + timestamp + "/";
+        String documentLocation = documents + timestamp + "/";
 
         StringBuilder html = new StringBuilder();
         html.append("<html><head><style type='text/css'>")
@@ -124,7 +125,7 @@ public class CucumberReporting {
         StringBuilder table = new StringBuilder();
 
         // Get list of all files in the directory
-        File[] files = new File(documentLocation).listFiles();
+        File[] files = new File(root + documentLocation).listFiles();
 
         overview.append("<ol>");
 
@@ -164,7 +165,7 @@ public class CucumberReporting {
                     testResultIndex = 2;
                 }
 
-                File file = new File(documentLocation + documentResult[filenameIndex]);
+                File file = new File(root + documentLocation + documentResult[filenameIndex]);
 
                 String fileFullName = file.getName();
                 String name = "";
@@ -244,11 +245,11 @@ public class CucumberReporting {
 
                     table.append("<a target='_blank' href='../")
                             .append(documentLocation).append(fileFullName).append("'>")
-                            .append("<img src='../").append(documentLocation).append("thumbnails/")
+                            .append("<img src='").append(documentLocation).append("thumbnails/")
                             .append(thumbnail.getName()).append("'/>")
                             .append("</a>");
                 } else {
-                    table.append("<a target='_blank' href='../")
+                    table.append("<a target='_blank' href='")
                             .append(documentLocation).append(fileFullName).append("'>")
                             .append(fileFullName)
                             .append("</a>");
