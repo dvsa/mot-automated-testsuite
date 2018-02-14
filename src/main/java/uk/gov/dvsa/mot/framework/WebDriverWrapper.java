@@ -180,7 +180,7 @@ public class WebDriverWrapper {
                         + env.getProperty("automateKey") + "@" + env.getProperty("server")),
                         capabilities);
             } catch (Exception exception) {
-                System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
+                System.setProperty("webdriver.chrome.driver", env.getRequiredProperty("driver"));
 
                 return new ChromeDriver(chromeOptions);
             }
@@ -208,8 +208,7 @@ public class WebDriverWrapper {
                     throw new IllegalArgumentException(message);
                 }
             } else {
-                System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-                
+
                 return new ChromeDriver(chromeOptions);
             }
         }
