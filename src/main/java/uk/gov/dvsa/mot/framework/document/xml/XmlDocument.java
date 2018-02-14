@@ -7,9 +7,13 @@ import uk.gov.dvsa.mot.framework.document.Document.Type;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class XmlDocument implements IDocument {
@@ -41,64 +45,46 @@ public class XmlDocument implements IDocument {
         }
     }
 
-    @Override
-    public boolean contains(List<String> values) throws Exception {
+    public boolean contains(Map<String, String> valuesToFind) throws Exception {
         // normalize text representation
         xmlData.getDocumentElement ().normalize ();
         System.out.println ("Root element of the doc is " +
                 xmlData.getDocumentElement().getNodeName());
 
+        for (String xpathString : valuesToFind.keySet()) {
+            XPath xpath = XPathFactory.newInstance().newXPath();
 
-        NodeList listOfPersons = xmlData.getElementsByTagName("person");
-        int totalPersons = listOfPersons.getLength();
-        System.out.println("Total no of people : " + totalPersons);
+            NodeList nodes = (NodeList) xpath.evaluate(xpathString, xmlData, XPathConstants.NODESET);
 
-        for(int s=0; s<listOfPersons.getLength() ; s++){
+            for (int i = 0; i < nodes.getLength(); ++i) {
+                if (!nodes.item(i).getTextContent().equals(valuesToFind.get(xpathString))) {
+                    return false;
+                }
+            }
+        }
 
+        return true;
+    }
 
-            Node firstPersonNode = listOfPersons.item(s);
-            if(firstPersonNode.getNodeType() == Node.ELEMENT_NODE){
+    @Override
+    public boolean contains(List<String> values) throws Exception {
+        //This is a simple check to see if the raw xml string contains the values
+        for (String value : values) {
+            if (!contains(value)) {
+                return false;
+            }
+        }
 
-
-                Element firstPersonElement = (Element)firstPersonNode;
-
-                //-------
-                NodeList firstNameList = firstPersonElement.getElementsByTagName("first");
-                Element firstNameElement = (Element)firstNameList.item(0);
-
-                NodeList textFNList = firstNameElement.getChildNodes();
-                System.out.println("First Name : " +
-                        ((Node)textFNList.item(0)).getNodeValue().trim());
-
-                //-------
-                NodeList lastNameList = firstPersonElement.getElementsByTagName("last");
-                Element lastNameElement = (Element)lastNameList.item(0);
-
-                NodeList textLNList = lastNameElement.getChildNodes();
-                System.out.println("Last Name : " +
-                        ((Node)textLNList.item(0)).getNodeValue().trim());
-
-                //----
-                NodeList ageList = firstPersonElement.getElementsByTagName("age");
-                Element ageElement = (Element)ageList.item(0);
-
-                NodeList textAgeList = ageElement.getChildNodes();
-                System.out.println("Age : " +
-                        ((Node)textAgeList.item(0)).getNodeValue().trim());
-
-                //------
-
-
-            }//end of if clause
-
-
-        }//end of for loop with s var
-
+        return true;
     }
 
     @Override
     public boolean contains(String value) {
-        return false;
+        if (!rawXmlData.contains(value)) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
