@@ -342,14 +342,13 @@ public class CucumberReporting {
     }
 
     private static void writeFile(String filename, String content) throws Exception {
-        BufferedWriter bufferedWriter = null;
-
         File file = new File(filename);
 
         file.mkdirs();
         file.delete();
         file.createNewFile();
 
+        BufferedWriter bufferedWriter = null;
         bufferedWriter = new BufferedWriter(new FileWriter(file));
         bufferedWriter.write(content);
 
