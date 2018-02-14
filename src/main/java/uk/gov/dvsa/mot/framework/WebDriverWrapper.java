@@ -5,6 +5,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
@@ -92,6 +93,10 @@ public class WebDriverWrapper {
         this.env = env;
         this.data = new HashMap<>();
         this.webDriver = createWebDriver();
+        String browserWidth = env.getProperty("browserWidth", "1024");
+        String browserHeight = env.getProperty("browserHeight", "768");
+        this.webDriver.manage().window().setSize(
+                new Dimension(Integer.parseInt(browserWidth), Integer.parseInt(browserHeight)));
         this.requestHandler = new RequestHandler(this.webDriver, env);
 
         // amount of time (in milliseconds) to wait for browser clicks to happen, before page refresh logic
