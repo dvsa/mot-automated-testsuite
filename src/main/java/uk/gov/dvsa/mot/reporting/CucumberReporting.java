@@ -346,6 +346,7 @@ public class CucumberReporting {
 
         File file = new File(filename);
 
+        file.mkdirs();
         file.delete();
         file.createNewFile();
 
