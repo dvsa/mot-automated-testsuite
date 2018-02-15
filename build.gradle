@@ -132,6 +132,18 @@ task('testsuite') {
             }
 
             javaexec {
+                main = 'uk.gov.dvsa.mot.browserstack.StopBrowserStackLocal'
+
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+                if (project.hasProperty("target_config")) {
+                    systemProperty "target_config", target_config
+                } else if (project.hasProperty("configuration")) {
+                    systemProperty "configuration", configuration
+                }
+            }
+
+            javaexec {
                 main = 'uk.gov.dvsa.mot.runner.StopDataServer'
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
                 ignoreExitValue = true
@@ -269,6 +281,17 @@ task('parallel') {
     }
 }
 
+
+task('run-server') {
+    description 'Use to test/debug the data server'
+    dependsOn assemble, compileJava, check
+    doLast {
+        javaexec {
+            main = 'uk.gov.dvsa.mot.server.ServerApplication'
+            classpath = configurations.serverRuntime + sourceSets.server.output
+        }
+    }
+}
 
 task('start-server') {
     description 'Use to test/debug the data server'
