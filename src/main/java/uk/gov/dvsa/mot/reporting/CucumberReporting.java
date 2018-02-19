@@ -231,7 +231,7 @@ public class CucumberReporting {
 
                 // If PDF then add a thumbnail, else just add a link with file name
                 if (extension.equals("pdf")) {
-                    File thumbnail = new File(documentLocation + "thumbnails/" + name + ".jpg");
+                    File thumbnail = new File(root + documentLocation + "thumbnails/" + name + ".jpg");
 
                     thumbnail.mkdirs();
                     thumbnail.delete();
@@ -241,9 +241,9 @@ public class CucumberReporting {
                     PDFRenderer renderer = new PDFRenderer(document);
 
                     BufferedImage bufferedImage = renderer.renderImage(0);
-                    ImageIO.write(bufferedImage,  "jpg", thumbnail);
+                    ImageIO.write(bufferedImage,  "png", thumbnail);
 
-                    table.append("<a target='_blank' href='../")
+                    table.append("<a target='_blank' href='")
                             .append(documentLocation).append(fileFullName).append("'>")
                             .append("<img src='").append(documentLocation).append("thumbnails/")
                             .append(thumbnail.getName()).append("'/>")
