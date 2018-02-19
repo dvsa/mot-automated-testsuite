@@ -933,10 +933,10 @@ public class TesterDoesStepDefinitions implements En {
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
         // And I click the "Search for a defect" link
-        driverWrapper.clickLink("Search for a defect");
+        driverWrapper.clickLink("Add a defect");
 
         // And The page title contains "Search for a defect"
-        driverWrapper.checkCurrentPageTitle("Search for a defect");
+        driverWrapper.checkCurrentPageTitle("Defect categories");
         // And I enter <text> into the <search-main> field (has no label)
         driverWrapper.enterIntoFieldWithId(defect, "search-main");
         // And I press the "Search" button
