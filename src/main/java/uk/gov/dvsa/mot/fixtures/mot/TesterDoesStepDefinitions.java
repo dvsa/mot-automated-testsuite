@@ -181,8 +181,11 @@ public class TesterDoesStepDefinitions implements En {
         And("^I check the brake results section of the test summary is \"([^\"]+)\"$", (String text) ->
                 assertEquals(text, driverWrapper.getRelativeTextFromHeading("Brake results overall")));
 
-        And("^I check the fails section of the test summary has \"([^\"]+)\"$", (String text) ->
-                assertTrue(driverWrapper.getTextFromUnorderedList("Fails").contains(text)));
+        And("^I check the dangerous failures section of the test summary has \"([^\"]+)\"$", (String text) ->
+                assertTrue(driverWrapper.getTextFromUnorderedList("Dangerous failures").contains(text)));
+
+        And("^I check the major failures section of the test summary has \"([^\"]+)\"$", (String text) ->
+                assertTrue(driverWrapper.getTextFromUnorderedList("Major failures").contains(text)));
 
         And("^I check the prs section of the test summary has \"([^\"]+)\"$", (String text) ->
                 assertTrue(driverWrapper.getTextFromUnorderedList("PRS").contains(text)));
@@ -193,8 +196,13 @@ public class TesterDoesStepDefinitions implements En {
         And("^I check the advisory section of the test summary has \"([^\"]+)\"$", (String text) ->
                 assertTrue(driverWrapper.getTextFromUnorderedList("Advisory text").contains(text)));
 
-        And("^I check the fails section of the test summary does not have \"([^\"]+)\"$", (String text) ->
-                assertFalse(driverWrapper.getTextFromUnorderedList("Fails").contains(text)));
+        And("^I check the dangerous failures section of the test summary does not have \"([^\"]+)\"$",
+                (String text) ->
+                assertFalse(driverWrapper.getTextFromUnorderedList("Dangerous failures").contains(text)));
+
+        And("^I check the major failures section of the test summary does not have \"([^\"]+)\"$",
+                (String text) ->
+                assertFalse(driverWrapper.getTextFromUnorderedList("Major failures").contains(text)));
 
         And("^I check the prs section of the test summary does not have \"([^\"]+)\"$", (String text) ->
                 assertFalse(driverWrapper.getTextFromUnorderedList("PRS").contains(text)));
