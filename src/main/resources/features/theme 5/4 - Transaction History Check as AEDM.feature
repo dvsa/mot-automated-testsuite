@@ -41,7 +41,6 @@ Feature: 04 - Transaction History Check as AEDM
     When I enter "01" in the "Day" field in fieldset "From"
     And I enter "10" in the "Month" field in fieldset "From"
     And I enter "2017" in the "Year" field in fieldset "From"
-
     And I enter "09" in the "Day" field in fieldset "To"
     And I enter "10" in the "Month" field in fieldset "To"
     And I enter "2017" in the "Year" field in fieldset "To"
@@ -52,7 +51,7 @@ Feature: 04 - Transaction History Check as AEDM
 
   Scenario: AEDM can see Print button on the Transaction Details page
     Given I login with 2FA using "AEDM_USER_WITH_TRANSACTIONS" as {AEDM}, {ORGANISATION}, {COUNT}, {AEREF}
-    And I click the last {ORGANISATION} link
+    And I click the first {ORGANISATION} link
     And I click the "Transaction history" link
     And I click the "All Transactions" link
 
