@@ -151,9 +151,9 @@ Feature: 05b - Tester does...
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I browse for a "Dangerous" defect of ("Body, structure and attachments", "Engine mountings", "Engine mounting/bracket missing") with comment "Test defect 1"
-    And I browse for a "Major" defect of ("Brakes", "Anti-lock braking system", "Component missing") with comment "Test defect 2"
-    And I browse for a "Major" defect of ("Axles, wheels, tyres and suspension", "Wheel bearings", "Wheel bearing has excessive play") with comment "Test defect 3"
+    And I browse for a "Dangerous" defect of ("Body, structure and attachments", "Engine mountings", "Fractured") with comment "Test defect 1"
+    And I browse for a "Major" defect of ("Brakes", "Rigid brake pipes", "Likely to become detached of damaged") with comment "Test defect 2"
+    And I browse for a "Major" defect of ("Steering", "Steering column", "Excessive movement up and down") with comment "Test defect 3"
     And I enter decelerometer results of service brake 61 and parking brake 16
     And I press the "Review test" button
 
@@ -162,11 +162,11 @@ Feature: 05b - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
-    And I check the dangerous failures section of the test summary has "Engine mounting/bracket missing"
+    And I check the dangerous failures section of the test summary has "Engine mounting fractured"
     And I check the dangerous failures section of the test summary has "Test defect 1"
-    And I check the major failures section of the test summary has "component missing"
+    And I check the major failures section of the test summary has "Brake pipe likely to become detached or damaged"
     And I check the major failures section of the test summary has "Test defect 2"
-    And I check the major failures section of the test summary has "Wheel bearing has excessive play"
+    And I check the major failures section of the test summary has "Steering column has excessive movement up and down"
     And I check the major failures section of the test summary has "Test defect 3"
     And I check the minors section of the test summary has "None recorded"
     And I check the prs section of the test summary has "None recorded"
@@ -174,17 +174,17 @@ Feature: 05b - Tester does...
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
-      | VT30                                       |
-      | Engine mounting/bracket missing            |
-      | Test defect 1                              |
-      | Component missing                          |
-      | Test defect 2                              |
-      | DANGEROUS                                  |
-      | Wheel bearing has excessive play           |
-      | Test defect 3                              |
-      | {registration1}                            |
-      | {vin1}                                     |
-      | {site}                                     |
+      | VT30                                               |
+      | Engine mounting fractured                          |
+      | * DANGEROUS *                                      |
+      | Test defect 1                                      |
+      | Brake pipe likely to become detached or damaged    |
+      | Test defect 2                                      |
+      | Steering column has excessive movement up and down |
+      | Test defect 3                                      |
+      | {registration1}                                    |
+      | {vin1}                                             |
+      | {site}                                             |
 
     When I click the "Back to user home" link
     And I start an MOT retest for {registration1}, {vin1}, {site}
@@ -192,9 +192,9 @@ Feature: 05b - Tester does...
     And I click the "Enter retest results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I mark the defect "Engine mounting/bracket missing" as repaired
-    And I mark the defect " component missing" as repaired
-    And I mark the defect "Wheel bearing has excessive play" as repaired
+    And I mark the defect "Engine mounting fractured " as repaired
+    And I mark the defect "Brake pipe likely to become detached or damaged" as repaired
+    And I mark the defect "Steering column has excessive movement up and down" as repaired
     And I press the "Review test" button
 
     Then The page title contains "MOT re-test summary"

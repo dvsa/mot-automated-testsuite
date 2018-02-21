@@ -990,7 +990,7 @@ public class TesterDoesStepDefinitions implements En {
 
             case AddFromBrowse:
                 // And I click the Advisory button for the specified defect
-                driverWrapper.clickLink("strong", defect, "../../ul/", defectType.type);
+                driverWrapper.clickLink("span", defect, "../div/", defectType.type);
                 break;
 
             case EditFromSummary:
@@ -1034,9 +1034,9 @@ public class TesterDoesStepDefinitions implements En {
 
     /** Encapsulates the type of defect. */
     private enum DefectType {
-        Dangerous("Dangerous", "failure"),
-        Major("Major", "failure"),
-        Minor("Minor", "minor"),
+        Dangerous("Dangerous failure", "dangerous failure"),
+        Major("Major failure", "major failure"),
+        Minor("Minor defect", "minor defect"),
         Failure("Failure", "failure"),
         PRS("PRS", "PRS"),
         Advisory("Advisory", "advisory");
