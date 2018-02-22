@@ -985,7 +985,7 @@ public class TesterDoesStepDefinitions implements En {
             case AddFromSearch:
                 // And I click the <Advisory> button for the specified defect
                 // (note - need to ignore the defect listed as "You searched for...")
-                driverWrapper.clickLink("div/strong", defect, "../../ul/", defectType.type);
+                driverWrapper.clickLink("span", defect, "../div/", defectType.type);
                 break;
 
             case AddFromBrowse:
