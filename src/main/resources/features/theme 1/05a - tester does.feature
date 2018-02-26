@@ -162,10 +162,10 @@ Feature: 05a - Tester does...
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I browse for a "Advisory" defect of ("Brakes", "Anti-lock braking system", "Wiring excessively damaged") with comment "Test advisory 1"
-    And I browse for a "Advisory" defect of ("Non-component advisories", "Oil leak") with comment "Test advisory 2"
-    And I search for a "Advisory" defect of "Stub axle has excessive vertical movement between stub axle and axle beam" with comment "Test advisory 3"
-    And I search for a "Advisory" defect of "Exhaust emits excessive smoke or vapour likely to obscure the vision of other road users" with comment "Test advisory 4"
+    And I browse for a "Advisory" defect of ("Body, structure and attachments", "Bumpers", "Slightly loose") with comment "Test advisory 1"
+    And I browse for a "Advisory" defect of ("Non-component advisories", "Nail in tyre") with comment "Test advisory 2"
+    And I search for a "Advisory" defect of "Stub axle has slight vertical movement between stub axle and axle beam" with comment "Test advisory 3"
+    And I search for a "Advisory" defect of "Standard fitment seat belt missing" with comment "Test advisory 4"
     And I add a manual advisory of "Test manual advisory"
     And I enter class 4 roller results for vehicle weight of 1000 as service brake 200,200,200,200 and parking brake 100,100
     And I press the "Review test" button
@@ -175,10 +175,10 @@ Feature: 05a - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
-    And I check the advisory section of the test summary has "wiring damaged but not excessively"
-    And I check the advisory section of the test summary has "Oil leak"
+    And I check the advisory section of the test summary has "Bumper slightly loose"
+    And I check the advisory section of the test summary has "Nail in tyre"
     And I check the advisory section of the test summary has "Stub axle has slight vertical movement between stub axle and axle beam"
-    And I check the advisory section of the test summary has "Exhaust emits excessive smoke or vapour but not likely to obscure the vision of other road users"
+    And I check the advisory section of the test summary has "Standard fitment seat belt missing"
     And I check the advisory section of the test summary has "Test advisory 1"
     And I check the advisory section of the test summary has "Test advisory 2"
     And I check the advisory section of the test summary has "Test advisory 3"
@@ -195,10 +195,10 @@ Feature: 05a - Tester does...
     | {registration1}                                                                                  |
     | {vin1}                                                                                           |
     | {site}                                                                                           |
-    | Wiring damaged but not excessively                                                               |
-    | Oil leak                                                                                         |
-    | Stub axle has slight vertical movement between stub axle and axle bea                         |
-    | Exhaust emits excessive smoke or vapour                                                          |
+    | Bumper slightly loose                                                                            |
+    | Nail in tyre                                                                                     |
+    | Stub axle has slight vertical movement between stub axle and axle beam                           |
+    | Standard fitment seat belt missing                                                               |
     | Test advisory 1                                                                                  |
     | Test advisory 2                                                                                  |
     | Test advisory 3                                                                                  |
