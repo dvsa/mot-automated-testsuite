@@ -195,7 +195,7 @@ Feature: 05e - Tester does...
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I browse for a "Minor" defect of ("Lamps, reflectors and electrical equipment", "Daytime running lamps", "Daytime running lamp insecure") with comment "Test browse minor"
+    And I browse for a "Minor" defect of ("Lamps, reflectors and electrical equipment", "Daytime running lamps", "Obviously incorrectly positioned") with comment "Test browse minor"
     And I search for a "Minor" defect of "Brake hose slightly damaged" with comment "Test search minor"
     And I enter decelerometer service brake result of 60 and gradient parking brake result of "Pass"
     And I press the "Review test" button
@@ -205,7 +205,7 @@ Feature: 05e - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
-    And I check the minors section of the test summary has "Daytime running lamp insecure"
+    And I check the minors section of the test summary has "Daytime running lamp obviously incorrectly positioned"
     And I check the minors section of the test summary has "Test browse minor"
     And I check the minors section of the test summary has "Brake hose slightly damaged"
     And I check the minors section of the test summary has "Test search minor"
