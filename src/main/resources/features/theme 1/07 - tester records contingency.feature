@@ -108,8 +108,8 @@ Feature: 07 - Tester records Contingency Test
     And I click the "Select vehicle" link
     And I press the "Confirm and start test" button
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I browse for a "Failure" defect of ("Exhaust, fuel and emissions", "Exhaust system", "Exhaust has a major leak of exhaust gases") with comment "Test defect 1"
-    And I search for a "Advisory" defect of "Body or chassis has excessive corrosion, seriously affecting its strength within 30cm of the body mountings" with comment "Test advisory 2"
+    And I browse for a "Major" defect of ("Identification of the vehicle", "Vehicle identification number", "Incomplete") with comment "Test defect 1"
+    And I search for a "Advisory" defect of "Body or chassis corroded within 30cm of a mounting, but not seriously affecting overall security" with comment "Test advisory 2"
     And I enter decelerometer results of service brake 60 and parking brake 30
     And I press the "Review test" button
 
@@ -118,21 +118,21 @@ Feature: 07 - Tester records Contingency Test
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
-    And I check the fails section of the test summary has "Exhaust has a major leak of exhaust gases"
-    And I check the fails section of the test summary has "Test defect 1"
-    And I check the advisory section of the test summary has "Body has slight corrosion"
+    And I check the major failures section of the test summary has "Vehicle Identification Number incomplete"
+    And I check the major failures section of the test summary has "Test defect 1"
+    And I check the advisory section of the test summary has "Body or chassis corroded within 30cm of a mounting"
     And I check the advisory section of the test summary has "Test advisory 2"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
-      | VT30                                      |
-      | {registration1}                           |
-      | {vin1}                                    |
-      | {site}                                    |
-      | Exhaust has a major leak of exhaust gases |
-      | Test defect 1                             |
-      | Body has slight corrosion                 |
-      | Test advisory 2                           |
+      | VT30                                                 |
+      | {registration1}                                      |
+      | {vin1}                                               |
+      | {site}                                               |
+      | Vehicle identification number incomplete             |
+      | Test defect 1                                        |
+      | Body or chassis corroded within 30cm of a mounting   |
+      | Test advisory 2                                      |
     And I click the "Back to user home" link
 
     Then I start a contingency MOT test at site {site}
@@ -154,7 +154,7 @@ Feature: 07 - Tester records Contingency Test
     And I press the "Confirm and start retest" button
 
     And I enter an odometer reading in miles of {mileage1} plus 5005
-    And I mark the defect "Exhaust has a major leak of exhaust gases" as repaired
+    And I mark the defect "Vehicle Identification Number incomplete" as repaired
     And I press the "Review test" button
 
     Then The page title contains "MOT re-test summary"
@@ -162,18 +162,18 @@ Feature: 07 - Tester records Contingency Test
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "None Recorded"
-    And I check the fails section of the test summary has "None recorded"
-    And I check the advisory section of the test summary has "Body has slight corrosion"
+    And I check the major failures section of the test summary has "None recorded"
+    And I check the advisory section of the test summary has "Body or chassis corroded within 30cm of a mounting"
     And I check the advisory section of the test summary has "Test advisory 2"
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
     And I click "Print documents" and check the PDF contains:
-      | VT20                      |
-      | {registration1}           |
-      | {vin1}                    |
-      | {site}                    |
-      | Body has slight corrosion |
-      | Test advisory 2           |
+      | VT20                                                  |
+      | {registration1}                                       |
+      | {vin1}                                                |
+      | {site}                                                |
+      | Body or chassis corroded within 30cm of a mounting    |
+      | Test advisory 2                                       |
 
   Scenario: A tester records a fail contingency test four days ago and performs retest pass now
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
@@ -197,8 +197,8 @@ Feature: 07 - Tester records Contingency Test
     And I click the "Select vehicle" link
     And I press the "Confirm and start test" button
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I browse for a "Failure" defect of ("Exhaust, fuel and emissions", "Exhaust system", "Exhaust has a major leak of exhaust gases") with comment "Test defect 1"
-    And I search for a "Advisory" defect of "Body or chassis has excessive corrosion, seriously affecting its strength within 30cm of the body mountings" with comment "Test advisory 2"
+    And I browse for a "Major" defect of ("Identification of the vehicle", "Vehicle identification number", "Incomplete") with comment "Test defect 1"
+    And I search for a "Advisory" defect of "Body or chassis corroded within 30cm of a mounting, but not seriously affecting overall security" with comment "Test advisory 2"
     And I enter decelerometer results of service brake 60 and parking brake 30
     And I press the "Review test" button
 
@@ -207,21 +207,21 @@ Feature: 07 - Tester records Contingency Test
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
-    And I check the fails section of the test summary has "Exhaust has a major leak of exhaust gases"
-    And I check the fails section of the test summary has "Test defect 1"
-    And I check the advisory section of the test summary has "Body has slight corrosion"
+    And I check the major failures section of the test summary has "Vehicle Identification Number incomplete"
+    And I check the major failures section of the test summary has "Test defect 1"
+    And I check the advisory section of the test summary has "Body or chassis corroded within 30cm of a mounting"
     And I check the advisory section of the test summary has "Test advisory 2"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
-      | VT30                                      |
-      | {registration1}                           |
-      | {vin1}                                    |
-      | {site}                                    |
-      | Exhaust has a major leak of exhaust gases |
-      | Test defect 1                             |
-      | Body has slight corrosion                 |
-      | Test advisory 2                           |
+      | VT30                                                 |
+      | {registration1}                                      |
+      | {vin1}                                               |
+      | {site}                                               |
+      | Vehicle identification number incomplete             |
+      | Test defect 1                                        |
+      | Body or chassis corroded within 30cm of a mounting   |
+      | Test advisory 2                                      |
     And I click the "Back to user home" link
 
     And I start an MOT retest for {registration1}, {vin1}, {site}
@@ -229,8 +229,8 @@ Feature: 07 - Tester records Contingency Test
     And I click the "Enter retest results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5005
-    And I mark the defect "Exhaust has a major leak of exhaust gases" as repaired
-    And I mark the defect "Body has slight corrosion" as repaired
+    And I mark the defect "Vehicle Identification Number incomplete" as repaired
+    And I mark the defect "Body or chassis corroded within 30cm of a mounting, but not seriously affecting overall security" as repaired
     And I press the "Review test" button
 
     Then The page title contains "MOT re-test summary"
@@ -238,7 +238,7 @@ Feature: 07 - Tester records Contingency Test
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "None Recorded"
-    And I check the fails section of the test summary has "None recorded"
+    And I check the major failures section of the test summary has "None recorded"
     And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
