@@ -1037,7 +1037,7 @@ public class TesterDoesStepDefinitions implements En {
         Dangerous("Dangerous failure", "dangerous failure"),
         Major("Major failure", "major failure"),
         Minor("Minor defect", "minor defect"),
-        Failure("Failure", "failure"),
+        Failure("Failure", "major failure"),
         PRS("PRS", "PRS"),
         Advisory("Advisory", "advisory");
 

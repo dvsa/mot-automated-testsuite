@@ -10,9 +10,9 @@ Feature: 05c - Tester does...
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I browse for a "Dangerous" defect of ("Body, structure and attachments", "Engine mountings", "Engine mounting/bracket missing") with comment "Test defect 1"
+    And I browse for a "Dangerous" defect of ("Body, structure and attachments", "Engine mountings", "Fractured") with comment "Test defect 1"
     And I search for a "Major" defect of "Brake performance not tested" with comment "Test defect 2"
-    And I browse for a "Major" defect of ("Axles, wheels, tyres and suspension", "Wheel bearings", "Wheel bearing has excessive play") with comment "Test defect 3"
+    And I browse for a "Major" defect of ("Visibility", "Washers", "Provides insufficient washer liquid") with comment "Test defect 3"
     And I press the "Review test" button
 
     And The page title contains "MOT test summary"
@@ -20,11 +20,11 @@ Feature: 05c - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Not tested"
-    And I check the dangerous failures section of the test summary has "Engine mounting/bracket missing"
+    And I check the dangerous failures section of the test summary has "Engine mounting fractured"
     And I check the dangerous failures section of the test summary has "Test defect 1"
     And I check the major failures section of the test summary has "Brake performance not tested"
     And I check the major failures section of the test summary has "Test defect 2"
-    And I check the major failures section of the test summary has "Wheel bearing has excessive play"
+    And I check the major failures section of the test summary has "Windscreen washer provides insufficient washer liquid"
     And I check the major failures section of the test summary has "Test defect 3"
     And I check the minors section of the test summary has "None recorded"
     And I check the prs section of the test summary has "None recorded"
@@ -32,13 +32,13 @@ Feature: 05c - Tester does...
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
-      | VT30                                       |
-      | Engine mounting/bracket missing            |
-      | Wheel bearing has excessive play           |
-      | Brake performance not tested               |
-      | {registration1}                            |
-      | {vin1}                                     |
-      | {site}                                     |
+      | VT30                                                            |
+      | Engine mounting fractured                                       |
+      | Windscreen washer provides insufficient washer liquid           |
+      | Brake performance not tested                                    |
+      | {registration1}                                                 |
+      | {vin1}                                                          |
+      | {site}                                                          |
 
     When I click the "Back to user home" link
     And I start an MOT retest for {registration1}, {vin1}, {site}
@@ -46,8 +46,8 @@ Feature: 05c - Tester does...
     And I click the "Enter retest results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I mark the defect "Engine mounting/bracket missing" as repaired
-    And I mark the defect "Wheel bearing has excessive play" as repaired
+    And I mark the defect "Engine mounting fractured " as repaired
+    And I mark the defect "Windscreen washer provides insufficient washer liquid" as repaired
     And I mark the defect "Brake performance not tested" as repaired
 
     And I check the "Review test" button is disabled
