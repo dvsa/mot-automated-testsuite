@@ -24,7 +24,7 @@ Feature: 06a - duplicate and replacement certificates
       | VT20            |
       | {reg}           |
       | {vin}           |
-      | {siteName}      |
+#      | {siteName}      |  -- not included on new certs
 
 
   Scenario Outline: <user> user issues duplicate certificate
@@ -65,7 +65,7 @@ Feature: 06a - duplicate and replacement certificates
       | VT20            |
       | {registration1} |
       | {vin1}          |
-      | {site}          |
+#      | {site}          |  -- not included on new certs
     And I click the "Back to user home" link
 
     And I search for certificates with reg {registration1}
@@ -84,7 +84,7 @@ Feature: 06a - duplicate and replacement certificates
       | VT20                  |
       | {registration1}       |
       | {vin1}                |
-      | {site}                |
+#      | {site}                |  -- not included on new certs
 
 
   Scenario: Tester issues duplicate certificate and cannot edit another sites tests

@@ -23,7 +23,7 @@ Feature: 05d - Tester does...
       | VT30                                                                         |
       | {registration1}                                                              |
       | {vin1}                                                                       |
-      | {site}                                                                       |
+#      | {site}                                                                       |  -- not included on new certs
 
 
   Scenario: Tester enters a class 4 MOT test pass, for a DVLA vehicle
@@ -50,7 +50,7 @@ Feature: 05d - Tester does...
       | VT20                                                                         |
       | {registration1}                                                              |
       | {vin1}                                                                       |
-      | {site}                                                                       |
+#      | {site}                                                                       |   -- not included on new certs
 
 
   Scenario: Tester enters a class 4 MOT test pass, for a new vehicle
@@ -92,4 +92,4 @@ Feature: 05d - Tester does...
       | VT20                                                                         |
       | ANDY1                                                                        |
       | 111111                                                                       |
-      | {site}                                                                       |
+#      | {site}                                                                       |  -- not included on new certs

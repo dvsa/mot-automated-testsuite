@@ -30,7 +30,7 @@ Feature: 05c - Tester does...
       | Anti-lock braking system component missing |
       | {registration1}                            |
       | {vin1}                                     |
-      | {site}                                     |
+#      | {site}                                     |  -- not included on new certs
 
     When I click the "Back to user home" link
     And I start an MOT retest for {registration1}, {vin1}, {site}
@@ -58,7 +58,7 @@ Feature: 05c - Tester does...
       | VT20            |
       | {registration1} |
       | {vin1}          |
-      | {site}          |
+#      | {site}          | -- not included on new certs
     And I click the "Back to user home" link
 
 
@@ -86,7 +86,7 @@ Feature: 05c - Tester does...
       | VT20            |
       | {registration1} |
       | {vin1}          |
-      | {site}          |
+#      | {site}          |  -- not included on new certs
     And I click the "Back to user home" link
 
 
@@ -116,12 +116,12 @@ Feature: 05c - Tester does...
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
       | VT30                                                                         |
-      | Blue                                                                         |
+#      | Blue                                                                         |  -- not included on new certs
       | Throttle operating incorrectly                                               |
       | Test defect 1                                                                |
       | {registration1}                                                              |
       | {vin1}                                                                       |
-      | {site}                                                                       |
+#      | {site}                                                                       | -- not included on new certs
 
 
   Scenario: Tester enters a class 5 MOT test pass, with engine capacity change
@@ -153,7 +153,7 @@ Feature: 05c - Tester does...
       | Test advisory 1                                                              |
       | {registration1}                                                              |
       | {vin1}                                                                       |
-      | {site}                                                                       |
+#      | {site}                                                                       | -- not included on new certs
 
 
   Scenario: Tester enters a class 7 MOT test fail
@@ -184,4 +184,4 @@ Feature: 05c - Tester does...
       | VT30                                                                         |
       | {registration1}                                                              |
       | {vin1}                                                                       |
-      | {site}                                                                       |
+#      | {site}                                                                       | -- not included on new certs

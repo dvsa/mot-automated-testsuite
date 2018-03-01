@@ -27,7 +27,7 @@ Feature: 05a - Tester does...
       | VT20            |
       | {registration1} |
       | {vin1}          |
-      | {site}          |
+#      | {site}          | -- not included on new certs
     And I click the "Back to user home" link
     And I check a slot was successfully used for site {site}
 
@@ -55,7 +55,7 @@ Feature: 05a - Tester does...
       | VT30                                         |
       | {registration1}                              |
       | {vin1}                                       |
-      | {site}                                       |
+#      | {site}                                       | -- not included on new certs
       | Parking brake: efficiency below requirements |
 
 
@@ -92,7 +92,7 @@ Feature: 05a - Tester does...
       | VT30                                      |
       | {registration1}                           |
       | {vin1}                                    |
-      | {site}                                    |
+#      | {site}                                    | -- not included on new certs
       | Steering system excessively tight         |
       | Exhaust has a major leak of exhaust gases |
       | Battery leaking electrolyte               |
@@ -126,7 +126,7 @@ Feature: 05a - Tester does...
       | VT30                         |
       | {registration1}              |
       | {vin1}                       |
-      | {site}                       |
+#      | {site}                       |  -- not included on new certs
       | Brake performance not tested |
 
 
@@ -167,7 +167,7 @@ Feature: 05a - Tester does...
     | VT20                                                                 |
     | {registration1}                                                      |
     | {vin1}                                                               |
-    | {site}                                                               |
+#    | {site}                                                               |  -- not included on new certs
     | Obligatory mirror obscured but not seriously affecting the rear view |
     | Adjustable towbar bracket slightly worn                              |
     | Body has slight corrosion                                            |
