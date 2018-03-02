@@ -89,7 +89,7 @@ Feature: 06b - duplicate and replacement certificates
       | VT20                  |
       | {reg}                 |
       | {vin}                 |
-      | {site}                |
+#      | {site}                |  -- not included on new certs
     And I click the "Back to user home" link
 
     When I search for certificates with reg {reg}
@@ -107,4 +107,4 @@ Feature: 06b - duplicate and replacement certificates
       | VT20                  |
       | {reg}                 |
       | {vin}                 |
-      | {site}                |
+#      | {site}                |  -- not included on new certs
