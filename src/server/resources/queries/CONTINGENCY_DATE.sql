@@ -1,4 +1,4 @@
-select date_format(SUBDATE(NOW(), 4) , "%d") as day,
-date_format(now(), "%m") as month,
-date_format(now(), "%Y") as year
+select date_format(SUBDATE(NOW(), INTERVAL 4 DAY)  , "%d") as day,
+date_format(SUBDATE(NOW(), INTERVAL 4 DAY) , "%m") as month,
+date_format(SUBDATE(NOW(), INTERVAL 4 DAY) , "%Y") as year
 from dual;
