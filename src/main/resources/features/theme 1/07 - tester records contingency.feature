@@ -39,7 +39,7 @@ Feature: 07 - Tester records Contingency Test
        | VT20            |
        | {registration1} |
        | {vin1}          |
-       | {site}          |
+#       | {site}          |  -- not included on new certs
      And I click the "Back to user home" link
 
 
@@ -79,7 +79,7 @@ Feature: 07 - Tester records Contingency Test
       | VT30            |
       | {registration1} |
       | {vin1}          |
-      | {site}          |
+#      | {site}          |  -- not included on new certs
     And I click the "Back to user home" link
 
 
@@ -124,7 +124,7 @@ Feature: 07 - Tester records Contingency Test
       | VT30                                      |
       | {registration1}                           |
       | {vin1}                                    |
-      | {site}                                    |
+#      | {site}                                    |  -- not included on new certs
       | Exhaust has a major leak of exhaust gases |
       | Test defect 1                             |
       | Body has slight corrosion                 |
@@ -167,7 +167,7 @@ Feature: 07 - Tester records Contingency Test
       | VT20                      |
       | {registration1}           |
       | {vin1}                    |
-      | {site}                    |
+#      | {site}                    |  -- not included on new certs
       | Body has slight corrosion |
       | Test advisory 2           |
 
@@ -213,7 +213,7 @@ Feature: 07 - Tester records Contingency Test
       | VT30                                      |
       | {registration1}                           |
       | {vin1}                                    |
-      | {site}                                    |
+#      | {site}                                    |  -- not included on new certs
       | Exhaust has a major leak of exhaust gases |
       | Test defect 1                             |
       | Body has slight corrosion                 |
@@ -242,7 +242,7 @@ Feature: 07 - Tester records Contingency Test
       | VT20                      |
       | {registration1}           |
       | {vin1}                    |
-      | {site}                    |
+#      | {site}                    |  -- not included on new certs
 
   Scenario: A tester record contingency test and then cancels the contingency test
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
@@ -277,7 +277,7 @@ Feature: 07 - Tester records Contingency Test
       | VT30            |
       | {registration}  |
       | {vin}           |
-      | {site}          |
+#      | {site}          |  -- not included on new certs
     And I click the "Finish" link
 
 
