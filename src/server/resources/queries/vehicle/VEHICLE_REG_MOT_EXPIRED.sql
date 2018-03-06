@@ -1,6 +1,7 @@
 select veh.registration, concat(ma.name, ' ', mo.name) as make, DATE_FORMAT(veh.first_registration_date, "%e %M %Y"), DATE_FORMAT(mtc.expiry_date, "%e %M %Y")
 from vehicle veh, model_detail md, model mo, make ma,
   (select max(id) as id, vehicle_id  from mot_test_current
+   where vehicle_id > 10000000
    group by vehicle_id
    limit 100000) as latest_mot,
    mot_test_current mtc
