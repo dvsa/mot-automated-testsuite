@@ -1,4 +1,5 @@
 @mothpp
+@mothint
 Feature: 25 - Dangerous advisories are shown
 
   Scenario: A MOTH user searches for an MOT test with dangerous advisories

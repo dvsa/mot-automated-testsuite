@@ -5,4 +5,7 @@ and mtc.vehicle_id = veh.id
 and mtc.prs_mot_test_id is not null  -- only shows tests that do have a Pass after Rectification at Station
 and mtc.id = rfr.mot_test_id
 and rfr.failure_dangerous=1 -- shows results for tests that fail for a dangerous reason
-limit 10
+and rfr.rfr_type_id = 3 -- PRS failure defect
+and mtc.status_id = 5 -- Failed test (part of the PRS)
+and mtc.mot_test_type_id = 1 -- Normal test
+limit 1
