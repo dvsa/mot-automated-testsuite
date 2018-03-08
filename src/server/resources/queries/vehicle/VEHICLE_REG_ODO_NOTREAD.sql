@@ -1,17 +1,11 @@
-select veh.registration, concat(ma.name, ' ', mo.name) as make
-from vehicle veh, model_detail md, model mo, make ma,
-  (select max(id) as id, vehicle_id  from mot_test_current
-   group by vehicle_id
-   limit 100000) as latest_mot,
-   mot_test_current mtc
+select distinct veh.registration, concat(ma.name, ' ', mo.name) as make
+from vehicle veh, model_detail md, model mo, make ma, mot_test_current mtc
 where veh.model_detail_id = md.id
 and md.vehicle_class_id = 4 -- cars only
-and veh.id = latest_mot.vehicle_id
 and md.model_id = mo.id
 and mo.make_id = ma.id
-and mtc.id = latest_mot.id
-and mtc.status_id not in (4,5) -- exclude vehicles whose latest status is under test or failed
-and odometer_result_type = 'NOT_READ' -- odometer not read
+and mtc.vehicle_id = veh.id
+and mtc.odometer_result_type = 'NOT_READ' -- odometer not present
 and veh.registration not like "%-%" -- exclude dodgy test data on ACPT
 and veh.registration is not null -- nullable in PP/Prod
 and veh.vin is not null -- nullable in PP/Prod
@@ -27,5 +21,4 @@ and not exists (
     group by v.vin
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
-and mtc.expiry_date > curdate()
 limit 10
