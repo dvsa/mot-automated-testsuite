@@ -1,8 +1,10 @@
 select veh.registration, ma.name, mo.name
 from vehicle veh, model_detail md, model mo, make ma
-where veh.id < 1000000
+where veh.id < 10000000
 and veh.registration is not null
 and veh.model_detail_id = md.id
+and veh.registration not like "%-%"
+and veh.registration not like "%@%"
 and md.model_id = mo.id
 and mo.make_id = ma.id
 and md.vehicle_class_id = 4 -- cars only
