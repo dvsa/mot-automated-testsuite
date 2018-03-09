@@ -113,7 +113,8 @@ Feature: 05c - Tester does...
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I browse for a "Failure" defect of ("Motorcycle driving controls", "Throttle", "Throttle operating incorrectly") with comment "Test defect 1"
+    And I browse for a "Major" defect of ("Motorcycle lamps and reflectors", "Stop lamp", "Showing white light to rear") with comment "Test defect 1"
+    And I search for a "Major" defect of "Throttle operating incorrectly" with comment "Test defect 2"
     And I enter decelerometer results of efficiency 15
     And I press the "Review test" button
 
@@ -123,8 +124,10 @@ Feature: 05c - Tester does...
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the vehicle summary section of the test summary has "Colour" of "Blue"
     And I check the brake results section of the test summary is "Fail"
-    And I check the major failures section of the test summary has "Throttle operating incorrectly"
+    And I check the major failures section of the test summary has "Stop lamp showing white light to the rear"
     And I check the major failures section of the test summary has "Test defect 1"
+    And I check the major failures section of the test summary has "Throttle operating incorrectly"
+    And I check the major failures section of the test summary has "Test defect 2"
     And I check the major failures section of the test summary has "Decelerometer brake test neither brake control achieves an efficiency of 25%"
     And I check the prs section of the test summary has "None recorded"
     And I check the advisory section of the test summary has "None recorded"
@@ -133,8 +136,10 @@ Feature: 05c - Tester does...
     And I click "Print documents" and check the PDF contains:
       | VT30                                                                         |
       | Blue                                                                         |
-      | Throttle operating incorrectly                                               |
+      | Stop lamp showing white light to the rear                                    |
       | Test defect 1                                                                |
+      | Throttle operating incorrectly                                               |
+      | Test defect 2                                                                |
       | {registration1}                                                              |
       | {vin1}                                                                       |
       | {site}                                                                       |
