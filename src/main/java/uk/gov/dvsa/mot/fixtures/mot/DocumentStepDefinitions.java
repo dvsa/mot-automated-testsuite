@@ -67,11 +67,11 @@ public class DocumentStepDefinitions implements En {
         And("^I click \"([^\"]+)\" and check the XML contains:$",
                 (String link, DataTable table) -> {
                     try {
-                        XmlDocument csvDocument = driverWrapper.createXmlDocument(link);
+                        XmlDocument xmlDocument = driverWrapper.createXmlDocument(link);
 
-                        assertTrue(csvDocument.contains(getList(table)));
+                        assertTrue(xmlDocument.contains(getList(table)));
 
-                        driverWrapper.writeDocument(csvDocument, Optional.of(false));
+                        driverWrapper.writeDocument(xmlDocument, Optional.of(false));
                     } catch (Exception exception) {
                         logger.error("Unable to load XML document: %s", exception);
                     }

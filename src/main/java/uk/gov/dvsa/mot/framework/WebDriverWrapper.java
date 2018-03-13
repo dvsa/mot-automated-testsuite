@@ -1767,7 +1767,7 @@ public class WebDriverWrapper {
         String filename = lastScenario.getFirst();
 
         try {
-            if (System.getProperty("SAVE_DOCUMENTS") != null && System.getProperty("SAVE_DOCUMENTS").equals("true")) {
+            if (System.getProperty("saveDocuments") != null && System.getProperty("saveDocuments").equals("true")) {
 
                 for (int i = 1;
                      new File("target/documents/" + filename + "." + document.getExtension()).exists();

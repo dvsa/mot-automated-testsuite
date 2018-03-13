@@ -46,7 +46,6 @@ public class XmlDocument implements IDocument {
     }
 
     public boolean contains(Map<String, String> valuesToFind) throws Exception {
-        // normalize text representation
         xmlData.getDocumentElement ().normalize ();
         System.out.println ("Root element of the doc is " +
                 xmlData.getDocumentElement().getNodeName());
@@ -68,7 +67,6 @@ public class XmlDocument implements IDocument {
 
     @Override
     public boolean contains(List<String> values) throws Exception {
-        //This is a simple check to see if the raw xml string contains the values
         for (String value : values) {
             if (!contains(value)) {
                 return false;
@@ -105,21 +103,5 @@ public class XmlDocument implements IDocument {
     @Override
     public String getExtension() {
         return null;
-    }
-
-    private boolean checkIfAnyNodeContains(NodeList nodeList, List<String> values) {
-        for (int i = 0; i < nodeList.getLength(); ++i) {
-            if (nodeList.item(i).getNodeType() == Node.TEXT_NODE) {
-                for (String value : values) {
-                    if (nodeList.item(i).getTextContent().equals(value)) {
-                        values.remove(value);
-                    }
-                }
-            } else {
-                return checkIfAnyNodeContains(nodeList.item(i).getChildNodes(), values);
-            }
-        }
-
-        return false;
     }
 }
