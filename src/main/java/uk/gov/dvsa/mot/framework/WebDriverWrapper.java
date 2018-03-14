@@ -32,6 +32,8 @@ import uk.gov.dvsa.mot.framework.csv.CsvDocument;
 import uk.gov.dvsa.mot.framework.csv.CsvException;
 import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
 import uk.gov.dvsa.mot.framework.pdf.PdfException;
+import uk.gov.dvsa.mot.framework.xml.XmlDocument;
+import uk.gov.dvsa.mot.framework.xml.XmlException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -1714,5 +1716,19 @@ public class WebDriverWrapper {
     public void setStartingUrl(String startingUrlKey) {
         this.startingUrl = env.getRequiredProperty(startingUrlKey);
         logger.debug("Switched starting url to: " + startingUrl);
+    }
+
+    /**
+     * Creates a XML document from the URL provided.
+     * @param       url of the target document
+     * @return      parsed XML from URL
+     */
+    public XmlDocument createXmlDocument(String url) throws XmlException {
+        try {
+            return requestHandler.getXmlDocument(url);
+        } catch (Exception ex) {
+            logger.error(String.format("Failed to load XML document from %s.", url), ex);
+            throw new XmlException("Error processing XML document", ex);
+        }
     }
 }
