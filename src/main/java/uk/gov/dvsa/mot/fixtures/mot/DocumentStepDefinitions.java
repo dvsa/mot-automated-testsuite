@@ -7,6 +7,7 @@ import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
+import uk.gov.dvsa.mot.framework.xml.XmlDocument;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,17 @@ public class DocumentStepDefinitions implements En {
 
         And("^I click \"([^\"]+)\" and check the CSV contains:$",
                 (String link, DataTable table) -> assertTrue(csvContainsData(link, table)));
+
+        And("^I click \"([^\"]+)\" and check the XML contains:$",
+                (String link, DataTable table) -> {
+                    try {
+                        XmlDocument xmlDocument = driverWrapper.createXmlDocument(link);
+
+                        assertTrue(xmlDocument.contains(getList(table)));
+                    } catch (Exception exception) {
+                        logger.error("Unable to load XML document: %s", exception);
+                    }
+                });
     }
 
     /**
@@ -81,5 +93,15 @@ public class DocumentStepDefinitions implements En {
             return driverWrapper.getData(text.substring(1, text.length() - 1));
         }
         return text;
+    }
+
+    private List<String> getList(DataTable dataTable) {
+        List<String> processedDataRows = new ArrayList<>();
+
+        for (String dataItem : dataTable.asList(String.class)) {
+            processedDataRows.add(getStringValue(dataItem));
+        }
+
+        return processedDataRows;
     }
 }

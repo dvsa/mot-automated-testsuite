@@ -22,6 +22,8 @@ public class CucumberReporting {
         generateOverviewReport(outputDirectory, sourceFile, outputName);
 
         generateFeatureReport(outputDirectory, sourceFile, outputName, screenShotLocation);
+
+        generateOpenInterfaceReport();
     }
 
     /**
@@ -56,5 +58,14 @@ public class CucumberReporting {
         cucumberResultsOverview.setOutputName(outputName);
         cucumberResultsOverview.setSourceFile(sourceFile);
         cucumberResultsOverview.execute();
+    }
+
+    /**
+     * Generate the open interface test report.
+     * @throws Exception            Error producing the report
+     */
+    private static void generateOpenInterfaceReport()
+            throws Exception {
+        OpenInterfaceReportBuilder.generateFinalReport();
     }
 }

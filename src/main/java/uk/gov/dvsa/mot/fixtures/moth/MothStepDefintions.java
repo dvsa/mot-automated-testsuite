@@ -37,6 +37,4 @@ public class MothStepDefintions implements En {
 
         When("^I close extra tabs$", () -> driverWrapper.closeTabs());
     }
-
-
 }
