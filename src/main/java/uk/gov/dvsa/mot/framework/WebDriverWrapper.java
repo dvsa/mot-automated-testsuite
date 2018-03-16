@@ -93,11 +93,14 @@ public class WebDriverWrapper {
         this.env = env;
         this.data = new HashMap<>();
         this.webDriver = createWebDriver();
+        this.requestHandler = new RequestHandler(this.webDriver, env);
+
         String browserWidth = env.getProperty("browserWidth", "1024");
         String browserHeight = env.getProperty("browserHeight", "768");
-        this.webDriver.manage().window().setSize(
-                new Dimension(Integer.parseInt(browserWidth), Integer.parseInt(browserHeight)));
-        this.requestHandler = new RequestHandler(this.webDriver, env);
+        
+        if (!env.isMobileConfig()) {
+            setBrowserResolution(browserWidth, browserHeight);
+        }
 
         // amount of time (in milliseconds) to wait for browser clicks to happen, before page refresh logic
         // this is a mandatory delay, to accommodate any browser/environment/network latency
@@ -212,6 +215,11 @@ public class WebDriverWrapper {
                 return new ChromeDriver(chromeOptions);
             }
         }
+    }
+
+    private void setBrowserResolution(String browserWidth, String browserHeight) {
+        this.webDriver.manage().window().setSize(
+                new Dimension(Integer.parseInt(browserWidth), Integer.parseInt(browserHeight)));
     }
 
     /**
