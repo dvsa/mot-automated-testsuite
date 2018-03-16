@@ -148,7 +148,6 @@ public class WebDriverWrapper {
 
             capabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
 
-            capabilities.setCapability("browser", env.getRequiredProperty("browser"));
             capabilities.setCapability("browser_version", env.getProperty("browser_version"));
 
             String localIdentifier = BrowserStackManager.getLocalIdentifier();
@@ -173,6 +172,7 @@ public class WebDriverWrapper {
                     capabilities.setCapability("browserName", env.getProperty("browserName"));
                 }
             } else {
+                capabilities.setCapability("browser", env.getRequiredProperty("browser"));
                 capabilities.setCapability("os", env.getProperty("os"));
                 capabilities.setCapability("os_version", env.getProperty("os_version"));
                 capabilities.setCapability("resolution", env.getProperty("resolution"));
@@ -1674,6 +1674,7 @@ public class WebDriverWrapper {
         } else {
             try {
                 PdfDocument pdfDocument = createPdfDocument(links.get(0).getAttribute("href"));
+                System.out.println("downloading document: " + links.get(0));
 
                 return pdfDocument.contains(values);
             } catch (PdfException ex) {
