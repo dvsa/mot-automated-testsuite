@@ -97,7 +97,7 @@ public class WebDriverWrapper {
 
         String browserWidth = env.getProperty("browserWidth", "1024");
         String browserHeight = env.getProperty("browserHeight", "768");
-        
+
         if (!env.isMobileConfig()) {
             setBrowserResolution(browserWidth, browserHeight);
         }
@@ -271,7 +271,6 @@ public class WebDriverWrapper {
                 break;
             case "firefox":
                 desiredCapabilities = DesiredCapabilities.firefox();
-                desiredCapabilities.setCapability("browserstack.geckodriver", "0.18.0");
                 break;
             case "iphone":
                 desiredCapabilities = DesiredCapabilities.iphone();
@@ -284,7 +283,6 @@ public class WebDriverWrapper {
                 break;
             case "ie":
                 desiredCapabilities = DesiredCapabilities.internetExplorer();
-                desiredCapabilities.setCapability("browserstack.ie.driver", "2.53.1");
                 break;
             case "safari":
                 desiredCapabilities = DesiredCapabilities.safari();
