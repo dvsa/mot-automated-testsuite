@@ -1,5 +1,6 @@
 package uk.gov.dvsa.mot.di;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +9,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.dvsa.mot.data.ClientDataProvider;
+import uk.gov.dvsa.mot.data.CsvDataProvider;
+import uk.gov.dvsa.mot.data.DataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 import java.lang.management.ManagementFactory;
@@ -41,8 +44,17 @@ public class SpringConfiguration {
         return new RestTemplate();
     }
 
+    /**
+     * Loads the data provider.
+     * @return  the data provider
+     */
     @Bean
-    public ClientDataProvider dataProvider() {
+    public DataProvider dataProvider() {
+        String staticDatafilePath = env.getProperty("staticDatafilePath");
+        String dataFiltering = env.getRequiredProperty("dataFiltering");
+        if (StringUtils.isNotEmpty(staticDatafilePath)) {
+            return new CsvDataProvider(staticDatafilePath, Boolean.parseBoolean(dataFiltering));
+        }
         return new ClientDataProvider(env, restTemplate());
     }
 

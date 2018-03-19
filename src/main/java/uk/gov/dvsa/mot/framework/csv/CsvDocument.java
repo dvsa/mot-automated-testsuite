@@ -17,7 +17,7 @@ public class CsvDocument {
     /** The logger to use. */
     private static final Logger logger = LoggerFactory.getLogger(CsvDocument.class);
 
-    private ArrayList<ArrayList<String>> csvData;
+    private List<List<String>> csvData;
 
     /**
      * Default constructor.
@@ -36,11 +36,11 @@ public class CsvDocument {
      * @return                  the CSV data
      * @throws CsvException     error parsing the CSV data
      */
-    private ArrayList<ArrayList<String>> parseCsvData(CSVParser csvParser) throws CsvException {
+    private List<List<String>> parseCsvData(CSVParser csvParser) throws CsvException {
         try {
-            ArrayList<ArrayList<String>> csvDataSet = new ArrayList<ArrayList<String>>();
+            List<List<String>> csvDataSet = new ArrayList<List<String>>();
             for (CSVRecord record : csvParser.getRecords()) {
-                ArrayList<String> csvDataRow = new ArrayList<String>();
+                List<String> csvDataRow = new ArrayList<String>();
 
                 for (int i = 0; i < record.size(); i++) {
                     csvDataRow.add(record.get(i));
@@ -61,7 +61,7 @@ public class CsvDocument {
      * @return whether the CSV contains a specified field or not.
      */
     public boolean contains(String field) {
-        for (ArrayList<String> row : csvData) {
+        for (List<String> row : csvData) {
             for (String value : row) {
                 if (field.equals(value)) {
                     return true;
@@ -88,5 +88,13 @@ public class CsvDocument {
 
         // All values must exist
         return true;
+    }
+
+    /**
+     * Returns the data as a list of lists.
+     * @return          returns the data rows
+     */
+    public List<List<String>> getRows() {
+        return this.csvData;
     }
 }
