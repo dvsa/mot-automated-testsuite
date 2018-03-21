@@ -280,6 +280,7 @@ Feature: 07 - Tester records Contingency Test
       | {site}          |
     And I click the "Finish" link
 
+  @smoke
   Scenario: A tester prints CT certificates
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     And I click "CT20 Pass Certificate" and check the PDF contains:
