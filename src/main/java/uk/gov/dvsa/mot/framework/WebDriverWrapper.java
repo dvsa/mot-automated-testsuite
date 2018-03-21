@@ -115,7 +115,10 @@ public class WebDriverWrapper {
         String browser = env.getRequiredProperty("browser");
         if ("chrome".equals(browser)) {
             ChromeOptions chromeOptions = new ChromeOptions();
-            if (env.getProperty("headless").equals("true")) {
+            if ("true".equals(env.getProperty("acceptInsecureCerts"))) {
+                chromeOptions.setAcceptInsecureCerts(true);
+            }
+            if ("true".equals(env.getProperty("headless"))) {
                 chromeOptions.addArguments("--headless");
                 chromeOptions.addArguments("window-size=1920,1080");
             }
