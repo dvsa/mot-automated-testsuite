@@ -7,3 +7,4 @@
 /.gradle/
 /configuration/testsuite.properties
 *.DS_Store
+*.iml
