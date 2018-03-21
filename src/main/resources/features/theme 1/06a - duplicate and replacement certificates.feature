@@ -28,13 +28,46 @@ Feature: 06a - duplicate and replacement certificates
 
 
   Scenario Outline: <user> user issues duplicate certificate
+#    Due to issues with historic data and new certs, need to generate a new certificate first
+
+    Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+    And I get the slot count from the homepage for site {site}
+
+    When I start an MOT test for {registration1}, {vin1}, {site}
+    And The page title contains "Your home"
+    And I click the "Enter test results" link
+
+    And I enter an odometer reading in miles of {mileage1} plus 5000
+    And I enter decelerometer results of service brake 51 and parking brake 16
+    And I press the "Review test" button
+
+    Then The page title contains "MOT test summary"
+    And I check the test information section of the test summary is "Pass"
+    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
+    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the brake results section of the test summary is "Pass"
+    And I check the fails section of the test summary has "None recorded"
+    And I press the "Save test result" button
+    And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT20            |
+      | {registration1} |
+      | {vin1}          |
+#      | {site}          | -- not included on new certs
+    And I click the "Back to user home" link
+    And I check a slot was successfully used for site {site}
+
+#    Now check that the duplicate cert can be viewed and printed
+
     Given I login without 2FA using "<dataScript>" as {<user>}
-    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
-    And I search for certificates with reg {reg}
+    And I search for certificates with reg {registration1}
     And I click the first "View certificate" link
     And I check there is a "Print certificate" link
     And I click "Print certificate" and check the PDF contains:
       | Duplicate certificate            |
+      | VT20                             |
+
 
   Examples:
   |user        |dataScript       |
