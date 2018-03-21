@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,7 +30,6 @@ public class DataServerManager {
      */
     public static void startServer() {
         logger.info("In DataServerManager.startServer");
-
         /*
          * Just in case the data server wasn't successfully shutdown last time the testsuite was run, check here
          * if it responds and if so shut it down before running the new version up
@@ -42,9 +42,35 @@ public class DataServerManager {
             String classpath = calculateServerClasspath("./build/server-libs");
             logger.info("Using classpath {}", classpath);
 
+            String config = System.getProperty("configuration");
+
+            TestsuiteConfig env;
+
+            if (config != null) {
+                env = TestsuiteConfig.loadConfigFromString(config);
+            } else {
+                env = TestsuiteConfig.loadConfig("testsuite");
+            }
+
+            // Get the address and port from the config and use it to run the server.
+            // This allows to assign these dynamically - for example when running multiple tests on a single machine.
+            // Default address and port are localhost and 9999.
+            String address = env.getProperty("dataserverUrl", "localhost")
+                    .replace("https:", "").replace("http:", "")
+                    .replace("/", "")
+                    .split(":")[0];
+            String port =  env.getProperty("dataserverUrl", "9999")
+                    .replace("https:", "").replace("http:", "")
+                    .replace("/", "")
+                    .split(":")[1];
+
             // start the server
             serverProcess = new ProcessBuilder(
-                    "java", "-cp", classpath, "uk.gov.dvsa.mot.server.ServerApplication").start();
+                    "java",
+                    (config != null ? "-Dconfiguration=" + config : ""),
+                    "-Dserver.address=" + address, "-Dserver.port=" + port,
+                    "-cp", classpath, "uk.gov.dvsa.mot.server.ServerApplication").start();
+
             logger.info("Started server process, waiting for it to startup");
 
             // wait 5 seconds for the server to start up
@@ -62,7 +88,6 @@ public class DataServerManager {
             logger.error(message, ex);
             throw new IllegalStateException(message, ex);
         }
-
     }
 
     /**
@@ -71,12 +96,23 @@ public class DataServerManager {
     public static void stopServer() {
         logger.info("In DataServerManager.stopServer");
 
+        RestTemplate restTemplate = new RestTemplate();
+
+        String config = System.getProperty("configuration");
+
+        TestsuiteConfig env;
+
+        if (config != null) {
+            env = TestsuiteConfig.loadConfigFromString(config);
+        } else {
+            env = TestsuiteConfig.loadConfig("testsuite");
+        }
+
         try {
             // POST to Spring Boot shutdown handler to trigger a clean shutdown...
             // (it returns a short JSON reply message)
-            RestTemplate restTemplate = new RestTemplate();
             String result = restTemplate.postForObject(
-                    "http://localhost:9999/shutdown", null, String.class);
+                    env.getProperty("dataserverUrl") + "/shutdown", null, String.class);
             logger.info("Server shutdown triggered, received {}", result);
 
         } catch (RestClientException ex) {
@@ -89,8 +125,6 @@ public class DataServerManager {
                 serverProcess.destroy();
                 logger.info("Server process killed");
             }
-
-            // swallow exception
         }
     }
 
@@ -101,6 +135,16 @@ public class DataServerManager {
     private static boolean checkIfServerAlreadyRunning() {
         logger.info("In DataServerManager.checkIfServerAlreadyRunning");
 
+        String config = System.getProperty("configuration");
+
+        TestsuiteConfig env;
+
+        if (config != null) {
+            env = TestsuiteConfig.loadConfigFromString(config);
+        } else {
+            env = TestsuiteConfig.loadConfig("testsuite");
+        }
+
         try {
             // issue a GET to Spring Boot health endpoint to determine if data server is already running...
             // (it returns a short JSON reply message)
@@ -109,7 +153,7 @@ public class DataServerManager {
             requestFactory.setConnectTimeout(500); // set short connect timeout
             requestFactory.setReadTimeout(2000); // set slightly longer read timeout
             restTemplate.setRequestFactory(requestFactory);
-            String result = restTemplate.getForObject("http://localhost:9999/health", String.class);
+            String result = restTemplate.getForObject(env.getProperty("dataserverUrl") + "/health", String.class);
             logger.info("Server is already running, received {}", result);
             return true;
 

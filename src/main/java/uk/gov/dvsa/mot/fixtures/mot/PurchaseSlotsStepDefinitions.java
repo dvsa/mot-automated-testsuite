@@ -3,7 +3,6 @@ package uk.gov.dvsa.mot.fixtures.mot;
 import static junit.framework.TestCase.assertTrue;
 
 import cucumber.api.java8.En;
-import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;

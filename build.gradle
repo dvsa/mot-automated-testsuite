@@ -49,6 +49,9 @@ configurations {
     all*.exclude group: 'commons-logging', module: 'commons-logging'
 }
 
+void browserstack(boolean isRunning = false) {
+}
+
 task serverTest(type: Test) {
     testClassesDir = sourceSets.serverTest.output.classesDir
     classpath = sourceSets.serverTest.runtimeClasspath
@@ -65,14 +68,10 @@ checkstyle {
     showViolations = true
 }
 
-task('cucumber-feature') {
-    description 'Runs a single feature (specified using -Pfeature=...)'
+task('testsuite') {
+    description 'Run a testsuite with optional arguments...'
     dependsOn assemble, compileJava, check
-    finalizedBy 'cucumber-reporting'
     doLast {
-        if (!project.hasProperty('feature')) {
-            throw new GradleException('feature parameter must be defined')
-        }
         copy {
             into "build/server-libs"
             from configurations.serverRuntime + sourceSets.server.output
@@ -80,91 +79,78 @@ task('cucumber-feature') {
         javaexec {
             main = 'uk.gov.dvsa.mot.runner.StartDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
-        }
-        try {
-            javaexec {
-                main = "cucumber.api.cli.Main"
-                classpath = configurations.cucumberRuntime + sourceSets.main.output
 
-                // Cucumber configuration
-                args = cucumberOptions + ['src/main/resources/features/' + feature]
+            if (project.hasProperty("configuration")) {
+                systemProperty "configuration", configuration
             }
-        } finally {
-            javaexec {
-                main = 'uk.gov.dvsa.mot.runner.StopDataServer'
-                classpath = configurations.cucumberRuntime + sourceSets.main.output
-                ignoreExitValue = true
-            }
-        }
-    }
-}
-
-task('cucumber-scenario') {
-    description 'Runs matching scenarios within a single feature test (specified using -Pfeature=... -Pscenario=...)'
-    dependsOn assemble, compileJava, check
-    finalizedBy 'cucumber-reporting'
-    doLast {
-        if (!project.hasProperty('feature')) {
-            throw new GradleException('feature parameter must be defined')
-        }
-        if (!project.hasProperty('scenario')) {
-            throw new GradleException('scenario parameter must be defined')
-        }
-        copy {
-            into "build/server-libs"
-            from configurations.serverRuntime + sourceSets.server.output
         }
         javaexec {
-            main = 'uk.gov.dvsa.mot.runner.StartDataServer'
+            main = 'uk.gov.dvsa.mot.browserstack.StartBrowserStackLocal'
+
             classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+            if (project.hasProperty("target_config")) {
+                systemProperty "target_config", target_config
+            } else if (project.hasProperty("configuration")) {
+                systemProperty "configuration", configuration
+            }
         }
         try {
             javaexec {
+                args = cucumberOptions
+                if (project.hasProperty('tag')) {
+                    args += ['--tags', tag, 'src/main/resources/features']
+                }
+
+                if (project.hasProperty('feature')) {
+                    args += ['src/main/resources/features/' + feature]
+                } else {
+                    args += ['src/main/resources/features/']
+                }
+
+                if (project.hasProperty('scenario')) {
+                    args += ['--name', scenario]
+                }
+
+                if (project.hasProperty("target_config")) {
+                    systemProperty "target_config", target_config
+                } else if (project.hasProperty("configuration")) {
+                    systemProperty "configuration", configuration
+                }
+
                 main = "cucumber.api.cli.Main"
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
-
-                // Cucumber configuration
-                args = cucumberOptions + ['--name', scenario, 'src/main/resources/features/' + feature]
             }
         } finally {
+            javaexec {
+                main = "uk.gov.dvsa.mot.reporting.CucumberReporting"
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+                if(project.hasProperty('configuration')) {
+                    systemProperty 'configuration', configuration
+                }
+            }
+
+            javaexec {
+                main = 'uk.gov.dvsa.mot.browserstack.StopBrowserStackLocal'
+
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+                if (project.hasProperty("target_config")) {
+                    systemProperty "target_config", target_config
+                } else if (project.hasProperty("configuration")) {
+                    systemProperty "configuration", configuration
+                }
+            }
+
             javaexec {
                 main = 'uk.gov.dvsa.mot.runner.StopDataServer'
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
                 ignoreExitValue = true
-            }
-        }
-    }
-}
 
-task('cucumber-tag') {
-    description 'Runs all features matching the tag(s) (specified using -Ptag=...)'
-    dependsOn assemble, compileJava, check
-    finalizedBy 'cucumber-reporting'
-    doLast {
-        if (!project.hasProperty('tag')) {
-            throw new GradleException('tag parameter must be defined')
-        }
-        copy {
-            into "build/server-libs"
-            from configurations.serverRuntime + sourceSets.server.output
-        }
-        javaexec {
-            main = 'uk.gov.dvsa.mot.runner.StartDataServer'
-            classpath = configurations.cucumberRuntime + sourceSets.main.output
-        }
-        try {
-            javaexec {
-                main = "cucumber.api.cli.Main"
-                classpath = configurations.cucumberRuntime + sourceSets.main.output
-
-                // Cucumber configuration
-                args = cucumberOptions + ['--tags', tag, 'src/main/resources/features']
-            }
-        } finally {
-            javaexec {
-                main = 'uk.gov.dvsa.mot.runner.StopDataServer'
-                classpath = configurations.cucumberRuntime + sourceSets.main.output
-                ignoreExitValue = true
+                if(project.hasProperty('configuration')) {
+                    systemProperty 'configuration', configuration
+                }
             }
         }
     }
@@ -173,7 +159,7 @@ task('cucumber-tag') {
 task('cucumber-rerun') {
     description 'Reruns all failed tests as listed within target/rerun.txt'
     dependsOn assemble, compileJava, check
-    finalizedBy 'cucumber-reporting'
+    finalizedBy 'check-server'
     doLast {
         copy {
             into "build/server-libs"
@@ -182,6 +168,10 @@ task('cucumber-rerun') {
         javaexec {
             main = 'uk.gov.dvsa.mot.runner.StartDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+            if (project.hasProperty("target_config")) {
+                systemProperty "configuration", configuration
+            }
         }
         try {
             javaexec {
@@ -204,12 +194,31 @@ task('cucumber-rerun') {
                 }
 
                 args = cucumberOptions
+
+                if (project.hasProperty("target_config")) {
+                    systemProperty "target_config", target_config
+                } else if (project.hasProperty("configuration")) {
+                    systemProperty "configuration", configuration
+                }
             }
         } finally {
+            javaexec {
+                main = "uk.gov.dvsa.mot.reporting.CucumberReporting"
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+                if(project.hasProperty('configuration')) {
+                    systemProperty 'configuration', configuration
+                }
+            }
+
             javaexec {
                 main = 'uk.gov.dvsa.mot.runner.StopDataServer'
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
                 ignoreExitValue = true
+
+                if(project.hasProperty('configuration')) {
+                    systemProperty 'configuration', configuration
+                }
             }
         }
     }
@@ -218,7 +227,6 @@ task('cucumber-rerun') {
 task('parallel') {
     description 'Runs all features matching the tag(s) (specified using -Ptag=...) in parallel'
     dependsOn assemble, compileJava, check
-    finalizedBy 'cucumber-reporting'
     doLast {
         if (!project.hasProperty('tag')) {
             throw new GradleException('tag parameter must be defined')
@@ -230,6 +238,10 @@ task('parallel') {
         javaexec {
             main = 'uk.gov.dvsa.mot.runner.StartDataServer'
             classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+            if (project.hasProperty("configuration")) {
+                systemProperty "configuration", configuration
+            }
         }
         try {
             javaexec {
@@ -239,16 +251,36 @@ task('parallel') {
 
                 // Cucumber configuration
                 systemProperties = ['cucumber.options': '--tags ' + tag]
+
+                if (project.hasProperty("target_config")) {
+                    systemProperty "target_config", target_config
+                } else if (project.hasProperty("configuration")) {
+                    systemProperty "configuration", configuration
+                }
             }
         } finally {
+            javaexec {
+                main = "uk.gov.dvsa.mot.reporting.CucumberReporting"
+                classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+                if(project.hasProperty('configuration')) {
+                    systemProperty "configuration", configuration
+                }
+            }
+
             javaexec {
                 main = 'uk.gov.dvsa.mot.runner.StopDataServer'
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
                 ignoreExitValue = true
+
+                if (project.hasProperty("configuration")) {
+                    systemProperty "configuration", configuration
+                }
             }
         }
     }
 }
+
 
 task('run-server') {
     description 'Use to test/debug the data server'
@@ -257,6 +289,36 @@ task('run-server') {
         javaexec {
             main = 'uk.gov.dvsa.mot.server.ServerApplication'
             classpath = configurations.serverRuntime + sourceSets.server.output
+        }
+    }
+}
+
+task('start-server') {
+    description 'Use to test/debug the data server'
+    dependsOn assemble, compileJava, check
+    doLast {
+        javaexec {
+            main = 'uk.gov.dvsa.mot.runner.StartDataServer'
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
+
+            if(project.hasProperty('configuration')) {
+                systemProperty "configuration", configuration
+            }
+        }
+    }
+}
+
+task('stop-server') {
+    dependsOn assemble, compileJava, check
+    doLast {
+        javaexec {
+            main = 'uk.gov.dvsa.mot.runner.StopDataServer'
+            classpath = configurations.cucumberRuntime + sourceSets.main.output
+            ignoreExitValue = true
+
+            if(project.hasProperty('configuration')) {
+                systemProperty "configuration", configuration
+            }
         }
     }
 }
@@ -276,6 +338,7 @@ task('cucumber-reporting') {
 }
 
 dependencies {
+    compile 'com.browserstack:browserstack-local-java:1.0.2'
     compile 'org.apache.pdfbox:pdfbox:2.0.7'
     compile 'org.apache.commons:commons-csv:1.5'
     compile 'com.jayway.restassured:rest-assured:2.9.0'
@@ -287,14 +350,7 @@ dependencies {
         // not using testng, clashes with junit
         exclude group: 'info.cukes', module: 'cucumber-testng'
     }
-    compile ("org.seleniumhq.selenium:selenium-java:$seleniumVersion") {
-        // exclude the unused drivers (IE, Edge, Safari, Firefox, Opera)
-        exclude group: 'org.seleniumhq.selenium', module: 'selenium-edge-driver'
-        exclude group: 'org.seleniumhq.selenium', module: 'selenium-firefox-driver'
-        exclude group: 'org.seleniumhq.selenium', module: 'selenium-ie-driver'
-        exclude group: 'org.seleniumhq.selenium', module: 'selenium-opera-driver'
-        exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
-    }
+    compile "org.seleniumhq.selenium:selenium-java:$seleniumVersion"
     compile "org.slf4j:slf4j-api:$slf4jVersion"
     runtime "org.slf4j:log4j-over-slf4j:$slf4jVersion"
     runtime "org.slf4j:jcl-over-slf4j:$slf4jVersion"
@@ -318,6 +374,7 @@ dependencies {
     serverCompile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     serverCompile("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
     serverCompile "javax.inject:javax.inject:1"
+    serverCompile 'joda-time:joda-time:2.9.9'
     serverCompile "mysql:mysql-connector-java:5.1.44"
     serverCompile"commons-dbcp:commons-dbcp:1.4"
     serverRuntime ("xml-apis:xml-apis:1.4.01") {

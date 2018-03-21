@@ -113,8 +113,9 @@ public class DuplicateAndReplacementStepDefinitions implements En {
 
         And("^I check the colours are correct \"([^\"]+)\" and \"([^\"]+)\"$",
                 (String primaryColour, String secondaryColour) -> {
-                    checkColoursOnConfirmationPage(primaryColour, secondaryColour);
-                });
+                checkColoursOnConfirmationPage(primaryColour, secondaryColour);
+            });
+
     }
 
     /**

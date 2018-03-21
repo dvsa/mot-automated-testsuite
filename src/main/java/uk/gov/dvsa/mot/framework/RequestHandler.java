@@ -11,13 +11,14 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.joda.time.DateTime;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.framework.csv.CsvDocument;
 import uk.gov.dvsa.mot.framework.csv.CsvException;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,32 +37,43 @@ public class RequestHandler {
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
 
     /** The web driver to use. */
-    private final WebDriver webDriver;
+    private WebDriver webDriver;
 
     /** The configuration settings to use. */
-    private final Environment env;
+    private TestsuiteConfig env;
 
     private boolean saveDocuments;
 
+    private String timestamp;
+
     /**
      * Creates new RequestHandler instance.
-     * @param webDriver Web driver to use for retrieving the cookies.
+     * @param env config to use
      */
-    public RequestHandler(WebDriver webDriver, Environment env) {
-        this.webDriver = webDriver;
+    public RequestHandler(TestsuiteConfig env) {
         this.env = env;
 
         RestAssured.useRelaxedHTTPSValidation();
         int timeout = 60000;
 
-        //TODO: Check for a recommended way to create a config.
         RestAssured.config()
                 .httpClient(httpClientConfig()
                         .setParam(ClientPNames.CONN_MANAGER_TIMEOUT, timeout)
                         .setParam(CoreConnectionPNames.CONNECTION_TIMEOUT, timeout)
                         .setParam(CoreConnectionPNames.SO_TIMEOUT, timeout));
+    }
 
+    /**
+     * Creates new RequestHandler instance.
+     * @param webDriver Web driver to use for retrieving the cookies.
+     */
+    public RequestHandler(WebDriver webDriver, TestsuiteConfig env) {
+        this(env);
+        this.webDriver = webDriver;
+        this.env = env;
         saveDocuments = Boolean.parseBoolean(env.getProperty("saveDocuments", "false"));
+
+        timestamp = getTimestamp();
     }
 
     /**
@@ -87,9 +99,6 @@ public class RequestHandler {
                 .cookie(token.getName(), token.getValue())
                 .get(url);
 
-        String filename = url.replaceFirst("https://", "").replaceAll("/", "-") + ".pdf";
-        writeFile(filename, url);
-
         PDDocument pdDocument = PDDocument.load(serverResponse.asInputStream());
         serverResponse.asInputStream().close();
 
@@ -112,8 +121,6 @@ public class RequestHandler {
 
         String document = new String(serverResponse.asByteArray());
         try {
-            String filename = url.replaceFirst("https://", "").replaceAll("/", "-") + ".csv";
-            writeFile(filename, url);
 
             return new CsvDocument(CSVParser.parse(document, CSVFormat.DEFAULT));
         } catch (IOException ex) {
@@ -123,16 +130,16 @@ public class RequestHandler {
 
     /**
      * Used to save a copy of the document for auditing and verification purposes.
-     * @param filename      The filename to save the document as
      * @param fileUrl       The URL of the file to save
      */
-    private void writeFile(String filename, String fileUrl) {
+    public String writeFile(String filename, String fileUrl) {
         // Check whether we should save documents
         if (this.saveDocuments) {
+
             Cookie session = getCookie(DEFAULT_SESSION_COOKIE_NAME);
             Cookie token = getCookie(DEFAULT_TOKEN_COOKIE_NAME);
             try {
-                File dir = new File("target/documents");
+                File dir = new File("target/documents/" + timestamp);
                 if (!dir.exists()) {
                     dir.mkdirs();
                 }
@@ -152,6 +159,69 @@ public class RequestHandler {
             } catch (Exception ex) {
                 logger.error("Error saving document", ex);
             }
+
+            return filename;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the timestamp from the server.
+     * @return the timestamp as a string
+     */
+    public String getTimestamp() {
+        if (timestamp == null || timestamp == "") {
+            try {
+                URL url = new URL(env.getProperty("dataserverUrl"));
+                Response serverResponse = with().get(url + "/timestamp");
+
+                timestamp = serverResponse.asString();
+
+                serverResponse.asInputStream().close();
+            } catch (Exception ex) {
+                timestamp = DateTime.now().toString("dd-MM-yyyy_HH-mm-ss");
+                logger.error("Error getting timestamp ", ex);
+            }
+        }
+
+        return timestamp;
+    }
+
+    /**
+     * Get document results.
+     * @return document results for the current session
+     */
+    public String getDocumentResults() {
+        String documentResults = "";
+
+        try {
+            URL url = new URL(env.getProperty("dataserverUrl"));
+            Response serverResponse = with().get(url + "/documents/results");
+
+            documentResults = serverResponse.asString();
+
+            serverResponse.asInputStream().close();
+        } catch (Exception ex) {
+            logger.error("Error getting timestamp ", ex);
+        }
+
+        return documentResults;
+    }
+
+    /**
+     * Send result/s to the server.
+     * @param result to send
+     */
+    public void sendDocumentResult(String result) {
+        try {
+            URL url = new URL(env.getProperty("dataserverUrl") + "/documents/results");
+
+            Response serverResponse = with().body(result).post(url);
+
+            serverResponse.asInputStream().close();
+        } catch (Exception ex) {
+            logger.error("Error sending document result", ex);
         }
     }
 }

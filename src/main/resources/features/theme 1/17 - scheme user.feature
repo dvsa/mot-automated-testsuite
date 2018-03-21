@@ -1,6 +1,7 @@
 @regression
 Feature: 17 - Scheme user
 
+  @browserstack
   Scenario: Scheme user creates draft special notice, edits it, then retracts it
     Given I login without 2FA using "SCHEME_USER" as {schemeUser}
     And I set today as {day}, {month}, {year}

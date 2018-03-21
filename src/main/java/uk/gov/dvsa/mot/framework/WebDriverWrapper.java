@@ -1,5 +1,6 @@
 package uk.gov.dvsa.mot.framework;
 
+import groovy.lang.Tuple2;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -20,18 +21,21 @@ import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.SessionId;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
+import uk.gov.dvsa.mot.browserstack.BrowserStackManager;
 import uk.gov.dvsa.mot.framework.csv.CsvDocument;
 import uk.gov.dvsa.mot.framework.csv.CsvException;
 import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
 import uk.gov.dvsa.mot.framework.pdf.PdfException;
+import uk.gov.dvsa.mot.utils.config.TestsuiteConfig;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -45,6 +49,7 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 /**
  * Wraps the <code>WebDriver</code> instance needed by step definitions with a simplified generic API.
@@ -58,7 +63,7 @@ public class WebDriverWrapper {
     private final WebDriver webDriver;
 
     /** The environment configuration to use. */
-    private final Environment env;
+    private final TestsuiteConfig env;
 
     /** The amount of time to wait (in milliseconds) for browser clicks before page refresh. */
     private final long clickWaitMilliseconds;
@@ -72,6 +77,9 @@ public class WebDriverWrapper {
     /** The data map to use. */
     private final Map<String, String> data;
 
+    /** String to store last scenario added to scenario results. */
+    private Tuple2<String, String> lastScenario;
+
     /** Request handler to process HTTP requests. **/
     private final RequestHandler requestHandler;
 
@@ -79,16 +87,20 @@ public class WebDriverWrapper {
      * Creates a new instance.
      * @param env   The environment configuration to use
      */
-    public WebDriverWrapper(Environment env) {
+    @Inject
+    public WebDriverWrapper(TestsuiteConfig env) {
         logger.debug("Creating WebDriverWrapper...");
         this.env = env;
         this.data = new HashMap<>();
         this.webDriver = createWebDriver();
+        this.requestHandler = new RequestHandler(this.webDriver, env);
+
         String browserWidth = env.getProperty("browserWidth", "1024");
         String browserHeight = env.getProperty("browserHeight", "768");
-        this.webDriver.manage().window().setSize(
-                new Dimension(Integer.parseInt(browserWidth), Integer.parseInt(browserHeight)));
-        this.requestHandler = new RequestHandler(this.webDriver, env);
+
+        if (!env.isMobileConfig()) {
+            setBrowserResolution(browserWidth, browserHeight);
+        }
 
         // amount of time (in milliseconds) to wait for browser clicks to happen, before page refresh logic
         // this is a mandatory delay, to accommodate any browser/environment/network latency
@@ -111,52 +123,188 @@ public class WebDriverWrapper {
      * @return The web driver instance
      */
     protected WebDriver createWebDriver() {
-        logger.debug("Creating new chrome driver");
-        String browser = env.getRequiredProperty("browser");
-        if ("chrome".equals(browser)) {
-            ChromeOptions chromeOptions = new ChromeOptions();
-            if (env.getProperty("headless").equals("true")) {
-                chromeOptions.addArguments("--headless");
-                chromeOptions.addArguments("window-size=1920,1080");
+        logger.debug("Creating new web driver");
+
+        ChromeOptions chromeOptions = new ChromeOptions();
+        if (env.getProperty("headless").equals("true")) {
+            chromeOptions.addArguments("--headless");
+            chromeOptions.addArguments("window-size=1920,1080");
+        }
+
+        LoggingPreferences loggingPreferences = new LoggingPreferences();
+
+        // logging turned off completely
+        loggingPreferences.enable(LogType.BROWSER, Level.OFF);
+        loggingPreferences.enable(LogType.PERFORMANCE, Level.OFF);
+        loggingPreferences.enable(LogType.PROFILER, Level.OFF);
+        loggingPreferences.enable(LogType.SERVER, Level.OFF);
+
+        // logging enabled
+        loggingPreferences.enable(LogType.DRIVER, Level.WARNING);
+        loggingPreferences.enable(LogType.CLIENT, Level.WARNING);
+
+        if (env.isUsingBrowserStack()) {
+            DesiredCapabilities capabilities = getDesiredCapabilities();
+
+            capabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
+
+            capabilities.setCapability("browser_version", env.getProperty("browser_version"));
+
+            String localIdentifier = BrowserStackManager.getLocalIdentifier();
+            capabilities.setCapability("browserstack.localIdentifier", localIdentifier);
+            capabilities.setCapability("browserstack.debug", env.getProperty("debug"));
+            capabilities.setCapability("browserstack.local", env.getProperty("local"));
+            capabilities.setCapability("browserstack.selenium_version", "3.5.2");
+
+            capabilities.setCapability("name", env.getProperty("name"));
+            capabilities.setCapability("build", env.getProperty("build"));
+
+            capabilities.setCapability("acceptSslCerts", "true");
+
+            if (env.isMobileConfig()) {
+                capabilities.setCapability("device", env.getProperty("device"));
+
+                if (env.getProperty("realMobile") != null) {
+                    capabilities.setCapability("realMobile", env.getProperty("realMobile"));
+                    capabilities.setCapability("os_version", env.getProperty("os_version"));
+                } else {
+                    capabilities.setCapability("platform", env.getProperty("platform"));
+                    capabilities.setCapability("browserName", env.getProperty("browserName"));
+                }
+            } else {
+                capabilities.setCapability("browser", env.getRequiredProperty("browser"));
+                capabilities.setCapability("os", env.getProperty("os"));
+                capabilities.setCapability("os_version", env.getProperty("os_version"));
+                capabilities.setCapability("resolution", env.getProperty("resolution"));
             }
 
-            LoggingPreferences loggingPreferences = new LoggingPreferences();
+            try {
+                return new RemoteWebDriver(new URL("https://" + env.getProperty("username") + ":"
+                        + env.getProperty("automateKey") + "@" + env.getProperty("server")),
+                        capabilities);
+            } catch (Exception exception) {
+                System.setProperty("webdriver.chrome.driver", env.getRequiredProperty("driver"));
 
-            // logging turned off completely
-            loggingPreferences.enable(LogType.BROWSER, Level.OFF);
-            loggingPreferences.enable(LogType.PERFORMANCE, Level.OFF);
-            loggingPreferences.enable(LogType.PROFILER, Level.OFF);
-            loggingPreferences.enable(LogType.SERVER, Level.OFF);
-
-            // logging enabled
-            loggingPreferences.enable(LogType.DRIVER, Level.WARNING);
-            loggingPreferences.enable(LogType.CLIENT, Level.WARNING);
-
+                return new ChromeDriver(chromeOptions);
+            }
+        } else {
             DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-            capabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
-            capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 
-            // path to driver executable
+
+            capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
+            capabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
+
+            capabilities.setCapability("browser", env.getRequiredProperty("browser"));
+
             System.setProperty("webdriver.chrome.driver", env.getRequiredProperty("driver"));
 
             //If gridURL is set create a remote webdriver instance
-            if (env.containsProperty("gridURL")) {
+            String gridUrl = env.getProperty("gridURL");
+            if (gridUrl != null && gridUrl != "") {
                 try {
-                    return new RemoteWebDriver(new URL(env.getProperty("gridURL")), capabilities);
+                    return new RemoteWebDriver(new URL(gridUrl), capabilities);
 
                 } catch (MalformedURLException malformedUrlException) {
                     String message = "Error while creating remote driver: " + malformedUrlException.getMessage();
                     logger.error(message);
+
                     throw new IllegalArgumentException(message);
                 }
             } else {
+
                 return new ChromeDriver(chromeOptions);
             }
-        } else {
-            String message = "Unsupported browser: " + browser;
-            logger.error(message);
-            throw new IllegalArgumentException(message);
         }
+    }
+
+    private void setBrowserResolution(String browserWidth, String browserHeight) {
+        this.webDriver.manage().window().setSize(
+                new Dimension(Integer.parseInt(browserWidth), Integer.parseInt(browserHeight)));
+    }
+
+    /**
+     * This method creates new DesiredCapabilites depending on the config passed by the tester.
+     *
+     * @return new DesiredCapabilities compatible with loaded config.
+     */
+    private DesiredCapabilities getDesiredCapabilities() {
+        logger.debug("Preparing desired capabilities for the current config...");
+
+        DesiredCapabilities desiredCapabilities = null;
+        String target = "";
+
+        if (env.isMobileConfig()) {
+            logger.debug("Detected mobile config...");
+
+            if (Boolean.parseBoolean(env.getProperty("realMobile"))) {
+                logger.debug("Getting desired capabilities for a real mobile...");
+
+                target = env.getProperty("device").toLowerCase();
+
+                if (target.contains("iphone")) {
+                    target = "iphone";
+                } else {
+                    target = "android";
+                }
+            } else {
+                logger.debug("Getting desired capabilities for an emulated mobile...");
+
+                target = env.getProperty("browserName").toLowerCase();
+            }
+        } else {
+            logger.debug("Detected desktop config...");
+
+            target = env.getRequiredProperty("browser").toLowerCase();
+        }
+
+        logger.debug(String.format("Detected %s target...", target));
+
+        switch (target) {
+            case "android":
+                desiredCapabilities = DesiredCapabilities.android();
+                break;
+            case "chrome":
+                desiredCapabilities = DesiredCapabilities.chrome();
+                break;
+            case "edge":
+                desiredCapabilities = DesiredCapabilities.edge();
+                break;
+            case "firefox":
+                desiredCapabilities = DesiredCapabilities.firefox();
+                break;
+            case "iphone":
+                desiredCapabilities = DesiredCapabilities.iphone();
+                break;
+            case "ipad":
+                desiredCapabilities = DesiredCapabilities.ipad();
+                break;
+            case "opera":
+                desiredCapabilities = DesiredCapabilities.operaBlink();
+                break;
+            case "ie":
+                desiredCapabilities = DesiredCapabilities.internetExplorer();
+                break;
+            case "safari":
+                desiredCapabilities = DesiredCapabilities.safari();
+                break;
+            default:
+                throw new IllegalArgumentException(String.format("Unsupported target BrowserStack browser - %s.",
+                        target));
+        }
+
+        return desiredCapabilities;
+    }
+
+    /**
+     * Get the config used by WebDriverWrapper.
+     *
+     * <p>NOTE: this is a workaround for dynamically providing config files from terminal, as this did not work with
+     * Spring framework. Might need some additional investigation, whether this is possible or not.</p>
+     *
+     * @return config stored in the class.
+     */
+    public TestsuiteConfig getConfig() {
+        return env;
     }
 
     /**
@@ -244,7 +392,7 @@ public class WebDriverWrapper {
             throw new IllegalArgumentException(message);
 
         } else {
-            buttons.get(0).submit();
+            buttons.get(0).click();
             waitForFullPageLoad();
         }
     }
@@ -1073,7 +1221,8 @@ public class WebDriverWrapper {
      */
     public String getRelativeTextFromHeading(String headingText) {
         return webDriver.findElement(
-                By.xpath("//h2[contains(text(),'" + headingText + "')]/../following-sibling::div[1]/p")).getText();
+                By.xpath("//h2[contains(text(),'" + headingText + "')]/../following-sibling::div[1]/p"))
+                .getText().trim();
     }
 
     /**
@@ -1484,8 +1633,15 @@ public class WebDriverWrapper {
     }
 
     /**
+     *
+     * @return session id used by Selenium web driver.
+     */
+    public SessionId getSessionId() {
+        return ((RemoteWebDriver) webDriver).getSessionId();
+    }
+
+    /**
      * Creates a new PDF document from the request handler and the url.
-     * @param url                       the URL of the PDF document
      * @return                          the PDF Document
      * @throws PdfException             error loading PDF document
      */
@@ -1518,6 +1674,7 @@ public class WebDriverWrapper {
         } else {
             try {
                 PdfDocument pdfDocument = createPdfDocument(links.get(0).getAttribute("href"));
+                System.out.println("downloading document: " + links.get(0));
 
                 return pdfDocument.contains(values);
             } catch (PdfException ex) {
@@ -1581,6 +1738,43 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Write file and save the result.
+     * @param url of the file to download.
+     */
+    public void writeDocument(String url, String extension) {
+        if (env.getProperty("saveDocuments") != null && env.getProperty("saveDocuments").equals("true")) {
+            // find any "a" elements with text containing the link text
+            List<WebElement> links = findLinks(url);
+
+            if (links.size() == 0) {
+                String message = "No links found with text: " + url;
+                logger.error(message);
+                throw new IllegalArgumentException(message);
+
+            } else {
+                try {
+                    String filename = lastScenario.getFirst();
+                    for (int i = 1; new File("target/documents/"
+                            + requestHandler.getTimestamp() + "/" + filename + "." + extension).exists(); i++) {
+                        filename = filename + "-" + i;
+                    }
+
+                    filename += "." + extension;
+
+                    requestHandler.writeFile(filename , links.get(0).getAttribute("href"));
+
+                    requestHandler.sendDocumentResult(filename
+                            + ";" + lastScenario.getFirst()
+                            + ";" + lastScenario.getSecond());
+                } catch (Exception ex) {
+                    logger.error("Unable to load PDF document", ex);
+                    throw new RuntimeException("Error processing PDF document", ex);
+                }
+            }
+        }
+    }
+
+    /**
      * Clicks the specified accordion.
      * @param accordionId  The accordion ID
      */
@@ -1599,6 +1793,16 @@ public class WebDriverWrapper {
         } else {
             clickAndWaitForPageLoad(accordions.get(0));
         }
+    }
+
+    /**
+     * Save the last scenario.
+     * @param name of the scenario
+     * @param result of the scenario
+     */
+    public void addScenarioStatus(String name, String result) {
+        lastScenario = new Tuple2<>(name.replaceAll("[\\s_\\\\/]",
+                "-").replace(";", "_"), result);
     }
 
     /**

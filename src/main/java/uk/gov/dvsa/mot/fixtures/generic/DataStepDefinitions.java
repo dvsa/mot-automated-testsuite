@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.data.DataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
@@ -37,11 +36,11 @@ public class DataStepDefinitions implements En {
      * @param dataProvider      The data provider to use
      */
     @Inject
-    public DataStepDefinitions(WebDriverWrapper driverWrapper, DataProvider dataProvider, Environment env) {
+    public DataStepDefinitions(WebDriverWrapper driverWrapper, DataProvider dataProvider) {
         logger.debug("Creating DataStepDefinitions...");
         this.driverWrapper = driverWrapper;
         this.dataProvider = dataProvider;
-        this.isParallelMode = Boolean.parseBoolean(env.getProperty("dataFiltering", "false"));
+        this.isParallelMode = Boolean.parseBoolean(driverWrapper.getConfig().getProperty("dataFiltering", "false"));
 
         When("^I load \"([^\"]+)\" as \\{([^\\}]+)\\}$",
                 (String dataSetName, String key1) ->

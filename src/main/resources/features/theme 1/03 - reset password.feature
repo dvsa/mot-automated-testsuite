@@ -1,6 +1,7 @@
 @regression
 Feature: 03 - reset password
 
+  @browserstack
   Scenario: User creates a new account and then reset their password
     Given I login with 2FA using "MOT_TESTER_CLASS_2" as {username}, {site}
 

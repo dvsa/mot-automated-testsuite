@@ -1,6 +1,7 @@
 @regression
 Feature: 13b - A01 user
 
+  @browserstack
   Scenario: AO1 user performs AE search, then remove a site association
     Given I load uniquely "AE_WITH_ASSIGNED_SITE" as {aeReference}, {aeName}, {siteReference}, {siteName}
     And I login without 2FA using "AO1_USER" as {ao1User}
