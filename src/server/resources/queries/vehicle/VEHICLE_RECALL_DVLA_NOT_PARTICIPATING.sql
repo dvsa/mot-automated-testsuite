@@ -5,7 +5,7 @@ left join dvla_model dmo on v.model_code = dmo.code and dmo.make_code = v.make_c
 left join dvla_model_model_detail_code_map dmap on dmap.dvla_make_code = dmo.make_code and dmap.dvla_model_code = dmo.code
 left join make ma on dmap.make_id = ma.id
 left join model mo on dmap.model_id = mo.id
-where v.id < 1000000
+where v.id < 100000000
 and v.vehicle_id is null -- vehicle not used in MOT application yet
 and v.registration is not null -- nullable in PP/Prod
 and v.vin is not null -- nullable in PP/Prod
@@ -13,5 +13,5 @@ and length(v.vin) > 5
 and ma.name is not null
 and mo.name is not null
 and (v.eu_classification = 'L1' or v.eu_classification = 'N1')-- DVLA cars and vans only
-and ma.name = 'MERCEDES' -- show results where the manufacture is not part of the fake SMMT service
+and ma.name not in (select smm.make from smmt_make_map smm)  -- this is set to return a non participating manufacture
 limit 10;

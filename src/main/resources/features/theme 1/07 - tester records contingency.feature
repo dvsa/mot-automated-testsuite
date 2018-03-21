@@ -284,4 +284,18 @@ Feature: 07 - Tester records Contingency Test
       | {site}          |
     And I click the "Finish" link
 
+  Scenario: A tester prints CT certificates
+    Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+    And I click "CT20 Pass Certificate" and check the PDF contains:
+      | Contingency MOT Test Certificate     |
+      | CT20                                 |
+      | {site}                               |
+    And I click "CT32 Advisory Continuation Sheet" and check the PDF contains:
+      | Contingency Advisory Notice          |
+      | CT32                                 |
+      | {site}                               |
+    And I click "CT30 Fail Continuation Sheet" and check the PDF contains:
+      | Contingency Refusal of an MOT Test Certificate   |
+      | CT30                                             |
+      | {site}                                           |
 
