@@ -2,7 +2,6 @@
 @mothhgv
 Feature: 39 - Check HGV with a current Annual Test
 
-
   Scenario: A MOTH user searches for a HGV with a current a current Annual Test
     Given I browse to /
     And I enter "KJ13HSH" in the registration field
