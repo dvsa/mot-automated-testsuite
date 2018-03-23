@@ -9,7 +9,7 @@ Feature: 32 - DVLA Vehicle without an Outstanding Recall
     Then The page contains "{registration}"
     And The page contains "{make} {model}"
     And The page contains "Check mileage recorded at test, MOT expiry date, defects and advisories"
-    And The page contains "Check if {make} {model} {registration} has outstanding safety recalls"
+    And The page contains "Check if {make} {model} {registration} has outstanding recalls"
     And I click the "Open All" button
     And I wait for "6" seconds
     And The page contains "This vehicle hasn't had its first MOT"
