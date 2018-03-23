@@ -128,7 +128,7 @@ Feature: 05c - Tester does...
     And I check the major failures section of the test summary has "Test defect 1"
     And I check the major failures section of the test summary has "Throttle operating incorrectly"
     And I check the major failures section of the test summary has "Test defect 2"
-    And I check the major failures section of the test summary has "Decelerometer brake test neither brake control achieves an efficiency of 25%"
+    And I check the major failures section of the test summary has "Decelerometer brake test Neither brake control achieves an efficiency of 25%"
     And I check the prs section of the test summary has "None recorded"
     And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
