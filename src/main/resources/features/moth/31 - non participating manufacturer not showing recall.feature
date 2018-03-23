@@ -12,5 +12,5 @@ Feature: 31 - Non Participating Manufacturer Not Showing Recall
     And I click the accordion section with the id "vehicle-recalls-description"
     And The page contains "We don't hold information about manufacturer's safety recalls for"
     And The page contains "{make} {model} {registration}"
-    And The page contains "Contact a"
-    And The page contains "dealership to find out about outstanding safety recalls."
+    And The page contains "To find out if your vehicle has any outstanding safety recalls, contact a "
+    And The page contains "dealership."
