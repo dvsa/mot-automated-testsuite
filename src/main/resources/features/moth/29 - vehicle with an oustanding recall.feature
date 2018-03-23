@@ -8,7 +8,7 @@ Feature: 29 - Vehicle with an Outstanding Recall
     When I press the "Continue" button
     Then The page contains "{registration}"
     And The page contains "{make} {model}"
-    And The page contains "Check if {make} {model} has outstanding safety recall"
+    And The page contains "Check if {make} {model} {registration} has outstanding safety recall"
     And I click the accordion section with the id "vehicle-recalls-description"
     And I wait for "6" seconds
     And The page contains "Outstanding recall found"
