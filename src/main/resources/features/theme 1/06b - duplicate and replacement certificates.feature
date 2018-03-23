@@ -15,7 +15,7 @@ Feature: 06b - duplicate and replacement certificates
     Then I press the "Finish changes and print certificate" button
     And The page title contains "Test Results Updated Successfully"
     And I click "Print" and check the PDF contains:
-      | VT20                            |
+      | VT2                             |
       | DVLA903                         |
       | DVLA304050921020                |
 
@@ -35,7 +35,7 @@ Feature: 06b - duplicate and replacement certificates
     And The page title contains "Test Results Updated Successfully"
     And I check there is a "Print" link
     And I click "Print" and check the PDF contains:
-      | VT20                            |
+      | VT                              |
       | DVLA903                         |
       | DVLA304050921020                |
 
@@ -108,7 +108,7 @@ Feature: 06b - duplicate and replacement certificates
     And The page title contains "Test Results Updated Successfully"
     And I check there is a "Print" link
     And I click "Print" and check the PDF contains:
-      | VT20                  |
+      | VT                    |
       | {reg}                 |
       | {vin}                 |
       | {site}                |
