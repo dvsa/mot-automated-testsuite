@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Courgette.class)
 @CourgetteOptions(
-        threads = 10,
+        threads = 5,
         runLevel = CourgetteRunLevel.FEATURE,
         rerunFailedScenarios = false,
         showTestOutput = true,
