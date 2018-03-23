@@ -8,7 +8,7 @@ Feature: 28 - Vehicle without an Outstanding Recall
     When I press the "Continue" button
     Then The page contains "{registration}"
     And The page contains "{make} {model}"
-    And The page contains "Mileage recorded at test, parts failed or had minor problems"
+    And The page contains "Check mileage recorded at test, MOT expiry date, defects and advisories"
     And The page contains "Check if {make} {model} has outstanding safety recall"
     And I click the accordion section with the id "vehicle-recalls-description"
     And I wait for "6" seconds

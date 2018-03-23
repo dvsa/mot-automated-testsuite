@@ -8,7 +8,7 @@ Feature: 34 - DVLA Class 1 Vehicle Not Showing Recall
     When I press the "Continue" button
     Then The page contains "{registration}"
     And The page contains "{make} {model}"
-    And The page contains "Check if {make} {model} has outstanding safety recall"
+    And The page contains "Check if {make} {model} {registration} has outstanding safety recall"
     And I click the accordion section with the id "vehicle-recalls-description"
     And The page contains "This vehicle hasn't had its first MOT"
     And The page contains "We don't hold information about manufacturer's safety recalls for"
