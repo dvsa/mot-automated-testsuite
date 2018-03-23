@@ -8,6 +8,6 @@ Feature: 40 - Check HGV with a current Annual Test that expires tomorrow
     When I press the "Continue" button
 
     Then The page contains "EXTOMOR"
-    And The page contains "DAF FA LF45.130 08"
+    And The page contains "IVECO FORD CARGO ML75E17"
     And The page contains "This vehicle's annual test expires soon"
 

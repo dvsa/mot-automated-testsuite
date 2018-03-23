@@ -8,5 +8,5 @@ Feature: 42 - Check HGV with a Annual Test that expires today
     When I press the "Continue" button
 
     Then The page contains "EXTODAY"
-    And The page contains "DAF FA LF45.130 08"
+    And The page contains "CONVERSION"
     And The page contains "This vehicle's MOT expires soon"

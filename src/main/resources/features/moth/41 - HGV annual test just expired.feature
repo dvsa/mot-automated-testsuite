@@ -8,6 +8,6 @@ Feature: 40 - Check HGV with a just expired Annual Test
     When I press the "Continue" button
 
     Then The page contains "EXYESTE"
-    And The page contains "DAF FA LF45.130 08"
+    And The page contains "CONVERSION"
     And The page contains "This vehicle’s annual test has expired"
     And The page contains "ou can be fined up to £1,000 for driving without a valid annual test"
