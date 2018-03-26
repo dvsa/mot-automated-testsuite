@@ -225,3 +225,33 @@ Feature: 05e - Tester does...
       #| Test browse minor             |
       #| Brake hose slightly damaged   |
       #| Test search minor             |
+
+  Scenario: Tester enters a class 1 MOT test fail, with brake performance not tested
+    Given I load "VEHICLE_CLASS_1" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_1" as {username1}, {site}
+
+    When I start an MOT test for {registration1}, {vin1}, {site}
+    And The page title contains "Your home"
+    And I click the "Enter test results" link
+
+    And I enter an odometer reading in miles of {mileage1} plus 5000
+    And I search for a "Major" defect of "Brake performance not tested" with comment "Test brake performance"
+    And I check the "Add brake test" link is hidden
+    And I press the "Review test" button
+
+    Then The page title contains "MOT test summary"
+    And I check the test information section of the test summary is "Fail"
+    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
+    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the brake results section of the test summary is "Not tested"
+    And I check the major failures section of the test summary has "Brake performance not tested"
+    And I check the prs section of the test summary has "None recorded"
+    And I check the advisory section of the test summary has "None recorded"
+    And I press the "Save test result" button
+    And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT30                          |
+      | Brake performance not tested  |
+      | {registration1}               |
+      | {vin1}                        |
+      | {site}                        |
