@@ -1,6 +1,6 @@
 #@mothpp @mothint
 @mothhgv
-Feature: 40 - Check HGV with a just expired Annual Test
+Feature: 41 - Check HGV with a just expired Annual Test
 
   Scenario: A MOTH user searches for a HGV with a Annual Test that is just about to expire
     Given I browse to /
@@ -9,5 +9,5 @@ Feature: 40 - Check HGV with a just expired Annual Test
 
     Then The page contains "EXYESTE"
     And The page contains "CONVERSION"
-    And The page contains "This vehicle’s annual test has expired"
-    And The page contains "ou can be fined up to £1,000 for driving without a valid annual test"
+    And The page contains "This vehicle's annual test has expired"
+    And The page contains "You can be fined up to £1,000 for driving without a valid annual test"

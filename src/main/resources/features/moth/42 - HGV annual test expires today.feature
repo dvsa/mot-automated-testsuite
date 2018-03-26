@@ -9,4 +9,4 @@ Feature: 42 - Check HGV with a Annual Test that expires today
 
     Then The page contains "EXTODAY"
     And The page contains "CONVERSION"
-    And The page contains "This vehicle's MOT expires soon"
+    And The page contains "This vehicle's annual test expires soon"
