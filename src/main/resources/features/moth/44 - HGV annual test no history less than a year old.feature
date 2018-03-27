@@ -1,5 +1,4 @@
-#@mothpp @mothint
-@mothhgv
+@mothhgv @mothpp @mothint
 Feature: 44 - Check HGV that has no Annual Test history and the vehicle is less then a year old
 
   Scenario: A MOTH user searches for a HGV that has no Annual Test history and the vehicle is less then a year old

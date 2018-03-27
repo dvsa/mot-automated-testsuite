@@ -1,5 +1,4 @@
-#@mothpp @mothint
-@mothhgv
+@mothhgv @mothpp @mothint
 Feature: 43 - Check HGV with a Annual Test that is due soon
 
   Scenario: A MOTH user searches for a HGV with a Annual Test that is due soon

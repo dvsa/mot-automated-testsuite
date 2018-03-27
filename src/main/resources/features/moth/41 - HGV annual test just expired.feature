@@ -1,5 +1,4 @@
-#@mothpp @mothint
-@mothhgv
+@mothhgv @mothpp @mothint
 Feature: 41 - Check HGV with a just expired Annual Test
 
   Scenario: A MOTH user searches for a HGV with a Annual Test that is just about to expire

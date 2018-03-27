@@ -1,5 +1,4 @@
-#@mothpp @mothint
-@mothhgv
+@mothhgv @mothpp @mothint
 Feature: 39 - Check HGV with a current Annual Test
 
   Scenario: A MOTH user searches for a HGV with a current a current Annual Test
