@@ -1,4 +1,4 @@
-@mothhgv @mothpp @mothint
+@mothhgv @mothint
 Feature: 46 - Check HGV where the VRM entered does not match the VRM returned by the HGV API
 
   Scenario: A MOTH user searches for a HGV where the VRM entered does not match the VRM returned by the HGV API

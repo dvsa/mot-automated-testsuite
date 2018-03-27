@@ -1,4 +1,4 @@
-@mothhgv @mothpp @mothint
+@mothhgv @mothint
 
 Feature: 42 - Check HGV with a Annual Test that expires today
 
