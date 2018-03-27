@@ -1,7 +1,7 @@
 @mothhgv @mothint
-Feature: 45 - Check HGV that has no Annual Test history and the vehicle is more then a year old
+Feature: 45 - Check HGV that has no Annual Test history and the vehicle is more than a year old
 
-  Scenario: A MOTH user searches for a HGV that has no Annual Test history and the vehicle is more then a year old
+  Scenario: A MOTH user searches for a HGV that has no Annual Test history and the vehicle is more than a year old
     Given I browse to /
     And I enter "NOHOLD2" in the registration field
     When I press the "Continue" button

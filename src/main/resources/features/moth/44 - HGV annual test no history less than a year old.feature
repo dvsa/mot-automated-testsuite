@@ -1,7 +1,7 @@
 @mothhgv @mothint
-Feature: 44 - Check HGV that has no Annual Test history and the vehicle is less then a year old
+Feature: 44 - Check HGV that has no Annual Test history and the vehicle is less than a year old
 
-  Scenario: A MOTH user searches for a HGV that has no Annual Test history and the vehicle is less then a year old
+  Scenario: A MOTH user searches for a HGV that has no Annual Test history and the vehicle is less than a year old
     Given I browse to /
     And I enter "NOHIST1" in the registration field
     When I press the "Continue" button
