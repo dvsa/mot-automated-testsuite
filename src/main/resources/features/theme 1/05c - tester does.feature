@@ -155,7 +155,7 @@ Feature: 05c - Tester does...
       | {vin1}                                                                       |
       | {site}                                                                       |
 
-
+  @smoke
   Scenario: Tester enters a class 7 MOT test fail
     Given I load "VEHICLE_CLASS_7" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_7" as {username1}, {site}
