@@ -12,11 +12,10 @@ Feature: 46 - Check HGV where the VRM entered does not match the VRM returned by
 
     And The page contains "There is something wrong with the vehicle details in our database."
     And The page contains "We can't show you the vehicle's annual test history until the vehicle details are corrected."
-    And The page contains "Review what information DVSA has on your vehicle and let us know which information is wrong or missing"
-    And The page contains "(link opens a new window)."
+    And The page contains "Review what information DVSA has on your vehicle and let us know which information is wrong or missing by "
 
-    And I click the "Review what information DVSA has on your vehicle and let us know which information is wrong or missing" link
+    And I click the "contact" link" link
     And I go to the next tab
 
-    Then The page title contains "Report wrong or missing vehicle details"
+    Then The page title contains "Contact DVSA - GOV.UK"
     And I close extra tabs

@@ -21,7 +21,7 @@ Feature: 39 - Check HGV with a current Annual Test
     And The page contains "If you think the annual test expiry date or any of the vehicle details are wrong,"
     And I click the "contact" link
     And I go to the next tab
-    Then The page title contains "Report wrong or missing vehicle details"
+    Then The page title contains "Contact DVSA - GOV.UK"
     And I go to the next tab
     And I close extra tabs
 
