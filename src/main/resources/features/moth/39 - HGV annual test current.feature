@@ -1,21 +1,19 @@
-#@mothpp @mothint
-@mothhgv
+@mothhgv @mothint
 Feature: 39 - Check HGV with a current Annual Test
-
 
   Scenario: A MOTH user searches for a HGV with a current a current Annual Test
     Given I browse to /
-    And I enter "KJ13HSH" in the registration field
+    And I enter "HISTVAL" in the registration field
     When I press the "Continue" button
 
     Then The page does not contain "This vehicle's MOT has expired"
-    And The page contains "KJ13HSH"
+    And The page contains "HISTVAL"
     And The page contains "DAF FA LF45.130 08"
 #    And The page contains "Check another vehicle" <-- this doesn't work due to the text being on 2 lines in the html code
     And The page contains "Check another"
-    And The page does not contain "Colour"
-    And The page does not contain "Fuel type"
-    And The page does not contain "Date registered"
+    And The page contains "Colour"
+    And The page contains "Fuel type"
+    And The page contains "Date registered"
     And The page contains "Annual test valid until"
     And The page contains "31 October 2018"
     And The page does not contain "reminders"
@@ -23,7 +21,7 @@ Feature: 39 - Check HGV with a current Annual Test
     And The page contains "If you think the annual test expiry date or any of the vehicle details are wrong,"
     And I click the "contact" link
     And I go to the next tab
-    Then The page title contains "Report wrong or missing HGV details"
+    Then The page title contains "Contact DVSA - GOV.UK"
     And I go to the next tab
     And I close extra tabs
 
@@ -34,7 +32,7 @@ Feature: 39 - Check HGV with a current Annual Test
 
     And The page contains "Date tested"
     And The page contains "17 October 2017"
-    And The page contains "Test Certificate Number"
+    And The page contains "Test Certificate number"
     And The page contains "GG80715"
     And The page contains "Test location"
     And The page contains "unavailable until further notice"
