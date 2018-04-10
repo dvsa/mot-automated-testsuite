@@ -9,7 +9,7 @@ Feature: 45 - Check HGV that has no Annual Test history and the vehicle is more 
     Then The page contains "NOHOLD2"
     And The page contains "CONVERSION"
     And The page contains "This vehicle's annual test has expired"
-    And The page contains "You can be fined up to £1000 for driving without a valid MOT This vehicle may be MOT exempt, for more information refer to MOT exemption guidance"
+    And The page contains "If the vehicle has been tested recently, it can take up to 10 working days for us to update our records This vehicle may be MOT exempt, for more information refer to MOT exemption guidance"
     And The page contains "Annual test expired on"
     And I click the accordion section with the id "mot-history-description"
 

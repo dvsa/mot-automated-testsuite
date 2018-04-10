@@ -9,4 +9,4 @@ Feature: 41 - Check HGV with a just expired Annual Test
     Then The page contains "EXYESTE"
     And The page contains "CONVERSION"
     And The page contains "This vehicle's annual test has expired"
-    And The page contains "You can be fined up to £1000 for driving without a valid MOT This vehicle may be MOT exempt, for more information refer to MOT exemption guidance"
+    And The page contains "If the vehicle has been tested recently, it can take up to 10 working days for us to update our records This vehicle may be MOT exempt, for more information refer to MOT exemption guidance"
