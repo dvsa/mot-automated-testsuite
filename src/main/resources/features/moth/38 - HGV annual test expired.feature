@@ -27,7 +27,7 @@ Feature: 38 - Check HGV with an expired Annual Test
     And The page contains "31 October 2002"
     And The page does not contain "reminders"
     And The page contains "The mileage recorded at test is currently not available for heavy goods and public service vehicles."
-    And The page contains "It can take up to three weeks for the latest annual test results to appear."
+    And The page contains "It can take up to 10 working days for the latest annual test results to appear."
 
     And The page contains "If you think the annual test expiry date or any of the vehicle details are wrong,"
     And I click the "contact" link
