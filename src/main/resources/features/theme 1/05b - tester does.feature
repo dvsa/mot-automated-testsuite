@@ -151,7 +151,7 @@ Feature: 05b - Tester does...
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I browse for a "Dangerous" defect of ("Body, structure and attachments", "Engine mountings", "Fractured") with comment "Test defect 1"
+    And I browse for a "Dangerous" defect of ("Body, chassis, structure", "Engine mounting", "Engine mounting condition", "Fractured") with comment "Test defect 1"
     And I browse for a "Major" defect of ("Brakes", "Rigid brake pipes", "Likely to become detached of damaged") with comment "Test defect 2"
     And I browse for a "Major" defect of ("Steering", "Steering column", "Excessive movement up and down") with comment "Test defect 3"
     And I enter decelerometer results of service brake 61 and parking brake 16
@@ -226,7 +226,7 @@ Feature: 05b - Tester does...
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I browse for a "Dangerous" defect of ("Body, structure and attachments", "Engine mountings", "Excessively loose") with comment "Test defect 1"
+    And I browse for a "Dangerous" defect of ("Body, chassis, structure", "Engine mounting", "Bracket", "Excessively loose") with comment "Test defect 1"
     And I browse for a "Major" defect of ("Road wheels", "Hubs", "Excessively worn") with comment "Test defect 2"
     And I browse for a "Major" defect of ("Tyres", "Condition", "Fouling part of vehicle") with comment "Test defect 3"
     And I enter class 4 roller results for vehicle weight of 1000 as service brake 100,50,100,50 and parking brake 60,50
@@ -237,7 +237,7 @@ Feature: 05b - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Fail"
-    And I check the dangerous failures section of the test summary has "Engine mounting excessively loose"
+    And I check the dangerous failures section of the test summary has "Engine mounting bracket excessively loose"
     And I check the dangerous failures section of the test summary has "Test defect 1"
     And I check the major failures section of the test summary has "Wheel hub spigot mounting excessively worn"
     And I check the major failures section of the test summary has "Test defect 2"
@@ -259,7 +259,7 @@ Feature: 05b - Tester does...
       | Test defect 1                                   |
       | Tyre fouling a part of the vehicle              |
       | Test defect 2                                   |
-      | Engine mounting excessively loose               |
+      | Engine mounting bracket excessively loose       |
       | Test defect 3                                   |
       | Service brake efficiency below requirements     |
       | Parking brake efficiency below requirements     |
@@ -275,7 +275,7 @@ Feature: 05b - Tester does...
     And I click the "Enter retest results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I mark the defect "Engine mounting excessively loose" as repaired
+    And I mark the defect "Engine mounting bracket excessively loose" as repaired
 
     And I check the "Review test" button is disabled
     And I edit class 4 roller results for vehicle weight of 1000 as service brake 160,160,160,160 and parking brake 80,80

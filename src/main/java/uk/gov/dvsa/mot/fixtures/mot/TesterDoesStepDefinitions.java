@@ -88,12 +88,18 @@ public class TesterDoesStepDefinitions implements En {
 
         And("^I browse for a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\"\\) "
                 + "with comment \"([^\"]+)\"$", (String defectType, String category, String defect, String comment) ->
-                    browseForDefect(defectType, category, Optional.empty(), defect, comment));
+                    browseForDefect(defectType, category, Optional.empty(), Optional.empty(), defect, comment));
 
         And("^I browse for a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"\\) "
                 + "with comment \"([^\"]+)\"$", (String defectType, String category, String subcategory, String defect,
-                    String comment) -> browseForDefect(defectType, category, Optional.of(subcategory), defect,
-                        comment));
+                    String comment) -> browseForDefect(defectType, category, Optional.of(subcategory), Optional.empty(),
+                    defect, comment));
+
+        And("^I browse for a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\", "
+                + "\"([^\"]+)\"\\) with comment \"([^\"]+)\"$", (String defectType, String category,
+                    String subcategory, String subsubcategory, String defect, String comment) ->
+                    browseForDefect(defectType, category, Optional.of(subcategory), Optional.of(subsubcategory), defect,
+                    comment));
 
         And("^I search for a \"([^\"]+)\" defect of \"([^\"]+)\" with comment \"([^\"]+)\"$",
                 this::searchForDefect);
@@ -181,6 +187,9 @@ public class TesterDoesStepDefinitions implements En {
         And("^I check the brake results section of the test summary is \"([^\"]+)\"$", (String text) ->
                 assertEquals(text, driverWrapper.getRelativeTextFromHeading("Brake results overall")));
 
+        And("^I check the fails section of the test summary has \"([^\"]+)\"$", (String text) ->
+                assertTrue(driverWrapper.getTextFromUnorderedList("Fails").contains(text)));
+
         And("^I check the dangerous failures section of the test summary has \"([^\"]+)\"$", (String text) ->
                 assertTrue(driverWrapper.getTextFromUnorderedList("Dangerous failures").contains(text)));
 
@@ -195,6 +204,9 @@ public class TesterDoesStepDefinitions implements En {
 
         And("^I check the advisory section of the test summary has \"([^\"]+)\"$", (String text) ->
                 assertTrue(driverWrapper.getTextFromUnorderedList("Advisory text").contains(text)));
+
+        And("^I check the fails section of the test summary does not have \"([^\"]+)\"$", (String text) ->
+                assertFalse(driverWrapper.getTextFromUnorderedList("Fails").contains(text)));
 
         And("^I check the dangerous failures section of the test summary does not have \"([^\"]+)\"$",
                 (String text) ->
@@ -879,8 +891,8 @@ public class TesterDoesStepDefinitions implements En {
      * @param defect        The defect
      * @param comment       The comment to use
      */
-    private void browseForDefect(String defectType, String category, Optional<String> subcategory, String defect,
-                                 String comment) {
+    private void browseForDefect(String defectType, String category, Optional<String> subcategory,
+                                 Optional<String> subsubcategory, String defect, String comment) {
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
         // And I click the "Add a defect" link
@@ -893,6 +905,11 @@ public class TesterDoesStepDefinitions implements En {
 
         subcategory.ifPresent(value -> {
             // And I click the <subcategory> link
+            driverWrapper.clickLink(value);
+        });
+
+        subsubcategory.ifPresent(value -> {
+            // And I click the <subsubcategory> link
             driverWrapper.clickLink(value);
         });
 
@@ -985,12 +1002,20 @@ public class TesterDoesStepDefinitions implements En {
             case AddFromSearch:
                 // And I click the <Advisory> button for the specified defect
                 // (note - need to ignore the defect listed as "You searched for...")
-                driverWrapper.clickLink("span", defect, "../div/", defectType.type);
+                if (defectType == DefectType.PreEUAdvisory || defectType == DefectType.PreEUFailure) {
+                    driverWrapper.clickLink("div/strong", defect, "../../ul/", defectType.type);
+                } else {
+                    driverWrapper.clickLink("span", defect, "../div/", defectType.type);
+                }
                 break;
 
             case AddFromBrowse:
                 // And I click the Advisory button for the specified defect
-                driverWrapper.clickLink("span", defect, "../div/", defectType.type);
+                if (defectType == DefectType.PreEUAdvisory || defectType == DefectType.PreEUFailure) {
+                    driverWrapper.clickLink("strong", defect, "../../ul/", defectType.type);
+                } else {
+                    driverWrapper.clickLink("span", defect, "../div/", defectType.type);
+                }
                 break;
 
             case EditFromSummary:
@@ -1037,7 +1062,8 @@ public class TesterDoesStepDefinitions implements En {
         Dangerous("Dangerous failure", "dangerous failure"),
         Major("Major failure", "major failure"),
         Minor("Minor defect", "minor defect"),
-        Failure("Failure", "major failure"),
+        PreEUFailure("Failure", "failure"),
+        PreEUAdvisory("Advisory", "advisory"),
         PRS("PRS", "PRS"),
         Advisory("Advisory", "advisory");
 
@@ -1074,14 +1100,17 @@ public class TesterDoesStepDefinitions implements En {
                 case "Minor":
                     return Minor;
 
-                case "Failure":
-                    return Failure;
+                case "Pre EU Failure":
+                    return PreEUFailure;
 
                 case "PRS":
                     return PRS;
 
                 case "Advisory":
                     return Advisory;
+
+                case "Pre EU Advisory":
+                    return PreEUAdvisory;
 
                 default:
                     String message = "Unknown defect type: " + type;

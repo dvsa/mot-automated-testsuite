@@ -10,7 +10,7 @@ Feature: 05c - Tester does...
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I browse for a "Dangerous" defect of ("Body, structure and attachments", "Engine mountings", "Fractured") with comment "Test defect 1"
+    And I browse for a "Dangerous" defect of ("Body, chassis, structure", "Engine mounting", "Engine mounting condition", "Fractured") with comment "Test defect 1"
     And I search for a "Major" defect of "Brake performance not tested" with comment "Test defect 2"
     And I browse for a "Major" defect of ("Visibility", "Washers", "Provides insufficient washer liquid") with comment "Test defect 3"
     And I press the "Review test" button
