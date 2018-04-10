@@ -1,6 +1,6 @@
 select veh.registration, ma.name, mo.name
 from vehicle veh, model_detail md, model mo, make ma
-where veh.id < 1000000
+where veh.id < 10000000
 and veh.registration is not null
 and veh.model_detail_id = md.id
 and md.model_id = mo.id

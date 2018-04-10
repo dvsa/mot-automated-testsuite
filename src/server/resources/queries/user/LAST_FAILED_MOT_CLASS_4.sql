@@ -5,7 +5,7 @@ select p.username, p.id, v.registration, v.vin, mtc.odometer_value, s.name
          and mtc.mot_test_type_id = 1
          and mtc.`status_id`= 5
          and mtc.site_id = s.id
-         and mtc.completed_date > CURDATE() -7
+         and mtc.completed_date > DATE_SUB(CURDATE(), INTERVAL 7 DAY)
          and not exists (
          	select 1 from mot_test_current mtc2
          	where mtc.vehicle_id = mtc2.vehicle_id
