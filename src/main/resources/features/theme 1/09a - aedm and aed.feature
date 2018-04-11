@@ -75,7 +75,6 @@ Feature: 09a - AEDM and AED
       | VT20            |
       | {reg}           |
       | {vin}           |
-#      | {siteName}      |  -- not included in new certs
     And I click the "Sign out" link
 
     When I login with 2FA as {aedm}
