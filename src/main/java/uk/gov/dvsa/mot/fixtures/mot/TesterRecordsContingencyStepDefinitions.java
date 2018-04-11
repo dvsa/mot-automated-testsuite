@@ -32,9 +32,9 @@ public class TesterRecordsContingencyStepDefinitions implements En {
     public TesterRecordsContingencyStepDefinitions(WebDriverWrapper driverWrapper, WebDriverWrapper driverWrapper1) {
         this.driverWrapper = driverWrapper1;
 
-        And("^I check the Test Information summary section of the test summary has \"([^\"]+)\" of \"([^\"]+)\"$",
+        And("^I check the Test Information summary section of the test summary has \"([^\"]+)\" of \\{([^\\}]+)\\}$",
                 (String field, String value) ->
-                        assertEquals(value, driverWrapper.getTextFromDefinitionList(field)));
+                        assertEquals(driverWrapper.getData(value), driverWrapper.getTextFromDefinitionList(field)));
 
 
         And("^I set time as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",

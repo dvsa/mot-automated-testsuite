@@ -35,8 +35,6 @@ Feature: 08 - Create Vehicle
       | VT30            |
       | <reg>           |
       | <vin>           |
-#      | <primaryColour> |  -- not included on new cert
-#      | {site}          |  -- not included on new cert
 
     Examples:
     |User              |reg         |vin               |make   |model  |fuelType|cylinderCapacity|class|primaryColour|secondaryColour|Country of reg                            |years|

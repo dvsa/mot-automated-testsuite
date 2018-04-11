@@ -34,15 +34,13 @@ Feature: 12b - Vehicle Examiner
     And I click "Print certificate" and check the PDF contains:
       | Duplicate certificate          |
 
-
-#  Disabling this test for now - new certs struggles with historic certificates
-#  Scenario: MOT test search by tester
-#    Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
-#    And I load "TESTER_WITH_2_MONTH_HISTORY" as {tester}
-#    And I click the "MOT tests" link
-#    When I search for an mot by "Tester (by date range)" with {tester} from 2 months ago
-#    And I click the first "View" link
-#    Then The page contains "summary"
-#    And I check there is a "Print certificate" link
-#    And I click "Print certificate" and check the PDF contains:
-#      | Duplicate certificate          |
+  Scenario: MOT test search by tester
+    Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
+    And I load immediately "TESTER_WITH_10_DAY_HISTORY" as {tester}
+    And I click the "MOT tests" link
+    When I search for an mot by "Tester (by date range)" with {tester} from 2 months ago
+    And I click the first "View" link
+    Then The page contains "summary"
+    And I check there is a "Print certificate" link
+    And I click "Print certificate" and check the PDF contains:
+      | Duplicate certificate          |

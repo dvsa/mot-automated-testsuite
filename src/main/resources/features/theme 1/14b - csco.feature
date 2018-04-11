@@ -22,17 +22,16 @@ Feature: 14b - CSCO
     And I click "Print certificate" and check the PDF contains:
       | Duplicate certificate          |
 
-#Temporarily disabling this as new certs doesn't always process historic certs
-#  Scenario: CSCO user performs MOT test search by tester, and is able to view test certificates
-#    Given I login without 2FA using "CSCO_USER" as {cscouser}
-#    And I load "TESTER_WITH_2_MONTH_HISTORY" as {tester}
-#    And I click the "MOT tests" link
-#    When I search for an mot by "Tester (by date range)" with {tester} from 2 months ago
-#    And I click the first "View" link
-#    Then The page contains "MOT test summary" or "MOT re-test summary"
-#    And I check there is a "Print certificate" link
-#    And I click "Print certificate" and check the PDF contains:
-#      | Duplicate certificate          |
+  Scenario: CSCO user performs MOT test search by tester, and is able to view test certificates
+    Given I login without 2FA using "CSCO_USER" as {cscouser}
+    And I load immediately "TESTER_WITH_10_DAY_HISTORY" as {tester}
+    And I click the "MOT tests" link
+    When I search for an mot by "Tester (by date range)" with {tester} from 2 months ago
+    And I click the first "View" link
+    Then The page contains "MOT test summary" or "MOT re-test summary"
+    And I check there is a "Print certificate" link
+    And I click "Print certificate" and check the PDF contains:
+      | Duplicate certificate          |
 
 
   Scenario: CSCO user performs MOT test search by vin, and view the test details

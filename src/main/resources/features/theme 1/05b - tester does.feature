@@ -45,7 +45,6 @@ Feature: 05b - Tester does...
       | Test advisory 2                                       |
       | {registration1}                                       |
       | {vin1}                                                |
-#      | {site}                                                | -- not included on new certs
     And I click the "Back to user home" link
 
 
@@ -111,7 +110,6 @@ Feature: 05b - Tester does...
       | Edited advisory 2                                                    |
       | {registration1}                                                      |
       | {vin1}                                                               |
-#      | {site}                                                               | -- not included on new certs
     And I click the "Back to user home" link
 
 
@@ -134,7 +132,6 @@ Feature: 05b - Tester does...
       | VT30            |
       | {registration1} |
       | {vin1}          |
-#      | {site}          |  -- not included on new certs
 
   @smoke
   Scenario: Tester enters a class 4 MOT retest pass, all failures repaired, no need to repeat brake test
@@ -169,7 +166,6 @@ Feature: 05b - Tester does...
       | Wheel insecure                             |
       | {registration1}                            |
       | {vin1}                                     |
-#      | {site}                                     |  -- not checked on new certs
 
     When I click the "Back to user home" link
     And I start an MOT retest for {registration1}, {vin1}, {site}
@@ -194,7 +190,6 @@ Feature: 05b - Tester does...
       | VT20            |
       | {registration1} |
       | {vin1}          |
-#      | {site}          |  -- not checked on new certs
     And I click the "Back to user home" link
 
 
@@ -230,7 +225,6 @@ Feature: 05b - Tester does...
       | Wheel insecure                             |
       | {registration1}                            |
       | {vin1}                                     |
-#      | {site}                                     |  -- not included on new certs
 
     When I click the "Back to user home" link
     And I start an MOT retest for {registration1}, {vin1}, {site}
@@ -258,4 +252,3 @@ Feature: 05b - Tester does...
       | Wheel insecure  |
       | {registration1} |
       | {vin1}          |
-#      | {site}          |  -- not included on new certs

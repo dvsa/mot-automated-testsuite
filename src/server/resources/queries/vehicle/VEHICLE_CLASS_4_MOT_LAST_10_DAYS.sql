@@ -9,7 +9,7 @@ and md.vehicle_class_id = 4 -- cars only
 and veh.id = latest_mot.vehicle_id
 and mtc.id = latest_mot.id
 and mtc.status_id not in (4,5) -- exclude vehicles whose latest status is under test or failed
-and DATE_SUB(CURDATE(), INTERVAL 10 DAY)  -- completed in last 10 days
+and mtc.completed_date > DATE_SUB(CURDATE(), INTERVAL 10 DAY)  -- completed in last 10 days
 and mtc.expiry_date > curdate() -- latest MOT expires after today
 and odometer_result_type = 'OK'
 and veh.registration not like "%-%" -- exclude dodgy test data on ACPT

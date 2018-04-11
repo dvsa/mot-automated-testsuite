@@ -49,7 +49,6 @@ Feature: 12a - Vehicle Examiner
       | VT30            |
       | {reg}           |
       | {vin}           |
-#      | {site}          | -- not included on new certs
 
   Scenario: Vehicle examiner searches for user by username
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
