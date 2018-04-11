@@ -53,7 +53,6 @@ Feature: 12a - Vehicle Examiner
       | VT30            |
       | {reg}           |
       | {vin}           |
-      | {site}          |
 
   Scenario: Vehicle examiner searches for user by username
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
@@ -65,7 +64,7 @@ Feature: 12a - Vehicle Examiner
 
   Scenario: Vehicle information search
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
-    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
+    And I load "VEHICLE_CLASS_4_MOT_LAST_10_DAYS" as {reg}, {vin}, {odo}
     And I click the "Vehicle information" link
     When I search for vehicle information by "Registration (VRM)" with {reg}
     Then I check the reg {reg}, vin {vin} on vehicle information

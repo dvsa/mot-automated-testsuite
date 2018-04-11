@@ -48,7 +48,6 @@ Feature: 05b - Tester does...
       | Test advisory 2                                       |
       | {registration1}                                       |
       | {vin1}                                                |
-      | {site}                                                |
     And I click the "Back to user home" link
 
 
@@ -116,7 +115,6 @@ Feature: 05b - Tester does...
       | Edited advisory 1                                                    |
       | {registration1}                                                      |
       | {vin1}                                                               |
-      | {site}                                                               |
     And I click the "Back to user home" link
 
 
@@ -139,7 +137,6 @@ Feature: 05b - Tester does...
       | VT30            |
       | {registration1} |
       | {vin1}          |
-      | {site}          |
 
   @smoke
   Scenario: Tester enters a class 4 MOT retest pass, all failures repaired, no need to repeat brake test
@@ -176,7 +173,6 @@ Feature: 05b - Tester does...
     And I click "Print documents" and check the PDF contains:
       | VT30                                               |
       | Engine mounting fractured                          |
-      | * DANGEROUS *                                      |
       | Test defect 1                                      |
       | Brake pipe likely to become detached or damaged    |
       | Test defect 2                                      |
@@ -184,7 +180,6 @@ Feature: 05b - Tester does...
       | Test defect 3                                      |
       | {registration1}                                    |
       | {vin1}                                             |
-      | {site}                                             |
 
     When I click the "Back to user home" link
     And I start an MOT retest for {registration1}, {vin1}, {site}
@@ -213,7 +208,6 @@ Feature: 05b - Tester does...
       | VT20            |
       | {registration1} |
       | {vin1}          |
-      | {site}          |
     And I click the "Back to user home" link
 
 
@@ -267,7 +261,6 @@ Feature: 05b - Tester does...
       | Brakes imbalanced across an axle Rear (Axle 2)  |
       | {registration1}                                 |
       | {vin1}                                          |
-      | {site}                                          |
 
     When I click the "Back to user home" link
     And I start an MOT retest for {registration1}, {vin1}, {site}
@@ -310,4 +303,3 @@ Feature: 05b - Tester does...
       | Test defect 3                     |
       | {registration1}                   |
       | {vin1}                            |
-      | {site}                            |

@@ -7,7 +7,14 @@ Feature: 38 - Check HGV with an expired Annual Test
     When I press the "Continue" button
 
     Then The page contains "This vehicle's annual test has expired"
-    And The page contains "You can be fined up to £1,000 for driving without a valid annual test"
+    And The page contains "If the vehicle has been tested recently, it can take up to 10 working days for us to update our records"
+    And The page contains "This vehicle may be MOT exempt, for more information refer to"
+
+    And I click the "MOT exemption guidance" link
+    And I go to the next tab
+    And I go to the next tab
+    And I close extra tabs
+
     And The page contains "HISTEXP"
     And The page contains "DAF FA LF45.130 08"
     And The page title contains "Check annual test history"
@@ -20,7 +27,7 @@ Feature: 38 - Check HGV with an expired Annual Test
     And The page contains "31 October 2002"
     And The page does not contain "reminders"
     And The page contains "The mileage recorded at test is currently not available for heavy goods and public service vehicles."
-    And The page contains "It can take up to three weeks for the latest annual test results to appear."
+    And The page contains "It can take up to 10 working days for the latest annual test results to appear."
 
     And The page contains "If you think the annual test expiry date or any of the vehicle details are wrong,"
     And I click the "contact" link
@@ -48,5 +55,3 @@ Feature: 38 - Check HGV with an expired Annual Test
     And I click the "What are failures and advisories?" help link
     And The page contains "Failure items must be fixed before the vehicle can pass its annual test."
     And The page contains "Advisory items are provided for advice. For some of these, if they became more serious, your vehicle may no longer be roadworthy and could require immediate attention."
-
-    And The page does not contain "Pass"

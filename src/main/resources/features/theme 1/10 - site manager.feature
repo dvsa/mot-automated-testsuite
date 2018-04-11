@@ -71,7 +71,6 @@ Feature: 10 - Site Manager and Site Admin
       | VT30            |
       | {registration1} |
       | {vin1}          |
-      | {siteName}      |
 
 
   Scenario: Site Admin updates VTS details

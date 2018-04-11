@@ -31,7 +31,6 @@ Feature: 05a - Tester does...
       | VT20            |
       | {registration1} |
       | {vin1}          |
-      | {site}          |
     And I click the "Back to user home" link
     And I check a slot was successfully used for site {site}
 
@@ -64,8 +63,7 @@ Feature: 05a - Tester does...
       | VT30                                         |
       | {registration1}                              |
       | {vin1}                                       |
-      | {site}                                       |
-      | Parking brake efficiency below requirements  |
+      | Parking brake efficiency below requirements |
 
 
   @smoke
@@ -110,9 +108,7 @@ Feature: 05a - Tester does...
       | VT30                                                             |
       | {registration1}                                                  |
       | {vin1}                                                           |
-      | {site}                                                           |
       | Steering column deformed to the extent that steering is affected |
-      | * DANGEROUS *                                                    |
       | Exhaust system insecure                                          |
       | Stop lamp(s) not working                                         |
       | Test defect 1                                                    |
@@ -149,7 +145,6 @@ Feature: 05a - Tester does...
       | VT30                         |
       | {registration1}              |
       | {vin1}                       |
-      | {site}                       |
       | Brake performance not tested |
 
 
@@ -194,7 +189,6 @@ Feature: 05a - Tester does...
     | VT20                                                                                             |
     | {registration1}                                                                                  |
     | {vin1}                                                                                           |
-    | {site}                                                                                           |
     | Bumper mountings corroded but not likely to become detached                                      |
     | Nail in tyre                                                                                     |
     | Stub axle has slight vertical movement between stub axle and axle beam                           |

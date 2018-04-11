@@ -5,6 +5,4 @@ select number as ContingencyCode,
        date_format(start_date, "%m") as month,
        date_format(start_date, "%Y") as year
 from emergency_log
-where start_date > SUBDATE(CURDATE(), INTERVAL 30 DAY)
-and end_date < CURDATE()
-limit 20
+where start_date = SUBDATE(CURDATE(), INTERVAL 4 DAY)
