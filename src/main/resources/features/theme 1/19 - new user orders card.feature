@@ -150,7 +150,7 @@ Feature: 19 - New trade user orders and activates 2FA card
     # Add Group A training certificate, then order card
     When I browse to /login
     And I load immediately "LATEST_TEST_USER" as {username}
-    And I load "SITE" as {siteNumber}, {siteName}
+    And I load "SITE_ALL" as {siteNumber}, {siteName}
     And I set today as {certDay}, {certMonth}, {certYear}
     And I enter {username} in the "User ID" field
     And I enter "MyPassword1234" in the "Password" field

@@ -187,7 +187,7 @@ Feature: 07 - Tester records Contingency Test
     And I enter {code} in the "Contingency code" field
     And I press the "Confirm contingency test" button
 
-    And I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
+    And I load uniquely "VEHICLE_CLASS_4_HISTORIC_10_DAYS" as {registration1}, {vin1}, {mileage1}, {testNumber1}
     And I enter {registration1} in the "Registration mark" field
     And I enter {vin1} in the "VIN" field
     And I press the "Search" button
