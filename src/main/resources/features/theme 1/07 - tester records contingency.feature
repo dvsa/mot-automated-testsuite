@@ -4,14 +4,14 @@ Feature: 07 - Tester records Contingency Test
    Scenario: A tester record a pass contingency test
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     Then I start a contingency MOT test at site {site}
-    And I enter "01" in the "Day" field
-    And I enter "01" in the "Month" field
-    And I enter "2017" in the "Year" field
+    And I load "CONTINGENCY_CODE" as {code}, {issueDate}, {dateOfTest}, {day}, {month}, {year}
+    And I enter {day} in the "Day" field
+    And I enter {month} in the "Month" field
+    And I enter {year} in the "Year" field
     And I enter "9" in the field with id "contingency_time-hour"
     And I enter "00" in the field with id "contingency_time-minutes"
     And I click the "Other" radio button
     And I enter "Automated Testing" in the "If other, please enter a reason" field
-    And I load "CONTINGENCY_CODE" as {code}, {startDate}, {endDate}
     And I enter {code} in the "Contingency code" field
     And I press the "Confirm contingency test" button
 
@@ -28,7 +28,7 @@ Feature: 07 - Tester records Contingency Test
 
     Then The page title contains "MOT test summary"
     And I check the test information section of the test summary is "Pass"
-    And I check the Test Information summary section of the test summary has "Issue date" of "1 January 2017"
+    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate}
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
@@ -39,21 +39,21 @@ Feature: 07 - Tester records Contingency Test
        | VT20            |
        | {registration1} |
        | {vin1}          |
-       | {site}          |
+       | {dateOfTest}    |
      And I click the "Back to user home" link
 
 
   Scenario: A tester records a fail contingency test
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     Then I start a contingency MOT test at site {site}
-    And I enter "18" in the "Day" field
-    And I enter "09" in the "Month" field
-    And I enter "2017" in the "Year" field
+    And I load "CONTINGENCY_CODE" as {code}, {issueDate}, {dateOfTest}, {day}, {month}, {year}
+    And I enter {day} in the "Day" field
+    And I enter {month} in the "Month" field
+    And I enter {year} in the "Year" field
     And I enter "9" in the field with id "contingency_time-hour"
     And I enter "00" in the field with id "contingency_time-minutes"
     And I click the "Other" radio button
     And I enter "Automated Testing" in the "If other, please enter a reason" field
-    And I load "CONTINGENCY_CODE" as {code}, {startDate}, {endDate}
     And I enter {code} in the "Contingency code" field
     And I press the "Confirm contingency test" button
 
@@ -70,6 +70,7 @@ Feature: 07 - Tester records Contingency Test
 
     Then The page title contains "MOT test summary"
     And I check the test information section of the test summary is "Fail"
+    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate}
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Fail"
@@ -79,20 +80,20 @@ Feature: 07 - Tester records Contingency Test
       | VT30            |
       | {registration1} |
       | {vin1}          |
-      | {site}          |
+      | {dateOfTest}    |
     And I click the "Back to user home" link
 
 
   Scenario: A tester records a fail contingency test then a contingency retest pass 10 working days later
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     Then I start a contingency MOT test at site {site}
-    And I enter "01" in the "Day" field
-    And I enter "02" in the "Month" field
-    And I enter "2017" in the "Year" field
+    And I load immediately "CONTINGENCY_CODE_14_DAY" as {code}, {issueDate}, {dateOfTest}, {day}, {month}, {year}
+    And I enter {day} in the "Day" field
+    And I enter {month} in the "Month" field
+    And I enter {year} in the "Year" field
     And I enter "9" in the field with id "contingency_time-hour"
     And I enter "00" in the field with id "contingency_time-minutes"
     And I click the "Communication problem" radio button
-    And I load "CONTINGENCY_CODE" as {code}, {startDate}, {endDate}
     And I enter {code} in the "Contingency code" field
     And I press the "Confirm contingency test" button
 
@@ -111,6 +112,7 @@ Feature: 07 - Tester records Contingency Test
 
     Then The page title contains "MOT test summary"
     And I check the test information section of the test summary is "Fail"
+    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate}
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
@@ -124,22 +126,22 @@ Feature: 07 - Tester records Contingency Test
       | VT30                                      |
       | {registration1}                           |
       | {vin1}                                    |
-      | {site}                                    |
       | Exhaust has a major leak of exhaust gases |
       | Test defect 1                             |
       | Body has slight corrosion                 |
       | Test advisory 2                           |
+      | {dateOfTest}                              |
     And I click the "Back to user home" link
 
     Then I start a contingency MOT test at site {site}
-    And I enter "15" in the "Day" field
-    And I enter "02" in the "Month" field
-    And I enter "2017" in the "Year" field
+    And I load immediately "CONTINGENCY_CODE_4_DAY" as {code2}, {issueDate2}, {dateOfTest2}, {day2}, {month2}, {year2}
+    And I enter {day2} in the "Day" field
+    And I enter {month2} in the "Month" field
+    And I enter {year2} in the "Year" field
     And I enter "11" in the field with id "contingency_time-hour"
     And I enter "00" in the field with id "contingency_time-minutes"
     And I click the "Communication problem" radio button
-    And I load "CONTINGENCY_CODE" as {code}, {startDate}, {endDate}
-    And I enter {code} in the "Contingency code" field
+    And I enter {code2} in the "Contingency code" field
     And I press the "Confirm contingency test" button
 
     And I enter {registration1} in the "Registration mark" field
@@ -155,6 +157,7 @@ Feature: 07 - Tester records Contingency Test
 
     Then The page title contains "MOT re-test summary"
     And I check the test information section of the test summary is "Pass"
+    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate2}
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "None Recorded"
@@ -167,25 +170,24 @@ Feature: 07 - Tester records Contingency Test
       | VT20                      |
       | {registration1}           |
       | {vin1}                    |
-      | {site}                    |
       | Body has slight corrosion |
       | Test advisory 2           |
+      | {dateOfTest2}             |
 
   Scenario: A tester records a fail contingency test four days ago and performs retest pass now
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     Then I start a contingency MOT test at site {site}
-    And I load immediately "CONTINGENCY_DATE" as {day}, {month}, {year}
+    And I load immediately "CONTINGENCY_CODE_4_DAY" as {code}, {issueDate}, {dateOfTest}, {day}, {month}, {year}
     And I enter {day} in the "Day" field
     And I enter {month} in the "Month" field
     And I enter {year} in the "Year" field
     And I enter "9" in the field with id "contingency_time-hour"
     And I enter "00" in the field with id "contingency_time-minutes"
     And I click the "Communication problem" radio button
-    And I load "CONTINGENCY_CODE" as {code}, {startDate}, {endDate}
     And I enter {code} in the "Contingency code" field
     And I press the "Confirm contingency test" button
 
-    And I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
+    And I load uniquely "VEHICLE_CLASS_4_HISTORIC_10_DAYS" as {registration1}, {vin1}, {mileage1}, {testNumber1}
     And I enter {registration1} in the "Registration mark" field
     And I enter {vin1} in the "VIN" field
     And I press the "Search" button
@@ -200,6 +202,7 @@ Feature: 07 - Tester records Contingency Test
 
     Then The page title contains "MOT test summary"
     And I check the test information section of the test summary is "Fail"
+    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate}
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
@@ -213,11 +216,11 @@ Feature: 07 - Tester records Contingency Test
       | VT30                                      |
       | {registration1}                           |
       | {vin1}                                    |
-      | {site}                                    |
       | Exhaust has a major leak of exhaust gases |
       | Test defect 1                             |
       | Body has slight corrosion                 |
       | Test advisory 2                           |
+      | {dateOfTest}                              |
     And I click the "Back to user home" link
 
     And I start an MOT retest for {registration1}, {vin1}, {site}
@@ -242,12 +245,11 @@ Feature: 07 - Tester records Contingency Test
       | VT20                      |
       | {registration1}           |
       | {vin1}                    |
-      | {site}                    |
 
   Scenario: A tester record contingency test and then cancels the contingency test
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     Then I start a contingency MOT test at site {site}
-    And I set today as {day}, {month}, {year}
+    And I load "CONTINGENCY_CODE" as {code}, {issueDate}, {dateOfTest}, {day}, {month}, {year}
     And I enter {day} in the "Day" field
     And I enter {month} in the "Month" field
     And I enter {year} in the "Year" field
@@ -256,7 +258,6 @@ Feature: 07 - Tester records Contingency Test
     And I select "am" in the field with id "contingency_time-ampm"
     And I click the "Other" radio button
     And I enter "Automated Testing" in the "If other, please enter a reason" field
-    And I load "CONTINGENCY_CODE" as {code}, {startDate}, {endDate}
     And I enter {code} in the "Contingency code" field
     And I press the "Confirm contingency test" button
 
@@ -277,7 +278,6 @@ Feature: 07 - Tester records Contingency Test
       | VT30            |
       | {registration}  |
       | {vin}           |
-      | {site}          |
     And I click the "Finish" link
 
   @smoke

@@ -35,8 +35,6 @@ Feature: 08 - Create Vehicle
       | VT30            |
       | <reg>           |
       | <vin>           |
-      | <primaryColour> |
-      | {site}          |
 
     Examples:
     |User              |reg         |vin               |make   |model  |fuelType|cylinderCapacity|class|primaryColour|secondaryColour|Country of reg                            |years|

@@ -24,17 +24,18 @@ Feature: 06a - duplicate and replacement certificates
       | VT20            |
       | {reg}           |
       | {vin}           |
-      | {siteName}      |
 
 
   Scenario Outline: <user> user issues duplicate certificate
     Given I login without 2FA using "<dataScript>" as {<user>}
-    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
+    And I load immediately "VEHICLE_CLASS_4_MOT_LAST_10_DAYS" as {reg}, {vin}, {mileage}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
     And I check there is a "Print certificate" link
     And I click "Print certificate" and check the PDF contains:
       | Duplicate certificate            |
+      | VT                               |
+
 
   Examples:
   |user        |dataScript       |
@@ -65,7 +66,6 @@ Feature: 06a - duplicate and replacement certificates
       | VT20            |
       | {registration1} |
       | {vin1}          |
-      | {site}          |
     And I click the "Back to user home" link
 
     And I search for certificates with reg {registration1}
@@ -84,7 +84,6 @@ Feature: 06a - duplicate and replacement certificates
       | VT20                  |
       | {registration1}       |
       | {vin1}                |
-      | {site}                |
 
 
   Scenario: Tester issues duplicate certificate and cannot edit another sites tests
