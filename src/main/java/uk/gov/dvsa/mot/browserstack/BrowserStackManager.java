@@ -44,13 +44,15 @@ public class BrowserStackManager {
         logger.debug(String.format("Starting BrowserStackLocal %s local instance...",
                 testsuiteConfig.getProperty("localIdentifier")));
 
-        try {
-            localBrowserStackInstance.start(commandParameters);
-        } catch (Exception exception) {
-            logger.error(String.format("Unable to start BrowserStackLocal instance. Stacktrace:\n %s",
-                    exception.toString()));
-            exception.printStackTrace();
-            throw new RuntimeException(exception.getMessage());
+        if (testsuiteConfig.isUsingBrowserStack()) {
+            try {
+                localBrowserStackInstance.start(commandParameters);
+            } catch (Exception exception) {
+                logger.error(String.format("Unable to start BrowserStackLocal instance. Stacktrace:\n %s",
+                        exception.toString()));
+                exception.printStackTrace();
+                throw new RuntimeException(exception.getMessage());
+            }
         }
     }
 
