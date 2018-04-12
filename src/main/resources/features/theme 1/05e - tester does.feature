@@ -31,10 +31,8 @@ Feature: 05e - Tester does...
       | VT30                                                         |
       | {registration1}                                              |
       | {vin1}                                                       |
-      | {site}                                                       |
       | Service brake efficiency less than 50% of the required value |
-      | * DANGEROUS *                                                |
-      | 123456 mi                                                    |
+      | 123,456 miles                                                |
 
 
   Scenario: Tester enters a class 4 MOT test fail, with a dangerous parking brake test failure
@@ -67,10 +65,8 @@ Feature: 05e - Tester does...
       | VT30                                                         |
       | {registration1}                                              |
       | {vin1}                                                       |
-      | {site}                                                       |
       | Parking brake efficiency less than 50% of the required value |
-      | * DANGEROUS *                                                |
-      | 12345 mi                                                     |
+      | 12,345 miles                                                 |
 
 
   Scenario: Tester enters a class 4 MOT test fail, with brake imbalance failure
@@ -105,11 +101,10 @@ Feature: 05e - Tester does...
       | VT30                             |
       | {registration1}                  |
       | {vin1}                           |
-      | {site}                           |
       | Brakes imbalanced across an axle |
       | Rear                             |
       | Axle 2                           |
-      | 55555 mi                         |
+      | 55,555 miles                     |
 
 
   Scenario: Tester enters a class 4 MOT test fail, with steered axle imbalance (dangerous)
@@ -146,12 +141,10 @@ Feature: 05e - Tester does...
       | VT30                                              |
       | {registration1}                                   |
       | {vin1}                                            |
-      | {site}                                            |
       | Brakes imbalanced across an axle by more than 50% |
       | Front                                             |
       | Axle 1                                            |
-      | * DANGEROUS *                                     |
-      | 99999 km                                          |
+      | 99,999 km                                         |
 
 
   Scenario: Tester enters a class 4 MOT test pass, with brake imbalance 40kg rule
@@ -182,8 +175,7 @@ Feature: 05e - Tester does...
       | VT20                             |
       | {registration1}                  |
       | {vin1}                           |
-      | {site}                           |
-      | 100000 mi                        |
+      | 100,000 miles                    |
 
 
   Scenario: Tester enters a class 4 MOT test pass, with minor defects
@@ -219,7 +211,6 @@ Feature: 05e - Tester does...
       | VT20                          |
       | {registration1}               |
       | {vin1}                        |
-      | {site}                        |
       # Commented out until the new certificate is in place which includes minor defects
       #| Daytime running lamp insecure |
       #| Test browse minor             |
@@ -254,4 +245,3 @@ Feature: 05e - Tester does...
       | Brake performance not tested  |
       | {registration1}               |
       | {vin1}                        |
-      | {site}                        |

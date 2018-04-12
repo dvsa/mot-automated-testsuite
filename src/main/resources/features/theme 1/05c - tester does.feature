@@ -132,7 +132,6 @@ Feature: 05c - Tester does...
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
       | VT30                                                                         |
-      | Blue                                                                         |
       | Stop lamp showing white light to the rear                                    |
       | Test defect 1                                                                |
       | Throttle operating incorrectly                                               |
@@ -208,7 +207,6 @@ Feature: 05c - Tester does...
     And I click "Print documents" and check the PDF contains:
       | VT30                                                                         |
       | Brakes imbalanced across an axle by more than 50% Front (Axle 1)             |
-      | * DANGEROUS *                                                                |
       | Brakes imbalanced across an axle Rear (Axle 2)                               |
       | {registration1}                                                              |
       | {vin1}                                                                       |
