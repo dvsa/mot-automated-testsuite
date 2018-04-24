@@ -24,11 +24,11 @@ Feature: 01 - Manage Direct Debit as AEDM
     And I enter "Derby" in the "Town or City" field
     And I enter "DE1 1DE" in the field with id "customer_postal_code"
     # And I click the "Set up Direct Debit" button
-    And I click the button with class name "btn btn--large"
+    And I click the button with class name "btn btn--large u-sm-full-width"
     And The page contains "20-00-00"
     And The page contains "55779911"
     # And I click the "Confirm" button
-    And I click the button with class name "btn btn--primary"
+    And I click the button with class name "btn btn--large btn--primary u-sm-full-width"
     And The page contains "Direct debit confirmation"
     And The page contains "Your direct debit has been successfully created"
     And I click the "Return to Authorised Examiner" link
