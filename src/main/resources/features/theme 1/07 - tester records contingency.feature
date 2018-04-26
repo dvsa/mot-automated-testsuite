@@ -160,7 +160,6 @@ Feature: 07 - Tester records Contingency Test
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "None Recorded"
-    And I check the fails section of the test summary has "None recorded"
     And I check the advisory section of the test summary has "Body has slight corrosion"
     And I check the advisory section of the test summary has "Test advisory 2"
     And I press the "Save test result" button
