@@ -1303,7 +1303,7 @@ public class WebDriverWrapper {
         // then for good measure wait for the footer to be available
         // the gocardless direct debit page and the card payment page are excluded from this wait
         if (!webDriver.getTitle().contains("Customer Payment Management System")
-                || !webDriver.getTitle().contains("Payment details - BJSS")) {
+                && !webDriver.getTitle().contains("Payment details - BJSS")) {
             (new WebDriverWait(webDriver, pageWaitSeconds))
                 .pollingEvery(pollFrequencyMilliseconds, TimeUnit.MILLISECONDS)
                     .until(ExpectedConditions.presenceOfElementLocated(By.id("footer")));
