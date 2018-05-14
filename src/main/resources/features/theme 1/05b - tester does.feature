@@ -149,7 +149,7 @@ Feature: 05b - Tester does...
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
     And I browse for a "Dangerous" defect of ("Body, chassis, structure", "Engine mounting", "Engine mounting condition", "Fractured") with comment "Test defect 1"
-    And I browse for a "Major" defect of ("Brakes", "Rigid brake pipes", "Likely to become detached of damaged") with comment "Test defect 2"
+    And I browse for a "Major" defect of ("Brakes", "Rigid brake pipes", "Likely to become detached or damaged") with comment "Test defect 2"
     And I browse for a "Major" defect of ("Steering", "Steering column", "Excessive movement up and down") with comment "Test defect 3"
     And I enter decelerometer results of service brake 61 and parking brake 16
     And I press the "Review test" button
