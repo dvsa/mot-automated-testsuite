@@ -52,8 +52,8 @@ public class HomePageStepDefinitions implements En {
      */
     private void getSlotsCountFromHomePage(String siteKey) {
         //And I get the slot count from the home page
-        String slots = driverWrapper.getElementText("a", driverWrapper.getData(siteKey),
-                        "../../../../div[2]/span");
+        String slots = driverWrapper.getElementText("a", ") " + driverWrapper.getData(siteKey),
+                "../../../../div[2]/span");
 
         //And I set the slots in the browser for later comparision
         driverWrapper.setData("slotCount", slots);
@@ -65,10 +65,11 @@ public class HomePageStepDefinitions implements En {
      */
     private void checkSlotsBalanceDecreased(String siteKey) {
         //And I check the slot balance decreased by 1
-        String slots = driverWrapper.getElementText("a", driverWrapper.getData(siteKey),
+        String slots = driverWrapper.getElementText("a", ") " + driverWrapper.getData(siteKey),
                 "../../../../div[2]/span");
-        int decreeasedSlots = Integer.valueOf(driverWrapper.getData("slotCount")) - 1;
-        assertTrue("The slot balance did not decrease", slots.contains(String.valueOf(decreeasedSlots)));
+
+        int decreasedSlots = Integer.valueOf(driverWrapper.getData("slotCount")) - 1;
+        assertTrue("The slot balance did not decrease", slots.contains(String.valueOf(decreasedSlots)));
     }
 
     /**
