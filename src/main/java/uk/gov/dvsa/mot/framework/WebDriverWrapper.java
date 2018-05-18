@@ -84,8 +84,8 @@ public class WebDriverWrapper {
         this.env = env;
         this.data = new HashMap<>();
         this.webDriver = createWebDriver();
-        String browserWidth = env.getProperty("browserWidth", "1024");
-        String browserHeight = env.getProperty("browserHeight", "768");
+        String browserWidth = env.getProperty("browserWidth", "1280");
+        String browserHeight = env.getProperty("browserHeight", "1960");
         this.webDriver.manage().window().setSize(
                 new Dimension(Integer.parseInt(browserWidth), Integer.parseInt(browserHeight)));
         this.requestHandler = new RequestHandler(this.webDriver, env);
