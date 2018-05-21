@@ -52,6 +52,7 @@ The following tags are used:
 * **@regression** = Theme 1 regression tests
 * **@smoke** = Smoke tests
 * **@cpms** = CPMS regression tests
+* **@extended** = Extended regression tests
 * **@mothint** = MOT History regression tests on the INT Enviroment
 * **@mothpp** = MOT History regression tests on the PP Enviroment
 * **@mothrecall** = MOT History Recall only regression tests
