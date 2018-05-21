@@ -53,6 +53,7 @@ MOT:
 * **@regression** = Theme 1 regression tests
 * **@smoke** = Smoke tests
 * **@cpms** = CPMS regression tests
+* **@extended** = Extended regression tests
 
 MOT History:
 * **@mothint** = MOT History regression tests on the INT Enviroment
