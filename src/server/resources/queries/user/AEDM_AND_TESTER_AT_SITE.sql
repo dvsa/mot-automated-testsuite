@@ -11,6 +11,9 @@ and obrm.status_id =1
 and aedm_person.id = obrm.person_id
 and aedm_person.is_account_claim_required = 0
 and aedm_person.is_password_change_required = 0
+and not exists (select 1 from site_business_role_map sbrm2
+                where sbrm2.person_id = aedm_person.id
+                and sbrm2.site_business_role_id = 1) -- Who is not a tester means tester will be different user to AEDM
 and o.id = obrm.organisation_id
 and o.slots_balance > 0
 and afa.organisation_id = o.id

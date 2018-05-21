@@ -25,6 +25,10 @@ and not exists (
     group by v.vin
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
-and mtc.completed_date < date_sub(CURDATE(), INTERVAL 7 DAY)  -- test not completed in last 7 days
+and not exists (
+	select 1 from mot_test_current mtc2
+	where mtc2.vehicle_id = veh.id
+	and mtc2.completed_date > date_sub(CURDATE(), INTERVAL 7 DAY)  -- test not completed in last 7 days
+	)
 and veh.last_updated_on < date_sub(CURDATE(), INTERVAL 7 DAY) -- vehicles not updated 7 days ago
 limit 50
