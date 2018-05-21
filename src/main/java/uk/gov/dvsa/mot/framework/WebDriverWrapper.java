@@ -935,6 +935,19 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Selects the specified checkbox button by id.
+     * @param idValue  The id of checkbox button
+     */
+    public void selectCheckboxById(String idValue) {
+        WebElement checkboxElement = webDriver.findElement(By.id(idValue));
+
+        // click checkbox if not already selected, otherwise leave as selected
+        if (!checkboxElement.isSelected()) {
+            checkboxElement.click();
+        }
+    }
+
+    /**
      * Selects the specified option in the (dropdown/multi-select) field.
      * @param optionText  The text of the option to select
      * @param label       The field label
