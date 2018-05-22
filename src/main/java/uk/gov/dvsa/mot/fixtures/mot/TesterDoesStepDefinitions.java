@@ -161,6 +161,24 @@ public class TesterDoesStepDefinitions implements En {
                     serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
                     parkingBrakeNearside, parkingBrakeOffside)));
 
+        And("^I enter class 7 plate results for weights of (\\d+) as service brake (\\d+),(\\d+),(\\d+),"
+                        + "(\\d+) and parking brake (\\d+),(\\d+)$",
+                (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
+                 Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2, Integer parkingBrakeNearside,
+                 Integer parkingBrakeOffside) ->
+                handleBrakeResults(BrakeTestJourney.addClass7PlateJourney(weight, serviceBrakeNearsideAxle1,
+                    serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
+                    parkingBrakeNearside, parkingBrakeOffside)));
+
+        And("^I enter class 4 plate results for weights of (\\d+) as service brake (\\d+),(\\d+),(\\d+),"
+                + "(\\d+) and parking brake (\\d+),(\\d+)$",
+                (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
+                 Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2, Integer parkingBrakeNearside,
+                 Integer parkingBrakeOffside) ->
+                handleBrakeResults(BrakeTestJourney.addClass4PlateJourney(weight, serviceBrakeNearsideAxle1,
+                    serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
+                    parkingBrakeNearside, parkingBrakeOffside)));
+
         And("^I enter single line class 4 plate results for weights of (\\d+) as service brake (\\d+),(\\d+),"
                 + "(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$",
                 (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
@@ -531,6 +549,8 @@ public class TesterDoesStepDefinitions implements En {
             AddDecelerometerServiceAndGradientParkingResult, EditServiceAndParkingDecelerometerResult,
             AddSinglePlateResult, AddClass4ServiceAndParkingRollerResult, EditClass4ServiceAndParkingRollerResult,
             AddClass7ServiceAndParkingRollerResult, AddClass4ServiceAndParkingPlateResult,
+            AddClass7ServiceAndParkingPlateResult
+            AddClass7ServiceAndParkingRollerResult, AddClass4ServiceAndParkingPlateResult,
             AddClass7ServiceAndParkingPlateResult, AddSingleClass4ServiceAndParkingRollerResult,
             AddSingleClass4ServiceAndParkingPlateResult, AddSingleServiceAndParkingDecelerometerResult,
             AddSingleDecelerometerAndGradientParkingResult
@@ -696,6 +716,57 @@ public class TesterDoesStepDefinitions implements En {
             journey.control1EffortRear = control1EffortRear;
             journey.control2EffortFront = control2EffortFront;
             journey.control2EffortRear = control2EffortRear;
+            return journey;
+        }
+
+        /**
+         * Add Class 4 brake test result - both service and parking brake using plate.
+         * @param weight                        The vehicle weight
+         * @param serviceBrakeNearsideAxle1     Weight applied by service brake to nearside axle 1
+         * @param serviceBrakeOffsideAxle1      Weight applied by service brake to offside axle 1
+         * @param serviceBrakeNearsideAxle2     Weight applied by service brake to nearside axle 2
+         * @param serviceBrakeOffsideAxle2      Weight applied by service brake to offside axle 2
+         * @param parkingBrakeNearside          Weight applied by parking brake to nearside
+         * @param parkingBrakeOffside           Weight applied by parking brake to offside
+         * @return The journey
+         */
+        static BrakeTestJourney addClass4PlateJourney(int weight, int serviceBrakeNearsideAxle1,
+                  int serviceBrakeOffsideAxle1, int serviceBrakeNearsideAxle2, int serviceBrakeOffsideAxle2,
+                  int parkingBrakeNearside, int parkingBrakeOffside) {
+            BrakeTestJourney journey = new BrakeTestJourney(BrakeTestJourneyType.AddClass4ServiceAndParkingPlateResult);
+            journey.weight = weight;
+            journey.serviceBrakeNearsideAxle1 = serviceBrakeNearsideAxle1;
+            journey.serviceBrakeOffsideAxle1 = serviceBrakeOffsideAxle1;
+            journey.serviceBrakeNearsideAxle2 = serviceBrakeNearsideAxle2;
+            journey.serviceBrakeOffsideAxle2 = serviceBrakeOffsideAxle2;
+            journey.parkingBrakeNearside = parkingBrakeNearside;
+            journey.parkingBrakeOffside = parkingBrakeOffside;
+            return journey;
+        }
+
+
+        /**
+         * Add Class 7 brake test result - both service and parking brake using plate.
+         * @param weight                        The vehicle weight
+         * @param serviceBrakeNearsideAxle1     Weight applied by service brake to nearside axle 1
+         * @param serviceBrakeOffsideAxle1      Weight applied by service brake to offside axle 1
+         * @param serviceBrakeNearsideAxle2     Weight applied by service brake to nearside axle 2
+         * @param serviceBrakeOffsideAxle2      Weight applied by service brake to offside axle 2
+         * @param parkingBrakeNearside          Weight applied by parking brake to nearside
+         * @param parkingBrakeOffside           Weight applied by parking brake to offside
+         * @return The journey
+         */
+        static BrakeTestJourney addClass7PlateJourney(int weight, int serviceBrakeNearsideAxle1,
+                    int serviceBrakeOffsideAxle1, int serviceBrakeNearsideAxle2, int serviceBrakeOffsideAxle2,
+                    int parkingBrakeNearside, int parkingBrakeOffside) {
+            BrakeTestJourney journey = new BrakeTestJourney(BrakeTestJourneyType.AddClass7ServiceAndParkingPlateResult);
+            journey.weight = weight;
+            journey.serviceBrakeNearsideAxle1 = serviceBrakeNearsideAxle1;
+            journey.serviceBrakeOffsideAxle1 = serviceBrakeOffsideAxle1;
+            journey.serviceBrakeNearsideAxle2 = serviceBrakeNearsideAxle2;
+            journey.serviceBrakeOffsideAxle2 = serviceBrakeOffsideAxle2;
+            journey.parkingBrakeNearside = parkingBrakeNearside;
+            journey.parkingBrakeOffside = parkingBrakeOffside;
             return journey;
         }
 
@@ -933,6 +1004,57 @@ public class TesterDoesStepDefinitions implements En {
                 driverWrapper.enterIntoFieldWithId(journey.control2EffortFront, "control2EffortFront");
                 // And I enter <n> in the field with id "control2EffortRear"
                 driverWrapper.enterIntoFieldWithId(journey.control2EffortRear, "control2EffortRear");
+                break;
+
+            case AddClass4ServiceAndParkingPlateResult:
+            case AddClass7ServiceAndParkingPlateResult:
+                // And I select "Plate" in the "Service brake test type" field
+                driverWrapper.selectOptionInField("Plate", "Service brake test type");
+
+                // And I select "Plate" in the "Parking brake test type" field
+                driverWrapper.selectOptionInField("Plate", "Parking brake test type");
+
+                if (journey.journeyType
+                        == BrakeTestJourney.BrakeTestJourneyType.AddClass7ServiceAndParkingPlateResult) {
+                    // And I click the "DGW (design gross weight from manufacturers plate)" radio button
+                    driverWrapper.selectRadio("DGW (design gross weight from manufacturers plate)");
+                } else {
+                    // And I click the "Brake test weight (from manufacturer or other reliable data)" radio button
+                    driverWrapper.selectRadio("Brake test weight (from manufacturer or other reliable data)");
+                }
+
+                // And I enter <n> in the "Vehicle Weight in kilograms" field
+                driverWrapper.enterIntoField(journey.weight, "Vehicle Weight in kilograms");
+                // And I click the "Dual" radio button in fieldset "Brake line type"
+                driverWrapper.selectRadioInFieldset("Brake line type", "Dual");
+                // And I select "2 axles" in the "Number of axles" field
+                driverWrapper.selectOptionInField("2 axles", "Number of axles");
+                // And I press the "Next" button
+                driverWrapper.pressButton("Next");
+
+                // And The page title contains "Add brake test results"
+                driverWrapper.checkCurrentPageTitle("Add brake test results");
+                // And I enter <n> in the field with id "serviceBrakeEffortNearsideAxle1"
+                driverWrapper.enterIntoFieldWithId(
+                        journey.serviceBrakeNearsideAxle1, "serviceBrakeEffortNearsideAxle1");
+                // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle1"
+                driverWrapper.enterIntoFieldWithId(
+                        journey.serviceBrakeOffsideAxle1, "serviceBrakeEffortOffsideAxle1");
+                // And I enter <n> in the field with id "serviceBrakeEffortNearsideAxle2"
+                driverWrapper.enterIntoFieldWithId(
+                        journey.serviceBrakeNearsideAxle2, "serviceBrakeEffortNearsideAxle2");
+                // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle2"
+                driverWrapper.enterIntoFieldWithId(
+                        journey.serviceBrakeOffsideAxle2, "serviceBrakeEffortOffsideAxle2");
+
+                // And I enter <n> in the field with id "parkingBrakeEffortNearside"
+                driverWrapper.enterIntoFieldWithId(
+                        journey.parkingBrakeNearside, "parkingBrakeEffortNearside");
+                // And I enter <n> in the field with id "parkingBrakeEffortOffside"
+                driverWrapper.enterIntoFieldWithId(
+                        journey.parkingBrakeOffside, "parkingBrakeEffortOffside");
+                // And I set the first axle as the steered axle
+                driverWrapper.selectCheckboxById("serviceBrake1SteeredAxle1");
                 break;
 
             case AddClass4ServiceAndParkingPlateResult:
