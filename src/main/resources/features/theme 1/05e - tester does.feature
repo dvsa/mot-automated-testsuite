@@ -208,14 +208,13 @@ Feature: 05e - Tester does...
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
-      | VT20                          |
-      | {registration1}               |
-      | {vin1}                        |
-      # Commented out until the new certificate is in place which includes minor defects
-      #| Daytime running lamp insecure |
-      #| Test browse minor             |
-      #| Brake hose slightly damaged   |
-      #| Test search minor             |
+      | VT20                                                  |
+      | {registration1}                                       |
+      | {vin1}                                                |
+      | Daytime running lamp obviously incorrectly positioned |
+      | Test browse minor                                     |
+      | Brake hose slightly damaged                           |
+      | Test search minor                                     |
 
   Scenario: Tester enters a class 1 MOT test fail, with brake performance not tested
     Given I load "VEHICLE_CLASS_1" as {registration1}, {vin1}, {mileage1}
