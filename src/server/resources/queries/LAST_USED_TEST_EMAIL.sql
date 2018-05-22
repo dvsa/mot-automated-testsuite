@@ -1,6 +1,6 @@
 SELECT
-  ifnull(MAX(email), 'test000000@example.com') AS lastemail
+  ifnull(MAX(email), 'success+test000000@simulator.amazonses.com') AS lastemail
 FROM
   email
 WHERE
-  email LIKE 'test______@example.com';
+  email LIKE 'success+test______@simulator.amazonses.com';

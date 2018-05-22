@@ -41,8 +41,8 @@ public class UserManagementStepDefinitions implements En {
     }
 
     /**
-     * Generates a unique email address of the form <code>test123456@example.com</code>, by loading the maximum
-     * previously entered email (if any) and adding 1 to the number.
+     * Generates a unique email address of the form <code>success+test123456@simulator.amazonses.com</code>,
+     * by loading the maximum previously entered email (if any) and adding 1 to the number.
      * @param emailKeyName      The data key to set with the generated value
      */
     private void generateUniqueEmail(String emailKeyName) {
@@ -56,19 +56,20 @@ public class UserManagementStepDefinitions implements En {
 
         // extract the number from the email
         String previouslyUsedEmail = results.get(0);
-        Pattern regex = Pattern.compile("^test(\\d{6})@example\\.com$");
+        Pattern regex = Pattern.compile("^success\\+test(\\d{6})@simulator.amazonses\\.com$");
         Matcher matcher = regex.matcher(previouslyUsedEmail);
         if (matcher.matches()) {
             int previouslyUsedNumber = Integer.parseInt(matcher.group(1));
 
             // generate the new email address by adding 1...
-            String newEmailAddress = "test" + String.format("%06d", previouslyUsedNumber + 1) + "@example.com";
+            String newEmailAddress = "success+test" + String.format("%06d", previouslyUsedNumber + 1)
+                    + "@simulator.amazonses.com";
             logger.debug("Using new email address: {}", newEmailAddress);
             driverWrapper.setData(emailKeyName, newEmailAddress);
 
         } else {
-            String message = "Expected previously used test email to be of the form: test123456@example.com, but "
-                    + "received: " + previouslyUsedEmail;
+            String message = "Expected previously used test email to be of the form: "
+                    + "success+test123456@simulator.amazonses.com, but received: " + previouslyUsedEmail;
             logger.error(message);
             throw new IllegalStateException(message);
         }

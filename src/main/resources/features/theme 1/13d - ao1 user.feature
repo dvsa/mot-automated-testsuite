@@ -34,8 +34,8 @@ Feature: 13d - A01 user
     And I enter "Example Town" in the field with id "REGCaddressTown"
     And I enter "AB1 2CD" in the field with id "REGCaddressPostCode"
     And I enter "01234567890" in the field with id "REGCphoneNumber"
-    And I enter "no_one@example.com" in the field with id "REGCemail"
-    And I enter "no_one@example.com" in the field with id "REGCemailConfirmation"
+    And I enter "success+no_one@simulator.amazonses.com" in the field with id "REGCemail"
+    And I enter "success+no_one@simulator.amazonses.com" in the field with id "REGCemailConfirmation"
     And I click the "Yes" radio button in fieldset "Are they the same as the business contact details?"
     And I select "01" in the "DVSA Area Office" field
     And I press the "Continue" button
@@ -59,8 +59,8 @@ Feature: 13d - A01 user
     And I enter "Example Town" in the field with id "BUSaddressTown"
     And I enter "AB1 2CD" in the field with id "BUSaddressPostCode"
     And I click the "England" radio button in fieldset "Country"
-    And I enter "no_one@example.com" in the field with id "BUSemail"
-    And I enter "no_one@example.com" in the field with id "BUSemailConfirmation"
+    And I enter "success+no_one@simulator.amazonses.com" in the field with id "BUSemail"
+    And I enter "success+no_one@simulator.amazonses.com" in the field with id "BUSemailConfirmation"
     And I enter "01234567890" in the field with id "BUSphoneNumber"
     And I select "2" in the "How many two-person test lanes (TPTL) does the site have?" field
     And I select "3" in the "How many one-person test lanes (OPTL) does the site have?" field
