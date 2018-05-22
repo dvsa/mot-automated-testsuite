@@ -733,17 +733,10 @@ public class TesterDoesStepDefinitions implements En {
         static BrakeTestJourney addClass4PlateJourney(int weight, int serviceBrakeNearsideAxle1,
                   int serviceBrakeOffsideAxle1, int serviceBrakeNearsideAxle2, int serviceBrakeOffsideAxle2,
                   int parkingBrakeNearside, int parkingBrakeOffside) {
-            BrakeTestJourney journey = new BrakeTestJourney(BrakeTestJourneyType.AddClass4ServiceAndParkingPlateResult);
-            journey.weight = weight;
-            journey.serviceBrakeNearsideAxle1 = serviceBrakeNearsideAxle1;
-            journey.serviceBrakeOffsideAxle1 = serviceBrakeOffsideAxle1;
-            journey.serviceBrakeNearsideAxle2 = serviceBrakeNearsideAxle2;
-            journey.serviceBrakeOffsideAxle2 = serviceBrakeOffsideAxle2;
-            journey.parkingBrakeNearside = parkingBrakeNearside;
-            journey.parkingBrakeOffside = parkingBrakeOffside;
-            return journey;
+            return addPlateOrRollerJourney(BrakeTestJourneyType.AddClass4ServiceAndParkingPlateResult, weight,
+                    serviceBrakeNearsideAxle1, serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2,
+                    serviceBrakeOffsideAxle2, parkingBrakeNearside, parkingBrakeOffside);
         }
-
 
         /**
          * Add Class 7 brake test result - both service and parking brake using plate.
@@ -759,15 +752,9 @@ public class TesterDoesStepDefinitions implements En {
         static BrakeTestJourney addClass7PlateJourney(int weight, int serviceBrakeNearsideAxle1,
                     int serviceBrakeOffsideAxle1, int serviceBrakeNearsideAxle2, int serviceBrakeOffsideAxle2,
                     int parkingBrakeNearside, int parkingBrakeOffside) {
-            BrakeTestJourney journey = new BrakeTestJourney(BrakeTestJourneyType.AddClass7ServiceAndParkingPlateResult);
-            journey.weight = weight;
-            journey.serviceBrakeNearsideAxle1 = serviceBrakeNearsideAxle1;
-            journey.serviceBrakeOffsideAxle1 = serviceBrakeOffsideAxle1;
-            journey.serviceBrakeNearsideAxle2 = serviceBrakeNearsideAxle2;
-            journey.serviceBrakeOffsideAxle2 = serviceBrakeOffsideAxle2;
-            journey.parkingBrakeNearside = parkingBrakeNearside;
-            journey.parkingBrakeOffside = parkingBrakeOffside;
-            return journey;
+            return addPlateOrRollerJourney(BrakeTestJourneyType.AddClass7ServiceAndParkingPlateResult, weight,
+                    serviceBrakeNearsideAxle1, serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2,
+                    serviceBrakeOffsideAxle2, parkingBrakeNearside, parkingBrakeOffside);
         }
 
         /**
@@ -841,6 +828,7 @@ public class TesterDoesStepDefinitions implements En {
         static BrakeTestJourney addClass4RollerJourney(int weight, int serviceBrakeNearsideAxle1,
                 int serviceBrakeOffsideAxle1, int serviceBrakeNearsideAxle2, int serviceBrakeOffsideAxle2,
                 int parkingBrakeNearside, int parkingBrakeOffside) {
+            return addPlateOrRollerJourney(BrakeTestJourneyType.AddClass4ServiceAndParkingRollerResult, weight,
             return addPlateOrRollerJourney(BrakeTestJourneyType.AddClass4ServiceAndParkingRollerResult, weight,
                     serviceBrakeNearsideAxle1, serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2,
                     serviceBrakeOffsideAxle2, parkingBrakeNearside, parkingBrakeOffside);
