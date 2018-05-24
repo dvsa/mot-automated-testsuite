@@ -58,6 +58,7 @@ MOT:
 * **@regressiondata** = Generate data for manual checking
 * **@VEinspection** = Vehicle Examiner Inspection test suite
 * **@OpenInterfaceTests** = Covers MOT tests for OpenIF
+* **@accessibility** = Runs the AXE accessibility checks output to `target/accessibility`. Note you must run `npm install` first to install the necessary axe libraries.
 
 MOT History:
 * **@mothint** = MOT History regression tests on the INT Environment

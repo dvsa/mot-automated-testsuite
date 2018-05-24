@@ -312,6 +312,8 @@ dependencies {
         force = true
     }
 
+    compile group: 'com.deque', name: 'axe-selenium', version: '2.1'
+
     // depends upon the "mot/2fa-pin-generator" project being checked out alongside this project, then built manually
     compile files("../2fa-pin-generator/build/libs/2fa-generator-1.0.jar")
 
