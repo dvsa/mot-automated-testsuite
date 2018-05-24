@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import java.util.Optional;
 import javax.inject.Inject;
 
@@ -221,6 +224,9 @@ public class TesterDoesStepDefinitions implements En {
 
         And("^I check the advisory section of the test summary does not have \"([^\"]+)\"$", (String text) ->
                 assertFalse(driverWrapper.getTextFromUnorderedList("Advisory text").contains(text)));
+
+        And("^I enter the current time for the contingency test$", () ->
+                selectContingencyTestTime());
     }
 
     /**
@@ -332,6 +338,25 @@ public class TesterDoesStepDefinitions implements En {
             // select the site
             driverWrapper.selectRadio(siteName);
         }
+    }
+
+    /**
+     * Selecting the current time for a contingency test.
+     * @param hour      The current hour
+     * @param minute    The current minute
+     * @param ampm      The either am or pm
+     */
+    private void selectContingencyTestTime() {
+        String hour  = (new SimpleDateFormat("hh").format(new Date()));
+        String minute = (new SimpleDateFormat("mm").format(new Date()));
+        String ampm = (new SimpleDateFormat("a").format(new Date()));
+
+        // Enter the Hour
+        driverWrapper.enterIntoField(driverWrapper.getData(hour), "contingency_time-hour");
+        // Enter the Hour
+        driverWrapper.enterIntoField(driverWrapper.getData(minute), "contingency_time-minutes");
+        // Enter either AM or PM
+        driverWrapper.selectOptionInFieldById(ampm, "contingency_time-ampm");
     }
 
     /**
