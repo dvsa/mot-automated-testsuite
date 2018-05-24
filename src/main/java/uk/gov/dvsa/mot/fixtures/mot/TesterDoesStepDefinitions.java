@@ -350,13 +350,14 @@ public class TesterDoesStepDefinitions implements En {
         String hour  = (new SimpleDateFormat("hh").format(new Date()));
         String minute = (new SimpleDateFormat("mm").format(new Date()));
         String ampm = (new SimpleDateFormat("a").format(new Date()));
+        String ampm2 = ampm.replace("AM", "am").replace("PM","pm");
 
         // Enter the Hour
-        driverWrapper.enterIntoField(driverWrapper.getData(hour), "contingency_time-hour");
+        driverWrapper.enterIntoFieldWithId(hour, "contingency_time-hour");
         // Enter the Hour
-        driverWrapper.enterIntoField(driverWrapper.getData(minute), "contingency_time-minutes");
-        // Enter either AM or PM
-        driverWrapper.selectOptionInFieldById(ampm, "contingency_time-ampm");
+        driverWrapper.enterIntoFieldWithId(minute, "contingency_time-minutes");
+        // Enter either am or pm
+        driverWrapper.selectOptionInFieldById(ampm2, "contingency_time-ampm");
     }
 
     /**
