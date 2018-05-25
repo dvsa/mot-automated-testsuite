@@ -87,7 +87,8 @@ Feature: 11 - Finance
 
      And I click the "purchase history" link
      And I click the link "Return to Authorised Examiner" with id "returnToExaminer"
-
+     
+  @smoke
   Scenario Outline: A finance user generates <report> finance report for <startDate> days ago to <endDate> days ago
     Given I login without 2FA using "FINANCE_USER" as {username}
     And I click the "Generate financial reports" link
