@@ -1645,4 +1645,13 @@ public class WebDriverWrapper {
             clickAndWaitForPageLoad(spans.get(spans.size() - 1));
         }
     }
+
+    /**
+     * Gets the current URL of the page.
+     * @return the current URL
+     */
+    public String getCurrentUrl() {
+        return this.webDriver.getCurrentUrl();
+    }
+
 }

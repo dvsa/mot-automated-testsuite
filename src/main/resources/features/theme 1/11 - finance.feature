@@ -88,8 +88,24 @@ Feature: 11 - Finance
      And I click the "purchase history" link
      And I click the link "Return to Authorised Examiner" with id "returnToExaminer"
 
-  # Scenario: Generate finance reports
-    # Generated all payments report - Waited and refreshed page until link was displayed (Can take many minutes)
-    # Generated general ledger sales report  - Waited and refreshed page until link was displayed (Can take many minutes)
-    # Reports generated for default dates, last month, and last 6 months
-
+  Scenario Outline: A finance user generates <report> finance report for <startDate> days ago to <endDate> days ago
+    Given I login without 2FA using "FINANCE_USER" as {username}
+    And I click the "Generate financial reports" link
+    And I select "<report>" in the field with id "input_report_type"
+    And I get the date <startDate> days ago as {start_day}, {start_month}, {start_year}
+    And I set the finance report from date to {start_day} {start_month} {start_year}
+    And I get the date <endDate> days ago as {end_day}, {end_month}, {end_year}
+    And I set the finance report to date to {end_day} {end_month} {end_year}
+    And I press the "Generate report" button
+    Then I record the finance report URL
+  Examples:
+  |report               |startDate|endDate|
+  |All Payments         |30       |0      |
+  |All Payments         |14       |7      |
+  |All Payments         |212      |182    |
+  |General Ledger Sales |30       |0      |
+  |General Ledger Sales |14       |7      |
+  |General Ledger Sales |212      |182    |
+  |Transaction Breakdown|30       |0      |
+  |Transaction Breakdown|14       |7      |
+  |Transaction Breakdown|212      |182    |
