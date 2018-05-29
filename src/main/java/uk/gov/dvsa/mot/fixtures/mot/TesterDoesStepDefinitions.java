@@ -347,17 +347,17 @@ public class TesterDoesStepDefinitions implements En {
      * @param ampm      The either am or pm
      */
     private void selectContingencyTestTime() {
-        String hour  = (new SimpleDateFormat("hh").format(new Date()));
-        String minute = (new SimpleDateFormat("mm").format(new Date()));
-        String ampm = (new SimpleDateFormat("a").format(new Date()));
-        String ampm2 = ampm.replace("AM", "am").replace("PM","pm");
+        Date currentDate = new Date();
+        String hour  = (new SimpleDateFormat("hh").format(currentDate));
+        String minute = (new SimpleDateFormat("mm").format(currentDate));
+        String ampm = (new SimpleDateFormat("a").format(currentDate)).toLowerCase();
 
         // Enter the Hour
         driverWrapper.enterIntoFieldWithId(hour, "contingency_time-hour");
         // Enter the Hour
         driverWrapper.enterIntoFieldWithId(minute, "contingency_time-minutes");
         // Enter either am or pm
-        driverWrapper.selectOptionInFieldById(ampm2, "contingency_time-ampm");
+        driverWrapper.selectOptionInFieldById(ampm, "contingency_time-ampm");
     }
 
     /**
