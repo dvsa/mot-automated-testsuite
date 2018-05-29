@@ -130,6 +130,10 @@ public class DataStepDefinitions implements En {
         When("^I set today formatted using \"([^\"]+)\" as \\{([^\\}]+)\\}$",
                 (String dateTimeFormat, String dateTimeKeyName) ->
                         setTodayWithFormat(dateTimeFormat, dateTimeKeyName));
+
+        When("^I get the date (\\d+) days ago as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (Integer days, String dayKeyName, String monthKeyName, String yearKeyName) ->
+                        setDate(days, dayKeyName, monthKeyName, yearKeyName));
     }
 
     /**
@@ -196,10 +200,23 @@ public class DataStepDefinitions implements En {
      * @param yearKeyName       The key to set with the currwent year (4 digits)
      */
     private void setToday(String dayKeyName, String monthKeyName, String yearKeyName) {
-        LocalDate today = LocalDate.now();
-        driverWrapper.setData(dayKeyName, String.valueOf(today.getDayOfMonth()));
-        driverWrapper.setData(monthKeyName, String.valueOf(today.getMonthValue()));
-        driverWrapper.setData(yearKeyName, String.valueOf(today.getYear()));
+        setDate(0, dayKeyName, monthKeyName, yearKeyName);
+    }
+
+    /**
+     * Sets the specified keys with the date X days ago.
+     * i.e. 7 days would be last week
+     * @param days              The number of days ago to get the date for
+     * @param dayKeyName        The key to set with the current day of the month (1..31)
+     * @param monthKeyName      The key to set with the current month of the year (1..12)
+     * @param yearKeyName       The key to set with the currwent year (4 digits)
+     */
+    private void setDate(Integer days, String dayKeyName, String monthKeyName, String yearKeyName) {
+        LocalDate theDate = LocalDate.now();
+        theDate = theDate.minusDays(days.longValue());
+        driverWrapper.setData(dayKeyName, String.valueOf(theDate.getDayOfMonth()));
+        driverWrapper.setData(monthKeyName, String.valueOf(theDate.getMonthValue()));
+        driverWrapper.setData(yearKeyName, String.valueOf(theDate.getYear()));
     }
 
     /**
