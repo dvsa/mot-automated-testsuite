@@ -47,11 +47,11 @@ public class PurchaseSlotsStepDefinitions implements En {
         });
 
         And("^I make the payment for card \"([^\"]+)\"$", (String cardNumber) -> {
-            makePayment(cardNumber);
+            makeCompletePayment(cardNumber);
         });
 
         And("^I make an orphan payment for card \"([^\"]+)\"$", (String cardNumber) -> {
-            makeOrphanPayment(cardNumber);
+            makePayment(cardNumber);
         });
         And("^I check that (\\d+) slots were bought successfully$", (Integer slots) -> {
             checkTheSummaryInformation(slots);
@@ -68,10 +68,10 @@ public class PurchaseSlotsStepDefinitions implements En {
                 .split("\n")[0].replace(",", ""));
 
         //Set the number of current slots in the driver
-        driverWrapper.setData("slotsCurrentBalance", Integer.toString(slotsBalance));
+        driverWrapper.setData("slotsBalance", Integer.toString(slotsBalance));
 
         //Set the number of slots purchased
-        driverWrapper.setData("slotsAdditon", Integer.toString(slots + 1));
+        driverWrapper.setData("slotsAdditon", Integer.toString(slots));
 
         //Set the new total of slots purchased
         driverWrapper.setData("slotsNewTotal", Integer.toString(slots + slotsBalance));
@@ -163,40 +163,19 @@ public class PurchaseSlotsStepDefinitions implements En {
             //And I click the continue button
             driverWrapper.clickButton("Continue");
         }
-
-        //And I click the save button
-        driverWrapper.clickButton("Cancel");
     }
 
     /**
      * Clicks the make payment button and enters the password for the card.
-     * Will not save the card at the end of the transaction
+     * Saves the payment to the account
      * @param cardNumber    The card number used in the payment
      */
-    private void makeOrphanPayment(String cardNumber) {
+    private void makeCompletePayment(String cardNumber) {
         //And I click the make payment button
-        driverWrapper.clickButton("Make Payment");
+        makePayment(cardNumber);
 
-        //Check the page title
-        System.out.print(driverWrapper.getCurrentPageTitle());
-
-        // If 3 D Secure Authorisation screen present fill it in
-        if (driverWrapper.containsMessage("3 D Secure Authorisation")) {
-            //Switch to password frame
-            driverWrapper.switchToFrame("scp_threeDSecure_iframe");
-
-            String passwordPrefix = "Test_";
-            String passwordSuffix = cardNumber.substring(cardNumber.length() - 4);
-
-            String password = passwordPrefix.concat(passwordSuffix);
-
-            //And I enter the password into the input
-            driverWrapper.enterIntoField(password, "Password");
-
-            //And I click the continue button
-            driverWrapper.clickButton("Continue");
-        }
-
+        //And I click the save button to save the payment to the account
+        driverWrapper.clickButton("Cancel");
     }
 
     private void checkTheSummaryInformation(int slots) {
