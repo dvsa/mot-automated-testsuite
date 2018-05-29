@@ -342,9 +342,6 @@ public class TesterDoesStepDefinitions implements En {
 
     /**
      * Selecting the current time for a contingency test.
-     * @param hour      The current hour
-     * @param minute    The current minute
-     * @param ampm      The either am or pm
      */
     private void selectContingencyTestTime() {
         Date currentDate = new Date();
@@ -354,7 +351,7 @@ public class TesterDoesStepDefinitions implements En {
 
         // Enter the Hour
         driverWrapper.enterIntoFieldWithId(hour, "contingency_time-hour");
-        // Enter the Hour
+        // Enter the Minute
         driverWrapper.enterIntoFieldWithId(minute, "contingency_time-minutes");
         // Enter either am or pm
         driverWrapper.selectOptionInFieldById(ampm, "contingency_time-ampm");
