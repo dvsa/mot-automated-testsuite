@@ -340,7 +340,7 @@ Feature: 07 - Tester records Contingency Test
       | Test defect 2                                                    |
       | Test defect 3                                                    |
     And I click the "Back to user home" link
-    And I wait for "60" seconds
+    And I wait for "90" seconds
 
     Then I start a contingency MOT test at site {site}
     And I load immediately "CONTINGENCY_CODE_0_DAY" as {code2}, {issueDate2}, {dateOfTest2}, {day2}, {month2}, {year2}
