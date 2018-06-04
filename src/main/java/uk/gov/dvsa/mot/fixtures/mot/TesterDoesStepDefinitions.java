@@ -349,6 +349,8 @@ public class TesterDoesStepDefinitions implements En {
         String minute = (new SimpleDateFormat("mm").format(currentDate));
         String ampm = (new SimpleDateFormat("a").format(currentDate)).toLowerCase();
 
+        driverWrapper.setData("Contingency time: ", hour + ':' + minute + ' ' + ampm);
+
         // Enter the Hour
         driverWrapper.enterIntoFieldWithId(hour, "contingency_time-hour");
         // Enter the Minute
