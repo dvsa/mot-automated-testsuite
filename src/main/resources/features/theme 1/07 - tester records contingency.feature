@@ -104,8 +104,8 @@ Feature: 07 - Tester records Contingency Test
     And I click the "Select vehicle" link
     And I press the "Confirm and start test" button
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I browse for a "Pre EU Failure" defect of ("Exhaust, fuel and emissions", "Exhaust system", "Exhaust has a major leak of exhaust gases") with comment "Test defect 1"
-    And I search for a "Pre EU Advisory" defect of "Body or chassis has excessive corrosion, seriously affecting its strength within 30cm of the body mountings" with comment "Test advisory 2"
+    And I browse for a "Dangerous" defect of ("Steering", "Steering column", "Fractured, steering affected") with comment "Test defect 1"
+    And I search for a "Advisory" defect of "Fuel pipe/s corroded" with comment "Test advisory 2"
     And I enter decelerometer results of service brake 60 and parking brake 30
     And I press the "Review test" button
 
@@ -115,21 +115,21 @@ Feature: 07 - Tester records Contingency Test
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
-    And I check the fails section of the test summary has "Exhaust has a major leak of exhaust gases"
-    And I check the fails section of the test summary has "Test defect 1"
-    And I check the advisory section of the test summary has "Body has slight corrosion"
+    And I check the dangerous failures section of the test summary has "Steering column fractured to the extent that steering is affected"
+    And I check the dangerous failures section of the test summary has "Test defect 1"
+    And I check the advisory section of the test summary has "Fuel Pipe/s corroded"
     And I check the advisory section of the test summary has "Test advisory 2"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
-      | VT30                                      |
-      | {registration1}                           |
-      | {vin1}                                    |
-      | Exhaust has a major leak of exhaust gases |
-      | Test defect 1                             |
-      | Body has slight corrosion                 |
-      | Test advisory 2                           |
-      | {dateOfTest}                              |
+      | VT30                                                              |
+      | {registration1}                                                   |
+      | {vin1}                                                            |
+      | Steering column fractured to the extent that steering is affected |
+      | Test defect 1                                                     |
+      | Fuel pipe/s corroded                                              |
+      | Test advisory 2                                                   |
+      | {dateOfTest}                                                      |
     And I click the "Back to user home" link
 
     Then I start a contingency MOT test at site {site}
@@ -151,7 +151,7 @@ Feature: 07 - Tester records Contingency Test
     And I press the "Confirm and start retest" button
 
     And I enter an odometer reading in miles of {mileage1} plus 5005
-    And I mark the defect "Exhaust has a major leak of exhaust gases" as repaired
+    And I mark the defect "Steering column fractured to the extent that steering is affected" as repaired
     And I press the "Review test" button
 
     Then The page title contains "MOT re-test summary"
@@ -162,7 +162,7 @@ Feature: 07 - Tester records Contingency Test
     And I check the brake results section of the test summary is "None Recorded"
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the major failures section of the test summary has "None recorded"
-    And I check the advisory section of the test summary has "Body has slight corrosion"
+    And I check the advisory section of the test summary has "Fuel Pipe/s corroded"
     And I check the advisory section of the test summary has "Test advisory 2"
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
@@ -170,7 +170,7 @@ Feature: 07 - Tester records Contingency Test
       | VT20                      |
       | {registration1}           |
       | {vin1}                    |
-      | Body has slight corrosion |
+      | Fuel pipe/s corroded      |
       | Test advisory 2           |
       | {dateOfTest2}             |
 
@@ -340,7 +340,7 @@ Feature: 07 - Tester records Contingency Test
       | Test defect 2                                                    |
       | Test defect 3                                                    |
     And I click the "Back to user home" link
-    And I wait for "60" seconds
+    And I wait for "90" seconds
 
     Then I start a contingency MOT test at site {site}
     And I load immediately "CONTINGENCY_CODE_0_DAY" as {code2}, {issueDate2}, {dateOfTest2}, {day2}, {month2}, {year2}
