@@ -9,3 +9,4 @@ Feature: 02 - AEDM Orphan Payment
     And I enter the card details "4462030000000000", "12/18", "654"
     And I enter the card holders name as "Jimi Orphan Hendrix"
     And I make an orphan payment for card "4462030000000000"
+    Then I browse to /
