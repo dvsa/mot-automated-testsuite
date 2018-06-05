@@ -15,5 +15,4 @@ and not exists ( -- not all security_card have a corresponding security_card_dri
   and (scd.last_observed_drift > 60 or scd.last_observed_drift < -60) -- no drift beyond +/-2
 )
 and p.username is not null -- exclude dodgy test data
-order by RAND()
 limit 50
