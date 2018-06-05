@@ -2,7 +2,7 @@
 Feature: 02 - AEDM Orphan Payment
 
   @smoke
-  Scenario: AEDM buys slots with an orpham payment
+  Scenario: AEDM buys slots with an orphan payment
     Given I login with 2FA using "AEDM_USER" as {AEDM}, {ORGANISATION}
     And I click the first {ORGANISATION} link
     And I order 123 slots
