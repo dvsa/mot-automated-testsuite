@@ -9,10 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 
+import java.util.Locale;
 import java.util.Optional;
+import java.util.TimeZone;
 import javax.inject.Inject;
 
 /**
@@ -344,10 +345,13 @@ public class TesterDoesStepDefinitions implements En {
      * Selecting the current time for a contingency test.
      */
     private void selectContingencyTestTime() {
-        Date currentDate = new Date();
-        String hour  = (new SimpleDateFormat("hh").format(currentDate));
-        String minute = (new SimpleDateFormat("mm").format(currentDate));
-        String ampm = (new SimpleDateFormat("a").format(currentDate)).toLowerCase();
+        TimeZone tz = TimeZone.getTimeZone("Europe/London") ;
+        Calendar currentDate = Calendar.getInstance(tz, Locale.UK);
+        String hour  = String.valueOf(currentDate.get(Calendar.HOUR));
+        String minute = String.valueOf(currentDate.get(Calendar.MINUTE));
+        String ampm = currentDate.get(Calendar.AM_PM) == 0 ? "am" : "pm";
+
+        driverWrapper.setData("Contingency time", hour + ':' + minute + ' ' + ampm);
 
         // Enter the Hour
         driverWrapper.enterIntoFieldWithId(hour, "contingency_time-hour");
