@@ -1,4 +1,4 @@
-@regression
+@cpms
 Feature: 02 - AEDM Orphan Payment
 
   @smoke
