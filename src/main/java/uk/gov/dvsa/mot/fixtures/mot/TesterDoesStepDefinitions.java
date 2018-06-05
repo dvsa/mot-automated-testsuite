@@ -13,6 +13,7 @@ import java.util.Calendar;
 
 import java.util.Locale;
 import java.util.Optional;
+import java.util.TimeZone;
 import javax.inject.Inject;
 
 /**
@@ -344,12 +345,13 @@ public class TesterDoesStepDefinitions implements En {
      * Selecting the current time for a contingency test.
      */
     private void selectContingencyTestTime() {
-        Calendar currentDate = Calendar.getInstance(Locale.UK);
+        TimeZone tz = TimeZone.getTimeZone("Europe/London") ;
+        Calendar currentDate = Calendar.getInstance(tz, Locale.UK);
         String hour  = String.valueOf(currentDate.get(Calendar.HOUR));
         String minute = String.valueOf(currentDate.get(Calendar.MINUTE));
         String ampm = currentDate.get(Calendar.AM_PM) == 0 ? "am" : "pm";
 
-        driverWrapper.setData("Contingency time: ", hour + ':' + minute + ' ' + ampm);
+        driverWrapper.setData("Contingency time", hour + ':' + minute + ' ' + ampm);
 
         // Enter the Hour
         driverWrapper.enterIntoFieldWithId(hour, "contingency_time-hour");
