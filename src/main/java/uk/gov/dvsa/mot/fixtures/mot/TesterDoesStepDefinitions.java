@@ -9,7 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
+import java.util.Calendar;
+
+import java.util.Locale;
 import java.util.Optional;
+import java.util.TimeZone;
 import javax.inject.Inject;
 
 /**
@@ -248,6 +252,9 @@ public class TesterDoesStepDefinitions implements En {
 
         And("^I check the advisory section of the test summary does not have \"([^\"]+)\"$", (String text) ->
                 assertFalse(driverWrapper.getTextFromUnorderedList("Advisory text").contains(text)));
+
+        And("^I enter the current time for the contingency test$", () ->
+                selectContingencyTestTime());
     }
 
     /**
@@ -359,6 +366,26 @@ public class TesterDoesStepDefinitions implements En {
             // select the site
             driverWrapper.selectRadio(siteName);
         }
+    }
+
+    /**
+     * Selecting the current time for a contingency test.
+     */
+    private void selectContingencyTestTime() {
+        TimeZone tz = TimeZone.getTimeZone("Europe/London") ;
+        Calendar currentDate = Calendar.getInstance(tz, Locale.UK);
+        String hour  = String.valueOf(currentDate.get(Calendar.HOUR));
+        String minute = String.valueOf(currentDate.get(Calendar.MINUTE));
+        String ampm = currentDate.get(Calendar.AM_PM) == 0 ? "am" : "pm";
+
+        driverWrapper.setData("Contingency time", hour + ':' + minute + ' ' + ampm);
+
+        // Enter the Hour
+        driverWrapper.enterIntoFieldWithId(hour, "contingency_time-hour");
+        // Enter the Minute
+        driverWrapper.enterIntoFieldWithId(minute, "contingency_time-minutes");
+        // Enter either am or pm
+        driverWrapper.selectOptionInFieldById(ampm, "contingency_time-ampm");
     }
 
     /**

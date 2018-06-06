@@ -1,5 +1,4 @@
 @mothpp
-@mothint
 Feature: 18 - Check vehicle with statutory appeal fail is not shown
 
   Scenario: A MOTH user searches for a vehicle with statutory appeal fail

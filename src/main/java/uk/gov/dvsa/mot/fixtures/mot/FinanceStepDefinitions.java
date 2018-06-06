@@ -32,6 +32,15 @@ public class FinanceStepDefinitions implements En {
         When("^I enter the last 8 characters of \\{([^\\}]+)\\} in the field with id \"([^\"]+)\"$",
                 (String dataKey, String id) -> enterLast8CharsIntoFieldWithId(driverWrapper.getData(dataKey), id));
 
+        Then("^I record the finance report URL", () -> recordFinanceReportUrl());
+
+        When("^I set the finance report from date to \\{([^\\}]+)\\} \\{([^\\}]+)\\} \\{([^\\}]+)\\}$",
+                (String day, String month, String year) -> setFinanceReportFromDates(driverWrapper.getData(day),
+                        driverWrapper.getData(month), driverWrapper.getData(year)));
+
+        When("^I set the finance report to date to \\{([^\\}]+)\\} \\{([^\\}]+)\\} \\{([^\\}]+)\\}$",
+                (String day, String month, String year) -> setFinanceReportToDates(driverWrapper.getData(day),
+                        driverWrapper.getData(month), driverWrapper.getData(year)));
     }
 
     /**
@@ -43,4 +52,22 @@ public class FinanceStepDefinitions implements En {
         driverWrapper.enterIntoFieldWithId(reference.substring(reference.length() - 8, reference.length()), id);
     }
 
+    /**
+     * Sets the current URL as the finance URL so it can be checked later to see if it was generated.
+     */
+    private void recordFinanceReportUrl() {
+        driverWrapper.setData("finance_report", driverWrapper.getCurrentUrl());
+    }
+
+    private void setFinanceReportFromDates(String day, String month, String year) {
+        driverWrapper.enterTextInFieldWithName("dateFrom[day]", day);
+        driverWrapper.enterTextInFieldWithName("dateFrom[month]", month);
+        driverWrapper.enterTextInFieldWithName("dateFrom[year]", year);
+    }
+
+    private void setFinanceReportToDates(String day, String month, String year) {
+        driverWrapper.enterTextInFieldWithName("dateTo[day]", day);
+        driverWrapper.enterTextInFieldWithName("dateTo[month]", month);
+        driverWrapper.enterTextInFieldWithName("dateTo[year]", year);
+    }
 }
