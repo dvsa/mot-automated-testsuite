@@ -47,9 +47,12 @@ public class PurchaseSlotsStepDefinitions implements En {
         });
 
         And("^I make the payment for card \"([^\"]+)\"$", (String cardNumber) -> {
-            makePayment(cardNumber);
+            makeCompletePayment(cardNumber);
         });
 
+        And("^I make an orphan payment for card \"([^\"]+)\"$", (String cardNumber) -> {
+            makePayment(cardNumber);
+        });
         And("^I check that (\\d+) slots were bought successfully$", (Integer slots) -> {
             checkTheSummaryInformation(slots);
         });
@@ -60,9 +63,18 @@ public class PurchaseSlotsStepDefinitions implements En {
      * @param slots The number of slots to be purchased
      */
     private void orderSlots(int slots) {
-        //Set the number of current slots in the driver
-        driverWrapper.setData("slotsBalance", driverWrapper.getElementText("slot-count")
+        //Current slot balance from page
+        int slotsBalance = Integer.parseInt(driverWrapper.getElementText("slot-count")
                 .split("\n")[0].replace(",", ""));
+
+        //Set the number of current slots in the driver
+        driverWrapper.setData("slotsBalance", Integer.toString(slotsBalance));
+
+        //Set the number of slots purchased
+        driverWrapper.setData("slotsAdditon", Integer.toString(slots));
+
+        //Set the new total of slots purchased
+        driverWrapper.setData("slotsNewTotal", Integer.toString(slots + slotsBalance));
 
         //And I click the buy slots link
         driverWrapper.clickLink("Buy slots");
@@ -151,8 +163,18 @@ public class PurchaseSlotsStepDefinitions implements En {
             //And I click the continue button
             driverWrapper.clickButton("Continue");
         }
+    }
 
-        //And I click the save button
+    /**
+     * Clicks the make payment button and enters the password for the card.
+     * Saves the payment to the account
+     * @param cardNumber    The card number used in the payment
+     */
+    private void makeCompletePayment(String cardNumber) {
+        //And I click the make payment button
+        makePayment(cardNumber);
+
+        //And I click the save button to save the payment to the account
         driverWrapper.clickButton("Cancel");
     }
 
