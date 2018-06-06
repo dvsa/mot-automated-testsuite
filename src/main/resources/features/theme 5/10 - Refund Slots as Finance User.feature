@@ -1,5 +1,5 @@
 @cpms
-Feature: 09 - Slot Adjustments as Finance User
+Feature: 10 - Refund slots as Finance User
 
 
   Scenario: A finance user increases an AE's slots
@@ -61,4 +61,3 @@ Feature: 09 - Slot Adjustments as Finance User
     And The page contains "£461.25"
     And I click the "Return to Authorised Examiner" link
     And I check the slot count "slotCount2" is reduced by 225
-    
