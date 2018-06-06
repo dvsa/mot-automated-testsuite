@@ -2,7 +2,7 @@
 Feature: 10 - Refund slots as Finance User
 
 
-  Scenario: A finance user increases an AE's slots
+  Scenario: A finance user performs slot refunds
     Given I login with 2FA using "AEDM_USER_WITH_TRANSACTIONS" as {AEDM}, {ORGANISATION}, {TRANSACTIONS}, {AEREF}
     And I click the first {ORGANISATION} link
     And I order 100 slots
