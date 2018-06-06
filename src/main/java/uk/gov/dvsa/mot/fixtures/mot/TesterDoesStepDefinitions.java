@@ -754,19 +754,33 @@ public class TesterDoesStepDefinitions implements En {
 
             case AddServiceAndParkingDecelerometerResult:
             case EditServiceAndParkingDecelerometerResult:
-                // And I select "Decelerometer" in the "Service brake test type" field
-                driverWrapper.selectOptionInField("Decelerometer", "Service brake test type");
-                // And I select "Decelerometer" in the "Parking brake test type" field
-                driverWrapper.selectOptionInField("Decelerometer", "Parking brake test type");
-                // And I press the "Next" button
-                driverWrapper.pressButton("Next");
+                try {
+                    // And I select "Decelerometer" in the "Service brake test type" field
+                    driverWrapper.selectOptionInField("Decelerometer", "Service brake test type");
+                    // And I select "Decelerometer" in the "Parking brake test type" field
+                    driverWrapper.selectOptionInField("Decelerometer", "Parking brake test type");
+                    // And I press the "Next" button
+                    driverWrapper.pressButton("Next");
 
-                // And The page title contains "Add brake test results"
-                driverWrapper.checkCurrentPageTitle("Add brake test results");
-                // And I enter <n> in the "Service brake" field
-                driverWrapper.enterIntoField(journey.serviceBrakeTestEfficiency, "Service brake");
-                // And I enter <n> in the "Parking brake" field
-                driverWrapper.enterIntoField(journey.parkingBrakeTestEfficiency, "Parking brake");
+                    // And The page title contains "Add brake test results"
+                    driverWrapper.checkCurrentPageTitle("Add brake test results");
+                    // And I enter <n> in the "Service brake" field
+                    driverWrapper.enterIntoField(journey.serviceBrakeTestEfficiency, "Service brake");
+                    // And I enter <n> in the "Parking brake" field
+                    driverWrapper.enterIntoField(journey.parkingBrakeTestEfficiency, "Parking brake");
+                } catch (Exception ex) {
+                    // And I select "Decelerometer" in the "Parking brake test type" field
+                    driverWrapper.selectOptionInField("Decelerometer", "Brake test type");
+                    // And I press the "Next" button
+                    driverWrapper.pressButton("Next");
+
+                    // And The page title contains "Add brake test results"
+                    driverWrapper.checkCurrentPageTitle("Add brake test results");
+                    // And I enter <n> in the "Service brake" field
+                    driverWrapper.enterIntoField(journey.serviceBrakeTestEfficiency, "Control one (optional)");
+                    // And I enter <n> in the "Parking brake" field
+                    driverWrapper.enterIntoField(journey.parkingBrakeTestEfficiency, "Control two (optional)");
+                }
                 break;
 
             case AddDecelerometerServiceAndGradientParkingResult:

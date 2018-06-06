@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.framework.csv.CsvDocument;
 import uk.gov.dvsa.mot.framework.csv.CsvException;
+import uk.gov.dvsa.mot.framework.excel.ExcelDocument;
+import uk.gov.dvsa.mot.framework.excel.ExcelException;
 import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
 import uk.gov.dvsa.mot.framework.pdf.PdfException;
 
@@ -566,6 +568,19 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Clicks the specified link found by locating the starting text then following the relative XPath expression.
+     * @param xpath          xPath of the element
+     * @param text     The relative XPath expression
+     */
+    public void clickLinkInsensitive(String xpath, String text) {
+        WebElement link = webDriver.findElement(
+                By.xpath("//" + xpath + "/a[contains(translate(text(),"
+                        + "'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '"
+                        + text + "')]"));
+        clickAndWaitForPageLoad(link);
+    }
+
+    /**
      * Clicks the span element that contains the given text.
      * @param text Span element text
      */
@@ -686,6 +701,18 @@ public class WebDriverWrapper {
                 By.xpath("//" + startTag.toLowerCase() + "[contains(text(),'" + startText + "')]"));
         WebElement relativeElement = startingElement.findElement(By.xpath(relativeXPath));
         return relativeElement.getText();
+    }
+
+    /**
+     * Get the text within the specified element.
+     * @param tag              The tag to look for
+     * @param tagClass         The class that tag should contain
+     * @return The text
+     */
+    public String getElementTextByClass(String tag, String tagClass) {
+        WebElement element = webDriver.findElement(
+                By.xpath("//" + tag.toLowerCase() + "[contains(@class,'" + tagClass + "')]"));
+        return element.getText();
     }
 
     /**
@@ -1374,6 +1401,48 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Checks if there is a element present by text.
+     * @param text    The text on the element to look for
+     * @return  return whether the element exists or not
+     */
+    public boolean checkElementExists(String text) {
+        return webDriver.findElements(By.xpath("//*[contains(@href,'" + text + "')]")).size() > 0;
+    }
+
+    /**
+     * Checks if there is a element present by text.
+     * @param tag    The tag to look for
+     * @param text    The text on the element to look for
+     * @return  return whether the element exists or not
+     */
+    public boolean checkElementExists(String tag, String text) {
+        return webDriver.findElements(By.xpath("//" + tag + "[contains(@href,'" + text + "')]")).size() > 0;
+    }
+
+    /**
+     * Checks if there is a element present by text - case insensitive.
+     * @param tag    The tag to look for
+     * @param text    The text on the element to look for
+     * @return  return whether the element exists or not
+     */
+    public boolean checkElementExistsInsensitive(String tag, String text) {
+        String xpath = "//" + tag + "[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', "
+                + "'abcdefghijklmnopqrstuvwxyz'),'" + text.toLowerCase() + "')]";
+        try {
+            List<WebElement> elements = webDriver.findElements(By.xpath(xpath));
+
+            return elements.size() > 0;
+        } catch (Exception ex) {
+            String message = String.format("Failed to find tag '%s' with text '%s'. The full xpath is '%s'."
+                    + "\n'nPage source:\n%s", tag, text, xpath, webDriver.getPageSource());
+            logger.debug(message);
+            logger.debug(webDriver.getPageSource());
+        }
+
+        return false;
+    }
+
+    /**
      * Clicks a link with href containing value.
      * @param hrefContains  The value the href has to contain
      */
@@ -1654,4 +1723,19 @@ public class WebDriverWrapper {
         return this.webDriver.getCurrentUrl();
     }
 
+    /**
+     * Gen an Excel document (xls, xlsx).
+     *
+     * @param url to get the document form.
+     * @return loaded document.
+     */
+    public ExcelDocument getExcelDocument(String url) {
+        try {
+            return requestHandler.getExcelDocument(url);
+        } catch (ExcelException ex) {
+            logger.error(String.format("Unable to get the excel document from: %s", url));
+        }
+
+        return null;
+    }
 }

@@ -276,6 +276,7 @@ task('cucumber-reporting') {
 }
 
 dependencies {
+    compile 'org.apache.poi:poi-ooxml:3.17'
     compile 'org.apache.pdfbox:pdfbox:2.0.7'
     compile 'org.apache.commons:commons-csv:1.5'
     compile 'com.jayway.restassured:rest-assured:2.9.0'

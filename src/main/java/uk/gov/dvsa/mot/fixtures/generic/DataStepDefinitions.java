@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.data.DataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
+import uk.gov.dvsa.mot.framework.excel.ExcelDocument;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

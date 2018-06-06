@@ -29,4 +29,4 @@ and not exists (
 and DATE(mtc.issued_date) < date_sub(CURDATE(), INTERVAL 14 DAY) -- Oldest certificate older than 10 days
 and DATE(mtc.issued_date) > date_sub(CURDATE(), INTERVAL 4 YEAR) -- Testers can only see 4 years worth
 AND DATE(mtc.issued_date) != CURDATE()
-limit 50
+limit 100

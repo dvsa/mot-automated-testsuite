@@ -26,4 +26,4 @@ and not exists (
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
 and veh.last_updated_on < CURDATE() -- vehicles not updated today
-limit 50
+limit 100

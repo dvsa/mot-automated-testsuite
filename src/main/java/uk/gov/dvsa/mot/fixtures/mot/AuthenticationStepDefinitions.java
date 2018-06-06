@@ -52,6 +52,13 @@ public class AuthenticationStepDefinitions implements En {
         this.isFilteringEnabled = Boolean.parseBoolean(env.getProperty("dataFiltering", "false"));
         logger.info("Filtering enabled: {}", isFilteringEnabled);
 
+        Given("^I login with 2FA as \"([^\\}]+)\", \"([^\\}]+)\"$",
+                (String usernameKey, String key2) ->
+                        loginWith2faNoKeys(usernameKey,
+                                env.getRequiredProperty("password"), env.getRequiredProperty("seed"),
+                                Optional.empty(), Optional.empty(),
+                                env.getRequiredProperty("maxLoginRetries", Integer.class), key2));
+
         Given("^I login with 2FA using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String dataSetName, String usernameKey, String key2) ->
                     loginWith2fa(dataSetName, usernameKey,
@@ -186,6 +193,8 @@ public class AuthenticationStepDefinitions implements En {
             // get the loaded username
             String username = driverWrapper.getData(usernameKey);
 
+            System.out.println(username);
+
             // try to login
             switch (handlePasswordAndPinScreens(username, password, seed, driftOffset.orElse(0),
                     lastDriftKey
@@ -218,6 +227,53 @@ public class AuthenticationStepDefinitions implements En {
         String message = "Login failed after trying " + loginAttempts + " users";
         logger.error(message);
         throw new IllegalStateException(message);
+    }
+
+    /**
+     * Logs a user into the application, using 2FA (password and pin).
+     * <p>Handles failed logins (password or pin rejected) by trying again with another user.</p>
+     * @param username       The username data key to set
+     * @param password          The password to use
+     * @param seed              The OTP seed to use
+     * @param driftOffset       The drift period offset to use (defaults to +0)
+     * @param lastDriftKey      The last drift period key to load then use, if any
+     * @param maxLoginRetries   The number of times to retry login with a different user before failing the test
+     * @param site              Site to use
+     */
+    private void loginWith2faNoKeys(String username, String password, String seed,
+                              Optional<Integer> driftOffset, Optional<String> lastDriftKey,
+                              int maxLoginRetries, String site) {
+        System.out.println(username);
+
+        driverWrapper.setData("site", site);
+
+        // try to login
+        switch (handlePasswordAndPinScreens(username, password, seed, driftOffset.orElse(0),
+                lastDriftKey
+                        .map((key) -> Integer.parseInt(driverWrapper.getData(key)))
+                        .orElse(0))) {
+            case PinSuccessful:
+                // check if any special notices need clearing down
+                if (driverWrapper.hasLink("Read and acknowledge")) {
+                    clearDownSpecialNotices();
+                }
+
+                // all successful
+                return;
+
+            case PinFailed:
+                if (driftOffset.isPresent() || lastDriftKey.isPresent()) {
+                    // if using drift settings then we return if PIN rejected
+                    return;
+                } else {
+                    // login (pin) failed, loop around to try again
+                    break;
+                }
+
+            default:
+                // login (password or pin) failed, loop around to try again
+                break;
+        }
     }
 
     /**

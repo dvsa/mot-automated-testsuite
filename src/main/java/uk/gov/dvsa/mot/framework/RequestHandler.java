@@ -11,6 +11,11 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.poi.POIDocument;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -18,6 +23,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.framework.csv.CsvDocument;
 import uk.gov.dvsa.mot.framework.csv.CsvException;
+import uk.gov.dvsa.mot.framework.excel.ExcelDocument;
+import uk.gov.dvsa.mot.framework.excel.ExcelException;
 
 import java.io.File;
 import java.io.IOException;
@@ -118,6 +125,31 @@ public class RequestHandler {
             return new CsvDocument(CSVParser.parse(document, CSVFormat.DEFAULT));
         } catch (IOException ex) {
             throw new CsvException("Error parsing CSV file", ex);
+        }
+    }
+
+    /**
+     * Get Excel document.
+     * @param url of the file to load.
+     * @return excel document.
+     */
+    public ExcelDocument getExcelDocument(String url) throws ExcelException {
+        Cookie session = getCookie(DEFAULT_SESSION_COOKIE_NAME);
+        Cookie token = getCookie(DEFAULT_TOKEN_COOKIE_NAME);
+
+        Response serverResponse = with()
+                .cookie(session.getName(), session.getValue())
+                .cookie(token.getName(), token.getValue())
+                .get(url);
+
+        String document = new String(serverResponse.asByteArray());
+        try {
+            String filename = url.replaceFirst("https://", "").replaceAll("/", "-") + ".xlsx";
+            writeFile(filename, url);
+
+            return new ExcelDocument(WorkbookFactory.create(serverResponse.asInputStream()));
+        } catch (Exception ex) {
+            throw new ExcelException("Error parsing Excel file", ex);
         }
     }
 
