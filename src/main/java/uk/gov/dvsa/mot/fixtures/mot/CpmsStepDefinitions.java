@@ -47,6 +47,25 @@ public class CpmsStepDefinitions implements En {
             checkIfPrintButtonIsVisible();
             checkIfPrintButtonContainsPrintFunction();
         });
+
+        And("^I record the current slot count as \"([^\"]+)\"$", (String arg1) -> {
+            storeCurrentSlotCount(arg1);
+        });
+
+        And("^I check the slot count \"([^\"]+)\" is reduced by (\\d+)$",
+                (String variableName, Integer slotsChange) -> {
+                    checkSlotCountUpdated(variableName, slotsChange);
+                });
+
+        And("^The table field \"([^\"]+)\" has value \"([^\"]+)\"$", (String tableField, String tableValue) -> {
+            assertTrue("Table does not contain expected value", driverWrapper.checkTextFromAnyTableRow(
+                    tableField, tableValue));
+        });
+
+        And("^The table field \"([^\"]+)\" has value \\{([^\\}]+)\\}$", (String tableField, String tableValue) -> {
+            assertTrue("Table does not contain expected value", driverWrapper.checkTextFromAnyTableRow(
+                    tableField, driverWrapper.getData(tableValue)));
+        });
     }
 
     /**
@@ -79,5 +98,29 @@ public class CpmsStepDefinitions implements En {
      */
     private void checkIfPrintButtonContainsPrintFunction() {
         assertTrue(driverWrapper.getAttribute("print", "href").contains("print()"));
+    }
+
+    /**
+     * Stores the current slot count for comparison later.
+     * @param variableName  The name of the variable to store the count under
+     */
+    private void storeCurrentSlotCount(String variableName) {
+        driverWrapper.setData(variableName, driverWrapper.getElementText("slot-count")
+                .split("\n")[0]);
+    }
+
+    /**
+     * Verifies that the slot count has been reduced as expected.
+     * @param variableName  The variable storing the original value
+     * @param slotsChange   The number of slots the slot count should have been reduced by
+     */
+    private void checkSlotCountUpdated(String variableName, Integer slotsChange) {
+
+        Integer currentCount = Integer.valueOf(
+                driverWrapper.getElementText("slot-count").split("\n")[0].replace(",", ""));
+
+        Integer previousCount = Integer.valueOf(driverWrapper.getData(variableName).replace(",", ""));
+
+        assertTrue("Slot count is not as expected", previousCount - slotsChange == currentCount);
     }
 }

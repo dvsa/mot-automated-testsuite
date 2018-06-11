@@ -1,5 +1,5 @@
 @cpms
-Feature: 5 - Payment Search as Finance User
+Feature: 05 - Payment Search as Finance User
 
    Scenario: A finance user searches for payments by Payment reference
      Given I login without 2FA using "FINANCE_USER" as {username}
