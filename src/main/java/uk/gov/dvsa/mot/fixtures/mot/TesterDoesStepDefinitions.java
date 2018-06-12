@@ -127,6 +127,11 @@ public class TesterDoesStepDefinitions implements En {
                 (Integer serviceBrake, Integer parkingBrake) ->
                     handleBrakeResults(BrakeTestJourney.addGroupBDecelerometerJourney(serviceBrake, parkingBrake)));
 
+        And("^I enter single line decelerometer results of service brake (\\d+) and parking brake (\\d+)$",
+                (Integer serviceBrake, Integer parkingBrake) ->
+                    handleBrakeResults(BrakeTestJourney.addSingleGroupBDecelerometerJourney(serviceBrake,
+                        parkingBrake)));
+
         And("^I edit decelerometer results of service brake (\\d+) and parking brake (\\d+)$",
                 (Integer serviceBrake, Integer parkingBrake) ->
                     handleBrakeResults(BrakeTestJourney.editGroupBDecelerometerJourney(serviceBrake, parkingBrake)));
@@ -513,7 +518,7 @@ public class TesterDoesStepDefinitions implements En {
             AddSinglePlateResult, AddClass4ServiceAndParkingRollerResult, EditClass4ServiceAndParkingRollerResult,
             AddClass7ServiceAndParkingRollerResult, AddClass4ServiceAndParkingPlateResult,
             AddClass7ServiceAndParkingPlateResult, AddSingleClass4ServiceAndParkingRollerResult,
-            AddSingleClass4ServiceAndParkingPlateResult
+            AddSingleClass4ServiceAndParkingPlateResult, AddSingleServiceAndParkingDecelerometerResult
         }
 
         /** The brake test journey type. */
@@ -610,6 +615,21 @@ public class TesterDoesStepDefinitions implements En {
                 int parkingBrakeTestEfficiency) {
             BrakeTestJourney journey =
                     new BrakeTestJourney(BrakeTestJourneyType.EditServiceAndParkingDecelerometerResult);
+            journey.serviceBrakeTestEfficiency = serviceBrakeTestEfficiency;
+            journey.parkingBrakeTestEfficiency = parkingBrakeTestEfficiency;
+            return journey;
+        }
+
+        /**
+         * Edit group B brake test result - both service and parking brake using decelerometer.
+         * @param serviceBrakeTestEfficiency Service brake efficiency
+         * @param parkingBrakeTestEfficiency Parking brake efficiency
+         * @return The journey
+         */
+        static BrakeTestJourney addSingleGroupBDecelerometerJourney(int serviceBrakeTestEfficiency,
+                int parkingBrakeTestEfficiency) {
+            BrakeTestJourney journey =
+                    new BrakeTestJourney(BrakeTestJourneyType.AddSingleServiceAndParkingDecelerometerResult);
             journey.serviceBrakeTestEfficiency = serviceBrakeTestEfficiency;
             journey.parkingBrakeTestEfficiency = parkingBrakeTestEfficiency;
             return journey;
@@ -935,11 +955,22 @@ public class TesterDoesStepDefinitions implements En {
                 break;
 
             case AddServiceAndParkingDecelerometerResult:
+            case AddSingleServiceAndParkingDecelerometerResult:
             case EditServiceAndParkingDecelerometerResult:
                 // And I select "Decelerometer" in the "Service brake test type" field
                 driverWrapper.selectOptionInField("Decelerometer", "Service brake test type");
                 // And I select "Decelerometer" in the "Parking brake test type" field
                 driverWrapper.selectOptionInField("Decelerometer", "Parking brake test type");
+
+                if (journey.journeyType
+                        == BrakeTestJourney.BrakeTestJourneyType.AddSingleServiceAndParkingDecelerometerResult) {
+                    // And I click the "Single" radio button in fieldset "Brake line type"
+                    driverWrapper.selectRadioInFieldset("Brake line type", "Single");
+                } else {
+                    // And I click the "Dual" radio button in fieldset "Brake line type"
+                    driverWrapper.selectRadioInFieldset("Brake line type", "Dual");
+                }
+
                 // And I press the "Next" button
                 driverWrapper.pressButton("Next");
 
