@@ -1,7 +1,7 @@
 @extended
 Feature: 05g - Tester does...
 
-  Scenario: Tester enters a class 4 MOT test fail, with a single line major brake imbalance failure
+  Scenario: Tester enters a class 4 MOT test fail, with a single line major brake imbalance failure on a roller
     Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
@@ -39,7 +39,7 @@ Feature: 05g - Tester does...
       | Axle 2                             |
       | 55,555 miles                       |
 
-  Scenario: Tester enters a class 4 MOT test fail, with a single line dangerous brake imbalance failure
+  Scenario: Tester enters a class 4 MOT test fail, with a single line dangerous brake imbalance failure on a roller
     Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
@@ -49,7 +49,7 @@ Feature: 05g - Tester does...
 
     And I enter an odometer reading in miles of 55445
     And I enter single line class 4 roller results for vehicle weight of 1000 as service brake 200,20,200,200 and parking brake 200,200
-    And The page contains "Brakes imbalanced across an axle"
+    And The page contains "Brakes imbalanced across an axle by more than 50%"
     And The page contains "Dangerous"
     And The page contains "Front"
     And The page contains "Axle 1"
@@ -60,7 +60,7 @@ Feature: 05g - Tester does...
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Fail"
-    And I check the dangerous failures section of the test summary has "Brakes imbalanced across an axle"
+    And I check the dangerous failures section of the test summary has "Brakes imbalanced across an axle by more than 50%"
     And I check the dangerous failures section of the test summary has "Axle 1"
     And I check the major failures section of the test summary has "None recorded"
     And I check the minors section of the test summary has "None recorded"
@@ -73,12 +73,12 @@ Feature: 05g - Tester does...
       | {registration1}                                 |
       | {vin1}                                          |
       | Do not drive until repaired (dangerous defects) |
-      | Brakes imbalanced across an axle                |
+      | Brakes imbalanced across an axle by more than 50%                |
       | Front                                           |
       | Axle 1                                          |
       | 55,445 miles                                    |
 
-  Scenario: Tester enters a class 4 MOT test fail, with a single line major brake failure
+  Scenario: Tester enters a class 4 MOT test fail, with a single line major brake failure on a roller
     Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
@@ -112,7 +112,7 @@ Feature: 05g - Tester does...
       | Service brake efficiency below requirements |
       | 65,555 miles                                |
 
-  Scenario: Tester enters a class 4 MOT test fail, with a single line dangerous brake failure
+  Scenario: Tester enters a class 4 MOT test fail, with a single line dangerous brake failure on a roller
     Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
@@ -147,7 +147,7 @@ Feature: 05g - Tester does...
       | Service brake efficiency less than 50% of the required value |
       | 55,448 miles                                                 |
 
-  Scenario: Tester enters a class 4 MOT test fail, with a single line major parking brake failure
+  Scenario: Tester enters a class 4 MOT test fail, with a single line major parking brake failure on a roller
     Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
@@ -181,7 +181,7 @@ Feature: 05g - Tester does...
       | Parking brake efficiency below requirements |
       | 65,333 miles                                |
 
-  Scenario: Tester enters a class 4 MOT test fail, with a single line dangerous parking brake failure
+  Scenario: Tester enters a class 4 MOT test fail, with a single line dangerous parking brake failure on a roller
     Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
