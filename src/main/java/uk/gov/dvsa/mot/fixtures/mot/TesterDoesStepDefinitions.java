@@ -141,6 +141,11 @@ public class TesterDoesStepDefinitions implements En {
                     handleBrakeResults(BrakeTestJourney.addGroupBDecelerometerServiceAndGradientParkingJourney(
                         serviceBrake, parkingBrake)));
 
+        And("^I enter single line decelerometer service brake result of (\\d+) and gradient parking brake "
+                + "result of \"([^\"]+)\"$", (Integer serviceBrake, String parkingBrake) ->
+                handleBrakeResults(BrakeTestJourney.addSingleGroupBDecelerometerServiceAndGradientParkingJourney(
+                        serviceBrake, parkingBrake)));
+
         And("^I enter group a plate results for weights of (\\d+),(\\d+),(\\d+) as (\\d+),(\\d+),(\\d+),(\\d+)$",
                 (Integer frontWeight, Integer rearWeight, Integer riderWeight, Integer control1EffortFront,
                  Integer control1EffortRear, Integer control2EffortFront, Integer control2EffortRear) ->
@@ -518,7 +523,8 @@ public class TesterDoesStepDefinitions implements En {
             AddSinglePlateResult, AddClass4ServiceAndParkingRollerResult, EditClass4ServiceAndParkingRollerResult,
             AddClass7ServiceAndParkingRollerResult, AddClass4ServiceAndParkingPlateResult,
             AddClass7ServiceAndParkingPlateResult, AddSingleClass4ServiceAndParkingRollerResult,
-            AddSingleClass4ServiceAndParkingPlateResult, AddSingleServiceAndParkingDecelerometerResult
+            AddSingleClass4ServiceAndParkingPlateResult, AddSingleServiceAndParkingDecelerometerResult,
+            AddSingleDecelerometerAndGradientParkingResult
         }
 
         /** The brake test journey type. */
@@ -590,6 +596,31 @@ public class TesterDoesStepDefinitions implements En {
                 int serviceBrakeTestEfficiency, String parkingBrakeGradientTestResult) {
             BrakeTestJourney journey =
                     new BrakeTestJourney(BrakeTestJourneyType.AddDecelerometerServiceAndGradientParkingResult);
+            journey.serviceBrakeTestEfficiency = serviceBrakeTestEfficiency;
+
+            if ("Pass".equals(parkingBrakeGradientTestResult)) {
+                journey.parkingBrakeGradientTestResult = true;
+            } else if ("Fail".equals(parkingBrakeGradientTestResult)) {
+                journey.parkingBrakeGradientTestResult = false;
+            } else {
+                String message = "Unknown Gradient parking brake result: " + parkingBrakeGradientTestResult;
+                logger.error(message);
+                throw new IllegalArgumentException(message);
+            }
+
+            return journey;
+        }
+
+        /**
+         * Add group B brake test result - service brake using decelerometer, parking brake using gradient.
+         * @param serviceBrakeTestEfficiency        Service brake efficiency
+         * @param parkingBrakeGradientTestResult    Parking brake gradient result ("Pass<" or "Fail")
+         * @return The journey
+         */
+        static BrakeTestJourney addSingleGroupBDecelerometerServiceAndGradientParkingJourney(
+                int serviceBrakeTestEfficiency, String parkingBrakeGradientTestResult) {
+            BrakeTestJourney journey =
+                    new BrakeTestJourney(BrakeTestJourneyType.AddSingleDecelerometerAndGradientParkingResult);
             journey.serviceBrakeTestEfficiency = serviceBrakeTestEfficiency;
 
             if ("Pass".equals(parkingBrakeGradientTestResult)) {
@@ -970,7 +1001,6 @@ public class TesterDoesStepDefinitions implements En {
                     // And I click the "Dual" radio button in fieldset "Brake line type"
                     driverWrapper.selectRadioInFieldset("Brake line type", "Dual");
                 }
-
                 // And I press the "Next" button
                 driverWrapper.pressButton("Next");
 
@@ -983,10 +1013,20 @@ public class TesterDoesStepDefinitions implements En {
                 break;
 
             case AddDecelerometerServiceAndGradientParkingResult:
+            case AddSingleDecelerometerAndGradientParkingResult:
                 // And I select "Decelerometer" in the "Service brake test type" field
                 driverWrapper.selectOptionInField("Decelerometer", "Service brake test type");
                 // And I select "Gradient" in the "Parking brake test type" field
                 driverWrapper.selectOptionInField("Gradient", "Parking brake test type");
+
+                if (journey.journeyType
+                        ==  BrakeTestJourney.BrakeTestJourneyType.AddSingleDecelerometerAndGradientParkingResult) {
+                    // And I click the "Single" radio button in fieldset "Brake line type"
+                    driverWrapper.selectRadioInFieldset("Brake line type", "Single");
+                } else {
+                    // And I click the "Dual" radio button in fieldset "Brake line type"
+                    driverWrapper.selectRadioInFieldset("Brake line type", "Dual");
+                }
                 // And I press the "Next" button
                 driverWrapper.pressButton("Next");
 
