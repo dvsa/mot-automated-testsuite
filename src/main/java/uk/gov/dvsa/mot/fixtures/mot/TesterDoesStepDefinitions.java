@@ -939,26 +939,14 @@ public class TesterDoesStepDefinitions implements En {
                 // And I select "Plate" in the "Parking brake test type" field
                 driverWrapper.selectOptionInField("Plate", "Parking brake test type");
 
-                if (journey.journeyType
-                        == BrakeTestJourney.BrakeTestJourneyType.AddClass7ServiceAndParkingPlateResult) {
-                    // And I click the "DGW (design gross weight from manufacturers plate)" radio button
-                    driverWrapper.selectRadio("DGW (design gross weight from manufacturers plate)");
-                } else {
-                    // And I click the "Brake test weight (from manufacturer or other reliable data)" radio button
-                    driverWrapper.selectRadio("Brake test weight (from manufacturer or other reliable data)");
-                }
+                breakTestWeightType(journey.journeyType
+                        == BrakeTestJourney.BrakeTestJourneyType.AddClass7ServiceAndParkingPlateResult);
 
                 // And I enter <n> in the "Vehicle Weight in kilograms" field
                 driverWrapper.enterIntoField(journey.weight, "Vehicle Weight in kilograms");
 
-                if (journey.journeyType
-                        == BrakeTestJourney.BrakeTestJourneyType.AddSingleClass4ServiceAndParkingPlateResult) {
-                    // And I click the "Single" radio button in fieldset "Brake line type"
-                    driverWrapper.selectRadioInFieldset("Brake line type", "Single");
-                } else {
-                    // And I click the "Dual" radio button in fieldset "Brake line type"
-                    driverWrapper.selectRadioInFieldset("Brake line type", "Dual");
-                }
+                breakLineType(journey.journeyType
+                        == BrakeTestJourney.BrakeTestJourneyType.AddSingleClass4ServiceAndParkingPlateResult);
                 // And I select "2 axles" in the "Number of axles" field
                 driverWrapper.selectOptionInField("2 axles", "Number of axles");
                 // And I press the "Next" button
@@ -997,14 +985,8 @@ public class TesterDoesStepDefinitions implements En {
                 // And I select "Decelerometer" in the "Parking brake test type" field
                 driverWrapper.selectOptionInField("Decelerometer", "Parking brake test type");
 
-                if (journey.journeyType
-                        == BrakeTestJourney.BrakeTestJourneyType.AddSingleServiceAndParkingDecelerometerResult) {
-                    // And I click the "Single" radio button in fieldset "Brake line type"
-                    driverWrapper.selectRadioInFieldset("Brake line type", "Single");
-                } else {
-                    // And I click the "Dual" radio button in fieldset "Brake line type"
-                    driverWrapper.selectRadioInFieldset("Brake line type", "Dual");
-                }
+                breakLineType(journey.journeyType
+                        == BrakeTestJourney.BrakeTestJourneyType.AddSingleServiceAndParkingDecelerometerResult);
                 // And I press the "Next" button
                 driverWrapper.pressButton("Next");
 
@@ -1023,14 +1005,8 @@ public class TesterDoesStepDefinitions implements En {
                 // And I select "Gradient" in the "Parking brake test type" field
                 driverWrapper.selectOptionInField("Gradient", "Parking brake test type");
 
-                if (journey.journeyType
-                        ==  BrakeTestJourney.BrakeTestJourneyType.AddSingleDecelerometerAndGradientParkingResult) {
-                    // And I click the "Single" radio button in fieldset "Brake line type"
-                    driverWrapper.selectRadioInFieldset("Brake line type", "Single");
-                } else {
-                    // And I click the "Dual" radio button in fieldset "Brake line type"
-                    driverWrapper.selectRadioInFieldset("Brake line type", "Dual");
-                }
+                breakLineType(journey.journeyType
+                        ==  BrakeTestJourney.BrakeTestJourneyType.AddSingleDecelerometerAndGradientParkingResult);
                 // And I press the "Next" button
                 driverWrapper.pressButton("Next");
 
@@ -1057,25 +1033,13 @@ public class TesterDoesStepDefinitions implements En {
                 // And I select "Roller" in the "Parking brake test type" field
                 driverWrapper.selectOptionInField("Roller", "Parking brake test type");
 
-                if (journey.journeyType
-                        == BrakeTestJourney.BrakeTestJourneyType.AddClass7ServiceAndParkingRollerResult) {
-                    // And I click the "DGW (design gross weight from manufacturers plate)" radio button
-                    driverWrapper.selectRadio("DGW (design gross weight from manufacturers plate)");
-                } else {
-                    // And I click the "Brake test weight (from manufacturer or other reliable data)" radio button
-                    driverWrapper.selectRadio("Brake test weight (from manufacturer or other reliable data)");
-                }
+                breakTestWeightType(journey.journeyType
+                        == BrakeTestJourney.BrakeTestJourneyType.AddClass7ServiceAndParkingRollerResult);
                 // And I enter <n> in the "Vehicle Weight in kilograms" field
                 driverWrapper.enterIntoField(journey.weight, "Vehicle Weight in kilograms");
 
-                if (journey.journeyType
-                        == BrakeTestJourney.BrakeTestJourneyType.AddSingleClass4ServiceAndParkingRollerResult) {
-                    // And I click the "Single" radio button in fieldset "Brake line type"
-                    driverWrapper.selectRadioInFieldset("Brake line type", "Single");
-                } else {
-                    // And I click the "Dual" radio button in fieldset "Brake line type"
-                    driverWrapper.selectRadioInFieldset("Brake line type", "Dual");
-                }
+                breakLineType(journey.journeyType
+                        == BrakeTestJourney.BrakeTestJourneyType.AddSingleClass4ServiceAndParkingRollerResult);
                 // And I select "2 axles" in the "Number of axles" field
                 driverWrapper.selectOptionInField("2 axles", "Number of axles");
                 // And I press the "Next" button
@@ -1119,6 +1083,34 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.checkCurrentPageTitle("Brake test summary");
         // And I click the "Done" link
         driverWrapper.clickLink("Done");
+    }
+
+    /**
+     * Checks either the Single or Dual Line brake type radio button.
+     * @param condition    The true or false value of the brake type
+     */
+    private void breakLineType(Boolean condition) {
+        if (condition) {
+            // And I click the "Single" radio button in fieldset "Brake line type"
+            driverWrapper.selectRadioInFieldset("Brake line type", "Single");
+        } else {
+            // And I click the "Dual" radio button in fieldset "Brake line type"
+            driverWrapper.selectRadioInFieldset("Brake line type", "Dual");
+        }
+    }
+
+    /**
+     * Selects the correct radio button depending on the vehicle class type.
+     * @param condition    The true or false value of the brake weight type
+     */
+    private void breakTestWeightType(Boolean condition) {
+        if (condition) {
+            // And I click the "DGW (design gross weight from manufacturers plate)" radio button
+            driverWrapper.selectRadio("DGW (design gross weight from manufacturers plate)");
+        } else {
+            // And I click the "Brake test weight (from manufacturer or other reliable data)" radio button
+            driverWrapper.selectRadio("Brake test weight (from manufacturer or other reliable data)");
+        }
     }
 
     /**
