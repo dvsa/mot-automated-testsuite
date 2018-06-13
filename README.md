@@ -55,7 +55,8 @@ The following tags are used:
 * **@mothint** = MOT History regression tests on the INT Enviroment
 * **@mothpp** = MOT History regression tests on the PP Enviroment
 * **@mothrecall** = MOT History Recall only regression tests
-* **@mothhgv** = MOT History HGV/PSV only regression tests
+* **@mothhgv** = MOT History HGV/PSV only regression tests (trailers excluded)
+* **@mothtrailers** = MOT History HGV/PSV only regression tests for trailers
 
 ## Reports
 Reporting is done via the [Extender Cucumber Runner](http://mkolisnyk.github.io/cucumber-reports/extended-cucumber-runner) library. The results are placed in the `target` directory along with screenshots of failing tests, and the HTML of the last page reached (if configured).
