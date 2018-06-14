@@ -49,9 +49,12 @@ To rerun failed tests from the last run (identified by target/rerun.txt):
 ## Feature Tags
 The following tags are used:
 
+MOT:
 * **@regression** = Theme 1 regression tests
 * **@smoke** = Smoke tests
 * **@cpms** = CPMS regression tests
+
+MOT History:
 * **@mothint** = MOT History regression tests on the INT Enviroment
 * **@mothpp** = MOT History regression tests on the PP Enviroment
 * **@mothrecall** = MOT History Recall only regression tests
