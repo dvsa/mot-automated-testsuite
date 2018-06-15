@@ -348,6 +348,10 @@ public class TesterDoesStepDefinitions implements En {
         TimeZone tz = TimeZone.getTimeZone("Europe/London") ;
         Calendar currentDate = Calendar.getInstance(tz, Locale.UK);
         String hour  = String.valueOf(currentDate.get(Calendar.HOUR));
+        // fix to output the correct 12pm time
+        if (hour.equals("0")) {
+            hour = "12";
+        }
         String minute = String.valueOf(currentDate.get(Calendar.MINUTE));
         String ampm = currentDate.get(Calendar.AM_PM) == 0 ? "am" : "pm";
 
