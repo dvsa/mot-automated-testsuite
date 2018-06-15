@@ -3,6 +3,7 @@ package uk.gov.dvsa.mot.fixtures.generic;
 import static junit.framework.TestCase.assertTrue;
 
 import cucumber.api.java8.En;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.openqa.selenium.json.Json;
@@ -28,7 +29,7 @@ public class B2BStepDefinitions implements En {
     private static final Logger logger = LoggerFactory.getLogger(B2BStepDefinitions.class);
 
     /** The current JSON response. */
-    private JSONObject response;
+    private JSONArray response;
 
     /**
      * Creates a new instance.
@@ -40,39 +41,18 @@ public class B2BStepDefinitions implements En {
 
         logger.debug("Creating B2BStepDefinitions...");
 
-        Given("^I invoke the b2b endpoint with registration \\{([^\\}]+)\\} and model \\{([^\\}]+)\\}$", (
+        Given("^I invoke the b2b endpoint with registration \\{([^\\}]+)\\} and make \\{([^\\}]+)\\}$", (
                 String registration, String model) -> {
-            // Write code here that turns the phrase above into concrete actions
             invokeB2b(env, driverWrapper.getData(registration), driverWrapper.getData(model));
         });
 
-        Then("^The response contains \"([^\"]+)\" equals \\{([^\\}]+)\\}$", (String name, String value) -> {
-            // Write code here that turns the phrase above into concrete actions
-            checkResponseContains(name, driverWrapper.getData(value));
+        Then("^The first MOT result contains \"([^\"]+)\" equals \\{([^\\}]+)\\}$", (String name, String value) -> {
+            checkResultContains(0, name, driverWrapper.getData(value));
         });
 
-        Then("^The vehicle make and model is \\{([^\\}]+)\\}$", (String makeAndModel) -> {
-            // Write code here that turns the phrase above into concrete actions
-            checkResponseMakeAndModel(driverWrapper.getData(makeAndModel));
+        Then("^Any MOT result contains \"([^\"]+)\" equals \\{([^\\}]+)\\}$", (String name, String value) -> {
+            checkAnyResultContains(name, driverWrapper.getData(value));
         });
-    }
-
-    /**
-     * Checks whether the make and model match expected value.
-     * @param value  the make and model separated by a space
-     */
-    private void checkResponseMakeAndModel(String value) {
-        try {
-            String[] makeAndModel = value.split(" ");
-
-            assertTrue("B2B response for does not contain expected value " + makeAndModel[0],
-                    makeAndModel[0].equals(response.getString("vehicle-make")));
-
-            assertTrue("B2B response for does not contain expected value " + makeAndModel[1],
-                    makeAndModel[1].equals(response.getString("vehicle-model")));
-        } catch (JSONException ex) {
-            throw new RuntimeException("Error checking make and model", ex);
-        }
     }
 
     /**
@@ -80,27 +60,50 @@ public class B2BStepDefinitions implements En {
      * @param name      field name
      * @param value     field value
      */
-    private void checkResponseContains(String name, String value) {
+    private void checkAnyResultContains(String name, String value) {
+        boolean resultFound = false;
+        try {
+            for (int i = 0; i < response.length(); i++) {
+                if (value.equals(response.getJSONObject(i).getString(name))) {
+                    //Result found we can stop now
+                    resultFound = true;
+                    break;
+                }
+            }
+
+            assertTrue("Expected result not found in any result " + name + ":" + value, resultFound);
+        } catch (JSONException ex) {
+            logger.error("Error checking response contains " + name + ":" + value, ex);
+            throw new RuntimeException("Error checking response contains " + name + ":" + value, ex);
+        }
+    }
+
+    /**
+     * Checks whether the named field contains the expected value.
+     * @param index     the index of the results to check (typically 0 which is the first most recent test)
+     * @param name      field name
+     * @param value     field value
+     */
+    private void checkResultContains(int index, String name, String value) {
         try {
             assertTrue("B2B response does not contain expected value " + name + ":" + value,
-                    value.equals(response.getString(name)));
+                    value.equals(response.getJSONObject(index).getString(name)));
         } catch (JSONException ex) {
-            throw new RuntimeException("Error checking response value: " + name + ":" + value, ex);
+            logger.error("Error checking result contains " + name + ":" + value, ex);
+            throw new RuntimeException("Error checking result contains " + name + ":" + value, ex);
         }
     }
 
     /**
      * Invokes the B2B interface.
      * @param registration  The registration
-     * @param makeModel     The make and model separated by a space
+     * @param make          The make
      */
-    private void invokeB2b(Environment env, String registration, String makeModel) {
+    private void invokeB2b(Environment env, String registration, String make) {
         //Reset the response just in case
         response = null;
 
-        String[] makeAndModel = makeModel.split(" ");
-
-        String b2bUrl = env.getRequiredProperty("mothB2BUrl") + registration + "/" + makeAndModel[0];
+        String b2bUrl = env.getRequiredProperty("mothB2BUrl") + registration + "/" + make;
 
         try {
             URL url = new URL(b2bUrl);
@@ -121,23 +124,19 @@ public class B2BStepDefinitions implements En {
                 responseOutput.append(dataline);
             }
 
-            Json.
-
-            // Trims off the leading and trailing square brackets as this is invalid
-            String output = responseOutput.toString().trim().substring(
-                    1, responseOutput.toString().trim().length() - 1);
-
-            logger.debug("Response: " + output);
-
-            response = new JSONObject(output);
+            logger.debug("Response: " + responseOutput.toString());
+            response = new JSONArray(responseOutput.toString());
 
             conn.disconnect();
 
         } catch (MalformedURLException ex) {
+            logger.error("MalformedURLException", ex);
             throw new RuntimeException("MalformedURLException", ex);
         } catch (IOException ex) {
+            logger.error("IOException", ex);
             throw new RuntimeException("IOException", ex);
         } catch (JSONException ex) {
+            logger.error("JSONException", ex);
             throw new RuntimeException("JSONException", ex);
         }
     }
