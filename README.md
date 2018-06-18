@@ -56,8 +56,8 @@ MOT:
 * **@extended** = Extended regression tests
 
 MOT History:
-* **@mothint** = MOT History regression tests on the INT Enviroment
-* **@mothpp** = MOT History regression tests on the PP Enviroment
+* **@mothint** = MOT History regression tests on the INT Environment
+* **@mothpp** = MOT History regression tests on the PP Environment
 * **@mothrecall** = MOT History Recall only regression tests
 * **@mothhgv** = MOT History HGV/PSV only regression tests (trailers excluded)
 * **@mothtrailers** = MOT History HGV/PSV only regression tests for trailers
