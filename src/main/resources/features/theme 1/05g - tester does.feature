@@ -112,16 +112,16 @@ Feature: 05g - Tester does...
       | Service brake efficiency below requirements |
       | 65,555 miles                                |
 
-  Scenario: Tester enters a class 4 MOT test fail, with a single line dangerous brake failure on a roller
-    Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
-    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+  Scenario: Tester enters a class 7 MOT test fail, with a single line dangerous brake failure on a roller
+    Given I load "VEHICLE_CLASS_7" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_7" as {username1}, {site}
 
     When I start an MOT test for {registration1}, {vin1}, {site}
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of 55448
-    And I enter single line class 4 roller results for vehicle weight of 1000 as service brake 50,50,50,50 and parking brake 200,200
+    And I enter single line class 7 roller results for vehicle weight of 1000 as service brake 50,50,50,50 and parking brake 200,200
     And The page contains "Service brake efficiency less than 50% of the required value"
     And The page contains "Dangerous"
     And The page contains "Location not recorded"
