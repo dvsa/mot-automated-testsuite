@@ -55,6 +55,7 @@ MOT:
 * **@cpms** = CPMS regression tests
 * **@extended** = Extended regression tests
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 MOT History:
 * **@mothint** = MOT History regression tests on the INT Enviroment
@@ -63,6 +64,10 @@ MOT History:
 * **@mothint** = MOT History regression tests on the INT Environment
 * **@mothpp** = MOT History regression tests on the PP Environment
 >>>>>>> Update to spelling mistake
+=======
+* **@mothint** = MOT History regression tests on the INT Environment
+* **@mothpp** = MOT History regression tests on the PP Environment
+>>>>>>> 127296ebb8448af4fde5c609a2a86c0dc01c1c44
 * **@mothrecall** = MOT History Recall only regression tests
 * **@mothhgv** = MOT History HGV/PSV only regression tests (trailers excluded)
 * **@mothtrailers** = MOT History HGV/PSV only regression tests for trailers
