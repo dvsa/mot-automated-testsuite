@@ -1,9 +1,9 @@
 @extended
 Feature: 05i - Tester does...
 
-  Scenario: Tester enters a class 4 MOT test fail, with a single line decelerometer major brake failure
-    Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
-    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+  Scenario: Tester enters a class 5 MOT test fail, with a single line decelerometer major brake failure
+    Given I load "VEHICLE_CLASS_5" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_5" as {username1}, {site}
 
     When I start an MOT test for {registration1}, {vin1}, {site}
     And The page title contains "Your home"
@@ -104,9 +104,9 @@ Feature: 05i - Tester does...
       | Parking brake efficiency below requirements |
       | 65,333 miles                                |
 
-  Scenario: Tester enters a class 4 MOT test fail, with a single line decelerometer dangerous parking brake failure
-    Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
-    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+  Scenario: Tester enters a class 3 MOT test fail, with a single line decelerometer dangerous parking brake failure
+    Given I load "VEHICLE_CLASS_3" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_3" as {username1}, {site}
 
     When I start an MOT test for {registration1}, {vin1}, {site}
     And The page title contains "Your home"

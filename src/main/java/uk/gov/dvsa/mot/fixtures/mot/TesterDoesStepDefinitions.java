@@ -215,6 +215,15 @@ public class TesterDoesStepDefinitions implements En {
                         serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2,serviceBrakeOffsideAxle2,
                         parkingBrakeNearside, parkingBrakeOffside)));
 
+        And("^I enter single line class 5 roller results for vehicle weight of (\\d+) as service brake "
+                + "(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$", (Integer weight,
+                   Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
+                   Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2,
+                   Integer parkingBrakeNearside, Integer parkingBrakeOffside) ->
+                handleBrakeResults(BrakeTestJourney.addSingleClass7RollerJourney(weight, serviceBrakeNearsideAxle1,
+                        serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2,serviceBrakeOffsideAxle2,
+                        parkingBrakeNearside, parkingBrakeOffside)));
+
         And("^I edit class 4 roller results for vehicle weight of (\\d+) as service brake "
                 + "(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$", (Integer weight,
                     Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
