@@ -69,14 +69,14 @@ Feature: 05g - Tester does...
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
-      | VT30                                            |
-      | {registration1}                                 |
-      | {vin1}                                          |
-      | Do not drive until repaired (dangerous defects) |
-      | Brakes imbalanced across an axle by more than 50%                |
-      | Front                                           |
-      | Axle 1                                          |
-      | 55,445 miles                                    |
+      | VT30                                              |
+      | {registration1}                                   |
+      | {vin1}                                            |
+      | Do not drive until repaired (dangerous defects)   |
+      | Brakes imbalanced across an axle by more than 50% |
+      | Front                                             |
+      | Axle 1                                            |
+      | 55,445 miles                                      |
 
   Scenario: Tester enters a class 4 MOT test fail, with a single line major brake failure on a roller
     Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
