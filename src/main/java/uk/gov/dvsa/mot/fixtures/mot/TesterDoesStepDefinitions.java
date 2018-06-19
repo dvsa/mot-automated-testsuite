@@ -1124,27 +1124,11 @@ public class TesterDoesStepDefinitions implements En {
                 // And I press the "Next" button
                 driverWrapper.pressButton("Next");
 
-                // And The page title contains "Add brake test results"
-                driverWrapper.checkCurrentPageTitle("Add brake test results");
-                // And I enter <n> in the field with id "serviceBrakeEffortNearsideAxle1"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.serviceBrakeNearsideAxle1, "serviceBrakeEffortNearsideAxle1");
-                // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle1"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.serviceBrakeOffsideAxle1, "serviceBrakeEffortOffsideAxle1");
-                // And I enter <n> in the field with id "serviceBrakeEffortNearsideAxle2"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.serviceBrakeNearsideAxle2, "serviceBrakeEffortNearsideAxle2");
-                // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle2"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.serviceBrakeOffsideAxle2, "serviceBrakeEffortOffsideAxle2");
+                // And I enter all the details for a 2 axle vehicle
+                enterBrakeValues2Axles(journey.serviceBrakeNearsideAxle1, journey.serviceBrakeOffsideAxle1,
+                        journey.serviceBrakeNearsideAxle2, journey.serviceBrakeOffsideAxle2,
+                        journey.parkingBrakeNearside, journey.parkingBrakeOffside);
 
-                // And I enter <n> in the field with id "parkingBrakeEffortNearside"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.parkingBrakeNearside, "parkingBrakeEffortNearside");
-                // And I enter <n> in the field with id "parkingBrakeEffortOffside"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.parkingBrakeOffside, "parkingBrakeEffortOffside");
                 // And I set the first axle as the steered axle
                 driverWrapper.selectCheckboxById("serviceBrake1SteeredAxle1");
                 break;
@@ -1178,33 +1162,11 @@ public class TesterDoesStepDefinitions implements En {
                 // And I press the "Next" button
                 driverWrapper.pressButton("Next");
 
-                // And The page title contains "Add brake test results"
-                driverWrapper.checkCurrentPageTitle("Add brake test results");
-                // And I enter <n> in the field with id "serviceBrakeEffortNearsideAxle1"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.serviceBrakeNearsideAxle1, "serviceBrakeEffortNearsideAxle1");
-                // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle1"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.serviceBrakeOffsideAxle1, "serviceBrakeEffortOffsideAxle1");
-                // And I enter <n> in the field with id "serviceBrakeEffortNearsideAxle2"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.serviceBrakeNearsideAxle2, "serviceBrakeEffortNearsideAxle2");
-                // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle2"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.serviceBrakeOffsideAxle2, "serviceBrakeEffortOffsideAxle2");
-                // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle3"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.serviceBrakeNearsideAxle3, "serviceBrakeEffortNearsideAxle3");
-                // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle3"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.serviceBrakeOffsideAxle3, "serviceBrakeEffortOffsideAxle3");
+                enterBrakeValues3Axles(journey.serviceBrakeNearsideAxle1, journey.serviceBrakeOffsideAxle1,
+                        journey.serviceBrakeNearsideAxle2, journey.serviceBrakeOffsideAxle2,
+                        journey.serviceBrakeNearsideAxle3, journey.serviceBrakeOffsideAxle3,
+                        journey.parkingBrakeNearside, journey.parkingBrakeOffside);
 
-                // And I enter <n> in the field with id "parkingBrakeEffortNearside"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.parkingBrakeNearside, "parkingBrakeEffortNearside");
-                // And I enter <n> in the field with id "parkingBrakeEffortOffside"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.parkingBrakeOffside, "parkingBrakeEffortOffside");
                 // And I set the first axle as the steered axle
                 driverWrapper.selectCheckboxById("serviceBrake1SteeredAxle1");
                 break;
@@ -1286,27 +1248,11 @@ public class TesterDoesStepDefinitions implements En {
                 // And I press the "Next" button
                 driverWrapper.pressButton("Next");
 
-                // And The page title contains "Add brake test results"
-                driverWrapper.checkCurrentPageTitle("Add brake test results");
-                // And I enter <n> in the field with id "serviceBrakeEffortNearsideAxle1"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.serviceBrakeNearsideAxle1, "serviceBrakeEffortNearsideAxle1");
-                // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle1"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.serviceBrakeOffsideAxle1, "serviceBrakeEffortOffsideAxle1");
-                // And I enter <n> in the field with id "serviceBrakeEffortNearsideAxle2"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.serviceBrakeNearsideAxle2, "serviceBrakeEffortNearsideAxle2");
-                // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle2"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.serviceBrakeOffsideAxle2, "serviceBrakeEffortOffsideAxle2");
+                // And I enter all the details for a 2 axle vehicle
+                enterBrakeValues2Axles(journey.serviceBrakeNearsideAxle1, journey.serviceBrakeOffsideAxle1,
+                        journey.serviceBrakeNearsideAxle2, journey.serviceBrakeOffsideAxle2,
+                        journey.parkingBrakeNearside, journey.parkingBrakeOffside);
 
-                // And I enter <n> in the field with id "parkingBrakeEffortNearside"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.parkingBrakeNearside, "parkingBrakeEffortNearside");
-                // And I enter <n> in the field with id "parkingBrakeEffortOffside"
-                driverWrapper.enterIntoFieldWithId(
-                        journey.parkingBrakeOffside, "parkingBrakeEffortOffside");
                 // And I set the first axle as the steered axle
                 driverWrapper.selectCheckboxById("serviceBrake1SteeredAxle1");
                 break;
@@ -1324,6 +1270,61 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.checkCurrentPageTitle("Brake test summary");
         // And I click the "Done" link
         driverWrapper.clickLink("Done");
+    }
+
+
+    /**
+     * Adds a break test values for a 2 axle vehicle.
+     * @param serviceBrakeNearsideAxle1     Weight applied by service brake to nearside axle 1
+     * @param serviceBrakeOffsideAxle1      Weight applied by service brake to offside axle 1
+     * @param serviceBrakeNearsideAxle2     Weight applied by service brake to nearside axle 2
+     * @param serviceBrakeOffsideAxle2      Weight applied by service brake to offside axle 2
+     * @param parkingBrakeNearside          Weight applied by parking brake to nearside
+     * @param parkingBrakeOffside           Weight applied by parking brake to offside
+     */
+    private void enterBrakeValues2Axles(Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
+                                        Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2,
+                                        Integer parkingBrakeNearside, Integer parkingBrakeOffside) {
+        // And The page title contains "Add brake test results"
+        driverWrapper.checkCurrentPageTitle("Add brake test results");
+        // And I enter <n> in the field with id "serviceBrakeEffortNearsideAxle1"
+        driverWrapper.enterIntoFieldWithId(serviceBrakeNearsideAxle1, "serviceBrakeEffortNearsideAxle1");
+        // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle1"
+        driverWrapper.enterIntoFieldWithId(serviceBrakeOffsideAxle1, "serviceBrakeEffortOffsideAxle1");
+        // And I enter <n> in the field with id "serviceBrakeEffortNearsideAxle2"
+        driverWrapper.enterIntoFieldWithId(serviceBrakeNearsideAxle2, "serviceBrakeEffortNearsideAxle2");
+        // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle2"
+        driverWrapper.enterIntoFieldWithId(serviceBrakeOffsideAxle2, "serviceBrakeEffortOffsideAxle2");
+        // And I enter <n> in the field with id "parkingBrakeEffortNearside"
+        driverWrapper.enterIntoFieldWithId(parkingBrakeNearside, "parkingBrakeEffortNearside");
+        // And I enter <n> in the field with id "parkingBrakeEffortOffside"
+        driverWrapper.enterIntoFieldWithId(parkingBrakeOffside, "parkingBrakeEffortOffside");
+    }
+
+    /**
+     * Adds a break test values for a 3 axle vehicle.
+     * @param serviceBrakeNearsideAxle1     Weight applied by service brake to nearside axle 1
+     * @param serviceBrakeOffsideAxle1      Weight applied by service brake to offside axle 1
+     * @param serviceBrakeNearsideAxle2     Weight applied by service brake to nearside axle 2
+     * @param serviceBrakeOffsideAxle2      Weight applied by service brake to offside axle 2
+     * @param serviceBrakeNearsideAxle3     Weight applied by service brake to nearside axle 3
+     * @param serviceBrakeOffsideAxle3      Weight applied by service brake to offside axle 3
+     * @param parkingBrakeNearside          Weight applied by parking brake to nearside
+     * @param parkingBrakeOffside           Weight applied by parking brake to offside
+     */
+    private void enterBrakeValues3Axles(Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
+                                  Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2,
+                                  Integer serviceBrakeNearsideAxle3, Integer serviceBrakeOffsideAxle3,
+                                  Integer parkingBrakeNearside, Integer parkingBrakeOffside) {
+
+        // And I enter all the details for a 2 axle vehicle
+        enterBrakeValues2Axles(serviceBrakeNearsideAxle1, serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2,
+                serviceBrakeOffsideAxle2, parkingBrakeNearside, parkingBrakeOffside);
+
+        // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle3"
+        driverWrapper.enterIntoFieldWithId(serviceBrakeNearsideAxle3, "serviceBrakeEffortNearsideAxle3");
+        // And I enter <n> in the field with id "serviceBrakeEffortOffsideAxle3"
+        driverWrapper.enterIntoFieldWithId(serviceBrakeOffsideAxle3, "serviceBrakeEffortOffsideAxle3");
     }
 
     /**
