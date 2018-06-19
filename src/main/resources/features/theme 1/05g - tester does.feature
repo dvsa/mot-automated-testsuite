@@ -147,16 +147,16 @@ Feature: 05g - Tester does...
       | Service brake efficiency less than 50% of the required value |
       | 55,448 miles                                                 |
 
-  Scenario: Tester enters a class 4 MOT test fail, with a single line major parking brake failure on a roller
-    Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
-    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+  Scenario: Tester enters a class 5 MOT test fail, with a single line major parking brake failure on a roller
+    Given I load "VEHICLE_CLASS_5" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_5" as {username1}, {site}
 
     When I start an MOT test for {registration1}, {vin1}, {site}
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of 65333
-    And I enter single line class 4 roller results for vehicle weight of 1000 as service brake 200,200,200,200 and parking brake 60,60
+    And I enter single line class 5 roller results for vehicle weight of 1000 as service brake 200,200,200,200 and parking brake 60,60
     And The page contains "Parking brake efficiency below requirements"
     And The page contains "Location not recorded"
     And I press the "Review test" button
