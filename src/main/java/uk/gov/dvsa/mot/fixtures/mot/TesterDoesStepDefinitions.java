@@ -188,6 +188,24 @@ public class TesterDoesStepDefinitions implements En {
                     serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
                     serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside, parkingBrakeOffside)));
 
+        And("^I enter 3 axle class 4 plate results for vehicle weight of (\\d+) as service brake "
+                        + "(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$",
+                (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
+                 Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2, Integer serviceBrakeNearsideAxle3,
+                 Integer serviceBrakeOffsideAxle3, Integer parkingBrakeNearside, Integer parkingBrakeOffside) ->
+                handleBrakeResults(BrakeTestJourney.add3AxleClass4PlateJourney(weight, serviceBrakeNearsideAxle1,
+                    serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
+                    serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside, parkingBrakeOffside)));
+
+        And("^I enter 3 axle class 7 plate results for vehicle weight of (\\d+) as service brake "
+                        + "(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$",
+                (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
+                 Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2, Integer serviceBrakeNearsideAxle3,
+                 Integer serviceBrakeOffsideAxle3, Integer parkingBrakeNearside, Integer parkingBrakeOffside) ->
+                handleBrakeResults(BrakeTestJourney.add3AxleClass7PlateJourney(weight, serviceBrakeNearsideAxle1,
+                    serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
+                    serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside, parkingBrakeOffside)));
+
         And("^I enter single line 3 axle class 4 roller results for vehicle weight of (\\d+) as service brake "
                         + "(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$",
                 (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
@@ -594,7 +612,8 @@ public class TesterDoesStepDefinitions implements En {
             AddSingleDecelerometerAndGradientParkingResult, AddSingleClass7ServiceAndParkingRollerResult,
             AddSingleClass7ServiceAndParkingPlateResult, AddSingle3AxleClass4ServiceAndParkingPlateResult,
             AddSingle3AxleClass7ServiceAndParkingPlateResult, AddSingle3AxleClass4ServiceAndParkingRollerResult,
-            AddSingle3AxleClass7ServiceAndParkingRollerResult
+            AddSingle3AxleClass7ServiceAndParkingRollerResult, Add3AxleClass4ServiceAndParkingPlateResult,
+            Add3AxleClass7ServiceAndParkingPlateResult
         }
 
         /** The brake test journey type. */
@@ -841,6 +860,52 @@ public class TesterDoesStepDefinitions implements En {
                      int serviceBrakeNearsideAxle3, int serviceBrakeOffsideAxle3,int parkingBrakeNearside,
                      int parkingBrakeOffside) {
             return addPlateOrRollerJourney3axle(BrakeTestJourneyType.AddSingle3AxleClass7ServiceAndParkingPlateResult,
+                    weight, serviceBrakeNearsideAxle1, serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2,
+                    serviceBrakeOffsideAxle2, serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3,
+                    parkingBrakeNearside, parkingBrakeOffside);
+        }
+
+        /**
+         * Add Class 4 brake test result on 3 axles - both service and parking brake using plate.
+         * @param weight                        The vehicle weight
+         * @param serviceBrakeNearsideAxle1     Weight applied by service brake to nearside axle 1
+         * @param serviceBrakeOffsideAxle1      Weight applied by service brake to offside axle 1
+         * @param serviceBrakeNearsideAxle2     Weight applied by service brake to nearside axle 2
+         * @param serviceBrakeOffsideAxle2      Weight applied by service brake to offside axle 2
+         * @param serviceBrakeNearsideAxle3     Weight applied by service brake to nearside axle 3
+         * @param serviceBrakeOffsideAxle3      Weight applied by service brake to offside axle 3
+         * @param parkingBrakeNearside          Weight applied by parking brake to nearside
+         * @param parkingBrakeOffside           Weight applied by parking brake to offside
+         * @return The journey
+         */
+        static BrakeTestJourney add3AxleClass4PlateJourney(int weight, int serviceBrakeNearsideAxle1,
+                 int serviceBrakeOffsideAxle1, int serviceBrakeNearsideAxle2, int serviceBrakeOffsideAxle2,
+                 int serviceBrakeNearsideAxle3, int serviceBrakeOffsideAxle3,int parkingBrakeNearside,
+                 int parkingBrakeOffside) {
+            return addPlateOrRollerJourney3axle(BrakeTestJourneyType.Add3AxleClass4ServiceAndParkingPlateResult,
+                    weight, serviceBrakeNearsideAxle1, serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2,
+                    serviceBrakeOffsideAxle2, serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3,
+                    parkingBrakeNearside, parkingBrakeOffside);
+        }
+
+        /**
+         * Add Class 7 brake test result on 3 axles - both service and parking brake using plate.
+         * @param weight                        The vehicle weight
+         * @param serviceBrakeNearsideAxle1     Weight applied by service brake to nearside axle 1
+         * @param serviceBrakeOffsideAxle1      Weight applied by service brake to offside axle 1
+         * @param serviceBrakeNearsideAxle2     Weight applied by service brake to nearside axle 2
+         * @param serviceBrakeOffsideAxle2      Weight applied by service brake to offside axle 2
+         * @param serviceBrakeNearsideAxle3     Weight applied by service brake to nearside axle 3
+         * @param serviceBrakeOffsideAxle3      Weight applied by service brake to offside axle 3
+         * @param parkingBrakeNearside          Weight applied by parking brake to nearside
+         * @param parkingBrakeOffside           Weight applied by parking brake to offside
+         * @return The journey
+         */
+        static BrakeTestJourney add3AxleClass7PlateJourney(int weight, int serviceBrakeNearsideAxle1,
+                 int serviceBrakeOffsideAxle1, int serviceBrakeNearsideAxle2, int serviceBrakeOffsideAxle2,
+                 int serviceBrakeNearsideAxle3, int serviceBrakeOffsideAxle3,int parkingBrakeNearside,
+                 int parkingBrakeOffside) {
+            return addPlateOrRollerJourney3axle(BrakeTestJourneyType.Add3AxleClass7ServiceAndParkingPlateResult,
                     weight, serviceBrakeNearsideAxle1, serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2,
                     serviceBrakeOffsideAxle2, serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3,
                     parkingBrakeNearside, parkingBrakeOffside);
@@ -1200,6 +1265,8 @@ public class TesterDoesStepDefinitions implements En {
 
             case AddSingle3AxleClass4ServiceAndParkingPlateResult:
             case AddSingle3AxleClass7ServiceAndParkingPlateResult:
+            case Add3AxleClass4ServiceAndParkingPlateResult:
+            case Add3AxleClass7ServiceAndParkingPlateResult:
                 // And I select "Plate" in the "Service brake test type" field
                 driverWrapper.selectOptionInField("Plate", "Service brake test type");
 
@@ -1210,7 +1277,7 @@ public class TesterDoesStepDefinitions implements En {
                 breakTestWeightType(journey.journeyType
                         == BrakeTestJourney.BrakeTestJourneyType.AddClass7ServiceAndParkingPlateResult
                         || journey.journeyType
-                        == BrakeTestJourney.BrakeTestJourneyType.AddSingle3AxleClass7ServiceAndParkingPlateResult);
+                        == BrakeTestJourney.BrakeTestJourneyType.Add3AxleClass7ServiceAndParkingPlateResult);
 
                 // And I enter <n> in the "Vehicle Weight in kilograms" field
                 driverWrapper.enterIntoField(journey.weight, "Vehicle Weight in kilograms");
