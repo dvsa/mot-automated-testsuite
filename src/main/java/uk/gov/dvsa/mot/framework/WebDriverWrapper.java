@@ -75,6 +75,9 @@ public class WebDriverWrapper {
     /** Request handler to process HTTP requests. **/
     private final RequestHandler requestHandler;
 
+    /** Starting URL. */
+    private String startingUrl;
+
     /**
      * Creates a new instance.
      * @param env   The environment configuration to use
@@ -103,6 +106,9 @@ public class WebDriverWrapper {
 
         // ensure all previous sessions are invalidated
         this.webDriver.manage().deleteAllCookies();
+
+        // ensure the starting url is set
+        this.startingUrl = env.getRequiredProperty("startingUrl");
     }
 
     /**
@@ -224,7 +230,7 @@ public class WebDriverWrapper {
         webDriver.manage().deleteAllCookies();
 
         // browse to the specified web page
-        String url = env.getRequiredProperty("startingUrl") + relativePath;
+        String url = startingUrl + relativePath;
         logger.debug("Browsing to {}", url);
         webDriver.get(url);
         waitForFullPageLoad();
@@ -682,6 +688,7 @@ public class WebDriverWrapper {
      * @return The text
      */
     public String getElementText(String startTag, String startText, String relativeXPath) {
+        waitForFullPageLoad();
         WebElement startingElement = webDriver.findElement(
                 By.xpath("//" + startTag.toLowerCase() + "[contains(text(),'" + startText + "')]"));
         WebElement relativeElement = startingElement.findElement(By.xpath(relativeXPath));
@@ -1654,4 +1661,29 @@ public class WebDriverWrapper {
         return this.webDriver.getCurrentUrl();
     }
 
+    /**
+     * Gets a list of web elements and returns the text as a string array list.
+     * @param className the class name of the elements to be found
+     * @param relativePath the relative path for the elements
+     * @return Strings contained in the web elements
+     */
+    public ArrayList<String> getTextFromElementsByClass(String className, String relativePath) {
+        ArrayList<String> elementsText = new ArrayList<>();
+
+        for (WebElement element : webDriver.findElements(By.xpath(
+                String.format("//ul[contains(@class, '%s')]/%s", className, relativePath)))) {
+            elementsText.add(element.getText().replaceAll("\n", " "));
+        }
+
+        return elementsText;
+    }
+
+    /**
+     * Sets the starting url using a key for the config file.
+     * @param startingUrlKey the name of the starting url key in the config
+     */
+    public void setStartingUrl(String startingUrlKey) {
+        this.startingUrl = env.getRequiredProperty(startingUrlKey);
+        logger.debug("Switched starting url to: " + startingUrl);
+    }
 }
