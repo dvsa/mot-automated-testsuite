@@ -51,7 +51,8 @@ public class ExcelDocument {
         boldAndBorderStyle.setBorderTop(BorderStyle.MEDIUM);
 
         Row headerRow = sheet.createRow(0);
-        String[] headerRows = {"Search term", "Original Top Ten", "New Top Ten"};
+        String[] headerRows = {"Search term (Original Results Count, Updated Results Count)",
+                "Original Top Ten", "New Top Ten"};
 
         for (int i = 0; i < headerRows.length; i++) {
             Cell cell = headerRow.createCell(i);
@@ -59,7 +60,25 @@ public class ExcelDocument {
             cell.setCellValue(headerRows[i]);
         }
 
-        int rowNumber = 1;
+        sheet.createRow(1).createCell(0).setCellValue("Key:");
+
+        CellStyle addativeStyle = workbook.createCellStyle();
+        addativeStyle.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
+        addativeStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        Cell greenKey = sheet.createRow(2).createCell(0);
+        greenKey.setCellValue("Added to top ten");
+        greenKey.setCellStyle(addativeStyle);
+
+        CellStyle removedStyle = workbook.createCellStyle();
+        removedStyle.setFillForegroundColor(IndexedColors.ROSE.getIndex());
+        removedStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        Cell redKey = sheet.createRow(3).createCell(0);
+        redKey.setCellValue("Removed from top ten");
+        redKey.setCellStyle(removedStyle);
+
+        int rowNumber = 4;
         int indexCounter = 0;
 
         for (ElasticSearchResult elasticSearchResult1 : resultSet1) {
@@ -79,10 +98,6 @@ public class ExcelDocument {
 
             row.createCell(0).setCellValue(searchTermData);
 
-            CellStyle removedStyle = workbook.createCellStyle();
-            removedStyle.setFillForegroundColor(IndexedColors.ROSE.getIndex());
-            removedStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-
             int originalRow = rowNumber;
 
             for (String result1 : elasticSearchResult1.getTopTenList()) {
@@ -95,10 +110,6 @@ public class ExcelDocument {
                     originalValue.setCellStyle(removedStyle);
                 }
             }
-
-            CellStyle addativeStyle = workbook.createCellStyle();
-            addativeStyle.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
-            addativeStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
             int updatedRow = rowNumber;
 

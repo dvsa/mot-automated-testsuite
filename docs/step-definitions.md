@@ -280,3 +280,8 @@ These steps are specific to the DVSA MOT application screens.
 * I close extra tabs
 * I click the accordion section with the id ```..text..```
 * I click the ```..text..``` help link
+
+### ElasticSearchStepDefinitons
+
+* I query elastic search with ```"..csv file name.."``` as ```"..data key.."```
+* I compare the search results for ```"..result set key.."``` and ```"..result set key.."```
