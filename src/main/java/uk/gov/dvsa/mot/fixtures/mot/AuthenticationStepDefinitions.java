@@ -130,7 +130,7 @@ public class AuthenticationStepDefinitions implements En {
 
     /** Encapsulates the possible results from the login journey. */
     private enum LoginOutcome {
-        PasswordFailed, PasswordSuccessful, PinFailed, PinSuccessful;
+        PasswordFailed, PasswordSuccessful, PinFailed, PinSuccessful, PinSkipped;
     }
 
     /**
@@ -191,6 +191,7 @@ public class AuthenticationStepDefinitions implements En {
                     lastDriftKey
                             .map((key) -> Integer.parseInt(driverWrapper.getData(key)))
                             .orElse(0))) {
+                case PinSkipped:
                 case PinSuccessful:
                     // check if any special notices need clearing down
                     if (driverWrapper.hasLink("Read and acknowledge")) {
@@ -301,6 +302,12 @@ public class AuthenticationStepDefinitions implements En {
      * @return The outcome
      */
     private LoginOutcome handlePinScreen(String seed, int driftOffset, int lastDrift) {
+
+        // if the pin has been skipped due to fingerprint
+        if (driverWrapper.getCurrentPageTitle().contains("Your home")) {
+            return LoginOutcome.PinSkipped;
+        }
+
         String pin = generatePin(seed, driftOffset, lastDrift);
         driverWrapper.enterIntoField(pin, "Security card PIN");
         driverWrapper.pressButton("Sign in");
