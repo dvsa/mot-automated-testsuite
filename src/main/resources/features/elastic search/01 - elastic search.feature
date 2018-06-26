@@ -17,7 +17,7 @@ Feature: 01 - elastic search
     And I click the "Vehicle registered in error" radio button
     And I press the "Cancel test" button
 
-    And I set the starting url key as "secondEnvironment"
+    And I set the starting url key as secondEnvironment
     And I login with 2FA using "<tester>" as {username}, {site}
     And I start an MOT test for {registration}, {vin}, {site}
 
