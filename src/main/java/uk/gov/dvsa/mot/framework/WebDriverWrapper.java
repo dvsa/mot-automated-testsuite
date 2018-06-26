@@ -1683,8 +1683,8 @@ public class WebDriverWrapper {
      * @param startingUrlKey the name of the starting url key in the config
      */
     public void setStartingUrl(String startingUrlKey) {
-        logger.info("Starting url key: " + startingUrlKey);
+        logger.error("Starting url key: " + startingUrlKey);
         this.startingUrl = env.getRequiredProperty(startingUrlKey);
-        logger.info("Switched starting url to: " + startingUrl);
+        logger.error("Switched starting url to: " + startingUrl);
     }
 }

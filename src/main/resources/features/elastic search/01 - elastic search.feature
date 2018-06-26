@@ -4,6 +4,7 @@ Feature: 01 - elastic search
   Scenario Outline: Login as a tester and Query elastic search
     Given I load "<vehicle>" as {registration}, {vin}, {mileage}
     And I login with 2FA using "<tester>" as {username}, {site}
+    And I set the starting url key as secondEnvironment
 
     When I start an MOT test for {registration}, {vin}, {site}
     And The page title contains "Your home"
