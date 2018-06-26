@@ -1684,7 +1684,7 @@ public class WebDriverWrapper {
      */
     public void setStartingUrl(String startingUrlKey) {
         logger.error("Starting url key: " + startingUrlKey);
-        this.startingUrl = env.getRequiredProperty(startingUrlKey);
+        this.startingUrl = String.format("https://%s.dev.mot-testing.service.gov.uk", env.getRequiredProperty(startingUrlKey));
         logger.error("Switched starting url to: " + startingUrl);
     }
 }
