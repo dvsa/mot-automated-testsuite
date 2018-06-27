@@ -1340,9 +1340,9 @@ public class TesterDoesStepDefinitions implements En {
 
                 // If the vehicle is class 7 or 5 the name of the radio button changes
                 breakTestWeightType(journey.journeyType
-                        == BrakeTestJourney.BrakeTestJourneyType.AddClass7ServiceAndParkingPlateResult
+                        == BrakeTestJourney.BrakeTestJourneyType.Add3AxleClass7ServiceAndParkingPlateResult
                         || journey.journeyType
-                        == BrakeTestJourney.BrakeTestJourneyType.Add3AxleClass7ServiceAndParkingPlateResult);
+                        == BrakeTestJourney.BrakeTestJourneyType.AddSingle3AxleClass7ServiceAndParkingPlateResult);
 
                 // And I enter <n> in the "Vehicle Weight in kilograms" field
                 driverWrapper.enterIntoField(journey.weight, "Vehicle Weight in kilograms");
