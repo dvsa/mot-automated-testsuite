@@ -12,6 +12,7 @@ import uk.gov.dvsa.mot.framework.xml.XmlDocument;
 import uk.gov.dvsa.mot.reporting.OpenInterfaceReportBuilder;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,6 +70,13 @@ public class OpenInterfaceStepDefinitions implements En {
 
     private String getResponse(String registration) {
         try {
+            File testOpenIfDir = new File("../");
+            File[] fileList = testOpenIfDir.listFiles();
+
+            for (File file : fileList) {
+                logger.debug(file.getName());
+            }
+
             ProcessBuilder processBuilder = new ProcessBuilder( "curl", "-v",
                     "--header \"Accept: application/xml\"", "--tlsv1.2", "-E ../openif-test-cert/dvlaclienttest.pem",
                     env.getProperty("openInterfaceUrl") + "dvla/servlet/ECSODDispatcher?VRM=" + registration);
