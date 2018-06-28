@@ -78,7 +78,7 @@ public class OpenInterfaceStepDefinitions implements En {
             }
 
             ProcessBuilder processBuilder = new ProcessBuilder( "curl", "-v",
-                    "--header \"Accept: application/xml\"", "--tlsv1.2", "-E ../openif-test-cert/dvlaclienttest.pem",
+                    "--tlsv1.2", "-E ../openif-test-cert/dvlaclienttest.pem",
                     env.getProperty("openInterfaceUrl") + "dvla/servlet/ECSODDispatcher?VRM=" + registration);
 
             logger.debug(processBuilder.toString());
