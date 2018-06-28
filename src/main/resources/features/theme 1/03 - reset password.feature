@@ -31,7 +31,7 @@ Feature: 03 - reset password
     And I enter "password1" in the "Re-type your new password" field
     And I press the "Change password" button
     And The page title contains "Change your password"
-    And The page contains "Must contain both upper and lower case letters"
+    And The page contains "Must contain both upper and lower case characters"
 
     # Check password history validation
     And I enter "Password1" in the "Current password" field
