@@ -15,7 +15,7 @@ Feature: 03 - reset password
     And I enter "Pass1" in the "Re-type your new password" field
     And I press the "Change password" button
     And The page title contains "Change your password"
-    And The page contains "must be 8 or more characters long"
+    And The page contains "must be at least 8 characters long"
 
     # Check numerical password validation
     And I enter "Password1" in the "Current password" field
@@ -23,7 +23,7 @@ Feature: 03 - reset password
     And I enter "Password" in the "Re-type your new password" field
     And I press the "Change password" button
     And The page title contains "Change your password"
-    And The page contains "must contain 1 or more numbers"
+    And The page contains "Must contain 1 or more numbers"
 
     # Check upper case and lower case validation
     And I enter "Password1" in the "Current password" field
@@ -31,7 +31,7 @@ Feature: 03 - reset password
     And I enter "password1" in the "Re-type your new password" field
     And I press the "Change password" button
     And The page title contains "Change your password"
-    And The page contains "must contain both upper and lower case letters"
+    And The page contains "Must contain both upper and lower case letters"
 
     # Check password history validation
     And I enter "Password1" in the "Current password" field
