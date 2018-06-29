@@ -143,6 +143,7 @@ public class AuthenticationStepDefinitions implements En {
     private void loginWith2fa(String usernameKey, String password, String seed) {
         switch (handlePasswordAndPinScreens(
                 driverWrapper.getData(usernameKey), password, seed, 0, 0)) {
+            case PinSkipped:
             case PinSuccessful:
                 // check if any special notices need clearing down
                 if (driverWrapper.hasLink("Read and acknowledge")) {
@@ -191,7 +192,6 @@ public class AuthenticationStepDefinitions implements En {
                     lastDriftKey
                             .map((key) -> Integer.parseInt(driverWrapper.getData(key)))
                             .orElse(0))) {
-                case PinSkipped:
                 case PinSuccessful:
                     // check if any special notices need clearing down
                     if (driverWrapper.hasLink("Read and acknowledge")) {
@@ -201,6 +201,7 @@ public class AuthenticationStepDefinitions implements En {
                     // all successful
                     return;
 
+                case PinSkipped:
                 case PinFailed:
                     if (driftOffset.isPresent() || lastDriftKey.isPresent()) {
                         // if using drift settings then we return if PIN rejected
