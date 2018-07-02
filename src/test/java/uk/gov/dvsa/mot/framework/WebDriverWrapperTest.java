@@ -1148,6 +1148,8 @@ public class WebDriverWrapperTest {
         assertTrue(driverWrapper.containsMessage("USER023"));
 
         assertTrue(driverWrapper.containsMessage("You have successfully updated the user: Fred Bloggs 'USER023'."));
+
+        assertTrue(driverWrapper.containsMessage("This is a test string on multiple lines here"));
     }
 
     /**
