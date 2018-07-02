@@ -9,14 +9,14 @@ Feature: 48 - Check HGV/PSV for Trailer with a current Annual Test
     Then The page does not contain "This vehicle's MOT has expired"
     And The page contains "C123456"
     And The page contains "HAS CURRENT TEST"
-    And The page contains "Check another"
+    And The page contains "Check another vehicle"
     And The page contains "Colour"
     And The page contains "Fuel type"
     And The page contains "Date registered"
     And The page contains "Annual test valid until"
     And The page does not contain "reminders"
 
-    And The page contains "If you think the annual test expiry date or any of the vehicle details are wrong,"
+    And The page contains "If you think the annual test expiry date or any of the vehicle details are wrong, contact DVSA."
     And I click the "contact" link
     And I go to the next tab
     Then The page title contains "Contact DVSA - GOV.UK"

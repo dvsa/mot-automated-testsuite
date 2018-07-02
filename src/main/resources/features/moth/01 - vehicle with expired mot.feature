@@ -12,6 +12,7 @@ Feature: 01 - Check vehicle with expired MOT
     And The page title contains "Check MOT history"
     And The page contains "This vehicle's MOT has expired"
     And The page contains "You can be fined up to £1000 for driving without a valid MOT"
+    And The page contains "This vehicle may be MOT exempt, for more information refer to MOT exemption guidance"
     And The page contains "Colour"
     And The page contains "Fuel type"
     And The page contains "Petrol"
@@ -23,3 +24,12 @@ Feature: 01 - Check vehicle with expired MOT
     And The page contains "Check mileage recorded at test, MOT expiry date, defects and advisories"
     And I click the accordion section with the id "mot-history-description"
     And The page contains "unavailable until further notice"
+
+    And The page contains "The MOT test changed on 20 May 2018"
+    And The page contains "Defects are now categorised according to their severity – dangerous, major, and minor. Find out more"
+
+    And I click the "Find out more" link
+    And I go to the next tab
+    Then The page title contains "Public service vehicle (PSV) inspection manual - GOV.UK"
+    And I go to the next tab
+    And I close extra tabs

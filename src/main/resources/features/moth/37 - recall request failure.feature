@@ -11,7 +11,7 @@ Feature: 37 - Recall Request Fails
     And The page contains "Check if {make} {model} {registration} has outstanding recalls"
     And I click the accordion section with the id "vehicle-recalls-description"
     And I wait for "6" seconds
-    And The page contains "We don't hold information about manufacturer's safety recalls for"
-    And The page contains "{make} {model} {registration}"
-    And The page contains "Contact a"
-    And The page contains "dealership to find out about outstanding safety recalls."
+    And The page contains "We don't hold information about manufacturer's safety recalls for {make} {model} {registration}."
+    And The page contains "Contact a {make} dealership to find out about outstanding safety recalls."
+    And The page contains "Was this vehicle recall information useful to you? Tell us your views so we can improve the service."
+

@@ -10,7 +10,7 @@ Feature: 47 - Check HGV/PSV for Trailer that has no Annual Test history and the 
     And The page contains "Trailers must be tested one year after they were first sold or supplied."
     And The page contains "The mileage recorded at test is currently not available for heavy goods and public service vehicles."
     And The page contains "It can take up to 10 working days for the latest annual test results to appear."
-    And The page contains "If you think the annual test expiry date or any of the vehicle details are wrong,"
+    And The page contains "If you think the annual test expiry date or any of the vehicle details are wrong, contact DVSA."
 
     And The page contains "First annual test due"
     And I click the accordion section with the id "mot-history-description"

@@ -9,14 +9,18 @@ Feature: 07 - Check vehicle with no EU classification
 
     When I press the "Continue" button
 
-    Then The page contains "{registration}"
-
     And The page title contains "Check MOT history"
+    And The page contains "{registration}"
+    And The page contains "Check the MOT fees table to see when different vehicle types need their first MOT."
+    And The page title contains "Check MOT history"
+    And The page contains "First MOT due"
     And The page contains "Unknown"
-    And The page contains "MOT fees table"
 
     When I click the "MOT fees" link
     And I go to the next tab
 
     Then The page title contains "Getting an MOT: MOT costs"
     And I close extra tabs
+
+    And I click the accordion section with the id "mot-history-description"
+    And The page contains "This vehicle hasn't had its first MOT."

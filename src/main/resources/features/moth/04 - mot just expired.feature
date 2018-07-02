@@ -12,3 +12,4 @@ Feature: 04 - Check vehicle with just expired MOT
     And The page contains "{model}"
     And The page contains "This vehicle's MOT has expired"
     And The page contains "You can be fined up to £1000 for driving without a valid MOT"
+    And The page contains "This vehicle may be MOT exempt, for more information refer to MOT exemption guidance"
