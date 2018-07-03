@@ -270,7 +270,7 @@ public class AuthenticationStepDefinitions implements En {
         driverWrapper.pressButton("Sign in");
 
         // message received after successful login if user has ordered new card, on page with title "Sign in"
-        String orderCardMessage = "You have ordered a new card.  Until you receive and activate the card, "
+        String orderCardMessage = "You have ordered a new card. Until you receive and activate the card, "
                 + "sign in with your security questions.";
 
         // message for when the account is locked
