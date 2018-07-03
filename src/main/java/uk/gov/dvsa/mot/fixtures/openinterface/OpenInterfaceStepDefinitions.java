@@ -12,7 +12,6 @@ import uk.gov.dvsa.mot.framework.xml.XmlDocument;
 import uk.gov.dvsa.mot.reporting.OpenInterfaceReportBuilder;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,6 +53,13 @@ public class OpenInterfaceStepDefinitions implements En {
                 });
     }
 
+    /**
+     * Get values from the open interface response.
+     *
+     * @param xmlDocument response xml to extract the values from
+     * @param xpathList list of xpath queries to locate in the response
+     * @return map of xpath to values extracted from the response
+     */
     private HashMap<String, String> getResponseValues(XmlDocument xmlDocument, List<String> xpathList) {
         HashMap<String, String> responseValues = new HashMap<>();
 
@@ -68,20 +74,18 @@ public class OpenInterfaceStepDefinitions implements En {
         return responseValues;
     }
 
+    /**
+     * Get the response from open interface for a vrm.
+     *
+     * @param registration used to query the endpoint
+     * @return xml response from the open interface server
+     */
     private String getResponse(String registration) {
         try {
-            File testOpenIfDir = new File("../");
-            File[] fileList = testOpenIfDir.listFiles();
-
-            for (File file : fileList) {
-                logger.debug(file.getName());
-            }
-
             ProcessBuilder processBuilder = new ProcessBuilder( "curl", "-v",
+                    "--insecure", "--connect-timeout 10",
                     "--tlsv1.2", "-E ../openif-test-cert/dvlaclienttest.pem",
                     env.getProperty("openInterfaceUrl") + "dvla/servlet/ECSODDispatcher?VRM=" + registration);
-
-            logger.debug(processBuilder.toString());
 
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
@@ -96,19 +100,23 @@ public class OpenInterfaceStepDefinitions implements En {
                 rawXml.append(content);
             }
 
-            logger.debug("Raw xml: " + rawXml);
-
             return rawXml.toString();
         } catch (Exception ex) {
-            throw new RuntimeException(String.format("Failed to check the mot history, %s", ex.getStackTrace()));
+            throw new RuntimeException(String.format("Failed to check the mot history, %s", ex.getMessage()));
         }
     }
 
+    /**
+     * Create new xml document from raw xml string.
+     *
+     * @param rawXml
+     * @return
+     */
     private XmlDocument getXmlDocument(String rawXml) {
         try {
             return new XmlDocument(rawXml);
         } catch (Exception ex) {
-            throw new RuntimeException(String.format("Failed to create new XmlDocument, %s", ex.getStackTrace()));
+            throw new RuntimeException(String.format("Failed to create new XmlDocument, %s", ex.getMessage()));
         }
     }
 
