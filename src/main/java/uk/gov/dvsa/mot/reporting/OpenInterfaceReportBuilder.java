@@ -32,7 +32,6 @@ public class OpenInterfaceReportBuilder {
                                               Map<String, Boolean> results) {
         StringBuilder resultsHtml = new StringBuilder();
 
-        // Add results
         for (String key : expectedValues.keySet()) {
 
             String resultxPath = HtmlWriter.tag("td", null, key);
@@ -54,28 +53,23 @@ public class OpenInterfaceReportBuilder {
             resultsHtml.append(resultRow);
         }
 
-        // Colspan = 2 attribute
         Map<String, String> colspanTwoAttribute = new HashMap<>();
         colspanTwoAttribute.put("colspan", "2");
 
-        // Vrm Heading
         String vrmHeadingContent = HtmlWriter.tag("th", null, "Vehicle VRM:")
                 + HtmlWriter.tag("td", colspanTwoAttribute, registration);
         String vrmHeading = HtmlWriter.tag("tr", null, vrmHeadingContent);
 
-        // Table Heading
         String tableHeadingContent = HtmlWriter.tag("th", null, "xPath")
                 + HtmlWriter.tag("th", null, "Expected Value")
                 + HtmlWriter.tag("th", null, "Response Value");
         String tableHeadingHtml = HtmlWriter.tag("tr", null, tableHeadingContent);
 
-        // Response
         String responseXmp = HtmlWriter.tag("xmp", null, response);
         String responseContent = HtmlWriter.tag("th", null, "Response:")
                 + HtmlWriter.tag("td", colspanTwoAttribute, responseXmp);
         String responseHtml = HtmlWriter.tag("tr", null, responseContent);
 
-        // Spacer
         Map<String, String> spacerTdAttributes = new HashMap<>();
         spacerTdAttributes.put("colspan", "3");
         Map<String, String> spacerTrAttributes = new HashMap<>();
@@ -153,8 +147,8 @@ public class OpenInterfaceReportBuilder {
             output += HtmlWriter.tag("div", null, headingHtml + fileContents);
         }
 
-        // Style
-        String styleContent = "xmp{white-space:pre-wrap;word-wrap:break-word;}"
+        String styleContent = "h1:first-letter{text-transform:uppercase;}"
+                + "xmp{white-space:pre-wrap;word-wrap:break-word;}"
                 + "div{margin-bottom:5rem;}"
                 + "." + FAIL + "{background-color:#ff7676;}"
                 + "." + PASS + "{background-color:#94fab1;}"
