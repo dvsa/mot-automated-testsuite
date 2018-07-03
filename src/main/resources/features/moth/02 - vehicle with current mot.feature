@@ -2,7 +2,6 @@
 @mothint
 Feature: 02a - Check vehicle with current MOT - reminder email tab
 
-
   Scenario: A MOTH user searches for a vehicle with a current MOT and clicks Get a reminder email
     Given I browse to /
     And I load "VEHICLE_REG_MOT_CURRENT" as {registration}, {model}
