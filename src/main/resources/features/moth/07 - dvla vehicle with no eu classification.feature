@@ -20,6 +20,7 @@ Feature: 07 - Check vehicle with no EU classification
     And I go to the next tab
 
     Then The page title contains "Getting an MOT: MOT costs"
+    And I go to the next tab
     And I close extra tabs
 
     And I click the accordion section with the id "mot-history-description"

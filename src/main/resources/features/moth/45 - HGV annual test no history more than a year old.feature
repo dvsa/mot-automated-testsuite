@@ -20,4 +20,4 @@ Feature: 45 - Check HGV that has no Annual Test history and the vehicle is more 
     And The page contains "Annual test expired on"
     And I click the accordion section with the id "mot-history-description"
 
-    And The page contains "No annual test results found."
+    And The page contains "No annual test results found"

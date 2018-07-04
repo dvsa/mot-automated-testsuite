@@ -16,7 +16,7 @@ Feature: 39 - Check HGV with a current Annual Test
     And The page contains "Annual test valid until"
     And The page contains "31 October 2018"
     And The page does not contain "reminders"
-    And The page contains "If you think the annual test expiry date or any of the vehicle details are wrong,contact DVSA."
+    And The page contains "If you think the annual test expiry date or any of the vehicle details are wrong, contact DVSA."
 
     And I click the "contact" link
     And I go to the next tab
@@ -47,9 +47,9 @@ Feature: 39 - Check HGV with a current Annual Test
     And The page contains "The annual test changed on 20 May 2018"
     And The page contains "Defects are now categorised according to their severity – dangerous, major, and minor. Find out more"
 
-    And I click the "Find out more" link
+    And I click the last "Find out more" link
     And I go to the next tab
-    Then The page title contains "Public service vehicle (PSV) inspection manual - GOV.UK"
+    Then The page title contains "Heavy goods vehicle (HGV) inspection manual - GOV.UK"
     And I go to the next tab
     And I close extra tabs
 

@@ -1,6 +1,6 @@
 @mothpp
 @mothint
-Feature: 02a - Check vehicle with current MOT - reminder email tab
+Feature: 02 - Check vehicle with current MOT
 
   Scenario: A MOTH user searches for a vehicle with a current MOT and clicks Get a reminder email
     Given I browse to /
@@ -34,7 +34,8 @@ Feature: 02a - Check vehicle with current MOT - reminder email tab
     And I go to the next tab
 
     Then The page title contains "Contact DVSA"
+    And I go to the next tab
     And I close extra tabs
 
-    When I press the "Back" button
-    And The page title contains "Check MOT history"
+    And I click the "Back" link
+    And The page title contains "What is the vehicle's registration number - MOT History"
