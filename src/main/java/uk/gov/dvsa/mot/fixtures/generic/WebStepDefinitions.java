@@ -204,5 +204,8 @@ public class WebStepDefinitions implements En {
 
         When("^I click the \"([^\"]+)\" help link$", (String helpText) ->
                 driverWrapper.helptextClick(helpText));
+
+        And("^I set the starting url key as \"([^\"]+)\"$", (String startingUrlKey) ->
+                driverWrapper.setStartingUrl(startingUrlKey));
     }
 }
