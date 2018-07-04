@@ -688,7 +688,6 @@ public class WebDriverWrapper {
      * @return The text
      */
     public String getElementText(String startTag, String startText, String relativeXPath) {
-        waitForFullPageLoad();
         WebElement startingElement = webDriver.findElement(
                 By.xpath("//" + startTag.toLowerCase() + "[contains(text(),'" + startText + "')]"));
         WebElement relativeElement = startingElement.findElement(By.xpath(relativeXPath));

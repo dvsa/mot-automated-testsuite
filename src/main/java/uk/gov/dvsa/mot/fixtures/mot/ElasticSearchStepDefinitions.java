@@ -102,7 +102,7 @@ public class ElasticSearchStepDefinitions implements En {
             CSVParser parser = CSVParser.parse(defectsData, Charset.defaultCharset(), CSVFormat.EXCEL);
             records.addAll(parser.getRecords());
         } catch (IOException exception) {
-            logger.error(exception.getMessage());
+            logger.error("Unable to parse CSV file: " + exception.getMessage());
         }
 
         return records;

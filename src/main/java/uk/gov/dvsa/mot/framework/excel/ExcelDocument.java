@@ -132,8 +132,7 @@ public class ExcelDocument {
                 }
             }
 
-            rowNumber = Math.max(updatedRow, originalRow);
-            rowNumber++;
+            rowNumber = Math.max(updatedRow, originalRow) + 1;
             indexCounter++;
         }
 
@@ -142,7 +141,7 @@ public class ExcelDocument {
             workbook.write(fileOut);
             fileOut.close();
         } catch (java.io.IOException exception) {
-            logger.error(exception.getMessage());
+            logger.error("Unable to write excel file: " + exception.getMessage());
         }
 
     }

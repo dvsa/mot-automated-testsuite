@@ -79,6 +79,7 @@ High level:
 * I delete the ```"..name.."``` cookie
    * Note: allows partial match of the cookie name
 * I wait for ```"..number.."``` seconds
+* I set the starting url key as ```"..starting url key.."```
 
 Lower level, only use if higher level steps can't be used:
 
@@ -284,4 +285,4 @@ These steps are specific to the DVSA MOT application screens.
 ### ElasticSearchStepDefinitons
 
 * I query elastic search with ```"..csv file name.."``` as ```"..data key.."```
-* I compare the search results for ```"..result set key.."``` and ```"..result set key.."```
+* I compare the search results for ```"..result set key.."``` and ```"..result set key.."``` with data ```"..csv data file.."```
