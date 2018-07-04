@@ -1,5 +1,5 @@
 @moth
-Feature: 22a - Inverted/Statutory appeal should show blank location
+Feature: 22 - Inverted/Statutory appeal should show blank location
 
   Scenario: A MOTH user searches for a vehicle with inverted appeal, test location should be blank
     Given I browse to /
