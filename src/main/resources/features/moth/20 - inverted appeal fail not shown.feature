@@ -1,5 +1,4 @@
-@mothpp
-@mothint
+@mothpp @mothint
 Feature: 20 - Check vehicle with inverted appeal fail is not shown
 
   Scenario: A MOTH user searches for a vehicle with inverted appeal fail

@@ -1,5 +1,4 @@
-@mothpp
-@mothint
+@mothpp @mothint
 Feature: 13 - Check vehicle reg with lowercase letters
 
   Scenario: A MOTH user searches for a vehicle reg with lowercase letters

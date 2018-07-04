@@ -1,5 +1,4 @@
-@mothpp
-@mothint
+@mothpp @mothint
 Feature: 16 - Check vehicle with odometer unreadable/not present
 
   Scenario: A MOTH user searches for a vehicle with unreadable odometer

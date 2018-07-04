@@ -1,5 +1,4 @@
-@mothpp
-@mothint
+@mothpp @mothint
 Feature: 02 - Check vehicle with current MOT
 
   Scenario: A MOTH user searches for a vehicle with a current MOT and clicks Get a reminder email
@@ -37,5 +36,22 @@ Feature: 02 - Check vehicle with current MOT
     And I go to the next tab
     And I close extra tabs
 
+  Scenario: A MOTH user searches for a vehicle with a current MOT and clicks back and searches again
+    Given I browse to /
+    And I load "VEHICLE_REG_MOT_CURRENT" as {registration}, {model}
+    And I enter {registration} in the registration field
+
+    When I press the "Continue" button
+
+    Then The page contains "{registration}"
+    And The page contains "{model}"
+
     And I click the "Back" link
     And The page title contains "What is the vehicle's registration number - MOT History"
+    And The page contains "What is the vehicle's registration number?"
+    And I enter {registration} in the registration field
+
+    When I press the "Continue" button
+
+    Then The page contains "{registration}"
+    And The page contains "{model}"

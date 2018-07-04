@@ -1,5 +1,4 @@
-@mothpp
-@mothint
+@mothpp @mothint
 Feature: 11 - Check registration longer than 14 characters
 
   Scenario: A MOTH user searches for a reg longer than 14 characters
