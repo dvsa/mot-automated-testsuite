@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.framework.csv.CsvDocument;
 import uk.gov.dvsa.mot.framework.csv.CsvException;
+import uk.gov.dvsa.mot.framework.xml.XmlDocument;
+import uk.gov.dvsa.mot.framework.xml.XmlException;
 
 import java.io.File;
 import java.io.IOException;
@@ -118,6 +120,31 @@ public class RequestHandler {
             return new CsvDocument(CSVParser.parse(document, CSVFormat.DEFAULT));
         } catch (IOException ex) {
             throw new CsvException("Error parsing CSV file", ex);
+        }
+    }
+
+    /**
+     * Get XML document.
+     * @param url of the file to load.
+     * @return xml document as a string.
+     */
+    public XmlDocument getXmlDocument(String url) throws XmlException {
+        Cookie session = getCookie(DEFAULT_SESSION_COOKIE_NAME);
+        Cookie token = getCookie(DEFAULT_TOKEN_COOKIE_NAME);
+
+        Response serverResponse = with()
+                .cookie(session.getName(), session.getValue())
+                .cookie(token.getName(), token.getValue())
+                .get(url);
+
+        String document = new String(serverResponse.asByteArray());
+        try {
+            String filename = url.replaceFirst("https://", "").replaceAll("/", "-") + ".xml";
+            writeFile(filename, url);
+
+            return new XmlDocument(document);
+        } catch (Exception ex) {
+            throw new XmlException("Error parsing XML file", ex);
         }
     }
 
