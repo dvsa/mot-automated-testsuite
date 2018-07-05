@@ -1477,9 +1477,6 @@ public class WebDriverWrapper {
      */
     public void closeTabs() {
         String originalHandle = webDriver.getWindowHandle();
-
-        //Do something to open new tabs
-
         for (String handle : webDriver.getWindowHandles()) {
             if (!handle.equals(originalHandle)) {
                 webDriver.switchTo().window(handle);

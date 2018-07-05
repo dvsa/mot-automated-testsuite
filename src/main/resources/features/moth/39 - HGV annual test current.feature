@@ -9,16 +9,15 @@ Feature: 39 - Check HGV with a current Annual Test
     Then The page does not contain "This vehicle's MOT has expired"
     And The page contains "HISTVAL"
     And The page contains "DAF FA LF45.130 08"
-#    And The page contains "Check another vehicle" <-- this doesn't work due to the text being on 2 lines in the html code
-    And The page contains "Check another"
+    And The page contains "Check another vehicle"
     And The page contains "Colour"
     And The page contains "Fuel type"
     And The page contains "Date registered"
     And The page contains "Annual test valid until"
     And The page contains "31 October 2018"
     And The page does not contain "reminders"
+    And The page contains "If you think the annual test expiry date or any of the vehicle details are wrong, contact DVSA."
 
-    And The page contains "If you think the annual test expiry date or any of the vehicle details are wrong,"
     And I click the "contact" link
     And I go to the next tab
     Then The page title contains "Contact DVSA - GOV.UK"
@@ -44,6 +43,15 @@ Feature: 39 - Check HGV with a current Annual Test
     And The page contains "Advisory notice item(s)"
     And The page does not contain "MOT test number"
     And The page does not contain "Mileage"
+
+    And The page contains "The annual test changed on 20 May 2018"
+    And The page contains "Defects are now categorised according to their severity – dangerous, major, and minor. Find out more"
+
+    And I click the last "Find out more" link
+    And I go to the next tab
+    Then The page title contains "Heavy goods vehicle (HGV) inspection manual - GOV.UK"
+    And I go to the next tab
+    And I close extra tabs
 
     And The page contains "What are failures?"
     And I click the "What are failures?" help link

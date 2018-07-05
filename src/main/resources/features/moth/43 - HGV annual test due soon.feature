@@ -8,7 +8,8 @@ Feature: 43 - Check HGV with a Annual Test that is due soon
 
     Then The page contains "NOHOLD1"
     And The page contains "IVECO FORD CARGO ML75E17"
-    And The page contains "This vehicle's first annual test is due soon"
+    And The page contains "This vehicle hasn't had its first annual test"
+    And The page contains "If the vehicle has been tested recently, it can take up to 10 working days for us to update our records"
     And I click the accordion section with the id "mot-history-description"
 
     And The page contains "This vehicle hasn't had its first annual test."

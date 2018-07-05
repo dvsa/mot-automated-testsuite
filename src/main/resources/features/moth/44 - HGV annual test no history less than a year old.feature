@@ -13,3 +13,11 @@ Feature: 44 - Check HGV that has no Annual Test history and the vehicle is less 
     And I click the accordion section with the id "mot-history-description"
 
     And The page contains "This vehicle hasn't had its first annual test."
+    And The page contains "The annual test changed on 20 May 2018"
+    And The page contains "Defects are now categorised according to their severity – dangerous, major, and minor. Find out more"
+
+    And I click the last "Find out more" link
+    And I go to the next tab
+    Then The page title contains "Public service vehicle (PSV) inspection manual - GOV.UK"
+    And I go to the next tab
+    And I close extra tabs

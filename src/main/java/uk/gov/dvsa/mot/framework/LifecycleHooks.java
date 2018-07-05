@@ -71,6 +71,9 @@ public class LifecycleHooks {
 
         // test cleanup (note: this will clear permanent cookies but not HTTP/Session cookies)
         driverWrapper.reset();
+
+        // close any extra tabs in the browser
+        driverWrapper.closeTabs();
     }
 
     /**
