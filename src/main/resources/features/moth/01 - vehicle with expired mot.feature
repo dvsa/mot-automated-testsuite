@@ -23,7 +23,7 @@ Feature: 01 - Check vehicle with expired MOT
     And The page contains "MOT history"
     And The page contains "Check mileage recorded at test, MOT expiry date, defects and advisories"
     And I click the accordion section with the id "mot-history-description"
-    And The page contains "unavailable until further notice"
+    And The page contains "View test location"
 
     And The page contains "The MOT test changed on 20 May 2018"
     And The page contains "Defects are now categorised according to their severity – dangerous, major, and minor. Find out more"
