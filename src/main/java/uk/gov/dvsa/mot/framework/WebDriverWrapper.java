@@ -8,6 +8,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
@@ -127,6 +128,13 @@ public class WebDriverWrapper {
             if ("true".equals(env.getProperty("headless"))) {
                 chromeOptions.addArguments("--headless");
                 chromeOptions.addArguments("window-size=1920,1080");
+            }
+
+            if ("true".equals(env.getProperty("securityProxy"))) {
+                Proxy proxy = new Proxy();
+                proxy.setSslProxy(env.getRequiredProperty("proxyServer"))
+                        .setHttpProxy(env.getRequiredProperty("proxyServer"));
+                chromeOptions.setProxy(proxy);
             }
 
             LoggingPreferences loggingPreferences = new LoggingPreferences();
