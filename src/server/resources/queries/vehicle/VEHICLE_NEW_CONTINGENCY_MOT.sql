@@ -1,18 +1,17 @@
-select veh.registration, date_format(mtc.issued_date,'%Y%m%d') as issued_date, mtc.number
-from vehicle veh, model_detail md,
-  (select max(id) as id, vehicle_id  from mot_test_current
-   group by vehicle_id
-   limit 100000) as latest_mot,
-   mot_test_current mtc,
-   mot_test_emergency_reason as mter
-where veh.model_detail_id = md.id
-and mter.id = mtc.id
-and veh.id = latest_mot.vehicle_id
-and mtc.id = latest_mot.id
-and mtc.status_id not in (4,5) -- exclude vehicles whose latest status is under test or failed
-and date_add(mtc.issued_date, interval 31 day) > curdate()
-and odometer_result_type = 'OK'
-and veh.registration not like "%-%" -- exclude dodgy test data on ACPT
+select veh.registration, date_format(t.issued_date,'%Y%m%d') as issued_date, t.number
+from mot_test_emergency_reason e
+join mot_test_current t on t.id = e.id
+join vehicle veh on t.vehicle_id = veh.id
+where t.status_id = 6 -- only consider passsed tests
+and t.id = (
+    select max(id) as id -- and only if latest test is the pass
+    from mot_test_current mtc
+    where mtc.vehicle_id = t.vehicle_id
+    group by vehicle_id
+)
+and t.odometer_result_type = 'OK'
+and veh.registration not like "%-%" -- exclude registration with hyphon - these are likely foreign plates
+and veh.registration not like "@%" -- exclude deleted vehicles
 and veh.registration is not null -- nullable in PP/Prod
 and veh.vin is not null -- nullable in PP/Prod
 and not exists (
@@ -27,5 +26,5 @@ and not exists (
     group by v.vin
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
-group by mtc.issued_date asc
-limit 50
+order by t.issued_date asc -- Not sure why an order by would need to be included here??
+limit 50;

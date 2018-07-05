@@ -40,7 +40,7 @@ public class OpenInterfaceStepDefinitions implements En {
         this.env = env;
 
         Then("^I check if a \"([^\\}]+)\", with \\{([^\\}]+)\\} vrm, contains xpath values:$",
-                (String type, String registration, DataTable table) -> {
+                (String queryName, String registration, DataTable table) -> {
                     String response = getResponse(registration);
                     XmlDocument document = getXmlDocument(response);
 
@@ -49,7 +49,7 @@ public class OpenInterfaceStepDefinitions implements En {
                     Map<String,String> responseValues =
                             getResponseValues(document, new ArrayList<>(values.keySet()));
 
-                    writeHtmlxPath(type, driverWrapper.getData(registration), response, values, responseValues);
+                    writeHtmlxPath(queryName, driverWrapper.getData(registration), response, values, responseValues);
                 });
     }
 
@@ -106,12 +106,6 @@ public class OpenInterfaceStepDefinitions implements En {
         }
     }
 
-    /**
-     * Create new xml document from raw xml string.
-     *
-     * @param rawXml
-     * @return
-     */
     private XmlDocument getXmlDocument(String rawXml) {
         try {
             return new XmlDocument(rawXml);
@@ -163,7 +157,7 @@ public class OpenInterfaceStepDefinitions implements En {
         return processedMap;
     }
 
-    private void writeHtmlxPath(String type, String registration, String response,
+    private void writeHtmlxPath(String queryName, String registration, String response,
                                 Map<String, String> expectedValues, Map<String, String> responseValues) {
         boolean scenarioResult = true;
 
@@ -182,7 +176,7 @@ public class OpenInterfaceStepDefinitions implements En {
             }
         }
 
-        OpenInterfaceReportBuilder.generateResponseReport(type, registration, response,
+        OpenInterfaceReportBuilder.generateResponseReport(queryName, registration, response,
                 expectedValues, responseValues, results);
 
         assertTrue(scenarioResult);

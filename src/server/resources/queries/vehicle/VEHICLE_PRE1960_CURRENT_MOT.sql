@@ -1,18 +1,20 @@
-select veh.registration, date_format(mtc.issued_date,'%Y%m%d') as issued_date, mtc.number
-from vehicle as veh, model_detail as md,
-  (select max(id) as id, vehicle_id from mot_test_current
-   group by vehicle_id
-   limit 100000) as latest_mot,
-   mot_test_current as mtc,
-   dvla_vehicle as dv
-where veh.model_detail_id = md.id
-and veh.id = latest_mot.vehicle_id
-and mtc.id = latest_mot.id
-and mtc.expiry_date > now()
-and odometer_result_type = 'OK'
-and veh.registration not like "%-%" -- exclude dodgy test data on ACPT
-and veh.registration is not null -- nullable in PP/Prod
-and veh.vin is not null -- nullable in PP/Prod
+select veh.registration, date_format(t.issued_date,'%Y%m%d') as issued_date, t.number
+from mot_test_current t
+join vehicle veh on t.vehicle_id = veh.id
+where
+t.status_id = 6 -- only consider passed tests
+and t.expiry_date > CURRENT_DATE -- that have not expired
+and t.id = (
+    select max(id) as id -- and only if latest test is the pass
+    from mot_test_current mtc
+    where mtc.vehicle_id = t.vehicle_id
+    group by vehicle_id
+)
+and t.odometer_result_type = 'OK'
+and veh.registration not like "%-%" -- exclude registration with hyphon - these are likely foreign plates
+and veh.registration not like "@%" -- exclude deleted vehicles
+and veh.registration is not null -- exclude null even though it's nullable
+and veh.vin is not null -- exclude null even though it's nullable
 and dv.first_registration_date < "1960-01-01"
 and not exists (
     select 1 from vehicle v
@@ -26,5 +28,4 @@ and not exists (
     group by v.vin
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
-group by mtc.issued_date asc
-limit 50
+limit 50;
