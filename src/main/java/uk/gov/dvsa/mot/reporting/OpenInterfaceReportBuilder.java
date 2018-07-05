@@ -1,194 +1,146 @@
 package uk.gov.dvsa.mot.reporting;
 
+import uk.gov.dvsa.mot.framework.FileWriter;
 import uk.gov.dvsa.mot.framework.html.HtmlWriter;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class to build reports for open interface tests.
+ */
 public class OpenInterfaceReportBuilder {
 
-    private static final String PASS = "pass";
-    private static final String FAIL = "fail";
+    private static final String PASS_CLASS = "pass";
+    private static final String FAIL_CLASS = "fail";
     private static final String SPACER_CLASS = "spacer";
+
+    private static final Map<String, String> PASS_ATTRIBUTES = new HashMap<String, String>() {
+        {
+            put("class", PASS_CLASS);
+        }
+    };
+    private static final Map<String, String> FAIL_ATTRIBUTES = new HashMap<String, String>() {
+        {
+            put("class", FAIL_CLASS);
+        }
+    };
 
     /**
      * Generate a report from the test results.
      *
-     * @param fileName of the html file to output
      * @param registration of the vehicle used for test
      * @param response from the open interface
      * @param expectedValues for the xpath
      * @param responseValues for the xpath located in response
      * @param results of the comparisons
      */
-    public static void generateResponseReport(String fileName, String registration, String response,
+    public static void generateResponseReport(String queryName, String registration, String response,
                                               Map<String, String> expectedValues, Map<String, String> responseValues,
                                               Map<String, Boolean> results) {
         StringBuilder resultsHtml = new StringBuilder();
 
+
         for (String key : expectedValues.keySet()) {
-
-            String resultxPath = HtmlWriter.tag("td", null, key);
-
-            String expectedValue = expectedValues.get(key);
-            String resultExpected = HtmlWriter.tag("td", null, expectedValue);
-
-            String responseValue = responseValues.get(key);
-            String resultResponse = HtmlWriter.tag("td", null, responseValue);
-
-            String resultContent = resultxPath + resultExpected + resultResponse;
-
-            Map<String, String> attributes = new HashMap<>();
-            attributes.put("class", (results.get(key) ? PASS : FAIL));
-            String resultRow = HtmlWriter.tag("tr",
-                    attributes,
-                    resultContent);
-
-            resultsHtml.append(resultRow);
+            resultsHtml.append( HtmlWriter.tag("tr",
+                    (results.get(key) ? PASS_ATTRIBUTES : FAIL_ATTRIBUTES),
+                    HtmlWriter.tag("td", null, key)
+                            + HtmlWriter.tag("td", null, expectedValues.get(key))
+                            + HtmlWriter.tag("td", null, responseValues.get(key))));
         }
 
         Map<String, String> colspanTwoAttribute = new HashMap<>();
         colspanTwoAttribute.put("colspan", "2");
 
-        String vrmHeadingContent = HtmlWriter.tag("th", null, "Vehicle VRM:")
-                + HtmlWriter.tag("td", colspanTwoAttribute, registration);
-        String vrmHeading = HtmlWriter.tag("tr", null, vrmHeadingContent);
+        String vrmHeading = HtmlWriter.tag("tr", null,
+                HtmlWriter.tag("th", null, "Vehicle VRM:")
+                        + HtmlWriter.tag("td", colspanTwoAttribute, registration));
 
-        String tableHeadingContent = HtmlWriter.tag("th", null, "xPath")
-                + HtmlWriter.tag("th", null, "Expected Value")
-                + HtmlWriter.tag("th", null, "Response Value");
-        String tableHeadingHtml = HtmlWriter.tag("tr", null, tableHeadingContent);
+        String tableHeadingHtml = HtmlWriter.tag("tr", null,
+                HtmlWriter.tag("th", null, "xPath")
+                        + HtmlWriter.tag("th", null, "Expected Value")
+                        + HtmlWriter.tag("th", null, "Response Value"));
 
-        String responseXmp = HtmlWriter.tag("xmp", null, response);
-        String responseContent = HtmlWriter.tag("th", null, "Response:")
-                + HtmlWriter.tag("td", colspanTwoAttribute, responseXmp);
-        String responseHtml = HtmlWriter.tag("tr", null, responseContent);
+        String responseHtml = HtmlWriter.tag("tr", null,
+                HtmlWriter.tag("th", null, "Response:")
+                        + HtmlWriter.tag("td", colspanTwoAttribute,
+                        HtmlWriter.tag("xmp", null, response)));
 
         Map<String, String> spacerTdAttributes = new HashMap<>();
         spacerTdAttributes.put("colspan", "3");
         Map<String, String> spacerTrAttributes = new HashMap<>();
         spacerTrAttributes.put("class", SPACER_CLASS);
 
-        String spacerContent = HtmlWriter.tag("td", spacerTdAttributes, "");
-        String spacerHtml = HtmlWriter.tag("tr", spacerTrAttributes, spacerContent);
+        String spacerHtml = HtmlWriter.tag("tr", spacerTrAttributes,
+                HtmlWriter.tag("td", spacerTdAttributes, ""));
 
-        String tableContent = vrmHeading + spacerHtml
-                + tableHeadingHtml + spacerHtml
-                + resultsHtml + spacerHtml + responseHtml;
-        String tableHtml = HtmlWriter.tag("table", null, tableContent);
+        String responseReport = HtmlWriter.tag("h1", null, queryName + ":")
+                + HtmlWriter.tag("table", null, vrmHeading
+                + spacerHtml + tableHeadingHtml + resultsHtml
+                + spacerHtml + responseHtml);
 
-        String parentDirectory = "target/openinterface/";
-        String outputDirectory = parentDirectory + "results/";
-        String outputName = fileName.replace(" ", "_") + ".html";
-
-        File parentDir = new File(parentDirectory);
-        File outputDir = new File(outputDirectory);
-        File outputFile = new File(outputDirectory + outputName);
-
-        if (parentDir.exists()) {
-            parentDir.delete();
-        }
-
-        outputDir.mkdirs();
-
-        try {
-            outputFile.createNewFile();
-        } catch (IOException ex) {
-            throw new RuntimeException("Failed to write open interface test results.");
-        }
-
-        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(outputFile), "UTF-8"))) {
-            out.write(tableHtml);
-
-        } catch (IOException ex) {
-            String message = "Error writing HTML file: " + ex.getMessage();
-            throw new RuntimeException(message);
-        }
+        FileWriter.writeFile(OpenInterfaceReportConfig.RESPONSE_REPORT_TARGET_DIR,
+                OpenInterfaceReportConfig.BASE_RESPONSE_FILE_NAME.replace("DESC", queryName),
+                responseReport, OpenInterfaceReportConfig.EXTENSION,
+                false, true,true);
     }
 
     /**
      * Generate a final report, containg all scenario reports in it.
      */
     public static void generateFinalReport() {
-        String sourceDirectory = "target/openinterface/results/";
+        File sourceDir = new File(OpenInterfaceReportConfig.RESPONSE_REPORT_TARGET_DIR);
+        File[] sourceFileList;
 
-        File sourceDir = new File(sourceDirectory);
-        File[] sourceFileList = sourceDir.listFiles();
+        if (sourceDir.exists()) {
+            sourceFileList = sourceDir.listFiles();
+        } else {
+            return;
+        }
+
+        if (sourceFileList == null && sourceFileList.length == 0) {
+            return;
+        }
 
         String output = "";
 
         for (File file : sourceFileList) {
-            Map<String, String> attributes = new HashMap<>();
-            attributes.put("width", "auto");
-            attributes.put("height", "auto");
-            attributes.put("frameborder", "0");
-            attributes.put("src", "openinterface/results/" + file.getName());
-
-            String heading = file.getName().substring(0, file.getName().lastIndexOf('.')).replace("_", " ") + ":";
-            String headingHtml = HtmlWriter.tag("h1", null, heading);
-
-            String fileContents = null;
             try {
-                fileContents = new String(Files.readAllBytes(file.toPath()));
+                output += HtmlWriter.tag("div", null,
+                        new String(Files.readAllBytes(file.toPath())));
             } catch (IOException ex) {
                 String message = String.format("Failed to read file %s. Stacktrace: %s", file.getName(),
-                        ex.getStackTrace());
+                        ex.getMessage());
 
                 throw new RuntimeException(message);
             }
 
-            output += HtmlWriter.tag("div", null, headingHtml + fileContents);
         }
 
         String styleContent = "h1:first-letter{text-transform:uppercase;}"
                 + "xmp{white-space:pre-wrap;word-wrap:break-word;}"
                 + "div{margin-bottom:5rem;}"
-                + "." + FAIL + "{background-color:#ff7676;}"
-                + "." + PASS + "{background-color:#94fab1;}"
+                + "." + FAIL_CLASS + "{background-color:#ff7676;}"
+                + "." + PASS_CLASS + "{background-color:#94fab1;}"
                 + "table{max-width:400px;border-collapse:collapse;}"
                 + "table td,table th{padding:0.2rem 0.6rem;border:1px solid black;}"
                 + "table th{background-color: #a3c8ff;}"
                 + "textarea{width:100%;height:100%;box-sizing:border-box;resize:none;}"
                 + "." + SPACER_CLASS + "{background-color:rgb(216,216,216);height:1.4rem;}"
                 + "xmp{white-space: break-word;}";
-        String style = HtmlWriter.tag("style", null, styleContent);
-        String title = HtmlWriter.tag("title", null, "Open Interface Test Report");
 
-        output = HtmlWriter.tag("head", null, title + style)
-                + HtmlWriter.tag("body", null, output);
+        output = HtmlWriter.tag("head", null,
+                HtmlWriter.tag("title", null, "Open Interface Test Report")
+                        + HtmlWriter.tag("style", null, styleContent))
+                + HtmlWriter.tag("body", null, output.toString());
 
         output = HtmlWriter.tag("html", null, output);
 
-        String targetDirectory = "target/";
-        String outputName = "open-interface-report.html";
-
-        File outputFile = new File(targetDirectory + outputName);
-
-
-        if (outputFile.exists()) {
-            outputFile.delete();
-        }
-
-        try {
-            outputFile.createNewFile();
-        } catch (IOException ex) {
-            throw new RuntimeException("Failed to write open interface test results.");
-        }
-
-        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(outputFile), "UTF-8"))) {
-            out.write(output);
-
-        } catch (IOException ex) {
-            String message = "Error writing HTML file: " + ex.getMessage();
-            throw new RuntimeException(message);
-        }
+        FileWriter.writeFile(OpenInterfaceReportConfig.FINAL_REPORT_TARGET_DIR,
+                OpenInterfaceReportConfig.FINAL_REPORT_FILE_NAME,
+                output, OpenInterfaceReportConfig.EXTENSION, false, true, true);
     }
 }
