@@ -8,7 +8,7 @@ Feature: 49 - Check HGV/PSV for Trailer with an expired Annual Test
 
     Then The page contains "This vehicle's annual test has expired"
     And The page contains "If the vehicle has been tested recently, it can take up to 10 working days for us to update our records"
-    And The page contains "This vehicle may be MOT exempt, for more information refer to"
+    And The page contains "This vehicle may be MOT exempt, for more information refer to MOT exemption guidance"
 
     And I click the "MOT exemption guidance" link
     And I go to the next tab
@@ -18,7 +18,7 @@ Feature: 49 - Check HGV/PSV for Trailer with an expired Annual Test
     And The page contains "A112233"
     And The page contains "SCAMMELL MH12SNX"
     And The page title contains "Check annual test history"
-    And The page contains "Check another"
+    And The page contains "Check another vehicle"
     And The page contains "Colour"
     And The page contains "Fuel type"
     And The page contains "Date registered"
@@ -28,7 +28,7 @@ Feature: 49 - Check HGV/PSV for Trailer with an expired Annual Test
     And The page contains "The mileage recorded at test is currently not available for heavy goods and public service vehicles."
     And The page contains "It can take up to 10 working days for the latest annual test results to appear."
 
-    And The page contains "If you think the annual test expiry date or any of the vehicle details are wrong,"
+    And The page contains "If you think the annual test expiry date or any of the vehicle details are wrong, contact DVSA"
     And I click the "contact" link
     And I go to the next tab
     Then The page title contains "Contact DVSA - GOV.UK"

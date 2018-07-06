@@ -10,7 +10,7 @@ Feature: 45 - Check HGV that has no Annual Test history and the vehicle is more 
     And The page contains "CONVERSION"
     And The page contains "This vehicle's annual test has expired"
     And The page contains "If the vehicle has been tested recently, it can take up to 10 working days for us to update our records"
-    And The page contains "This vehicle may be MOT exempt, for more information refer to"
+    And The page contains "This vehicle may be MOT exempt, for more information refer to MOT exemption guidance"
 
     And I click the "MOT exemption guidance" link
     And I go to the next tab
@@ -20,4 +20,4 @@ Feature: 45 - Check HGV that has no Annual Test history and the vehicle is more 
     And The page contains "Annual test expired on"
     And I click the accordion section with the id "mot-history-description"
 
-    And The page contains "No annual test results found."
+    And The page contains "No annual test results found"

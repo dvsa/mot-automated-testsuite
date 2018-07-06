@@ -12,10 +12,8 @@ Feature: 29 - Vehicle with an Outstanding Recall
     And I click the accordion section with the id "vehicle-recalls-description"
     And I wait for "6" seconds
     And The page contains "Outstanding recall found"
-    And The page contains "there's an outstanding manufacturer's safety recall on"
-    And The page contains "{make} {model} {registration}"
-    And The page contains "Contact a"
-    And The page contains "dealership to arrange for repairs."
-    And The page contains "If you've had the recalled component repaired recently, it can take up to three weeks for the manufacturer to"
-    And The page contains "update their records."
+    And The page contains "there's an outstanding manufacturer's safety recall on {make} {model} {registration}."
+    And The page contains "Contact a {make} dealership to arrange for repairs."
+    And The page contains "If you've had the recalled component repaired recently, it can take up to three weeks for the manufacturer to update their records."
+    And The page contains "Was this vehicle recall information useful to you? Tell us your views so we can improve the service."
 

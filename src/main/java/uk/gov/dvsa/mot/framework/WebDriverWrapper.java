@@ -8,6 +8,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
@@ -75,6 +76,9 @@ public class WebDriverWrapper {
     /** Request handler to process HTTP requests. **/
     private final RequestHandler requestHandler;
 
+    /** Starting URL. */
+    private String startingUrl;
+
     /**
      * Creates a new instance.
      * @param env   The environment configuration to use
@@ -103,6 +107,9 @@ public class WebDriverWrapper {
 
         // ensure all previous sessions are invalidated
         this.webDriver.manage().deleteAllCookies();
+
+        // ensure the starting url is set
+        this.startingUrl = env.getRequiredProperty("startingUrl");
     }
 
     /**
@@ -121,6 +128,13 @@ public class WebDriverWrapper {
             if ("true".equals(env.getProperty("headless"))) {
                 chromeOptions.addArguments("--headless");
                 chromeOptions.addArguments("window-size=1920,1080");
+            }
+
+            if ("true".equals(env.getProperty("securityProxy"))) {
+                Proxy proxy = new Proxy();
+                proxy.setSslProxy(env.getRequiredProperty("proxyServer"))
+                        .setHttpProxy(env.getRequiredProperty("proxyServer"));
+                chromeOptions.setProxy(proxy);
             }
 
             LoggingPreferences loggingPreferences = new LoggingPreferences();
@@ -224,7 +238,7 @@ public class WebDriverWrapper {
         webDriver.manage().deleteAllCookies();
 
         // browse to the specified web page
-        String url = env.getRequiredProperty("startingUrl") + relativePath;
+        String url = startingUrl + relativePath;
         logger.debug("Browsing to {}", url);
         webDriver.get(url);
         waitForFullPageLoad();
@@ -1100,7 +1114,7 @@ public class WebDriverWrapper {
      */
     public boolean containsMessage(String message) {
         return webDriver.findElements(
-                By.xpath("//*[text()[contains(.,\"" + expandDataKeys(message) + "\")]]")).size() > 0;
+                By.xpath("//body[contains(normalize-space(.),\"" + expandDataKeys(message) + "\")]")).size() > 0;
     }
 
     /**
@@ -1111,7 +1125,7 @@ public class WebDriverWrapper {
      */
     public boolean doesNotContainMessage(String message) {
         return webDriver.findElements(
-                By.xpath("//*[text()[contains(.,\"" + expandDataKeys(message) + "\")]]")).size() == 0;
+                By.xpath("//body[contains(normalize-space(.),\"" + expandDataKeys(message) + "\")]")).size() == 0;
     }
 
     /**
@@ -1471,9 +1485,6 @@ public class WebDriverWrapper {
      */
     public void closeTabs() {
         String originalHandle = webDriver.getWindowHandle();
-
-        //Do something to open new tabs
-
         for (String handle : webDriver.getWindowHandles()) {
             if (!handle.equals(originalHandle)) {
                 webDriver.switchTo().window(handle);
@@ -1654,4 +1665,29 @@ public class WebDriverWrapper {
         return this.webDriver.getCurrentUrl();
     }
 
+    /**
+     * Gets a list of web elements and returns the text as a string array list.
+     * @param className the class name of the elements to be found
+     * @param relativePath the relative path for the elements
+     * @return Strings contained in the web elements
+     */
+    public ArrayList<String> getTextFromElementsByClass(String className, String relativePath) {
+        ArrayList<String> elementsText = new ArrayList<>();
+
+        for (WebElement element : webDriver.findElements(By.xpath(
+                String.format("//ul[contains(@class, '%s')]/%s", className, relativePath)))) {
+            elementsText.add(element.getText().replaceAll("\n", " "));
+        }
+
+        return elementsText;
+    }
+
+    /**
+     * Sets the starting url using a key for the config file.
+     * @param startingUrlKey the name of the starting url key in the config
+     */
+    public void setStartingUrl(String startingUrlKey) {
+        this.startingUrl = env.getRequiredProperty(startingUrlKey);
+        logger.debug("Switched starting url to: " + startingUrl);
+    }
 }

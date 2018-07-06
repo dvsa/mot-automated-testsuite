@@ -13,8 +13,6 @@ Feature: 28 - Vehicle without an Outstanding Recall
     And I click the accordion section with the id "vehicle-recalls-description"
     And I wait for "6" seconds
     And The page contains "No outstanding safety recalls found"
-    And The page contains "There are no outstanding manufacturer's safety recalls for"
-    And The page contains "{make} {model} {registration}"
-    And The page contains "Was this vehicle recall information useful to you?"
-    And The page contains "Tell us your views"
-    And The page contains "so we can improve the service."
+    And The page contains "There are no outstanding manufacturer's safety recalls for {make} {model} {registration}"
+    And The page contains "There can be a delay before we receive information about safety recalls. If you are concerned, contact your vehicle manufacturer’s dealership."
+    And The page contains "Was this vehicle recall information useful to you? Tell us your views so we can improve the service."

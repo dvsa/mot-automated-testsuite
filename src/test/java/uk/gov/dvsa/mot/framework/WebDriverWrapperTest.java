@@ -1136,6 +1136,73 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>containsMessage()</code> can find text ignoring tags.
+     */
+    @Test
+    public void containsMessageIgnoringTags() {
+        browseTo("/containsMessage-5.html", "containsMessage - 5");
+        assertTrue(driverWrapper.containsMessage("You have successfully updated the user:"));
+
+        assertTrue(driverWrapper.containsMessage("Fred Bloggs"));
+
+        assertTrue(driverWrapper.containsMessage("USER023"));
+
+        assertTrue(driverWrapper.containsMessage("You have successfully updated the user: Fred Bloggs 'USER023'."));
+
+        assertTrue(driverWrapper.containsMessage("This is a test string on multiple lines here"));
+    }
+
+    /**
+     * Tests <code>doesNotContainMessage()</code> should not see tags.
+     */
+    @Test
+    public void doesNotContainMessageIgnoringTags() {
+        browseTo("/containsMessage-5.html", "containsMessage - 5");
+        assertTrue(driverWrapper.doesNotContainMessage("You have successfully updated the user: <strong>Fred Bloggs"
+                + "</strong> 'USER023'."));
+
+        assertTrue(driverWrapper.doesNotContainMessage("You have successfully updated the user: strong Fred Bloggs"
+                + "strong 'USER023'."));
+    }
+
+    /**
+     * Tests <code>containsMessage()</code> can find text over multiple lines.
+     */
+    @Test
+    public void containsMessageOverMultipleLines() {
+        browseTo("/containsMessage-6.html", "containsMessage - 6");
+        assertTrue(driverWrapper.containsMessage("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin "
+                + "blandit nibh maximus nibh mollis luctus. Duis aliquam lacus vitae arcu tincidunt, sit amet laoreet "
+                + "urna rutrum. Pellentesque sed pharetra ex. Phasellus condimentum neque in pharetra pellentesque. "));
+
+        assertTrue(driverWrapper.containsMessage(
+                "Nullam egestas nisl sed mi molestie, nec varius nunc hendrerit. Proin tempus lacus nec cursus "
+                + "mattis. Integer sagittis elit sit amet nisi ultrices, id porta nisi tempus. Maecenas imperdiet nec "
+                + "augue id faucibus. Suspendisse potenti. Pellentesque viverra ante metus, sit amet sollicitudin "
+                + "lectus malesuada a."));
+
+        assertTrue(driverWrapper.containsMessage("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin "
+                + "blandit nibh maximus nibh mollis luctus. Duis aliquam lacus vitae arcu tincidunt, sit amet laoreet "
+                + "urna rutrum. Pellentesque sed pharetra ex. Phasellus condimentum neque in pharetra pellentesque. "
+                + "Nullam egestas nisl sed mi molestie, nec varius nunc hendrerit. Proin tempus lacus nec cursus "
+                + "mattis. Integer sagittis elit sit amet nisi ultrices, id porta nisi tempus. Maecenas imperdiet nec "
+                + "augue id faucibus. Suspendisse potenti. Pellentesque viverra ante metus, sit amet sollicitudin "
+                + "lectus malesuada a."));
+    }
+
+    /**
+     * Tests <code>doesNotContainMessage()</code> can not find text where we add return carriages in the text to check.
+     */
+    @Test
+    public void doesNotContainMessageOverMultipleLines() {
+        browseTo("/containsMessage-6.html", "containsMessage - 6");
+        assertTrue(driverWrapper.doesNotContainMessage("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+                + "Proin blandit nibh maximus nibh mollis luctus.\n"
+                + "Duis aliquam lacus vitae arcu tincidunt, sit amet laoreet urna rutrum. Pellentesque sed pharetra "
+                + "ex."));
+    }
+
+    /**
      * Tests <code>checkTextFromAnyTableRow()</code> with a matching example.
      */
     @Test
