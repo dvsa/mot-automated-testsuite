@@ -1233,42 +1233,6 @@ public class WebDriverWrapperTest {
     }
 
     /**
-     * Tests <code>tableColumnContainsValue()</code> with a matching examples.
-     */
-    @Test
-    public void testTableColumnContainsValue() {
-        browseTo("/checkTextFromAnyTableRow-2.html", "checkTextFromAnyTableRow - 2");
-        assertTrue("Value should be found",
-                driverWrapper.tableColumnContainsValue("Column 1", "Value 1"));
-        assertTrue("Value should be found",
-                driverWrapper.tableColumnContainsValue("column2", "value2"));
-        assertTrue("Value should be found",
-                driverWrapper.tableColumnContainsValue("COL_3", "COL_3"));
-        assertTrue("Value should be found",
-                driverWrapper.tableColumnContainsValue("4", "val 4"));
-        assertTrue("Value should be found",
-                driverWrapper.tableColumnContainsValue("Column 1", "test1"));
-        assertTrue("Value should be found",
-                driverWrapper.tableColumnContainsValue("column2", "A string value 2"));
-    }
-
-    /**
-     * Tests <code>tableColumnContainsValue()</code> with non-matching examples.
-     */
-    @Test
-    public void testNotTableColumnContainsValue() {
-        browseTo("/checkTextFromAnyTableRow-2.html", "checkTextFromAnyTableRow - 2");
-        assertFalse("Value should not be found",
-                driverWrapper.tableColumnContainsValue("Column 1", "Random text"));
-        assertFalse("Value should not be found",
-                driverWrapper.tableColumnContainsValue("Unknown", "value2"));
-        assertFalse("Value should not be found",
-                driverWrapper.tableColumnContainsValue("COL_3", "Value 1"));
-        assertFalse("Value should not be found",
-                driverWrapper.tableColumnContainsValue("Four", "val 4"));
-    }
-
-    /**
      * Tests <code>checkTableHasRows()</code> with a matching example (no thead/tbody) that does have sufficient rows.
      */
     @Test
