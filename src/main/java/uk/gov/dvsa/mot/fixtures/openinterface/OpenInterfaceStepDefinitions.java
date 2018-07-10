@@ -83,8 +83,7 @@ public class OpenInterfaceStepDefinitions implements En {
     private String getResponse(String registration) {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder( "curl", "-v",
-                    "--insecure", "--connect-timeout 10",
-                    "--tlsv1.2", "-E ../openif-test-cert/dvlaclienttest.pem",
+                    "--insecure", "--tlsv1.2", "-E ../openif-test-cert/dvlaclienttest.pem",
                     "-H \"Accept: application/xml\"",
                     env.getProperty("openInterfaceUrl") + "dvla/servlet/ECSODDispatcher?VRM=" + registration);
 
