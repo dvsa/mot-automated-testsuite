@@ -101,6 +101,9 @@ public class OpenInterfaceStepDefinitions implements En {
                 rawXml.append(content);
             }
 
+            //remove later
+            System.out.println(rawXml.toString());
+
             return rawXml.toString();
         } catch (Exception ex) {
             throw new RuntimeException(String.format("Failed to check the mot history, %s", ex.getMessage()));
