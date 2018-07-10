@@ -70,8 +70,35 @@ Feature: 12a - Vehicle Examiner
     Then I check the reg {reg}, vin {vin} on vehicle information
     And I click the "View MOT history" link
     And The page contains "Vehicle MOT test history"
+    And The page does not contain "Test date/time utc"
     And I click the first "View" link
     And The page contains "MOT test summary" or "MOT re-test summary"
     And I check there is a "Print certificate" link
     And I click "Print certificate" and check the PDF contains:
       | Duplicate certificate          |
+
+  Scenario: Vehicle information search table
+    Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
+    And I load "VEHICLE_CLASS_4_AFTER_2010" as {reg}, {vin}, {odo}
+    And I click the "Vehicle information" link
+    When I search for vehicle information by "Registration (VRM)" with {reg}
+    Then I check the reg {reg}, vin {vin} on vehicle information
+    And I click the "View MOT history" link
+    And The page contains "Vehicle MOT test history"
+    And The page does not contain "Test date/time utc"
+    And The page contains "Filter"
+    And The page contains "Test date/time"
+    And The page contains "Result"
+    And The page contains "Summary"
+    And The page contains "Test"
+    And The page contains "VIN/Chassis"
+    And The page contains "Registration"
+    And The page contains "Make"
+    And The page contains "Model"
+    And The page contains "Type"
+    And The page contains "Site"
+    And The page contains "User ID"
+    And The page contains "Previous"
+    And The page contains "Next"
+
+
