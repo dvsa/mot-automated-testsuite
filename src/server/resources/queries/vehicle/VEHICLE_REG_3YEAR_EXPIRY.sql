@@ -6,7 +6,7 @@ and d.registration != "JU57OFH" -- broken data in PP/INT due to new HGV test dat
 and d.eu_classification = "M1"
 and d.registration is not null -- nullable in PP/Prod
 and d.vin is not null -- nullable in PP/Prod
-and convert(extract(DAY FROM d.first_registration_date), INT) > 15 -- as leading zero of date is removed in UI
+and convert(extract(DAY FROM d.first_registration_date), SIGNED INTEGER) > 15 -- as leading zero of date is removed in UI
 and d.registration not in (
   select v.registration from vehicle v
   where v.registration is not null -- exclude same registration manually entered into the application
