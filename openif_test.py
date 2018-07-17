@@ -99,8 +99,6 @@ def main(argv):
         print('Unsupported environment: ' + args[0])
         sys.exit(2)
 
-    print('cert' + args[2])
-
     request = requests.get(getRequestURL(args[0], args[1]), verify=args[2])
 
     print(request.text)
