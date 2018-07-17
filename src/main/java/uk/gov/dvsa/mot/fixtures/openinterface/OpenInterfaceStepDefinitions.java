@@ -83,7 +83,7 @@ public class OpenInterfaceStepDefinitions implements En {
     private String getResponse(String registration) {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder("python3", "openif_test.py",
-                    "-e", env.getProperty("environment"), "-r", registration, "-c", env.getProperty("openifCertDir"));
+                    "-e", env.getProperty("environment"), "-r", registration, "-c", env.getProperty("openifCertPath"));
 
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
@@ -99,7 +99,8 @@ public class OpenInterfaceStepDefinitions implements En {
             }
 
             //remove later
-            System.out.println(rawXml.toString());
+            System.out.println("response: " + rawXml.toString());
+            logger.debug("response: " + rawXml.toString());
 
             return rawXml.toString();
         } catch (Exception ex) {
