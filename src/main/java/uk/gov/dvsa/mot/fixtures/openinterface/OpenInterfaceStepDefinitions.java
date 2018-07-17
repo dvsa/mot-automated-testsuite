@@ -1,18 +1,25 @@
 package uk.gov.dvsa.mot.fixtures.openinterface;
 
+import static com.jayway.restassured.RestAssured.given;
 import static org.junit.Assert.assertTrue;
 
+import com.jayway.restassured.response.Response;
 import cucumber.api.DataTable;
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import sun.net.www.protocol.https.Handler;
+import sun.net.www.protocol.https.HttpsURLConnectionImpl;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 import uk.gov.dvsa.mot.framework.xml.XmlDocument;
 import uk.gov.dvsa.mot.reporting.OpenInterfaceReportBuilder;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,9 +89,12 @@ public class OpenInterfaceStepDefinitions implements En {
      */
     private String getResponse(String registration) {
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder( "curl", "-v",
-                    "--insecure", "--tlsv1.2", "-E ../openif-test-cert/dvlaclienttest.pem",
-                    env.getProperty("openInterfaceUrl") + "dvla/servlet/ECSODDispatcher?VRM=" + registration);
+            //ProcessBuilder processBuilder = new ProcessBuilder( "curl", "-v",
+            //        "--insecure", "--tlsv1.2", "-E ",
+            //        env.getProperty("openInterfaceUrl") + "dvla/servlet/ECSODDispatcher?VRM=" + registration);
+
+            ProcessBuilder processBuilder = new ProcessBuilder("python3", "openif_test.py",
+                    "-e", env.getProperty("environment"), "-r", registration, "-c", env.getProperty("openifCertDir"));
 
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
