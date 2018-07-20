@@ -244,8 +244,7 @@ Feature: 05e - Tester does...
       | Brake performance not tested  |
       | {registration1}               |
       | {vin1}                        |
-
-  @manual
+    
   Scenario: Tester opens a manual from the rfr search page
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
