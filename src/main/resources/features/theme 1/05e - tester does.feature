@@ -244,3 +244,21 @@ Feature: 05e - Tester does...
       | Brake performance not tested  |
       | {registration1}               |
       | {vin1}                        |
+
+  @manual
+  Scenario: Tester opens a manual from the rfr search page
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+    When I start an MOT test for {registration1}, {vin1}, {site}
+
+    And The page title contains "Your home"
+    And I click the "Enter test results" link
+    And I search for defect "brake" and open the "1.1.12 (d)" manual link, I expect the "Section 1 Brakes" manual page
+
+    And I click the "Finish and return to MOT test results" link
+    And I click the "Cancel test" link
+    And The page title contains "Cancel test"
+
+    And I click the "Aborted by VE" radio button
+    And I press the "Cancel test" button
+    Then The page title contains "MOT test aborted"
