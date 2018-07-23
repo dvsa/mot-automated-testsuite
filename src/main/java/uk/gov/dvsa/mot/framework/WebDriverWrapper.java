@@ -1715,4 +1715,21 @@ public class WebDriverWrapper {
         this.startingUrl = env.getRequiredProperty(startingUrlKey);
         logger.debug("Switched starting url to: " + startingUrl);
     }
+
+    /**
+     * Gets the current number of open tabs in the driver.
+     * @return return the number of open tabs
+     */
+    public int getCurrentTabsCount() {
+        return webDriver.getWindowHandles().size();
+    }
+
+    /**
+     * Switches the current webdriver context to a specified tab.
+     * @param tabNumber the tab number to switch to
+     */
+    public void switchToTab(int tabNumber) {
+        ArrayList<String> tabs = new ArrayList<String>(webDriver.getWindowHandles());
+        webDriver.switchTo().window(tabs.get(tabNumber));
+    }
 }

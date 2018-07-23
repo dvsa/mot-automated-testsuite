@@ -92,21 +92,21 @@ public class TesterDoesStepDefinitions implements En {
 
         And("^I browse for a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\"\\) "
                 + "with comment \"([^\"]+)\"$", (String defectType, String category, String defect, String comment) ->
-                    browseForDefect(defectType, category, Optional.empty(), Optional.empty(), defect, comment));
+                    addDefectFromBrowse(defectType, category, Optional.empty(), Optional.empty(), defect, comment));
 
         And("^I browse for a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"\\) "
                 + "with comment \"([^\"]+)\"$", (String defectType, String category, String subcategory, String defect,
-                    String comment) -> browseForDefect(defectType, category, Optional.of(subcategory), Optional.empty(),
-                    defect, comment));
+                    String comment) -> addDefectFromBrowse(defectType, category, Optional.of(subcategory),
+                    Optional.empty(), defect, comment));
 
         And("^I browse for a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\", "
                 + "\"([^\"]+)\"\\) with comment \"([^\"]+)\"$", (String defectType, String category,
                     String subcategory, String subsubcategory, String defect, String comment) ->
-                    browseForDefect(defectType, category, Optional.of(subcategory), Optional.of(subsubcategory), defect,
-                    comment));
+                    addDefectFromBrowse(defectType, category, Optional.of(subcategory), Optional.of(subsubcategory),
+                            defect, comment));
 
         And("^I search for a \"([^\"]+)\" defect of \"([^\"]+)\" with comment \"([^\"]+)\"$",
-                this::searchForDefect);
+                this::addDefectFromSearch);
 
         And("^I add a manual advisory of \"([^\"]+)\"$", this::addManualAdvisory);
 
@@ -228,6 +228,11 @@ public class TesterDoesStepDefinitions implements En {
 
         And("^I enter the current time for the contingency test$", () ->
                 selectContingencyTestTime());
+
+        And("^I search for defect \"([^\"]+)\" and open the \"([^\"]+)\" manual link,"
+                       + " I expect the \"([^\"]+)\" manual page",
+                (String defect, String linkText, String manualTitle) ->
+                        openManualLinkFromSearchPage(defect, linkText, manualTitle));
     }
 
     /**
@@ -914,16 +919,31 @@ public class TesterDoesStepDefinitions implements En {
     }
 
     /**
+     * Adds a defect to the current mot tests by browsing through the specified category.
+     * @param defectType        The defect type, must be "Advisory", "PRS" or "Failure"
+     * @param category          The defect category
+     * @param subcategory       The defect sub-category (if any)
+     * @param subSubCategory    The defect second sub-category (if any)
+     * @param defect            The defect
+     * @param comment           The comment to use
+     */
+    private void addDefectFromBrowse(String defectType, String category, Optional<String> subcategory,
+                                     Optional<String> subSubCategory, String defect, String comment) {
+        // Browse to the desired defect
+        browseForDefect(category, subcategory, subSubCategory);
+
+        // Add the defect
+        addDefectAndReturnToResults(DefectJourney.AddFromBrowse, defect, DefectType.fromString(defectType),
+                comment, false, "Defects");
+    }
+
+    /**
      * Adds a defect to the current MOT test, by browsing through the specified category and optional sub-category.
      * Refactored repeated cucumber steps, the original steps are detailed below.
-     * @param defectType    The defect type, must be "Advisory", "PRS" or "Failure"
      * @param category      The defect category
      * @param subcategory   The defect sub-category (if any)
-     * @param defect        The defect
-     * @param comment       The comment to use
      */
-    private void browseForDefect(String defectType, String category, Optional<String> subcategory,
-                                 Optional<String> subsubcategory, String defect, String comment) {
+    private void browseForDefect(String category, Optional<String> subcategory, Optional<String> subsubcategory) {
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
         // And I click the "Add a defect" link
@@ -943,12 +963,23 @@ public class TesterDoesStepDefinitions implements En {
             // And I click the <subsubcategory> link
             driverWrapper.clickLink(value);
         });
+    }
 
-        // add the defect
-        handleDefect(DefectJourney.AddFromBrowse, defect, DefectType.fromString(defectType), comment, false);
-
-        // And The page title contains "Defects"
-        driverWrapper.checkCurrentPageTitle("Defects");
+    /**
+     * Adds a defect a returns the Mot test results page.
+     * @param journey       The journey taken to add the defect
+     * @param defect        The defect
+     * @param defectType    The defect type, must be "Advisory", "PRS" or "Failure"
+     * @param comment       The comment to use
+     * @param isDangerous   Is the defect dangerous
+     * @param pageTitle     The title of the page the journey returns to after adding the defect
+     */
+    private void addDefectAndReturnToResults(DefectJourney journey, String defect, DefectType defectType,
+                                             String comment, boolean isDangerous, String pageTitle) {
+        // Add the defect
+        handleDefect(journey, defect, defectType, comment, isDangerous);
+        // And The page title contains "Search for a defect"
+        driverWrapper.checkCurrentPageTitle(pageTitle);
         // And I click the "Finish and return to MOT test results" link
         driverWrapper.clickLink("Finish and return to MOT test results");
 
@@ -990,11 +1021,9 @@ public class TesterDoesStepDefinitions implements En {
     /**
      * Adds a defect to the current MOT test, by searching for the specified defect text. Refactored repeated cucumber
      * steps, the original steps are detailed below.
-     * @param defectType    The defect type, must be "Advisory", "PRS" or "Failure"
      * @param defect        The defect
-     * @param comment       The comment to use
      */
-    private void searchForDefect(String defectType, String defect, String comment) {
+    private void searchForDefect(String defect) {
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
         // And I click the "Search for a defect" link
@@ -1006,17 +1035,52 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.enterIntoFieldWithId(defect, "search-main");
         // And I press the "Search" button
         driverWrapper.pressButton("Search");
+    }
 
-        // add the defect
-        handleDefect(DefectJourney.AddFromSearch, defect, DefectType.fromString(defectType), comment, false);
+    /**
+     * Add a defect by searching for it.
+     * @param defectType    The defect type, must be "Advisory", "PRS" or "Failure"
+     * @param defect        The defect
+     * @param comment       The comment to use
+     */
+    private void addDefectFromSearch(String defectType, String defect, String comment) {
+        //Search for the defect
+        searchForDefect(defect);
 
-        // And The page title contains "Search for a defect"
+        //Add the defect and return to results
+        addDefectAndReturnToResults(DefectJourney.AddFromSearch, defect, DefectType.fromString(defectType),
+                comment, false, "Search for a defect");
+    }
+
+    /**
+     * Opens a specified manuals link and checks the page is as expected.
+     * @param defect the defect to search for
+     * @param manualLinkText the manual link text
+     * @param manualTitle the title of the manuals page
+     */
+    private void openManualLinkFromSearchPage(String defect, String manualLinkText, String manualTitle) {
+        //Search for defect
+        searchForDefect(defect);
+        //Click the first manual reference link
+        driverWrapper.clickFirstLink(manualLinkText);
+
+        //Check the second Tab is open
+        assertEquals("The new tab was not opened", driverWrapper.getCurrentTabsCount(), 2);
+
+        //Switch to the second tab
+        driverWrapper.switchToTab(1);
+
+        //Check the manual page title
+        driverWrapper.checkCurrentPageTitle(manualTitle);
+
+        //Switch back to the first tab
+        driverWrapper.switchToTab(0);
+
+        //Close other tabs
+        driverWrapper.closeTabs();
+
+        //Check the current page title
         driverWrapper.checkCurrentPageTitle("Search for a defect");
-        // And I click the "Finish and return to MOT test results" link
-        driverWrapper.clickLink("Finish and return to MOT test results");
-
-        // And The page title contains "MOT test results"
-        driverWrapper.checkCurrentPageTitle("MOT test results");
     }
 
     /**
