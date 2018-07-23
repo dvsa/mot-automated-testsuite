@@ -82,8 +82,9 @@ public class OpenInterfaceStepDefinitions implements En {
      */
     private String getResponse(String registration) {
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder("python3", "openif_test.py",
-                    "-e", env.getProperty("environment"), "-r", registration, "-c", env.getProperty("openifCertPath"));
+            ProcessBuilder processBuilder = new ProcessBuilder( "curl", "-v",
+                    "--insecure", "--tlsv1.2", "-E ../openif-test-cert/dvlaclienttest.pem",
+                    env.getProperty("openInterfaceUrl") + "dvla/servlet/ECSODDispatcher?VRM=" + registration);
 
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
@@ -99,8 +100,7 @@ public class OpenInterfaceStepDefinitions implements En {
             }
 
             //remove later
-            System.out.println("response: " + rawXml.toString());
-            logger.debug("response: " + rawXml.toString());
+            System.out.println(rawXml.toString());
 
             return rawXml.toString();
         } catch (Exception ex) {
