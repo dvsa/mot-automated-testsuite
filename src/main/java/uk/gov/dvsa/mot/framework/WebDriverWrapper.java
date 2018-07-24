@@ -1061,6 +1061,31 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Checks whether a specified piece of text exists under a certain column in the table.
+     * @param column    The column name
+     * @param value     The value to check for
+     * @return          Whether the value exists in the table column
+     */
+    public boolean tableColumnContainsValue(String column, String value) {
+
+        List<WebElement> tableHeaders =
+                webDriver.findElements(By.xpath("//thead/tr/th"));
+        int columnIndex = 1;
+        boolean foundColumn = false;
+        for (WebElement header : tableHeaders) {
+            if (header.getText().contains(column)) {
+                foundColumn = true;
+                break;
+            } else {
+                columnIndex++;
+            }
+        }
+
+        return foundColumn && webDriver.findElements(
+                By.xpath("//tbody/tr/td[" + columnIndex + "][contains(text(), '" + value + "')]")).size() > 0;
+    }
+
+    /**
      * Fetches the text in any list items in a div following the h2 element (also in a div).
      * @param headingText   The heading text
      * @return The list item text (concatenated together)
@@ -1689,5 +1714,22 @@ public class WebDriverWrapper {
     public void setStartingUrl(String startingUrlKey) {
         this.startingUrl = env.getRequiredProperty(startingUrlKey);
         logger.debug("Switched starting url to: " + startingUrl);
+    }
+
+    /**
+     * Gets the current number of open tabs in the driver.
+     * @return return the number of open tabs
+     */
+    public int getCurrentTabsCount() {
+        return webDriver.getWindowHandles().size();
+    }
+
+    /**
+     * Switches the current webdriver context to a specified tab.
+     * @param tabNumber the tab number to switch to
+     */
+    public void switchToTab(int tabNumber) {
+        ArrayList<String> tabs = new ArrayList<String>(webDriver.getWindowHandles());
+        webDriver.switchTo().window(tabs.get(tabNumber));
     }
 }
