@@ -313,6 +313,8 @@ dependencies {
     // depends upon the "mot/2fa-pin-generator" project being checked out alongside this project, then built manually
     compile files("../2fa-pin-generator/build/libs/2fa-generator-1.0.jar")
 
+    compile group: 'org.json', name: 'json', version: '20180130'
+
     serverCompile "org.slf4j:slf4j-api:$slf4jVersion"
     serverRuntime "ch.qos.logback:logback-classic:$logbackVersion"
     serverCompile "org.springframework:spring-jdbc:$springVersion"
