@@ -60,13 +60,17 @@ public class LifecycleHooks {
 
         // add to the test report
         outputDataUse(scenario);
-        outputFinalScreenshot(scenario);
-        outputFinalHtml(scenario);
 
-        // log the current user out, if they are logged in
-        if (driverWrapper.hasLink("Sign out")) {
-            logger.debug("Logging the current user out...");
-            driverWrapper.clickLink("Sign out");
+        // For all non-B2B scenarios take screenshot, HTML and sign out at the end
+        if (!scenario.getSourceTagNames().contains("@mothb2b")) {
+            outputFinalScreenshot(scenario);
+            outputFinalHtml(scenario);
+
+            // log the current user out, if they are logged in
+            if (driverWrapper.hasLink("Sign out")) {
+                logger.debug("Logging the current user out...");
+                driverWrapper.clickLink("Sign out");
+            }
         }
 
         // test cleanup (note: this will clear permanent cookies but not HTTP/Session cookies)
