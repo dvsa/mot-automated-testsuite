@@ -40,8 +40,57 @@ public class JsonApiStepDefinitions implements En {
                 logger.debug("RESPONSE:" + response.body().prettyPrint());
             });
 
+        Given("^I invoke the Trade API search by test number with \\{([^\\}]+)\\}$",
+                (String testNumber) -> {
+
+                    String url = env.getProperty("tradeApiUrl");
+                    String apiKey = env.getProperty("tradeApiKey");
+
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("x-api-key", apiKey);
+                    headers.put("Accept", "application/json");
+                    response = given().headers(headers).when().get(url + "?number="
+                            + driverWrapper.getData(testNumber)).andReturn();
+
+                    logger.debug("RESPONSE:" + response.body().prettyPrint());
+                });
+
+        Given("^I invoke the Trade API search by registration number with \\{([^\\}]+)\\}$",
+                (String registrationNumber) -> {
+
+                    String url = env.getProperty("tradeApiUrl");
+                    String apiKey = env.getProperty("tradeApiKey");
+
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("x-api-key", apiKey);
+                    headers.put("Accept", "application/json");
+                    response = given().headers(headers).when().get(url + "?registration="
+                            + driverWrapper.getData(registrationNumber)).andReturn();
+
+                    logger.debug("RESPONSE:" + response.body().prettyPrint());
+                });
+
+        Given("^I invoke the Trade API search by page number with \"([^\"]+)\"$",
+                (String pageNumber) -> {
+
+                    String url = env.getProperty("tradeApiUrl");
+                    String apiKey = env.getProperty("tradeApiKey");
+
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("x-api-key", apiKey);
+                    headers.put("Accept", "application/json");
+                    response = given().headers(headers).when().get(url + "?page="
+                            + pageNumber).andReturn();
+
+                    logger.debug("RESPONSE:" + response.body().prettyPrint());
+                });
+
         Then("^The first response contains \"([^\"]+)\" equals \\{([^\\}]+)\\}$", (String name, String value) -> {
             response.then().body(name + "[0]", is(driverWrapper.getData(value)));
+        });
+
+        Then("^The response contains \"([^\"]+)\" equals \\{([^\\}]+)\\}$", (String name, String value) -> {
+            response.then().body(name, is(driverWrapper.getData(value)));
         });
     }
 }
