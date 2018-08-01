@@ -192,6 +192,7 @@ public class AuthenticationStepDefinitions implements En {
                     lastDriftKey
                             .map((key) -> Integer.parseInt(driverWrapper.getData(key)))
                             .orElse(0))) {
+                case PinSkipped:
                 case PinSuccessful:
                     // check if any special notices need clearing down
                     if (driverWrapper.hasLink("Read and acknowledge")) {
@@ -201,7 +202,6 @@ public class AuthenticationStepDefinitions implements En {
                     // all successful
                     return;
 
-                case PinSkipped:
                 case PinFailed:
                     if (driftOffset.isPresent() || lastDriftKey.isPresent()) {
                         // if using drift settings then we return if PIN rejected
@@ -304,10 +304,7 @@ public class AuthenticationStepDefinitions implements En {
      */
     private LoginOutcome handlePinScreen(String seed, int driftOffset, int lastDrift) {
 
-        // if the pin has been skipped due to fingerprint
-        if (driverWrapper.getCurrentPageTitle().contains("Your home")) {
-            return LoginOutcome.PinSkipped;
-        }
+
 
         String pin = generatePin(seed, driftOffset, lastDrift);
         driverWrapper.enterIntoField(pin, "Security card PIN");
@@ -317,6 +314,9 @@ public class AuthenticationStepDefinitions implements En {
             // pin rejected, still on the security PIN screen
             return LoginOutcome.PinFailed;
 
+        } else if (driverWrapper.getCurrentPageTitle().contains("Your home")) {
+            // if the pin has been skipped due to fingerprint
+            return LoginOutcome.PinSkipped;
         } else {
             return LoginOutcome.PinSuccessful;
         }

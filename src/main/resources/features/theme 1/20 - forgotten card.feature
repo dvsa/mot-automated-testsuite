@@ -31,7 +31,7 @@ Feature: 20 - Existing user has forgotten 2FA card
     And I click the "Sign out" link
     And I delete the "_hasLoggedInWithLostForgottenCardJourney" cookie
     And I login without 2FA as {username}
-    And The page title contains "Your security card PIN"
+    # FAnd The page title contains "Your security card PIN"
     And I generate 2FA PIN with previous drift {lastDrift} as {pin}
     And I enter {pin} in the "Security card PIN" field
     And I press the "Sign in" button
