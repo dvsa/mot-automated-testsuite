@@ -8,6 +8,9 @@ Feature: 17 - Scheme user
     And The page title contains "Special Notices"
 
     Then I click the "Create special notice" link
+    And The page title contains "Select a message type"
+    And I click the "Special notice" radio button
+    And I press the "Continue" button
     And The page title contains "Create Special Notice"
     And I enter "Test Special Notice" in the "Subject title" field
     And I enter {day} in the "Day" field in fieldset "Internal publish date"
