@@ -234,7 +234,7 @@ public class VehicleExaminerStepDefinitions implements En {
         driverWrapper.clickLink("AE information");
 
         //And I enter the AE number into the field
-        driverWrapper.enterIntoField(driverWrapper.getData(aeRefKey), "AE Number");
+        driverWrapper.enterIntoField(driverWrapper.getData(aeRefKey), "Authorised Examiner ID");
 
         //And I press the Search button
         driverWrapper.pressButton("Search");
