@@ -6,7 +6,7 @@ Feature: 16 - Scheme manager
     And I login without 2FA using "SCHEME_MGR" as {schemeManager}
 
     When I click the "AE information" link
-    And I enter {aeReference} in the "AE Number" field
+    And I enter {aeReference} in the "Authorised Examiner ID" field
     And I press the "Search" button
 
     Then The page title contains "Authorised Examiner"

@@ -5,7 +5,7 @@ Feature: 13b - A01 user
     Given I load uniquely "AE_WITH_ASSIGNED_SITE" as {aeReference}, {aeName}, {siteReference}, {siteName}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I click the "AE information" link
-    And I enter {aeReference} in the "AE Number" field
+    And I enter {aeReference} in the "Authorised Examiner ID" field
     And I press the "Search" button
     And I click the remove site association link for {siteName}
     And I select "Surrendered" in the "Choose a status" field
