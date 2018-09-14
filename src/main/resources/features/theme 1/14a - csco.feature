@@ -5,7 +5,7 @@ Feature: 14a - CSCO
     Given I login without 2FA using "CSCO_USER" as {cscouser}
     And I load "AE_NOT_REJECTED" as {aeNumber}, {aeName}
     And I click the "AE information" link
-    When I enter {aeNumber} in the "AE Number" field
+    When I enter {aeNumber} in the "Authorised Examiner ID" field
     And I press the "Search" button
     And I check the "Authorised Examiner ID" field row has value {aeNumber}
 

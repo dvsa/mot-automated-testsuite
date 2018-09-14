@@ -20,7 +20,7 @@ Feature: 10 - Refund slots as Finance User
 
     Then I login without 2FA using "FINANCE_USER" as {username}
     And I click the "AE information" link
-    And I enter {AEREF} in the "AE Number" field
+    And I enter {AEREF} in the "Authorised Examiner ID" field
     And I press the "Search" button
 
     # Partial batch refund 25 slots out of 150

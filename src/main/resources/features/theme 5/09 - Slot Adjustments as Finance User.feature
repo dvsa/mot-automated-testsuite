@@ -6,7 +6,7 @@ Feature: 09 - Slot Adjustments as Finance User
     Given I login without 2FA using "FINANCE_USER" as {username}
     And I click the "AE information" link
     And I load "AE_USER_SLOTADJUST" as {aeusername}, {aename}, {slots}, {slotsup}, {slotsdown}
-    And I enter {aeusername} in the "AE Number" field
+    And I enter {aeusername} in the "Authorised Examiner ID" field
     And I press the "Search" button
     And I click the "Slot adjustment" link
     And I click the "Add slots" radio button
@@ -32,7 +32,7 @@ Feature: 09 - Slot Adjustments as Finance User
     Given I login without 2FA using "FINANCE_USER" as {username}
     And I click the "AE information" link
     And I load "AE_USER_SLOTADJUST" as {aeusername}, {aename}, {slots}, {slotsup}, {slotsdown}
-    And I enter {aeusername} in the "AE Number" field
+    And I enter {aeusername} in the "Authorised Examiner ID" field
     And I press the "Search" button
     And I click the "Slot adjustment" link
     And I click the "Remove slots" radio button
