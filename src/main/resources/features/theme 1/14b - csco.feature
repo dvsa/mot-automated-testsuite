@@ -11,9 +11,9 @@ Feature: 14b - CSCO
       | Duplicate certificate          |
 
 
-  Scenario: CSCO user performs MOT test search by site, and is able to view test certificates
+  Scenario: CSCO user performs MOT test search by site, and is able to view a recent test certificate
     Given I login without 2FA using "CSCO_USER" as {cscouser}
-    And I load "SITE" as {siteNumber}, {siteName}
+    And I load "SITE_RECENT" as {siteNumber}, {siteName}
     And I click the "MOT tests" link
     When I search for an mot by "Site (recent tests)" with {siteNumber}
     And I click the first "View" link
