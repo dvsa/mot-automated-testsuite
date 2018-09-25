@@ -13,7 +13,7 @@ Feature: 19 - New trade user orders and activates 2FA card
     And I press the "Continue" button
     And I enter "Bert" in the "First name" field
     And I enter "William" in the "Middle name (optional)" field
-    And I enter "Tester" in the "Last name" field
+    And I enter "Varcher" in the "Last name" field
     And I enter "20" in the "Day" field
     And I enter "07" in the "Month" field
     And I enter "1969" in the "Year" field
@@ -126,7 +126,7 @@ Feature: 19 - New trade user orders and activates 2FA card
     And I enter {email} in the "Re-type your email address" field
     And I press the "Continue" button
     And I enter "Fred" in the "First name" field
-    And I enter "Tester" in the "Last name" field
+    And I enter "Varcher" in the "Last name" field
     And I enter "20" in the "Day" field
     And I enter "07" in the "Month" field
     And I enter "1969" in the "Year" field
