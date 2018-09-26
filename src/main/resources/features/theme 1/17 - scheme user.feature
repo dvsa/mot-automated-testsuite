@@ -27,8 +27,8 @@ Feature: 17 - Scheme user
     And I click the "VTS Roles" checkbox
     And I enter "This is a test special notice." in the field with id "notice-text-input"
     And I press the "Preview" button
-    Then The page title contains "Special Notice Preview"
-    And I click the "Home" link
+    Then The page title contains "Review and publish the message - MOT testing service"
+    And I click the "Return to home" link
     And I click the first "Special notices" link
 
     And I click the last "View" link
@@ -36,8 +36,8 @@ Feature: 17 - Scheme user
     And I enter "Edited Test Special Notice" in the "Subject title" field
     And I enter "This is an edited test special notice." in the field with id "notice-text-input"
     And I press the "Preview" button
-    Then The page title contains "Special Notice Preview"
-    And I press the "Publish special notice" button
+    Then The page title contains "Review and publish the message - MOT testing service"
+    And I press the "Publish" button
     And I click the last "View" link
     And I click the last "Remove" link
     And I check the alert popup contains "This action will delete this notice from the library."
