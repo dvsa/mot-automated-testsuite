@@ -53,8 +53,8 @@ MOT:
 * **@regression** = Theme 1 regression tests
 * **@smoke** = Smoke tests
 * **@cpms** = CPMS regression tests
+* **@elasticSearch** = Elastic Search comparison test suite
 * **@extended** = Extended regression tests
-* **@elasticSearch = Elastic Search comparison test suite
 
 MOT History:
 * **@mothint** = MOT History regression tests on the INT Environment
