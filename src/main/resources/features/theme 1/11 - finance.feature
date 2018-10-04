@@ -6,7 +6,7 @@ Feature: 11 - Finance
     And I click the "AE information" link
     # We are purposefully picking AE with the most transactions available so we definately have results and pagination
     And I load "AEDM_USER_WITH_TRANSACTIONS" as {aedm}, {organisation}, {count}, {aeRef}
-    And I enter {aeRef} in the "AE Number" field
+    And I enter {aeRef} in the "Authorised Examiner ID" field
     And I press the "Search" button
     And I click the "Transaction history" link
 
@@ -59,7 +59,7 @@ Feature: 11 - Finance
      Given I login without 2FA using "FINANCE_USER" as {username}
      And I click the "AE information" link
      And I load "AE_USER" as {aeusername}, {aename}, {slots}
-     And I enter {aeusername} in the "AE Number" field
+     And I enter {aeusername} in the "Authorised Examiner ID" field
      And I press the "Search" button
 
      And I click the "Buy slots" link

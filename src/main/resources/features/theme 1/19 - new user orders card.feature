@@ -13,7 +13,7 @@ Feature: 19 - New trade user orders and activates 2FA card
     And I press the "Continue" button
     And I enter "Bert" in the "First name" field
     And I enter "William" in the "Middle name (optional)" field
-    And I enter "Tester" in the "Last name" field
+    And I enter "Varcher" in the "Last name" field
     And I enter "20" in the "Day" field
     And I enter "07" in the "Month" field
     And I enter "1969" in the "Year" field
@@ -39,7 +39,7 @@ Feature: 19 - New trade user orders and activates 2FA card
     And I load immediately "AE_WITH_NO_AEDM" as {aeReference}, {aeName}, {unused1}, {unused2}
     And I login without 2FA using "AO1_USER" as {ao1User}
     And I click the "AE information" link
-    And I enter {aeReference} in the "AE Number" field
+    And I enter {aeReference} in the "Authorised Examiner ID" field
     And I press the "Search" button
     And I click the "Assign a role" link
     And I enter {username} in the field with id "userSearchBox"
@@ -47,7 +47,7 @@ Feature: 19 - New trade user orders and activates 2FA card
     And I click the "Authorised Examiner Designated Manager" radio button in fieldset "Select a role"
     And I press the "Choose role" button
     And I press the "Confirm" button
-    And The page contains "A role notification has been sent to Bert William Tester '{username}'."
+    And The page contains "A role notification has been sent to Bert William Varcher '{username}'."
     And I click the "Sign out" link
 
     # Login as the new user and order a card
@@ -126,7 +126,7 @@ Feature: 19 - New trade user orders and activates 2FA card
     And I enter {email} in the "Re-type your email address" field
     And I press the "Continue" button
     And I enter "Fred" in the "First name" field
-    And I enter "Tester" in the "Last name" field
+    And I enter "Varcher" in the "Last name" field
     And I enter "20" in the "Day" field
     And I enter "07" in the "Month" field
     And I enter "1969" in the "Year" field

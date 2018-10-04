@@ -45,7 +45,8 @@ Feature: 39 - Check HGV with a current Annual Test
     And The page does not contain "Mileage"
 
     And The page contains "The annual test changed on 20 May 2018"
-    And The page contains "Defects are now categorised according to their severity – dangerous, major, and minor. Find out more"
+    And The page does not contain "Defects are now categorised according to their severity – dangerous, major, and minor."
+    And The page contains "Find out more"
 
     And I click the last "Find out more" link
     And I go to the next tab

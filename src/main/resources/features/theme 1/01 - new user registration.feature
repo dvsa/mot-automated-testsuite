@@ -15,7 +15,7 @@ Feature: 01 - new user registration
 
     And I enter "John" in the "First name" field
     And I enter "Bob" in the "Middle name (optional)" field
-    And I enter "Tester" in the "Last name" field
+    And I enter "Varcher" in the "Last name" field
     And I enter "20" in the "Day" field
     And I enter "07" in the "Month" field
     And I enter "1969" in the "Year" field

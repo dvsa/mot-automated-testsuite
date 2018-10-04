@@ -6,7 +6,7 @@ Feature: 13a - A01 user
     And I login without 2FA using "AO1_USER" as {ao1User}
 
     When I click the "AE information" link
-    And I enter {aeReference} in the "AE Number" field
+    And I enter {aeReference} in the "Authorised Examiner ID" field
     And I press the "Search" button
     And I check the "Authorised Examiner ID" field row has value {aeReference}
     And I click the "Change" link for the "Status" field row
@@ -26,7 +26,7 @@ Feature: 13a - A01 user
     Given I load "AE_NOT_REJECTED" as {aeReference}, {aeName}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I click the "AE information" link
-    And I enter {aeReference} in the "AE Number" field
+    And I enter {aeReference} in the "Authorised Examiner ID" field
     And I press the "Search" button
     And I click the "Event history" link
     And The page title contains "Events history"
@@ -55,7 +55,7 @@ Feature: 13a - A01 user
     Given I load uniquely "AE_WITH_NO_AEDM" as {aeReference}, {aeName}, {unassignedTesterUsername}, {unassignedTesterName}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I click the "AE information" link
-    And I enter {aeReference} in the "AE Number" field
+    And I enter {aeReference} in the "Authorised Examiner ID" field
     And I press the "Search" button
     And I click the "Assign a role" link
     And I enter {unassignedTesterUsername} in the field with id "userSearchBox"
@@ -70,7 +70,7 @@ Feature: 13a - A01 user
     Given I load uniquely "AE_WITH_AEDM" as {aeReference}, {aeName}, {aedmUsername}, {aedmName}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I click the "AE information" link
-    And I enter {aeReference} in the "AE Number" field
+    And I enter {aeReference} in the "Authorised Examiner ID" field
     And I press the "Search" button
     And I click the remove AE role link for {aedmName}
     And I press the "Remove role" button
@@ -81,7 +81,7 @@ Feature: 13a - A01 user
     Given I load uniquely "AE_WITH_UNASSIGNED_SITE" as {aeReference}, {aeName}, {siteReference}, {siteName}
     And I login without 2FA using "AO1_USER" as {ao1User}
     When I click the "AE information" link
-    And I enter {aeReference} in the "AE Number" field
+    And I enter {aeReference} in the "Authorised Examiner ID" field
     And I press the "Search" button
     And I click the "Add a site association" link
     And I enter {siteReference} in the "Site ID" field
