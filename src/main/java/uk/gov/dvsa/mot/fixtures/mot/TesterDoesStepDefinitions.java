@@ -157,108 +157,116 @@ public class TesterDoesStepDefinitions implements En {
                 (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
                  Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2, Integer parkingBrakeNearside,
                  Integer parkingBrakeOffside) ->
-                        handleBrakeResults(BrakeTestJourney.addClass4PlateJourney(weight, serviceBrakeNearsideAxle1,
-                                serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
-                                parkingBrakeNearside, parkingBrakeOffside)));
+                handleBrakeResults(BrakeTestJourney.addClass4PlateJourney(weight, serviceBrakeNearsideAxle1,
+                        serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
+                        parkingBrakeNearside, parkingBrakeOffside)));
 
         And("^I enter single line class 4 plate results for weights of (\\d+) as service brake (\\d+),(\\d+),"
                         + "(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$",
                 (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
                  Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2, Integer parkingBrakeNearside,
                  Integer parkingBrakeOffside) ->
-                        handleBrakeResults(BrakeTestJourney.addSingleClass4PlateJourney(weight, serviceBrakeNearsideAxle1,
-                                serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
-                                parkingBrakeNearside, parkingBrakeOffside)));
+                handleBrakeResults(BrakeTestJourney.addSingleClass4PlateJourney(weight, serviceBrakeNearsideAxle1,
+                        serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
+                        parkingBrakeNearside, parkingBrakeOffside)));
 
         And("^I enter single line 3 axle class 4 plate results for vehicle weight of (\\d+) as service brake "
                         + "(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$",
                 (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
                  Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2, Integer serviceBrakeNearsideAxle3,
                  Integer serviceBrakeOffsideAxle3, Integer parkingBrakeNearside, Integer parkingBrakeOffside) ->
-                        handleBrakeResults(BrakeTestJourney.addSingle3AxleClass4PlateJourney(weight, serviceBrakeNearsideAxle1,
-                                serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
-                                serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside, parkingBrakeOffside)));
+                handleBrakeResults(BrakeTestJourney.addSingle3AxleClass4PlateJourney(weight, serviceBrakeNearsideAxle1,
+                        serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
+                        serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside,
+                        parkingBrakeOffside)));
 
         And("^I enter single line 3 axle class 7 plate results for vehicle weight of (\\d+) as service brake "
                         + "(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$",
                 (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
                  Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2, Integer serviceBrakeNearsideAxle3,
                  Integer serviceBrakeOffsideAxle3, Integer parkingBrakeNearside, Integer parkingBrakeOffside) ->
-                        handleBrakeResults(BrakeTestJourney.addSingle3AxleClass7PlateJourney(weight, serviceBrakeNearsideAxle1,
-                                serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
-                                serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside, parkingBrakeOffside)));
+                handleBrakeResults(BrakeTestJourney.addSingle3AxleClass7PlateJourney(weight, serviceBrakeNearsideAxle1,
+                        serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
+                        serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside,
+                        parkingBrakeOffside)));
 
         And("^I enter 3 axle class 4 plate results for vehicle weight of (\\d+) as service brake "
                         + "(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$",
                 (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
                  Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2, Integer serviceBrakeNearsideAxle3,
                  Integer serviceBrakeOffsideAxle3, Integer parkingBrakeNearside, Integer parkingBrakeOffside) ->
-                        handleBrakeResults(BrakeTestJourney.add3AxleClass4PlateJourney(weight, serviceBrakeNearsideAxle1,
-                                serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
-                                serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside, parkingBrakeOffside)));
+                handleBrakeResults(BrakeTestJourney.add3AxleClass4PlateJourney(weight, serviceBrakeNearsideAxle1,
+                        serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
+                        serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside,
+                        parkingBrakeOffside)));
 
         And("^I enter 3 axle class 7 plate results for vehicle weight of (\\d+) as service brake "
                         + "(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$",
                 (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
                  Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2, Integer serviceBrakeNearsideAxle3,
                  Integer serviceBrakeOffsideAxle3, Integer parkingBrakeNearside, Integer parkingBrakeOffside) ->
-                        handleBrakeResults(BrakeTestJourney.add3AxleClass7PlateJourney(weight, serviceBrakeNearsideAxle1,
-                                serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
-                                serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside, parkingBrakeOffside)));
+                handleBrakeResults(BrakeTestJourney.add3AxleClass7PlateJourney(weight, serviceBrakeNearsideAxle1,
+                        serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
+                        serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside,
+                        parkingBrakeOffside)));
 
         And("^I enter single line 3 axle class 4 roller results for vehicle weight of (\\d+) as service brake "
                         + "(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$",
                 (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
                  Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2, Integer serviceBrakeNearsideAxle3,
                  Integer serviceBrakeOffsideAxle3, Integer parkingBrakeNearside, Integer parkingBrakeOffside) ->
-                        handleBrakeResults(BrakeTestJourney.addSingle3AxleClass4RollerJourney(weight, serviceBrakeNearsideAxle1,
-                                serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
-                                serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside, parkingBrakeOffside)));
+                handleBrakeResults(BrakeTestJourney.addSingle3AxleClass4RollerJourney(weight, serviceBrakeNearsideAxle1,
+                        serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
+                        serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside,
+                        parkingBrakeOffside)));
 
         And("^I enter single line 3 axle class 7 roller results for vehicle weight of (\\d+) as service brake "
                         + "(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$",
                 (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
                  Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2, Integer serviceBrakeNearsideAxle3,
                  Integer serviceBrakeOffsideAxle3, Integer parkingBrakeNearside, Integer parkingBrakeOffside) ->
-                        handleBrakeResults(BrakeTestJourney.addSingle3AxleClass7RollerJourney(weight, serviceBrakeNearsideAxle1,
-                                serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
-                                serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside, parkingBrakeOffside)));
+                handleBrakeResults(BrakeTestJourney.addSingle3AxleClass7RollerJourney(weight, serviceBrakeNearsideAxle1,
+                        serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
+                        serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside,
+                        parkingBrakeOffside)));
 
         And("^I enter 3 axle class 4 roller results for vehicle weight of (\\d+) as service brake "
                         + "(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$",
                 (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
                  Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2, Integer serviceBrakeNearsideAxle3,
                  Integer serviceBrakeOffsideAxle3, Integer parkingBrakeNearside, Integer parkingBrakeOffside) ->
-                        handleBrakeResults(BrakeTestJourney.add3AxleClass4RollerJourney(weight, serviceBrakeNearsideAxle1,
-                                serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
-                                serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside, parkingBrakeOffside)));
+                handleBrakeResults(BrakeTestJourney.add3AxleClass4RollerJourney(weight, serviceBrakeNearsideAxle1,
+                        serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
+                        serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside,
+                        parkingBrakeOffside)));
 
         And("^I enter 3 axle class 7 roller results for vehicle weight of (\\d+) as service brake "
                         + "(\\d+),(\\d+),(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$",
                 (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
                  Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2, Integer serviceBrakeNearsideAxle3,
                  Integer serviceBrakeOffsideAxle3, Integer parkingBrakeNearside, Integer parkingBrakeOffside) ->
-                        handleBrakeResults(BrakeTestJourney.add3AxleClass7RollerJourney(weight, serviceBrakeNearsideAxle1,
-                                serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
-                                serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside, parkingBrakeOffside)));
+                handleBrakeResults(BrakeTestJourney.add3AxleClass7RollerJourney(weight, serviceBrakeNearsideAxle1,
+                        serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
+                        serviceBrakeNearsideAxle3, serviceBrakeOffsideAxle3, parkingBrakeNearside,
+                        parkingBrakeOffside)));
 
         And("^I enter class 7 plate results for weights of (\\d+) as service brake (\\d+),(\\d+),(\\d+),"
                         + "(\\d+) and parking brake (\\d+),(\\d+)$",
                 (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
                  Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2, Integer parkingBrakeNearside,
                  Integer parkingBrakeOffside) ->
-                        handleBrakeResults(BrakeTestJourney.addClass7PlateJourney(weight, serviceBrakeNearsideAxle1,
-                                serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
-                                parkingBrakeNearside, parkingBrakeOffside)));
+                handleBrakeResults(BrakeTestJourney.addClass7PlateJourney(weight, serviceBrakeNearsideAxle1,
+                        serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
+                        parkingBrakeNearside, parkingBrakeOffside)));
 
         And("^I enter single line class 7 plate results for weights of (\\d+) as service brake (\\d+),(\\d+),(\\d+),"
                         + "(\\d+) and parking brake (\\d+),(\\d+)$",
                 (Integer weight, Integer serviceBrakeNearsideAxle1, Integer serviceBrakeOffsideAxle1,
                  Integer serviceBrakeNearsideAxle2, Integer serviceBrakeOffsideAxle2, Integer parkingBrakeNearside,
                  Integer parkingBrakeOffside) ->
-                        handleBrakeResults(BrakeTestJourney.addSingleClass7PlateJourney(weight, serviceBrakeNearsideAxle1,
-                                serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
-                                parkingBrakeNearside, parkingBrakeOffside)));
+                handleBrakeResults(BrakeTestJourney.addSingleClass7PlateJourney(weight, serviceBrakeNearsideAxle1,
+                        serviceBrakeOffsideAxle1, serviceBrakeNearsideAxle2, serviceBrakeOffsideAxle2,
+                        parkingBrakeNearside, parkingBrakeOffside)));
 
         And("^I enter class 4 roller results for vehicle weight of (\\d+) as service brake "
                 + "(\\d+),(\\d+),(\\d+),(\\d+) and parking brake (\\d+),(\\d+)$", (Integer weight,
