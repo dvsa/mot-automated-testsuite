@@ -428,11 +428,11 @@ public class WebDriverWrapper {
     private List<WebElement> findLinks(String linkText) {
         // find any "a" elements with text containing the link text
         List<WebElement> links = webDriver.findElements(
-                By.xpath("//a[contains(text(),\"" + expandDataKeys(linkText) + "\")]"));
+                By.xpath("//a[contains(normalize-space(),\"" + expandDataKeys(linkText) + "\")]"));
 
         // then add any "a" elements with any sub-elements (e.g. nested "span"s) with text containing the link text
         links.addAll(webDriver.findElements(
-                By.xpath("//a[.//*[contains(text(),\"" + expandDataKeys(linkText) + "\")]]")));
+                By.xpath("//a[.//*[contains(normalize-space(),\"" + expandDataKeys(linkText) + "\")]]")));
 
         return links;
     }
