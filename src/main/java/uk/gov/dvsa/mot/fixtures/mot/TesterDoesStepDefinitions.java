@@ -684,7 +684,7 @@ public class TesterDoesStepDefinitions implements En {
          * @return The journey
          */
         static BrakeTestJourney addGroupBDecelerometerJourney(int serviceBrakeTestEfficiency,
-                                                              int parkingBrakeTestEfficiency) {
+                int parkingBrakeTestEfficiency) {
             BrakeTestJourney journey =
                     new BrakeTestJourney(BrakeTestJourneyType.AddServiceAndParkingDecelerometerResult);
             journey.serviceBrakeTestEfficiency = serviceBrakeTestEfficiency;
