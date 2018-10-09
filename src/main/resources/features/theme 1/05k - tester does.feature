@@ -1,5 +1,5 @@
 @extended
-Feature: 05m - Tester does...
+Feature: 05k - Tester does...
 
   Scenario: Tester enters a class 4 MOT test fail with a major brake imbalance failure on a 3 axle vehicle using a plate test
     Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
