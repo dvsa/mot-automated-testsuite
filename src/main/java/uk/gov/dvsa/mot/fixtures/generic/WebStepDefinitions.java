@@ -77,6 +77,9 @@ public class WebStepDefinitions implements En {
         When("^I click the \"([^\"]+)\" checkbox$", (String labelText) ->
                 driverWrapper.selectCheckbox(labelText));
 
+        When("^I click the id \"([^\"]+)\" checkbox$", (String labelText) ->
+                driverWrapper.selectCheckboxById(labelText));
+
         When("^I clear the \"([^\"]+)\" checkbox$", (String labelText) ->
                 driverWrapper.clearCheckbox(labelText));
 
