@@ -29,18 +29,6 @@ and mtc.mot_test_type_id = 1  -- Normal tests only
 and mtc.vehicle_id = v.id
 and mtc.document_id IS NOT NULL  -- exclude where there are no MOT certificates
 and mtc.id = (select max(lmtc.id) from mot_test_current lmtc where lmtc.vehicle_id = v.id) -- Checking only the latest test for vehicle
-and not exists (
-    select 1 from vehicle v2
-    where v2.registration = v.registration
-    group by v2.registration
-    having count(v2.registration) > 1 -- exclude where same registration has been entered as different vehicles
-)
-and not exists (
-    select 1 from vehicle v2
-    where v2.vin = v.vin
-    group by v2.vin
-    having count(v2.vin) > 1 -- exclude where same vin has been entered as different vehicles
-)
 and not exists ( -- not all security_card have a corresponding security_card_drift
   select 1 from security_card_drift scd
   where sc.id = scd.security_card_id
