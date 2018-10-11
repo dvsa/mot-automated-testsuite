@@ -39,6 +39,7 @@ Feature: 01 - new user registration
     And I press the "Continue" button
 
     And I press the "Create your account" button
+    And The page title contains "Your account has been created - MOT testing service"
 
     And I browse to /login
     And I load immediately "LATEST_TEST_USER" as {username}
