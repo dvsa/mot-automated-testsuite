@@ -35,8 +35,8 @@ Feature: 03 - reset password
 
     # Check common password validation
     And I enter "Password1" in the "Current password" field
-    And I enter "qwerty123" in the "New password" field
-    And I enter "qwerty123" in the "Re-type your new password" field
+    And I enter "Qwerty123" in the "New password" field
+    And I enter "Qwerty123" in the "Re-type your new password" field
     And I press the "Change password" button
     And The page title contains "Change your password"
     And The page contains "must not be a common password"
