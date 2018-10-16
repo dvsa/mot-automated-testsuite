@@ -39,6 +39,8 @@ Feature: 17 - Scheme user
     And I press the "Save and continue to review" button
     Then The page title contains "Review and publish the message - MOT testing service"
     And I press the "Publish" button
+    Then The page title contains "Message Scheduled for publishing - MOT testing service"
+    And I click the "View messages" link
     And I click the last "View" link
     And I click the last "Remove" link
     And I check the alert popup contains "This action will delete this notice from the library."
