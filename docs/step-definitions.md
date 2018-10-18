@@ -86,6 +86,7 @@ Lower level, only use if higher level steps can't be used:
 * I enter ```"..text.."``` in the field with id ```"..id.."```
 * I enter ```{key}``` in the field with id ```"..id.."```
 * I select ```"..text.."``` in the field with id ```"..id.."```
+* I select ```{key}``` in the field with id ```"..id.."```
 
 
 ### DataStepDefinitions
