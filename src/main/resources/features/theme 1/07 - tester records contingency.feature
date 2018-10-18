@@ -1,7 +1,7 @@
 @regression
 Feature: 07 - Tester records Contingency Test
 
-  Scenario: A tester record a pass contingency test
+  Scenario: A tester record a pass contingency test 30 days ago
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     Then I start a contingency MOT test at site {site}
     And I load "CONTINGENCY_CODE" as {code}, {issueDate}, {dateOfTest}, {day}, {month}, {year}
@@ -41,6 +41,47 @@ Feature: 07 - Tester records Contingency Test
       | {dateOfTest}    |
     And I click the "Back to user home" link
 
+
+  @regressiondata
+  Scenario: A tester record a pass contingency test 1 day ago
+    Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+    Then I start a contingency MOT test at site {site}
+    And I load "CONTINGENCY_CODE_1_DAY" as {code}, {issueDate}, {dateOfTest}, {day}, {month}, {year}
+    And I enter {day} in the "Day" field
+    And I enter {month} in the "Month" field
+    And I enter {year} in the "Year" field
+    And I enter "9" in the field with id "contingency_time-hour"
+    And I enter "00" in the field with id "contingency_time-minutes"
+    And I click the "Other" radio button
+    And I enter "Automated Testing" in the "If other, please enter a reason" field
+    And I enter {code} in the "Contingency code" field
+    And I press the "Confirm contingency test" button
+
+    And I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
+    And I enter {registration1} in the "Registration mark" field
+    And I enter {vin1} in the "VIN" field
+    And I press the "Search" button
+
+    And I click the "Select vehicle" link
+    And I press the "Confirm and start test" button
+    And I enter an odometer reading in miles of {mileage1} plus 5000
+    And I enter decelerometer results of service brake 51 and parking brake 16
+    And I press the "Review test" button
+
+    Then The page title contains "MOT test summary"
+    And I check the test information section of the test summary is "Pass"
+    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate}
+    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
+    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the brake results section of the test summary is "Pass"
+    And I press the "Save test result" button
+    And The page title contains "MOT test complete"
+    And I click "Print documents" and check the PDF contains:
+      | VT20            |
+      | {registration1} |
+      | {vin1}          |
+      | {dateOfTest}    |
+    And I click the "Back to user home" link
 
   Scenario: A tester records a fail contingency test
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
