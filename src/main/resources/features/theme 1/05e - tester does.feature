@@ -260,4 +260,4 @@ Feature: 05e - Tester does...
 
     And I click the "Aborted by VE" radio button
     And I press the "Cancel test" button
-    Then The page title contains "MOT test aborted"
+    Then The page contains "MOT test cancelled"

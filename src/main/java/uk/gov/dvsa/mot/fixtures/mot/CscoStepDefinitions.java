@@ -36,7 +36,7 @@ public class CscoStepDefinitions implements En {
         // Then I press the "Search" button
         driverWrapper.pressButton("Search");
 
-        if (!driverWrapper.getCurrentPageTitle().contains("Vehicle Testing Station")) {
+        if (!driverWrapper.getCurrentPageTitle().contains("Vehicle testing station")) {
             // not gone straight into the site details screen, so assume we are on the search results screen
             // (which has no page title), so we need to select the first of the expected results
             // (note the same site can be listed several times with different phone numbers or address edits)

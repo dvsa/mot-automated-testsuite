@@ -37,7 +37,7 @@ Feature: 09a - AEDM and AED
     And I click the first {organisation} link
     And The page title contains "Authorised Examiner"
     And I click the {siteName} site link for site reference {siteNumber}
-    And The page title contains "Vehicle Testing Station"
+    And The page title contains "Vehicle testing station"
 
     And I click the "Assign a role" link
     And The page title contains "Assign a role"
@@ -52,7 +52,7 @@ Feature: 09a - AEDM and AED
     And I check the role summary has a new role of "Tester"
     And I press the "Assign role" button
 
-    Then The page title contains "Vehicle Testing Station"
+    Then The page title contains "Vehicle testing station"
     And The page contains "You have assigned a role to {testerName}, {tester}. They have been sent a notification."
     And I check there is pending "Tester" role listed for {testerName}
 

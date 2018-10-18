@@ -71,7 +71,7 @@ Feature: 13d - A01 user
     And I press the "Continue" button
     And I press the "Create site" button
 
-    Then The page title contains "Vehicle Testing Station"
+    Then The page title contains "Vehicle testing station"
     And I check the "Name" field row has value "Example Site"
     And I check the "Classes" field row has value "1,2,3,4"
     And I check the "Type" field row has value "Vehicle Testing Station"

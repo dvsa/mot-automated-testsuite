@@ -274,11 +274,11 @@ Feature: 07 - Tester records Contingency Test
 
     And I click the "Aborted by VE" radio button
     And I press the "Cancel test" button
-    And I click "Print documents" and check the PDF contains:
+    And I click "Print certificate" and check the PDF contains:
       | VT30           |
       | {registration} |
       | {vin}          |
-    And I click the "Finish" link
+    And I click the "Return to home" link
 
   @smoke
   Scenario: A tester prints CT certificates

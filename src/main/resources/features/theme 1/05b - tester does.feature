@@ -132,8 +132,8 @@ Feature: 05b - Tester does...
     And The page title contains "Cancel test"
     And I click the "Aborted by VE" radio button
     And I press the "Cancel test" button
-    Then The page title contains "MOT test aborted"
-    And I click "Print documents" and check the PDF contains:
+    Then The page contains "MOT test cancelled"
+    And I click "Print certificate" and check the PDF contains:
       | VT30            |
       | {registration1} |
       | {vin1}          |

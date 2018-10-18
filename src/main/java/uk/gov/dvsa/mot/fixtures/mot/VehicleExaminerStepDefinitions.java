@@ -326,7 +326,8 @@ public class VehicleExaminerStepDefinitions implements En {
         driverWrapper.clickLink(driverWrapper.getData(regKey));
 
         //Check the vin number
-        String vin = driverWrapper.getTextFromDefinitionList("Vehicle Identification Number");
+        String vin = driverWrapper.getTextFromTableRow("Vehicle Identification Number");
+
         assertTrue("The vin is incorrect on view active mot",
                 vin.contains(driverWrapper.getData(vinKey)));
 
@@ -343,7 +344,7 @@ public class VehicleExaminerStepDefinitions implements En {
         driverWrapper.checkCurrentPageTitle("MOT test aborted");
 
         //And I check the print VT30 button is present
-        assertTrue("The print VT30 button is missing", driverWrapper.hasLink("Print VT30"));
+        assertTrue("The print VT30 button is missing", driverWrapper.hasLink("Print certificate"));
     }
 
     /**

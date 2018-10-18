@@ -18,8 +18,8 @@ Feature: 05d - Tester does...
     And I click the "Inspection may be dangerous or cause damage" radio button
     And I enter "Test reason" in the "How might this be dangerous or cause damage?" field
     And I press the "Cancel test" button
-    Then The page title contains "MOT test abandoned"
-    And I click "Print documents" and check the PDF contains:
+    Then The page contains "MOT test cancelled"
+    And I click "Print certificate" and check the PDF contains:
       | VT30                                                                         |
       | {registration1}                                                              |
       | {vin1}                                                                       |

@@ -49,7 +49,7 @@ Feature: 12a - Vehicle Examiner
     And I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
     When I search for Site information by site number with {siteNumber}
     And I abort the active mot test at site for reg {reg}, vin {vin}
-    And I click "Print VT30" and check the PDF contains:
+    And I click "Print certificate" and check the PDF contains:
       | VT30            |
       | {reg}           |
       | {vin}           |
