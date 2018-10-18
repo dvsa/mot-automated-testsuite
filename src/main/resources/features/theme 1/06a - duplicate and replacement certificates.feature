@@ -36,12 +36,13 @@ Feature: 06a - duplicate and replacement certificates
       | Duplicate certificate            |
       | VT                               |
 
-
   Examples:
   |user        |dataScript       |
   |AO1         |AO1_USER         |
   |DVLA Manager|DVLA_MANAGER_USER|
 
+
+  @regressiondata
   Scenario: Tester completes a test then issues duplicate certificate and can edit test
     Given I load uniquely "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
@@ -99,7 +100,7 @@ Feature: 06a - duplicate and replacement certificates
     And I click "Print certificate" and check the PDF contains:
       | Duplicate certificate            |
 
-  @smoke
+  @smoke @regressiondata
   Scenario: AO1 user edits vehicle details on latest certificate
     Given I login without 2FA using "AO1_USER" as {AO1}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
