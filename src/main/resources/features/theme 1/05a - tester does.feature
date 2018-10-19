@@ -4,7 +4,7 @@ Feature: 05a - Tester does...
   @smoke
   Scenario: Tester enters a class 4 MOT test pass, with no defects and slot is consumed
     Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
-    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+    And I login with 2FA using "MOT_TESTER_CLASS_4_WITH_ONLY_ONE_SITE" as {username1}, {site}
     And I get the slot count from the homepage for site {site}
 
     When I start an MOT test for {registration1}, {vin1}, {site}
@@ -35,9 +35,10 @@ Feature: 05a - Tester does...
     And I check a slot was successfully used for site {site}
 
 
-  Scenario: Tester enters a class 4 MOT test fail, with brake test failure
+  Scenario: Tester enters a class 4 MOT test fail, with brake test failure and checks slot value
     Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
-    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+    And I login with 2FA using "MOT_TESTER_CLASS_4_WITH_ONLY_ONE_SITE" as {username1}, {site}
+    And I get the slot count from the homepage for site {site}
 
     When I start an MOT test for {registration1}, {vin1}, {site}
     And The page title contains "Your home"
@@ -63,7 +64,9 @@ Feature: 05a - Tester does...
       | VT30                                         |
       | {registration1}                              |
       | {vin1}                                       |
-      | Parking brake efficiency below requirements |
+      | Parking brake efficiency below requirements  |
+    And I click the "Back to user home" link
+    And I check a slot was not used for site {site}
 
 
   @smoke

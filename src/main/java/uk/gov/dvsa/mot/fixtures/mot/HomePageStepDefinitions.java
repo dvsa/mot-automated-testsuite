@@ -40,6 +40,10 @@ public class HomePageStepDefinitions implements En {
             checkSlotsBalanceDecreased(siteKey);
         });
 
+        And("^I check a slot was not used for site \\{([^\\}]+)\\}$", (String siteKey) -> {
+            checkSlotsBalanceNoChange(siteKey);
+        });
+
         And("^I get the site number \\{([^\\}]+)\\} by name \\{([^\\}]+)\\}$",
                 (String siteNumberKey, String siteNameKey) -> {
                     getSiteNumberByName(siteNumberKey, siteNameKey);
@@ -70,6 +74,19 @@ public class HomePageStepDefinitions implements En {
 
         int decreasedSlots = Integer.valueOf(driverWrapper.getData("slotCount")) - 1;
         assertTrue("The slot balance did not decrease", slots.contains(String.valueOf(decreasedSlots)));
+    }
+
+    /**
+     * Checks that the slot balance of an AE decreased by 1.
+     * @param siteKey   The key of the site name to be used
+     */
+    private void checkSlotsBalanceNoChange(String siteKey) {
+        //And I check the slot balance decreased by 1
+        String slots = driverWrapper.getElementText("a", ") " + driverWrapper.getData(siteKey),
+                "../../../../div[2]/span");
+
+        int noChangeSlots = Integer.valueOf(driverWrapper.getData("slotCount"));
+        assertTrue("The slot balance did not decrease", slots.contains(String.valueOf(noChangeSlots)));
     }
 
     /**
