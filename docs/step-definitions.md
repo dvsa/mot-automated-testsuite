@@ -197,6 +197,7 @@ These steps are specific to the DVSA MOT application screens.
 * I click the organisation link ```{..organisationKey..}```
 * I get the slot count from the homepage for site ```{..siteKey..}```
 * I check a slot was successfully used for site ```{..siteKey..}```
+* I check a slot was not used for site ```{..siteKey..}```
 
 ### PurchaseSlotsStepDefinitions
 

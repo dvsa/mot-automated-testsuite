@@ -1,9 +1,10 @@
 @regression
 Feature: 05b - Tester does...
 
-  Scenario: Tester enters a class 4 MOT test pass, with advisory and PRS defects
+  Scenario: Tester enters a class 4 MOT test pass, with advisory and PRS defects, checks slot usage
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
-    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+    And I login with 2FA using "MOT_TESTER_CLASS_4_WITH_ONLY_ONE_SITE" as {username1}, {site}
+    And I get the slot count from the homepage for site {site}
 
     When I start an MOT test for {registration1}, {vin1}, {site}
     And The page title contains "Your home"
@@ -49,6 +50,7 @@ Feature: 05b - Tester does...
       | {registration1}                                       |
       | {vin1}                                                |
     And I click the "Back to user home" link
+    And I check a slot was successfully used for site {site}
 
 
   Scenario: Tester enters a class 4 MOT test fail, add edit and remove advisory, PRS and failure defects
