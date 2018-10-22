@@ -25,5 +25,10 @@ and not exists (
     group by v.vin
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
+and not exists (
+	select 1 from mot_test_current mtc2
+	where mtc2.vehicle_id = veh.id
+	and mtc2.completed_date = CURDATE() -- test not completed in today
+	)
 and veh.last_updated_on < CURDATE() -- vehicles not updated today
 limit 50
