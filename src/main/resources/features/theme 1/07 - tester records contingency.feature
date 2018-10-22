@@ -1,8 +1,10 @@
 @regression
 Feature: 07 - Tester records Contingency Test
 
-  Scenario: A tester record a pass contingency test
-    Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+  Scenario: A tester record a pass contingency test and confirms a slot is consumed
+    Given I login with 2FA using "MOT_TESTER_CLASS_4_WITH_ONLY_ONE_SITE" as {username1}, {site}
+    And I get the slot count from the homepage for site {site}
+
     Then I start a contingency MOT test at site {site}
     And I load "CONTINGENCY_CODE" as {code}, {issueDate}, {dateOfTest}, {day}, {month}, {year}
     And I enter {day} in the "Day" field
@@ -40,7 +42,7 @@ Feature: 07 - Tester records Contingency Test
       | {vin1}          |
       | {dateOfTest}    |
     And I click the "Back to user home" link
-
+    And I check a slot was successfully used for site {site}
 
   Scenario: A tester records a fail contingency test
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
