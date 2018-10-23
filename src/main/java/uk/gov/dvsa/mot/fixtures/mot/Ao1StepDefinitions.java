@@ -113,7 +113,7 @@ public class Ao1StepDefinitions implements En {
             driverWrapper.clickFirstLink(siteReference);
         }
 
-        // And The page title contains "Vehicle Testing Station"
-        driverWrapper.checkCurrentPageTitle("Vehicle Testing Station");
+        // And The page title contains "Vehicle testing station"
+        driverWrapper.checkCurrentPageTitle("Vehicle testing station");
     }
 }

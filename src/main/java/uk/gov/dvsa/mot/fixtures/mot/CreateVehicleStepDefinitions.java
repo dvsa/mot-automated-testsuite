@@ -78,8 +78,8 @@ public class CreateVehicleStepDefinitions implements En {
             //And I press the "Confirm and cancel test" button
             driverWrapper.pressButton("Cancel test");
 
-            //Check the page title contains "MOT test aborted"
-            driverWrapper.checkCurrentPageTitle("MOT test aborted");
+            //Check the page title contains "MOT test cancelled"
+            driverWrapper.containsMessage("MOT test cancelled");
         });
 
         And("I check the registration \"([^\"]+)\" and vin \"([^\"]+)\" is correct$",

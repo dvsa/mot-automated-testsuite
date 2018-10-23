@@ -4,7 +4,7 @@ Feature: 10 - Site Manager and Site Admin
   Scenario: Site Manager assigns Site Admin role
     Given I login with 2FA using "SITE_MGR_AND_OTHER_TESTER" as {managerUsername1}, {sitename1}, {sitenumber1}, {otherUsername1}, {otherName1}
     And I click the "({sitenumber1}) {sitename1}" link
-    And The page title contains "Vehicle Testing Station"
+    And The page title contains "Vehicle testing station"
 
     When I click the "Assign a role" link
     And The page title contains "Assign a role"
@@ -19,7 +19,7 @@ Feature: 10 - Site Manager and Site Admin
     And I check the role summary has a new role of "Site admin"
     And I press the "Assign role" button
 
-    Then The page title contains "Vehicle Testing Station"
+    Then The page title contains "Vehicle testing station"
     And The page contains "You have assigned a role to {otherName1}, {otherUsername1}. They have been sent a notification."
     And I check there is pending "Site admin" role listed for {otherName1}
 
@@ -27,7 +27,7 @@ Feature: 10 - Site Manager and Site Admin
   Scenario: Site Admin assigns Tester role
     Given I login with 2FA using "SITE_MGR_AND_OTHER_TESTER" as {managerUsername1}, {sitename1}, {sitenumber1}, {otherUsername1}, {otherName1}
     And I click the "({sitenumber1}) {sitename1}" link
-    And The page title contains "Vehicle Testing Station"
+    And The page title contains "Vehicle testing station"
 
     When I click the "Assign a role" link
     And The page title contains "Assign a role"
@@ -42,7 +42,7 @@ Feature: 10 - Site Manager and Site Admin
     And I check the role summary has a new role of "Tester"
     And I press the "Assign role" button
 
-    Then The page title contains "Vehicle Testing Station"
+    Then The page title contains "Vehicle testing station"
     And The page contains "You have assigned a role to {otherName1}, {otherUsername1}. They have been sent a notification."
     And I check there is pending "Tester" role listed for {otherName1}
 
@@ -57,17 +57,17 @@ Feature: 10 - Site Manager and Site Admin
 
     When I login with 2FA as {managerUsername}
     And I select the site {siteNumber} - {siteName} at AE {aeName}
-    And The page title contains "Vehicle Testing Station"
+    And The page title contains "Vehicle testing station"
     And I click the {registration1} link
-    And The page title contains "Vehicle Testing Station"
+    And The page title contains "MOT test in progress - MOT testing service"
     And I click the "Abort MOT Test" link
     And The page title contains "Abort MOT test"
     And I click the "Vehicle registered in error" radio button
     And I press the "Abort MOT test" button
 
-    Then The page contains "You have successfully aborted MOT test"
+    Then The page contains "MOT test aborted"
     And The page contains "Vehicle registered in error"
-    And I click "Print VT30" and check the PDF contains:
+    And I click "Print certificate" and check the PDF contains:
       | VT30            |
       | {registration1} |
       | {vin1}          |
@@ -77,7 +77,7 @@ Feature: 10 - Site Manager and Site Admin
     Given I login with 2FA using "SITE_ADMIN" as {username1}, {sitename1}, {sitenumber1}, {startingGroupABrakeDefault}, {startingGroupBServiceBrakeDefault}, {startingGroupBParkingBrakeDefault}
     And I choose different brake defaults for {startingGroupABrakeDefault}, {startingGroupBServiceBrakeDefault}, {startingGroupBParkingBrakeDefault} as {newGroupABrakeDefault}, {newGroupBServiceBrakeDefault}, {newGroupBParkingBrakeDefault}
     And I click the "({sitenumber1}) {sitename1}" link
-    And The page title contains "Vehicle Testing Station"
+    And The page title contains "Vehicle testing station"
 
     When I click the "Change default test settings" link
     And The page title contains "Change default test settings"
@@ -86,7 +86,7 @@ Feature: 10 - Site Manager and Site Admin
     And I click the {newGroupBParkingBrakeDefault} radio button in fieldset "Default parking brake test type" in fieldset "Options for Class 3, 4, 5 and 7"
     And I press the "Change defaults" button
 
-    Then The page title contains "Vehicle Testing Station"
+    Then The page title contains "Vehicle testing station"
     And I check the VTS default for "Brake" is {newGroupABrakeDefault}
     And I check the VTS default for "Service brake" is {newGroupBServiceBrakeDefault}
     And I check the VTS default for "Parking brake" is {newGroupBParkingBrakeDefault}
@@ -96,7 +96,7 @@ Feature: 10 - Site Manager and Site Admin
     Given I load uniquely "SITE_MGR_AND_TESTER_CLASS_4" as {testerUsername}, {testerName}, {managerUsername}, {siteName}, {siteNumber}, {aeName}
     And I login with 2FA as {managerUsername}
     And I select the site {siteNumber} - {siteName} at AE {aeName}
-    And The page title contains "Vehicle Testing Station"
+    And The page title contains "Vehicle testing station"
     When I click the "Test quality information" link
     And The page contains "This information will help you manage the quality of testing at your site."
     And I check there is a "Download the group B report as a CSV (spreadsheet) file" link

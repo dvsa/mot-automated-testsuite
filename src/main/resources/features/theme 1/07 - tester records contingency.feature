@@ -1,8 +1,10 @@
 @regression
 Feature: 07 - Tester records Contingency Test
 
-  Scenario: A tester record a pass contingency test
-    Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+  Scenario: A tester record a pass contingency test and confirms a slot is consumed
+    Given I login with 2FA using "MOT_TESTER_CLASS_4_WITH_ONLY_ONE_SITE" as {username1}, {site}
+    And I get the slot count from the homepage for site {site}
+
     Then I start a contingency MOT test at site {site}
     And I load "CONTINGENCY_CODE" as {code}, {issueDate}, {dateOfTest}, {day}, {month}, {year}
     And I enter {day} in the "Day" field
@@ -40,7 +42,7 @@ Feature: 07 - Tester records Contingency Test
       | {vin1}          |
       | {dateOfTest}    |
     And I click the "Back to user home" link
-
+    And I check a slot was successfully used for site {site}
 
   Scenario: A tester records a fail contingency test
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
@@ -274,15 +276,15 @@ Feature: 07 - Tester records Contingency Test
 
     And I click the "Aborted by VE" radio button
     And I press the "Cancel test" button
-    And I click "Print documents" and check the PDF contains:
+    And I click "Print certificate" and check the PDF contains:
       | VT30           |
       | {registration} |
       | {vin}          |
-    And I click the "Finish" link
+    And I click the "Return to home" link
 
   @smoke
   Scenario: A tester prints CT certificates
-    Given I login with 2FA using "MOT_TESTER_CLASS_4_WITH_ONLY_ONE_SITE" as {username}, {site}, {reg}
+    Given I login with 2FA using "MOT_TESTER_CLASS_4_WITH_ONLY_ONE_SITE" as {username}, {site}
     And I click "CT20 Pass Certificate" and check the PDF contains:
       | Contingency MOT Test Certificate |
       | CT20                             |
