@@ -1,4 +1,4 @@
-@Open_Interface_Tests
+@OpenInterfaceTests
 Feature: MOT test for class 4 vehicles for open interface testing
 
   Scenario: 3 - Tester enters a class 4 MOT test for a DVLA vehicle without a previous MOT
