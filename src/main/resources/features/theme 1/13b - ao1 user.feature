@@ -22,7 +22,7 @@ Feature: 13b - A01 user
     And The page title contains "Change site name"
     And I enter "Example Site" in the "Site name" field
     And I press the "Change site name" button
-    And The page title contains "Vehicle Testing Station"
+    And The page title contains "Vehicle testing station"
     Then The page contains "Site name has been successfully changed."
     And I check the "Name" field row has value "Example Site"
 
@@ -30,7 +30,7 @@ Feature: 13b - A01 user
     And The page title contains "Change status"
     And I select "Lapsed" in the "Site status" field
     And I press the "Change site status" button
-    And The page title contains "Vehicle Testing Station"
+    And The page title contains "Vehicle testing station"
     And The page contains "Site status has been successfully changed."
     And I check the "Status" field row has value "Lapsed"
 
@@ -44,7 +44,7 @@ Feature: 13b - A01 user
     And I click the "Class 7" checkbox
     And I press the "Review classes" button
     And I press the "Change classes" button
-    And The page title contains "Vehicle Testing Station"
+    And The page title contains "Vehicle testing station"
     And The page contains "Classes have been successfully changed."
     And I check the "Classes" field row has value "4,5,7"
 
@@ -73,7 +73,7 @@ Feature: 13b - A01 user
     And I click the remove site role link for {testerName}, {testerUsername}
     And The page title contains "Remove a role"
     And I press the "Remove role" button
-    And The page title contains "Vehicle Testing Station"
+    And The page title contains "Vehicle testing station"
     And The page contains "You have removed the role of Tester from {testerName}"
 
 
