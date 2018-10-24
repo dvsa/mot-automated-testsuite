@@ -110,11 +110,12 @@ public class AuthenticationStepDefinitions implements En {
                             Optional.of(Integer.parseInt(drift)), Optional.of(lastDriftKey),
                             env.getRequiredProperty("maxLoginRetries", Integer.class), key3, key4));
 
-        Given("^I login and click forgotten card using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, "
+        Given("^I login and click \"([^\"]+)\" card using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, "
                         + "\\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
-                (String dataSetName, String usernameKey, String key2, String key3, String key4) ->
+                (String forgotOrLost, String dataSetName, String usernameKey, String key2, String key3, String key4) ->
                         loginAndClickForgottenCard(dataSetName, usernameKey, env.getRequiredProperty("password"),
-                                env.getRequiredProperty("maxLoginRetries", Integer.class), key2, key3, key4));
+                                env.getRequiredProperty("maxLoginRetries", Integer.class), forgotOrLost, key2,
+                                key3, key4));
 
         Given("^I generate 2FA PIN with drift ([\\+|\\-]\\d+) as \\{([^\\}]+)\\}$",
                 (String drift, String pinKey) ->
@@ -390,10 +391,11 @@ public class AuthenticationStepDefinitions implements En {
      * @param usernameKey       The username data key to set
      * @param password          The password to use
      * @param maxLoginRetries   The number of times to retry login with a different user before failing the test
+     * @param journey           The user journey being take
      * @param keys              The extra data keys to set
      */
     private void loginAndClickForgottenCard(String dataSetName, String usernameKey, String password,
-                                int maxLoginRetries, String... keys) {
+                                int maxLoginRetries, String journey, String... keys) {
         int loginAttempts = 0;
         while (loginAttempts < maxLoginRetries) {
             loginAttempts++;
@@ -414,7 +416,22 @@ public class AuthenticationStepDefinitions implements En {
                     break;
 
                 default:
-                    driverWrapper.clickLink("Lost, forgotten or damaged security card?");
+
+                    // selects the correct link for the 2fa card problem journeys
+                    switch (journey) {
+                        case "lost":
+                            // And I click the "Lost or damaged security card" link
+                            driverWrapper.clickLink("Lost or damaged security card");
+                            break;
+                        case "forgotten":
+                            // And I click the "Temporary sign in" link
+                            driverWrapper.clickLink("Temporary sign in");
+                            break;
+                        default:
+                            String message = "Unknown card issue journey " + journey;
+                            logger.error(message);
+                            throw new IllegalArgumentException(message);
+                    }
 
                     // all successful
                     return;
