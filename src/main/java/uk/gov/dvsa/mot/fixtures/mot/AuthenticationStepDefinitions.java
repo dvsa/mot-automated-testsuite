@@ -383,7 +383,7 @@ public class AuthenticationStepDefinitions implements En {
      * @param usernameKey       The username data key to set
      * @param password          The password to use
      * @param maxLoginRetries   The number of times to retry login with a different user before failing the test
-     * @param journey           The user journey being take
+     * @param journey           The user journey being taken
      * @param keys              The extra data keys to set
      */
     private void loginAndClickForgottenCard(String dataSetName, String usernameKey, String password,
