@@ -15,5 +15,5 @@ and d.vehicle_id in
 		where m.vehicle_id = d.vehicle_id
 	    and m.mot_test_type_id = 1
 		and m.status_id = 6
-		) < now()
+		) < now() -- expired MOT
 		limit 10;
