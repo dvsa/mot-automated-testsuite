@@ -37,7 +37,7 @@ Feature: 21 - Existing user has lost 2FA card
     And I press the "Continue" button
     And The page title contains "Sign in successful"
     And The page contains "You have signed in without your security card"
-    When I click the "Order a security card" button
+    When I click the "Order a security card" link
     And The page title contains "Order a security card"
     And I click the "Continue" link
     And The page title contains "Choose a delivery address"
