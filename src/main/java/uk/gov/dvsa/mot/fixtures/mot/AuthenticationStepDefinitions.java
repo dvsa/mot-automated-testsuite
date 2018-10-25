@@ -415,7 +415,7 @@ public class AuthenticationStepDefinitions implements En {
                             // And I click the "Lost or damaged security card" link
                             driverWrapper.clickLink("Lost or damaged security card");
                             break;
-                        case "forgotten":
+                        case "temporary":
                             // And I click the "Temporary sign in" link
                             driverWrapper.clickLink("Temporary sign in");
                             break;

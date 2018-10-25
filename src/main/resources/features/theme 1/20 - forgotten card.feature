@@ -3,7 +3,7 @@ Feature: 20 - Existing user has forgotten 2FA card
 
   Scenario: Active 2FA card user can login via security questions with the Temporary sign in link
     # Login via security questions, change insecure answers to questions
-    Given I login and click "forgotten" card using "2FA_CARD_USER" as {username}, {lastDrift}, {question1}, {question2}
+    Given I login and click "temporary" card using "2FA_CARD_USER" as {username}, {lastDrift}, {question1}, {question2}
     And The page title contains "Sign in without your security card"
     When I click the "Continue" link
     And I enter "answer" in the {question1} field
