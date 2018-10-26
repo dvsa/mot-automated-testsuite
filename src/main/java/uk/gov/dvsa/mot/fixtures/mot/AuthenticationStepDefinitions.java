@@ -302,15 +302,12 @@ public class AuthenticationStepDefinitions implements En {
      * @return The outcome
      */
     private LoginOutcome handlePinScreen(String seed, int driftOffset, int lastDrift) {
-        String pin = generatePin(seed, driftOffset, lastDrift);
-        driverWrapper.enterIntoField(pin, "Security card PIN");
-        driverWrapper.pressButton("Sign in");
-
-        if (driverWrapper.getCurrentPageTitle().contains("Your home")) {
+        if (!driverWrapper.getCurrentPageTitle().contains("Security card PIN")) {
             // PIN fingerprint found, not required to enter PIN to log in
             return LoginOutcome.PinSuccessful;
 
         } else {
+            String pin = generatePin(seed, driftOffset, lastDrift);
             driverWrapper.enterIntoField(pin, "Security card PIN");
             driverWrapper.pressButton("Sign in");
 
