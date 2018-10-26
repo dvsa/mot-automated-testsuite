@@ -302,7 +302,7 @@ public class AuthenticationStepDefinitions implements En {
      * @return The outcome
      */
     private LoginOutcome handlePinScreen(String seed, int driftOffset, int lastDrift) {
-        if (!driverWrapper.getCurrentPageTitle().contains("Security card PIN")) {
+        if (!driverWrapper.getCurrentPageTitle().contains("Your security card PIN - MOT testing service")) {
             // PIN fingerprint found, not required to enter PIN to log in
             return LoginOutcome.PinSuccessful;
 
