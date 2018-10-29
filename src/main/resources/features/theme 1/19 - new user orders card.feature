@@ -105,10 +105,6 @@ Feature: 19 - New trade user orders and activates 2FA card
     And I enter {username} in the "User ID" field
     And I enter "MyPassword1234" in the "Password" field
     And I press the "Sign in" button
-    And The page title contains "Your security card PIN"
-    And I generate 2FA PIN with drift +0 as {newPin}
-    And I enter {newPin} in the "Security card PIN" field
-    And I press the "Sign in" button
     And The page title contains "Your home"
     And I click the "Your profile" link
     And I click the "Roles and associations" link
