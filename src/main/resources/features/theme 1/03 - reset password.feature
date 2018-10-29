@@ -65,10 +65,11 @@ Feature: 03 - reset password
     And I enter {username} in the "User ID" field
     And I enter "Password2" in the "Password" field
     And I press the "Sign in" button
-    And The page title contains "Your security card PIN"
-    And I generate 2FA PIN with drift +0 as {newPin}
-    And I enter {newPin} in the "Security card PIN" field
-    And I press the "Sign in" button
+#    Removed the following sections due to new 2fa_fingerprint functionality
+#    And The page title contains "Your security card PIN"
+#    And I generate 2FA PIN with drift +0 as {newPin}
+#    And I enter {newPin} in the "Security card PIN" field
+#    And I press the "Sign in" button
     Then The page title contains "Your home"
 
     When I click the "Your profile" link
@@ -99,8 +100,9 @@ Feature: 03 - reset password
     And I enter {username} in the "User ID" field
     And I enter "Password3" in the "Password" field
     And I press the "Sign in" button
-    And The page title contains "Your security card PIN"
-    And I generate 2FA PIN with drift +0 as {newPin}
-    And I enter {newPin} in the "Security card PIN" field
-    And I press the "Sign in" button
+#    Removed the following sections due to new 2fa_fingerprint functionality
+#    And The page title contains "Your security card PIN"
+#    And I generate 2FA PIN with drift +0 as {newPin}
+#    And I enter {newPin} in the "Security card PIN" field
+#    And I press the "Sign in" button
     Then The page title contains "Your home"
