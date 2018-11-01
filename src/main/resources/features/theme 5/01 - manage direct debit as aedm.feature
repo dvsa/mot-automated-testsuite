@@ -18,7 +18,7 @@ Feature: 01 - Manage Direct Debit as AEDM
     And I enter "andrew.lai@bjss.com" in the "Email" field
     And I enter "20-00-00" in the "Your sort code" field
     And I enter "55779911" in the "Your account number" field
-    And I click the button which contains text "or enter your address manually"
+    And I click the button which contains text "Click here to enter your address manually"
     And I enter "123 Derby Road" in the "Billing address line 1" field
     And I enter "Oakwood" in the "Billing address line 2" field
     And I enter "Derby" in the "Town or City" field
