@@ -1,7 +1,7 @@
 @regression
 Feature: 22 - order card and check grace period exists
 
-  Scenario: User logs in with temporary login and checks grace period is created, orders a cared and checks that grace period is still active.
+  Scenario: User logs in with temporary login and checks grace period is created, orders a card and checks that grace period is still active.
 
     #Login with temporary login link and answer the security questions.
     Given I login and click "temporary" card using "2FA_CARD_USER" as {username}, {lastDrift}, {question1}, {question2}
