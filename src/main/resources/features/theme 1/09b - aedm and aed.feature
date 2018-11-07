@@ -19,10 +19,10 @@ Feature: 09b - AEDM and AED
     | Failures by category |
 
   Examples:
-    |status         |dataSource         |
-    |Satisfactory   |AEDM_AND_GREEN_SITE|
-    |Improve        |AEDM_AND_AMBER_SITE|
-    |Unsatisfactory |AEDM_AND_RED_SITE  |
+  |status|dataSource         |
+  |Green |AEDM_AND_GREEN_SITE|
+  |Amber |AEDM_AND_AMBER_SITE|
+  |Red   |AEDM_AND_RED_SITE  |
 
 
   Scenario: AED can view TQI for site (via VTS)
