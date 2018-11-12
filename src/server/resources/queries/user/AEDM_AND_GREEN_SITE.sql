@@ -3,6 +3,7 @@ from site s, organisation o, person p, organisation_business_role_map obrm,
   security_card sc, person_security_card_map pscm, site_risk_score srs
 where o.id = s.organisation_id
 and o.id = srs.organisation_id
+and s.id = srs.site_id
 and srs.risk_colour = "GREEN"
 and exists (
   select 1 from auth_for_testing_mot_at_site aft
