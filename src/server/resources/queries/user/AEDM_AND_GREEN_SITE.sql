@@ -1,9 +1,9 @@
 select p.username, o.name, s.name
 from site s, organisation o, person p, organisation_business_role_map obrm,
-  enforcement_site_assessment esa, security_card sc, person_security_card_map pscm
-where s.last_site_assessment_id = esa.id
-and esa.site_assessment_score <= 270.00
-and o.id = s.organisation_id
+  security_card sc, person_security_card_map pscm, site_risk_score srs
+where o.id = s.organisation_id
+and o.id = srs.organisation_id
+and srs.risk_colour = "GREEN"
 and exists (
   select 1 from auth_for_testing_mot_at_site aft
   where aft.site_id = s.id
@@ -23,6 +23,6 @@ and not exists ( -- not all security_card have a corresponding security_card_dri
 )
 and p.username is not null
 and exists (select 1 from site_business_role_map sbrm where sbrm.site_id = s.id and sbrm.site_business_role_id = 1) -- At least one tester exists
+and (select count(*) from site site_count where site_count.organisation_id = o.id) < 9 -- Has less than 9 sites else we see a paginated list
 group by s.id
-order by esa.site_assessment_score desc
-limit 10
+limit 10;
