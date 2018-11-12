@@ -4,7 +4,7 @@ from site s, organisation o, person p, organisation_business_role_map obrm,
 where o.id = s.organisation_id
 and o.id = srs.organisation_id
 and s.id = srs.site_id
-and srs.risk_colour = "AMBER"
+and srs.risk_colour = "WHITE"
 and exists (
   select 1 from auth_for_testing_mot_at_site aft
   where aft.site_id = s.id
@@ -26,4 +26,3 @@ and p.username is not null
 and exists (select 1 from site_business_role_map sbrm where sbrm.site_id = s.id and sbrm.site_business_role_id = 1) -- At least one tester exists
 and (select count(*) from site site_count where site_count.organisation_id = o.id) < 9 -- Has less than 9 sites else we see a paginated list
 group by s.id
-limit 10;
