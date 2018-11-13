@@ -536,7 +536,7 @@ public class TesterDoesStepDefinitions implements En {
     }
 
     /**
-     * Recording the MOT test number for the current test from the MOT test summary page
+     * Recording the MOT test number for the current test from the MOT test summary page.
      */
     private void recordTestNumber() {
         //Get the current MOT test number value
