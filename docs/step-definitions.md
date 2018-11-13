@@ -86,6 +86,7 @@ Lower level, only use if higher level steps can't be used:
 * I enter ```"..text.."``` in the field with id ```"..id.."```
 * I enter ```{key}``` in the field with id ```"..id.."```
 * I select ```"..text.."``` in the field with id ```"..id.."```
+* I select ```{key}``` in the field with id ```"..id.."```
 
 
 ### DataStepDefinitions
@@ -154,7 +155,7 @@ These steps are specific to the DVSA MOT application screens.
 * I generate 2FA PIN with drift ```..drift period..``` as ```{key}```
    * Note: ```drift period``` is of the format ```+/-<n>``` (e.g. +2, +0, -10)
 * I generate 2FA PIN with previous drift ```{..last drift key..}``` as ```{key}```  
-* I login and click forgotten card using ```"..dataset name.."``` as ```{..username key..}```, ```{key2}```, ```{key3}```, ```{key4}```
+* I login and click ```"..journey type.."``` card using ```"..dataset name.."``` as ```{..username key..}```, ```{key2}```, ```{key3}```, ```{key4}```
 
 
 ### CreateVehicleStepDefinitions
@@ -197,6 +198,7 @@ These steps are specific to the DVSA MOT application screens.
 * I click the organisation link ```{..organisationKey..}```
 * I get the slot count from the homepage for site ```{..siteKey..}```
 * I check a slot was successfully used for site ```{..siteKey..}```
+* I check a slot was not used for site ```{..siteKey..}```
 
 ### PurchaseSlotsStepDefinitions
 

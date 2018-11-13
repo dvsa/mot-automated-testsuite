@@ -31,10 +31,10 @@ Feature: 08 - Create Vehicle
     And I press the "Confirm and start test" button
     Then The page title contains "MOT test started"
     And I cancel the mot test after creating the vehicle
-    And I click "Print documents" and check the PDF contains:
-      | VT30  |
-      | <reg> |
-      | <vin> |
+    And I click "Print certificate" and check the PDF contains:
+      | VT30            |
+      | <reg>           |
+      | <vin>           |
 
     Examples:
       | User               | reg         | vin                | make    | model | fuelType | cylinderCapacity | class | primaryColour | secondaryColour | Country of reg                             | years |

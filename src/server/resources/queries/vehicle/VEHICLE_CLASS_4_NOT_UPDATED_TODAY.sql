@@ -1,8 +1,9 @@
 select veh.registration, veh.vin, mtc.odometer_value
 from vehicle veh, model_detail md,
   (select max(id) as id, vehicle_id  from mot_test_current
+   where vehicle_id > 75175698
    group by vehicle_id
-   limit 100000) as latest_mot,
+   limit 10000) as latest_mot,
    mot_test_current mtc
 where veh.model_detail_id = md.id
 and md.vehicle_class_id = 4 -- cars only
@@ -25,5 +26,10 @@ and not exists (
     group by v.vin
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
+and not exists (
+	select 1 from mot_test_current mtc2
+	where mtc2.vehicle_id = veh.id
+	and mtc2.completed_date = CURDATE() -- test not completed in today
+	)
 and veh.last_updated_on < CURDATE() -- vehicles not updated today
-limit 50
+limit 5

@@ -9,7 +9,7 @@ and md.vehicle_class_id = 4 -- cars only
 and veh.id = latest_mot.vehicle_id
 and mtc.id = latest_mot.id
 and mtc.status_id not in (4,5) -- exclude vehicles whose latest status is under test or failed
-and datediff(mtc.completed_date, curdate()) < -7 -- excludes retests
+and datediff(curdate(), mtc.completed_date) > 15 -- excludes retests, tests that are over 8 days old
 and mtc.completed_date is not null -- excludes first-time tests
 and odometer_result_type = 'OK'
 and veh.registration not like "%-%" -- exclude dodgy test data on ACPT

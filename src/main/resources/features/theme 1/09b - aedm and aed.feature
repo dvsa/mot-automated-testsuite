@@ -23,6 +23,7 @@ Feature: 09b - AEDM and AED
   |Green |AEDM_AND_GREEN_SITE|
   |Amber |AEDM_AND_AMBER_SITE|
   |Red   |AEDM_AND_RED_SITE  |
+  |White |AEDM_AND_WHITE_SITE|
 
 
   Scenario: AED can view TQI for site (via VTS)

@@ -485,12 +485,12 @@ public class TesterDoesStepDefinitions implements En {
             //And I press the "Confirm and start test" button
             driverWrapper.pressButton("Confirm and start test");
 
-            //And The page title contains "MOT test started"
-            driverWrapper.checkCurrentPageTitle("MOT test started");
+            //And The page title contains "MOT test started - MOT testing service"
+            driverWrapper.checkCurrentPageTitle("MOT test started - MOT testing service");
         }
 
-        //And I click the "Continue to home" link
-        driverWrapper.clickLink("Continue to home");
+        //And I click the "Return to home" link
+        driverWrapper.clickLink("Return to home");
     }
 
     /**
