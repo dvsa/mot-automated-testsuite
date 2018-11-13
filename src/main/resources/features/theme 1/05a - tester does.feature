@@ -1,8 +1,9 @@
 @regression
 Feature: 05a - Tester does...
 
-  @smoke
+  @smoke @karltest
   Scenario: Tester enters a class 4 MOT test pass, with no defects and confirms a slot is consumed
+
     Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4_WITH_ONLY_ONE_SITE" as {username1}, {site}
     And I get the slot count from the homepage for site {site}
@@ -25,6 +26,7 @@ Feature: 05a - Tester does...
     And I check the minors section of the test summary has "None recorded"
     And I check the prs section of the test summary has "None recorded"
     And I check the advisory section of the test summary has "None recorded"
+    And I record the MOT test number
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:

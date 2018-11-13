@@ -395,6 +395,9 @@ public class TesterDoesStepDefinitions implements En {
                        + " I expect the \"([^\"]+)\" manual page",
                 (String defect, String linkText, String manualTitle) ->
                         openManualLinkFromSearchPage(defect, linkText, manualTitle));
+
+        And("^I record the MOT test number$", () ->
+                recordTestNumber());
     }
 
     /**
@@ -530,6 +533,17 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.enterIntoFieldWithId(minute, "contingency_time-minutes");
         // Enter either am or pm
         driverWrapper.selectOptionInFieldById(ampm, "contingency_time-ampm");
+    }
+
+    /**
+     * Recording the MOT test number for the current test.
+     */
+    private void recordTestNumber() {
+        //Get the current MOT test number value
+        String motTestNumber = driverWrapper.getElementText("motTestNumber");
+
+        //Add the MOT test number to check later
+        driverWrapper.setData("currentMotTestNumber", String.valueOf(motTestNumber));
     }
 
     /**
