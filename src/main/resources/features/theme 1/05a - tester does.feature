@@ -1,7 +1,7 @@
 @regression
 Feature: 05a - Tester does...
 
-  @smoke @karltest
+  @smoke
   Scenario: Tester enters a class 4 MOT test pass, with no defects and confirms a slot is consumed
 
     Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
