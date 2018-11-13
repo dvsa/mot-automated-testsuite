@@ -92,6 +92,7 @@ Feature: 08 - Create Vehicle
     And I check the minors section of the test summary has "None recorded"
     And I check the prs section of the test summary has "None recorded"
     And I check the advisory section of the test summary has "None recorded"
+    And I record the MOT test number
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:

@@ -1,7 +1,6 @@
 @regression
 Feature: 07 - Tester records Contingency Test
 
-
   Scenario: A tester record a pass contingency test and confirms a slot is consumed
     Given I login with 2FA using "MOT_TESTER_CLASS_4_WITH_ONLY_ONE_SITE" as {username1}, {site}
     And I get the slot count from the homepage for site {site}
@@ -77,6 +76,7 @@ Feature: 07 - Tester records Contingency Test
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
     And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
     And I check the brake results section of the test summary is "Pass"
+    And I record the MOT test number
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
