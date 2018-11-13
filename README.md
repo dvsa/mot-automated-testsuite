@@ -1,5 +1,5 @@
 # MOT Automated Test Suite
-tester
+
 Using Cucumber-JVM and Selenium to test the DVSA MOT application through the web browser UI, with test fixtures
 written using Java (JDK 8 Lambda-format step definitions).
 
