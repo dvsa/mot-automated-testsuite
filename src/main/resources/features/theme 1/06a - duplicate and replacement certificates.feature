@@ -15,7 +15,7 @@ Feature: 06a - duplicate and replacement certificates
     And I submit the certificate changes
     And I check the odometer reading on the confirmation page is correct
     And I check the expiry date of the confirmation page is correct
-#    And I check the vts information appears on the confirmation page - commented out due to a known bug ticket 4513
+    And I check the vts information appears on the confirmation page
     And I press the "Finish changes and print certificate" button
 
     Then The page title contains "Test Results Updated Successfully"
@@ -82,7 +82,7 @@ Feature: 06a - duplicate and replacement certificates
     And I edit the primary colour "Red" and secondary colour "White"
     And I press the "Review changes" button
     And I check the odometer reading on the confirmation page is correct
-    #  And I check the colours are correct "Red" and "White" - commented out due to a known bug ticket 4513
+    And I check the colours are correct "Red" and "White"
     And I press the "Finish changes and print certificate" button
     Then The page title contains "Test Results Updated Successfully"
     And I check there is a "Print" link
@@ -104,6 +104,34 @@ Feature: 06a - duplicate and replacement certificates
   @smoke @regressiondata
   Scenario: AO1 user edits vehicle details on latest certificate
     Given I login without 2FA using "AO1_USER" as {AO1}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
+    And I search for certificates with reg {reg}
+    And I click the first "View certificate" link
+    And I record the MOT test number
+    And I press the "Edit this MOT test result" button
+    And I edit the make "FORD" and model "FOCUS"
+    And I edit the primary colour "Red" and secondary colour "White"
+    And I edit the vehicle vin with "VINR3V0L"
+    And I edit the vehicle registration with "R3GHAU5"
+    And I edit the country of registration with "GB, NI (UK) - Northern Ireland"
+    When I submit the certificate changes
+    And I check the registration on the confirmation page is "R3GHAU5"
+    And I check the vin on the confirmation page is "VINR3V0L"
+    And I check the make on the confirmation page is "FORD"
+    And I check the model on the confirmation page is "FOCUS"
+    And I check the colours are correct "Red" and "White"
+    Then I press the "Finish changes and print certificate" button
+    And The page title contains "Test Results Updated Successfully"
+    And I check there is a "Print" link
+    And I click "Print" and check the PDF contains:
+      | R3GHAU5               |
+      | VINR3V0L              |
+      | FORD                  |
+      | FOCUS                 |
+
+  @regressiondata
+  Scenario: DVLA user edits vehicle details on latest certificate
+    Given I login without 2FA using "DVLA_OPERATIVE_USER" as {AO1}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
