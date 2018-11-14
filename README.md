@@ -55,6 +55,7 @@ MOT:
 * **@cpms** = CPMS regression tests
 * **@elasticSearch** = Elastic Search comparison test suite
 * **@extended** = Extended regression tests
+* **@regressiondata** = Generate data for manual checking
 
 MOT History:
 * **@mothint** = MOT History regression tests on the INT Environment

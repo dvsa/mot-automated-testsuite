@@ -56,7 +56,7 @@ Feature: 06b - duplicate and replacement certificates
     And I check the vin on the confirmation page is "VINR3V0L"
     And I check the make on the confirmation page is "FORD"
     And I check the model on the confirmation page is "FOCUS"
-  #  And I check the colours are correct "Red" and "White" - commented out due to a known bug ticket 4513
+    And I check the colours are correct "Red" and "White"
     Then I press the "Finish changes and print certificate" button
     And The page title contains "Test Results Updated Successfully"
     And I check there is a "Print" link
@@ -102,7 +102,7 @@ Feature: 06b - duplicate and replacement certificates
     And I edit the primary colour "Red" and secondary colour "White"
     And I press the "Review changes" button
     And I check the odometer reading on the confirmation page is correct
-  #  And I check the colours are correct "Red" and "White" - commented out due to a known bug ticket 4513
+    And I check the colours are correct "Red" and "White"
     Then I press the "Finish changes and print certificate" button
     And The page title contains "Test Results Updated Successfully"
     And I check there is a "Print" link
