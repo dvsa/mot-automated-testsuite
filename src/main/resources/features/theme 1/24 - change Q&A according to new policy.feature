@@ -20,6 +20,21 @@ Feature: 24 - Verify Q&A policy is enabled and working
     Then The page contains "There was a problem with the information you entered:"
     Then The page contains "First memorable answer - must not be a common answer"
     Then The page contains "Must not be a common answer"
+
+
+    And I enter "This is an answer of 70 characters which will then given an error message that it is too long" in the field with id "answer1"
+    And I press the "Continue" button
+    Then The page contains "There was a problem with the information you entered:"
+    Then The page contains "First memorable answer - must be shorter than 71 characters"
+    Then The page contains "Must be shorter than 71 characters"
+
+    And I enter "ans" in the field with id "answer1"
+    And I press the "Continue" button
+    Then The page contains "There was a problem with the information you entered:"
+    Then The page contains "First memorable answer - must be at least 6 characters"
+    Then The page contains "Must be at least 6 characters"
+
+
     And I enter "Secure answer33" in the field with id "answer1"
     When I press the "Continue" button
 
@@ -31,6 +46,13 @@ Feature: 24 - Verify Q&A policy is enabled and working
     Then The page contains "There was a problem with the information you entered:"
     Then The page contains "Second memorable answer - security answers must not be the same"
     Then The page contains "Security answers must not be the same"
+
+    And I enter " " in the field with id "answer2"
+    When I press the "Continue" button
+    Then The page contains "There was a problem with the information you entered:"
+    Then The page contains "Second memorable answer - enter a memorable answer"
+    Then The page contains "Enter a memorable answer"
+
     And I enter "Secure answer44" in the field with id "answer2"
     And I press the "Continue" button
 
