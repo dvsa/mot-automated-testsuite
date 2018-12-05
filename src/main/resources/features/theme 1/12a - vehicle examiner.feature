@@ -173,7 +173,7 @@ Feature: 12a - Vehicle Examiner
     When I start an MOT test for {registration1}, {vin1}, {site}
     And I click the "Enter test results" link
     And I enter an odometer reading in miles of {mileage1} plus 1000
-    And I enter decelerometer results of service brake 55 and parking brake 32
+    And I enter decelerometer results of service brake 75 and parking brake 42
     And I press the "Review test" button
     And I check the test information section of the test summary is "Pass"
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
@@ -278,6 +278,7 @@ Feature: 12a - Vehicle Examiner
     And I perform a test comparison with outcome "Disciplinary action report" and justification "Test was inadequate"
     And I check the case outcome "Disciplinary action report" is saved
 
+
   Scenario: VE re-inspection Fail to Satutory Appeal Verified Pass
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
@@ -319,6 +320,7 @@ Feature: 12a - Vehicle Examiner
     And I perform a test comparison with outcome "Advisory warning letter" and justification "Test was inadequate"
     And I check the case outcome "Advisory warning letter" is saved
 
+
     Scenario: Authorised Examiner Search
       Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
       And I load "AUTHORISED_EXAMINER" as {aeNumber}, {aeName}, {slotUsage}
@@ -343,6 +345,7 @@ Feature: 12a - Vehicle Examiner
         | {reg}           |
         | {vin}           |
 
+
   Scenario: Vehicle examiner searches for user by username
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
     And I load "AEDM_USER" as {searchUser}, {organisation}
@@ -351,9 +354,10 @@ Feature: 12a - Vehicle Examiner
     And I check the user profile contains username {searchUser}
     And I change the testers group "A" status to "Qualified"
 
-  Scenario: Vehicle information search
+
+  Scenario: Vehicle information MOT test summary search
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
-    And I load "VEHICLE_CLASS_4_MOT_LAST_10_DAYS" as {reg}, {vin}, {odo}
+    And I load "VEHICLE_REG_MOT_LATEST_TEST" as {reg}, {vin}, {odo}
     And I click the "Vehicle information" link
     When I search for vehicle information by "Registration (VRM)" with {reg}
     Then I check the reg {reg}, vin {vin} on vehicle information
@@ -361,12 +365,45 @@ Feature: 12a - Vehicle Examiner
     And The page contains "Vehicle MOT test history"
     And The page does not contain "Test date/time utc"
     And I click the first "View" link
-    And The page contains "MOT test summary" or "MOT re-test summary"
+    And The page contains "MOT test summary"
     And I check there is a "Print certificate" link
     And I click "Print certificate" and check the PDF contains:
       | Duplicate certificate          |
 
-  Scenario: Vehicle information search table validation
+
+  Scenario: Vehicle information MOT re-test summary search
+    Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
+    And I load "VEHICLE_REG_MOT_LATEST_RETEST" as {reg}, {vin}, {odo}
+    And I click the "Vehicle information" link
+    When I search for vehicle information by "Registration (VRM)" with {reg}
+    Then I check the reg {reg}, vin {vin} on vehicle information
+    And I click the "View MOT history" link
+    And The page contains "Vehicle MOT test history"
+    And The page does not contain "Test date/time utc"
+    And I click the first "View" link
+    And The page contains "MOT re-test summary"
+    And I check there is a "Print certificate" link
+    And I click "Print certificate" and check the PDF contains:
+      | Duplicate certificate          |
+
+
+  Scenario: Vehicle information MOT reinspection summary search
+    Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
+    And I load "VEHICLE_REG_MOT_LATEST_REINSPECTION_TEST" as {reg}, {vin}, {odo}
+    And I click the "Vehicle information" link
+    When I search for vehicle information by "Registration (VRM)" with {reg}
+    Then I check the reg {reg}, vin {vin} on vehicle information
+    And I click the "View MOT history" link
+    And The page contains "Vehicle MOT test history"
+    And The page does not contain "Test date/time utc"
+    And I click the first "View" link
+    And The page contains "MOT reinspection summary"
+    And I check there is a "Print certificate" link
+    And I click "Print certificate" and check the PDF contains:
+      |  Quality Control check          |
+
+
+  Scenario: Vehicle information test history search table validation
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
     And I load "VEHICLE_CLASS_4_AFTER_2010" as {reg}, {vin}, {odo}
     And I click the "Vehicle information" link

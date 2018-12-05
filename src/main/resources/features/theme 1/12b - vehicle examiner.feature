@@ -1,4 +1,4 @@
-@regression
+@regression @VEinspection
 Feature: 12b - Vehicle Examiner
 
   Scenario: MOT test search by vin
