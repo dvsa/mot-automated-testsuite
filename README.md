@@ -56,6 +56,7 @@ MOT:
 * **@elasticSearch** = Elastic Search comparison test suite
 * **@extended** = Extended regression tests
 * **@regressiondata** = Generate data for manual checking
+* **@VEinspection** = Vehicle Examiner Inspection test suite
 
 MOT History:
 * **@mothint** = MOT History regression tests on the INT Environment

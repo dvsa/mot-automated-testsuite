@@ -166,9 +166,6 @@ public class VehicleExaminerStepDefinitions implements En {
     private void startTestTypeOnMot(String testType) {
         //And I select the test type
         driverWrapper.selectOptionInFieldByName(testType, "motTestType");
-
-        //And I start the test
-        driverWrapper.pressButton("Start inspection");
     }
 
     /**
