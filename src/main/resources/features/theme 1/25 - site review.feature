@@ -1,4 +1,4 @@
-@regression @demi
+@regression
   Feature: 25 - site review
 
     Scenario: VE user creates a satisfactory site review with an activity performed
