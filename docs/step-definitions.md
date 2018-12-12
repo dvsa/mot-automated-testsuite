@@ -291,3 +291,7 @@ These steps are specific to the DVSA MOT application screens.
 
 * I query elastic search with ```"..csv file name.."``` as ```"..data key.."```
 * I compare the search results for ```"..result set key.."``` and ```"..result set key.."``` with data ```"..csv data file.."```
+
+### SiteReviewStepDefinitions
+
+* I enter the date of site visit as ```..days..``` days ago
