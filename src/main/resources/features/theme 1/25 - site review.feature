@@ -58,17 +58,3 @@
       And I check the "Activity" field row has value "Satisfactory"
       And I check the "Activity" field row has value "MOT test number: 123456789012"
       And I check the "AE representative" field row has value "John Doe"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
