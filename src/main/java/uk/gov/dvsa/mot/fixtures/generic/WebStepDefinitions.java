@@ -42,6 +42,9 @@ public class WebStepDefinitions implements En {
         When("^I click the button with class name \"([^\"]+)\"$", (String className) ->
                 driverWrapper.clickButtonByClassName(className));
 
+        When("^I click the button with id \"([^\"]+)\"$", (String buttonId) ->
+                driverWrapper.clickElement(buttonId));
+
         When("^I click the \"([^\"]+)\" link$", (String linkText) ->
                 driverWrapper.clickLink(linkText));
 
