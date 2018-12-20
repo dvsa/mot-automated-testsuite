@@ -1,4 +1,4 @@
-@regression @demi
+@regression
   Feature: 25 - site review
 
     Scenario: VE user creates a satisfactory site review with an activity performed
@@ -142,8 +142,16 @@
       And I check the "Activity" field row has value "Needs improvement"
       And I check the "Activity" field row has value "MOT test number: 123456789012"
       And I check the "AE representative" field row has value "John Doe"
+      And I click the button with id "back-button"
 
-    Scenario: VE user creates an unsatisfactory site review and creates an event
+      #Check that an event has been created
+      And I click the "Events history" link
+      And I click the first "Site Review" link
+      Then I check the "Event type" field row has value "Site Review"
+      And I check the "Description" field row has value "No further action"
+
+
+    Scenario: VE user creates an unsatisfactory site review with no activity performed and creates an event
       #Search for a site with an existing site review and start a new site review
       Given I load "SITE_REVIEW" as {siteNumber}, {siteName}
       And I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
@@ -179,13 +187,11 @@
       And I enter "People outcome comment" in the field with id "unsatisfactory-advice-textarea"
       And I press the "Save and return" button
 
-      #Record an activity performed with MOT test number and unsatisfactory outcome
+      #No activity performed
       And I click the button with id "RecordActivityButton"
-      And I click the "Yes" radio button
+      And I click the "No" radio button
       And I press the "Save and continue" button
-      And I enter "123456789012" in the "MOT test number" field
-      And I click the "Unsatisfactory" radio button
-      And I enter "Activity outcome comment" in the field with id "unsatisfactory-advice-textarea"
+      And I select "Blocked by VTS" in the field with id "reason-options"
       And I press the "Save and return" button
 
       #Submit and check the check details page
@@ -194,9 +200,9 @@
       And The page does not contain "Satisfactory"
       And The page does not contain "Improve"
       And The page does not contain "Needs improvement"
-      And I check the "Activity" field row has value "Activity performed"
-      And I check the "Activity" field row has value "Unsatisfactory"
-      And I check the "Activity" field row has value "MOT test number: 123456789012"
+      And I check the "Activity" field row has value "No activity performed"
+      And I check the "Activity" field row has value "Reason: Blocked by VTS"
+      And The page does not contain "MOT test number"
       And I check there is a "Change" link
 
       #Submit site review and create an event
@@ -216,7 +222,14 @@
 
       #Check the summary
       And I click the "View summary" link
-      Then I check the "Activity" field row has value "Activity performed"
-      And I check the "Activity" field row has value "Unsatisfactory"
-      And I check the "Activity" field row has value "MOT test number: 123456789012"
+      Then I check the "Activity" field row has value "No activity performed"
+      And I check the "Activity" field row has value "Reason: Blocked by VTS"
+      And The page does not contain "MOT test number"
       And I check the "AE representative" field row has value "John Doe"
+      And I click the button with id "back-button"
+
+      #Check that an event has been created
+      And I click the "Events history" link
+      And I click the first "Site Review" link
+      Then I check the "Event type" field row has value "Site Review"
+      And I check the "Description" field row has value "Advisory Warning Letter (AWL)"
