@@ -140,7 +140,7 @@ Feature: 12a - Vehicle Examiner
     And I start a "<ConfirmTestType>" test
     And I press the "Start inspection" button
     And I enter an odometer reading in miles of {mileage1} plus 1125
-    And I enter decelerometer results of service brake 56 and parking brake 32
+    And I enter decelerometer results of service brake 88 and parking brake 88
     And I press the "Review test" button
     And I check the test information section of the test summary is "Pass"
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
