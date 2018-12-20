@@ -149,8 +149,7 @@
       And I click the first "Site Review" link
       Then I check the "Event type" field row has value "Site Review"
       And I check the "Description" field row has value "No further action"
-
-
+      
     Scenario: VE user creates an unsatisfactory site review with no activity performed and creates an event
       #Search for a site with an existing site review and start a new site review
       Given I load "SITE_REVIEW" as {siteNumber}, {siteName}
