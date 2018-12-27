@@ -70,7 +70,7 @@ Feature: 05d - Tester does...
     And I select country of registration "GB, UK, ENG, CYM, SCO (UK) - Great Britain"
     And I enter the date of first use as today minus 4 years
 
-    And The page title contains "Confirm new record and start test"
+    And The page title contains "Confirm new record"
     And I press the "Confirm and start test" button
     And The page title contains "MOT test started"
     And I click the "Continue to home" link

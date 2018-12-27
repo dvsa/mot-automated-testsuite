@@ -18,7 +18,7 @@ Feature: 08 - Create Vehicle
 
     And I select country of registration "<Country of reg>"
     And I enter the date of first use as today minus <years> years
-    And The page title contains "Confirm new record and start test"
+    And The page title contains "Confirm new record"
 
     And I check the registration "<reg>" and vin "<vin>" is correct
     And I check the make "<make>" and model "<model>" is correct
@@ -63,7 +63,7 @@ Feature: 08 - Create Vehicle
 
     And I select country of registration "<Country of reg>"
     And I enter the date of first use as today minus <years> years
-    And The page title contains "Confirm new record and start test"
+    And The page title contains "Confirm new record"
 
     And I check the registration "<reg>" and vin "<vin>" is correct
     And I check the make "<make>" and model "<model>" is correct
