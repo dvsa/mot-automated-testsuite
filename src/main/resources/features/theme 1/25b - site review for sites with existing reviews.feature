@@ -1,20 +1,19 @@
 @regression
   Feature: 25b - site review for sites with existing reviews
 
-    Scenario: VE user creates a satisfactory site review with an activity performed
+    Background: VE user searches for a site with an existing site review and starts a new site review
 
-      #Search for a site with an existing site review
       Given I load "SITE_REVIEW" as {siteNumber}, {siteName}
       And I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
       And I search for Site information by site number with {siteNumber}
-
-      #Start a site review
       When I click the "Site review" link
       And I click the "Record a site review" link
       And I enter the date of site visit as 1 days ago
       And I enter "John Doe" in the field with id "aeName"
       And I enter "AE" in the field with id "aeRole"
       And I press the "Save and continue" button
+
+    Scenario: VE user creates a satisfactory site review with an activity performed
 
       #Record a satisfactory compliance outcome
       And I click the button with id "change_CO_button"
@@ -78,17 +77,6 @@
       And I check the "AE representative" field row has value "John Doe"
 
     Scenario: VE user creates an improve site review and creates an event
-
-      #Search for a site with an existing site review and start a new site review
-      Given I load "SITE_REVIEW" as {siteNumber}, {siteName}
-      And I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
-      And I search for Site information by site number with {siteNumber}
-      When I click the "Site review" link
-      And I click the "Record a site review" link
-      And I enter the date of site visit as 1 days ago
-      And I enter "John Doe" in the field with id "aeName"
-      And I enter "AE" in the field with id "aeRole"
-      And I press the "Save and continue" button
 
       #Record a satisfactory compliance outcome
       And I click the button with id "change_CO_button"
@@ -175,17 +163,6 @@
       And I check the "Description" field row has value "No further action"
       
     Scenario: VE user creates an unsatisfactory site review with no activity performed and creates an event
-
-      #Search for a site with an existing site review and start a new site review
-      Given I load "SITE_REVIEW" as {siteNumber}, {siteName}
-      And I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
-      And I search for Site information by site number with {siteNumber}
-      When I click the "Site review" link
-      And I click the "Record a site review" link
-      And I enter the date of site visit as 1 days ago
-      And I enter "John Doe" in the field with id "aeName"
-      And I enter "AE" in the field with id "aeRole"
-      And I press the "Save and continue" button
 
       #Record an unsatisfactory compliance outcome
       And I click the button with id "change_CO_button"
