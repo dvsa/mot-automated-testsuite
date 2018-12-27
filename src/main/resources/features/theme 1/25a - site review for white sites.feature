@@ -1,7 +1,6 @@
 @regression
   Feature: 25a - site review for white sites
-
-    @smoke
+    
     Scenario: VE user creates a first site review
 
       #Search for a site which has no previous site reviews
