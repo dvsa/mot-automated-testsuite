@@ -1,7 +1,8 @@
 @regression
-  Feature: 25 - site review
+  Feature: 25b - site review for sites with existing reviews
 
     Scenario: VE user creates a satisfactory site review with an activity performed
+
       #Search for a site with an existing site review
       Given I load "SITE_REVIEW" as {siteNumber}, {siteName}
       And I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
@@ -15,7 +16,7 @@
       And I enter "AE" in the field with id "aeRole"
       And I press the "Save and continue" button
 
-      #Record a "satisfactory" compliance outcome
+      #Record a satisfactory compliance outcome
       And I click the button with id "change_CO_button"
       And I click the "Satisfactory" radio button
       And I press the "Save and return" button
@@ -48,6 +49,10 @@
       Then I check the "Site review outcome" field row has value "Satisfactory"
       And The page does not contain "Improve"
       And The page does not contain "Unsatisfactory"
+      And I check the "Compliance" field row has value "Satisfactory"
+      And I check the "Premises" field row has value "Satisfactory"
+      And I check the "Management and quality" field row has value "Satisfactory"
+      And I check the "People" field row has value "Satisfactory"
       And I check the "Activity" field row has value "Activity performed"
       And I check the "Activity" field row has value "Satisfactory"
       And I check the "Activity" field row has value "MOT test number: 123456789012"
@@ -63,12 +68,17 @@
 
       #Check the summary
       And I click the "View summary" link
-      Then I check the "Activity" field row has value "Activity performed"
+      Then I check the "Compliance" field row has value "Satisfactory"
+      And I check the "Premises" field row has value "Satisfactory"
+      And I check the "Management and quality" field row has value "Satisfactory"
+      And I check the "People" field row has value "Satisfactory"
+      And I check the "Activity" field row has value "Activity performed"
       And I check the "Activity" field row has value "Satisfactory"
       And I check the "Activity" field row has value "MOT test number: 123456789012"
       And I check the "AE representative" field row has value "John Doe"
 
     Scenario: VE user creates an improve site review and creates an event
+
       #Search for a site with an existing site review and start a new site review
       Given I load "SITE_REVIEW" as {siteNumber}, {siteName}
       And I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
@@ -116,9 +126,16 @@
       And I click the button with id "continueButton"
       Then I check the "Site review outcome" field row has value "Needs improvement"
       And The page does not contain "Unsatisfactory"
+      And I check the "Premises" field row has value "Needs improvement"
+      And I check the "Management and quality" field row has value "Needs improvement"
+      And I check the "People" field row has value "Needs improvement"
       And I check the "Activity" field row has value "Activity performed"
       And I check the "Activity" field row has value "Needs improvement"
       And I check the "Activity" field row has value "MOT test number: 123456789012"
+      And I check the "Premises" field row has value "Advice given: Premises outcome comment"
+      And I check the "Management and quality" field row has value "Advice given: Management and quality outcome comment"
+      And I check the "People" field row has value "Advice given: People outcome comment"
+      And I check the "Activity" field row has value "Advice given: Activity outcome comment"
       And I check there is a "Change" link
 
       #Submit site review and create an event
@@ -138,9 +155,16 @@
 
       #Check the summary
       And I click the "View summary" link
-      Then I check the "Activity" field row has value "Activity performed"
+      And I check the "Premises" field row has value "Needs improvement"
+      And I check the "Management and quality" field row has value "Needs improvement"
+      And I check the "People" field row has value "Needs improvement"
+      And I check the "Activity" field row has value "Activity performed"
       And I check the "Activity" field row has value "Needs improvement"
       And I check the "Activity" field row has value "MOT test number: 123456789012"
+      And I check the "Premises" field row has value "Advice given: Premises outcome comment"
+      And I check the "Management and quality" field row has value "Advice given: Management and quality outcome comment"
+      And I check the "People" field row has value "Advice given: People outcome comment"
+      And I check the "Activity" field row has value "Advice given: Activity outcome comment"
       And I check the "AE representative" field row has value "John Doe"
       And I click the button with id "back-button"
 
@@ -151,6 +175,7 @@
       And I check the "Description" field row has value "No further action"
       
     Scenario: VE user creates an unsatisfactory site review with no activity performed and creates an event
+
       #Search for a site with an existing site review and start a new site review
       Given I load "SITE_REVIEW" as {siteNumber}, {siteName}
       And I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
@@ -199,8 +224,16 @@
       And The page does not contain "Satisfactory"
       And The page does not contain "Improve"
       And The page does not contain "Needs improvement"
+      And I check the "Compliance" field row has value "Unsatisfactory"
+      And I check the "Premises" field row has value "Unsatisfactory"
+      And I check the "Management and quality" field row has value "Unsatisfactory"
+      And I check the "People" field row has value "Unsatisfactory"
       And I check the "Activity" field row has value "No activity performed"
       And I check the "Activity" field row has value "Reason: Blocked by VTS"
+      And I check the "Compliance" field row has value "Advice given: Compliance outcome comment"
+      And I check the "Premises" field row has value "Advice given: Premises outcome comment"
+      And I check the "Management and quality" field row has value "Advice given: Management and quality outcome comment"
+      And I check the "People" field row has value "Advice given: People outcome comment"
       And The page does not contain "MOT test number"
       And I check there is a "Change" link
 
@@ -221,9 +254,17 @@
 
       #Check the summary
       And I click the "View summary" link
-      Then I check the "Activity" field row has value "No activity performed"
+      Then I check the "Compliance" field row has value "Unsatisfactory"
+      And I check the "Premises" field row has value "Unsatisfactory"
+      And I check the "Management and quality" field row has value "Unsatisfactory"
+      And I check the "People" field row has value "Unsatisfactory"
+      And I check the "Activity" field row has value "No activity performed"
       And I check the "Activity" field row has value "Reason: Blocked by VTS"
       And The page does not contain "MOT test number"
+      And I check the "Compliance" field row has value "Advice given: Compliance outcome comment"
+      And I check the "Premises" field row has value "Advice given: Premises outcome comment"
+      And I check the "Management and quality" field row has value "Advice given: Management and quality outcome comment"
+      And I check the "People" field row has value "Advice given: People outcome comment"
       And I check the "AE representative" field row has value "John Doe"
       And I click the button with id "back-button"
 
