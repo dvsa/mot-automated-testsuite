@@ -277,8 +277,6 @@ public class DuplicateAndReplacementStepDefinitions implements En {
      * Checks the update site information appears on the page.
      */
     private void checkTheTestingLocation() {
-        System.out.print(driverWrapper.getElementText("testInformation"));
-
         //And I check the testing location number is on the confirmation page
         assertTrue("Testing location number does not appear on the confirmation page",
                 driverWrapper.getElementText("testInformation").contains(driverWrapper.getData("siteNumber")));

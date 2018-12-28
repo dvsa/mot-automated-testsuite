@@ -1,6 +1,6 @@
-@regression
 Feature: 11 - Finance
 
+  @regression
   Scenario: View AE transaction
     Given I login without 2FA using "FINANCE_USER" as {username}
     And I click the "AE information" link
@@ -54,40 +54,62 @@ Feature: 11 - Finance
   # The below scenario contains a bug - BL-5595 where
   # the cheque details were not being stored
   # therefore the cheque details will not show up in full
-   Scenario: A finance user buys slots for an AE and processes the payment as a Cheque payment
+  @regression
+  Scenario: A finance user buys slots for an AE and processes the payment as a Cheque payment
+    Given I login without 2FA using "FINANCE_USER" as {username}
+    And I click the "AE information" link
+    And I load "AE_USER" as {aeusername}, {aename}, {slots}
+    And I enter {aeusername} in the "Authorised Examiner ID" field
+    And I press the "Search" button
 
-     Given I login without 2FA using "FINANCE_USER" as {username}
-     And I click the "AE information" link
-     And I load "AE_USER" as {aeusername}, {aename}, {slots}
-     And I enter {aeusername} in the "Authorised Examiner ID" field
-     And I press the "Search" button
+    And I click the "Buy slots" link
 
-     And I click the "Buy slots" link
+    And I click the "Cheque" radio button
+    And I press the "Start order" button
 
-     And I click the "Cheque" radio button
-     And I press the "Start order" button
+    And I set today as {day}, {month}, {year}
+    And I enter {day} in the "Day" field
+    And I enter {month} in the "Month" field
+    And I enter {year} in the "Year" field
+    And I enter "1234" in the field with id "slipNumber"
 
-     And I set today as {day}, {month}, {year}
-     And I enter {day} in the "Day" field
-     And I enter {month} in the "Month" field
-     And I enter {year} in the "Year" field
-     And I enter "1234" in the field with id "slipNumber"
+    And I enter "12345" in the field with id "chequeNumber"
+    And I enter "Automated testing" in the field with id "accountName"
+    And I enter "205.00" in the field with id "amount"
 
-     And I enter "12345" in the field with id "chequeNumber"
-     And I enter "Automated testing" in the field with id "accountName"
-     And I enter "205.00" in the field with id "amount"
+    And I press the "Create order" button
+    And I click the link "Confirm order" with id "confirmOrder"
 
-     And I press the "Create order" button
-     And I click the link "Confirm order" with id "confirmOrder"
+    Then The page contains "Order confirmed"
+    And I click the link "View purchase details" with id "purchaseDetails"
+    Then The page contains "Transaction details"
+    And I check the "Status" field row has value "Success"
 
-     Then The page contains "Order confirmed"
-     And I click the link "View purchase details" with id "purchaseDetails"
-     Then The page contains "Transaction details"
-     And I check the "Status" field row has value "Success"
+    And I click the "purchase history" link
+    And I click the link "Return to Authorised Examiner" with id "returnToExaminer"
 
-     And I click the "purchase history" link
-     And I click the link "Return to Authorised Examiner" with id "returnToExaminer"
-     
+  @cpms
+  Scenario Outline: A finance user generates <report> finance report for <startDate> days ago to <endDate> days ago
+    Given I login without 2FA using "FINANCE_USER" as {username}
+    And I click the "Generate financial reports" link
+    And I select "<report>" in the field with id "input_report_type"
+    And I get the date <startDate> days ago as {start_day}, {start_month}, {start_year}
+    And I set the finance report from date to {start_day} {start_month} {start_year}
+    And I get the date <endDate> days ago as {end_day}, {end_month}, {end_year}
+    And I set the finance report to date to {end_day} {end_month} {end_year}
+    And I press the "Generate report" button
+    Then I record the finance report URL
+
+    Examples:
+      | report                | startDate | endDate |
+      | All Payments          | 14        | 7       |
+      | All Payments          | 212       | 182     |
+      | General Ledger Sales  | 30        | 0       |
+      | General Ledger Sales  | 14        | 7       |
+      | General Ledger Sales  | 212       | 182     |
+      | Transaction Breakdown | 14        | 7       |
+      | Transaction Breakdown | 212       | 182     |
+
   @smoke
   Scenario Outline: A finance user generates <report> finance report for <startDate> days ago to <endDate> days ago
     Given I login without 2FA using "FINANCE_USER" as {username}
@@ -99,14 +121,8 @@ Feature: 11 - Finance
     And I set the finance report to date to {end_day} {end_month} {end_year}
     And I press the "Generate report" button
     Then I record the finance report URL
-  Examples:
-  |report               |startDate|endDate|
-  |All Payments         |30       |0      |
-  |All Payments         |14       |7      |
-  |All Payments         |212      |182    |
-  |General Ledger Sales |30       |0      |
-  |General Ledger Sales |14       |7      |
-  |General Ledger Sales |212      |182    |
-  |Transaction Breakdown|30       |0      |
-  |Transaction Breakdown|14       |7      |
-  |Transaction Breakdown|212      |182    |
+
+    Examples:
+      | report                | startDate | endDate |
+      | All Payments          | 30        | 0       |
+      | Transaction Breakdown | 30        | 0       |

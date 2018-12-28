@@ -14,6 +14,9 @@ and mtc.expiry_date > curdate() -- latest MOT expires after today
 and odometer_result_type = 'OK'
 and veh.registration not like "%-%" -- exclude dodgy test data on ACPT
 and veh.registration is not null -- nullable in PP/Prod
+and veh.registration <> 'R3GHAU5' -- Exclude vehicles that have already been modified by automation
+and veh.registration <> 'R3GHA01' -- Exclude vehicles that have already been modified by automation
+and veh.registration <> 'R3GHDVL5' -- Exclude vehicles that have already been modified by automation
 and veh.vin is not null -- nullable in PP/Prod
 and not exists (
     select 1 from vehicle v
