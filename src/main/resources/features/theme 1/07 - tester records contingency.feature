@@ -218,10 +218,10 @@ Feature: 07 - Tester records Contingency Test
       | Test advisory 2           |
       | {dateOfTest2}             |
 
-  Scenario: A tester records a fail contingency test one day ago and performs retest pass now
+  Scenario: A tester records a failed contingency test two day's ago and performs retest pass now
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     Then I start a contingency MOT test at site {site}
-    And I load "CONTINGENCY_CODE_1_DAY" as {code}, {issueDate}, {dateOfTest}, {day}, {month}, {year}
+    And I load "CONTINGENCY_CODE_2_DAY" as {code}, {issueDate}, {dateOfTest}, {day}, {month}, {year}
     And I enter {day} in the "Day" field
     And I enter {month} in the "Month" field
     And I enter {year} in the "Year" field
