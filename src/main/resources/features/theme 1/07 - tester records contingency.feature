@@ -130,7 +130,7 @@ Feature: 07 - Tester records Contingency Test
   Scenario: A tester records a fail contingency test then a contingency retest pass 10 working days later
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     Then I start a contingency MOT test at site {site}
-    And I load immediately "CONTINGENCY_CODE_14_DAY" as {code}, {issueDate}, {dateOfTest}, {day}, {month}, {year}
+    And I load "CONTINGENCY_CODE_14_DAY" as {code}, {issueDate}, {dateOfTest}, {day}, {month}, {year}
     And I enter {day} in the "Day" field
     And I enter {month} in the "Month" field
     And I enter {year} in the "Year" field
@@ -177,7 +177,7 @@ Feature: 07 - Tester records Contingency Test
     And I click the "Back to user home" link
 
     Then I start a contingency MOT test at site {site}
-    And I load immediately "CONTINGENCY_CODE_4_DAY" as {code2}, {issueDate2}, {dateOfTest2}, {day2}, {month2}, {year2}
+    And I load "CONTINGENCY_CODE_4_DAY" as {code2}, {issueDate2}, {dateOfTest2}, {day2}, {month2}, {year2}
     And I enter {day2} in the "Day" field
     And I enter {month2} in the "Month" field
     And I enter {year2} in the "Year" field
@@ -221,7 +221,7 @@ Feature: 07 - Tester records Contingency Test
   Scenario: A tester records a fail contingency test one day ago and performs retest pass now
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     Then I start a contingency MOT test at site {site}
-    And I load immediately "CONTINGENCY_CODE_1_DAY" as {code}, {issueDate}, {dateOfTest}, {day}, {month}, {year}
+    And I load "CONTINGENCY_CODE_1_DAY" as {code}, {issueDate}, {dateOfTest}, {day}, {month}, {year}
     And I enter {day} in the "Day" field
     And I enter {month} in the "Month" field
     And I enter {year} in the "Year" field
@@ -387,7 +387,7 @@ Feature: 07 - Tester records Contingency Test
     And I wait for "60" seconds
 
     Then I start a contingency MOT test at site {site}
-    And I load immediately "CONTINGENCY_CODE_0_DAY" as {code2}, {issueDate2}, {dateOfTest2}, {day2}, {month2}, {year2}
+    And I load "CONTINGENCY_CODE_0_DAY" as {code2}, {issueDate2}, {dateOfTest2}, {day2}, {month2}, {year2}
     And I enter {day2} in the "Day" field
     And I enter {month2} in the "Month" field
     And I enter {year2} in the "Year" field

@@ -28,7 +28,7 @@ Feature: 06a - duplicate and replacement certificates
 
   Scenario Outline: <user> user issues duplicate certificate
     Given I login without 2FA using "<dataScript>" as {<user>}
-    And I load immediately "VEHICLE_CLASS_4_MOT_LAST_10_DAYS" as {reg}, {vin}, {mileage}
+    And I load "VEHICLE_CLASS_4_MOT_LAST_10_DAYS" as {reg}, {vin}, {mileage}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
     And I check there is a "Print certificate" link
