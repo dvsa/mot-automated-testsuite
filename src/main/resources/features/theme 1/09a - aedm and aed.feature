@@ -59,14 +59,14 @@ Feature: 09a - AEDM and AED
 
   Scenario: AEDM checks today's test log at VTS
     Given I load uniquely "AEDM_AND_TESTER_AT_SITE" as {aedm}, {aeName}, {siteName}, {siteNumber}, {testerUsername}, {testerName}
-    And I load "VEHICLE_CLASS_4_BEFORE_2010" as {reg}, {vin}, {odometer}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {odometer}
     And I login with 2FA as {testerUsername}
 
     And I start an MOT test for {reg}, {vin}, {siteName}
     And The page title contains "Your home"
     And I click the "Enter test results" link
     And I enter an odometer reading in miles of {odometer} plus 5000
-    And I enter decelerometer results of service brake 51 and parking brake 16
+    And I enter decelerometer results of service brake 58 and parking brake 16
     And I press the "Review test" button
     And The page title contains "MOT test summary"
     And I press the "Save test result" button

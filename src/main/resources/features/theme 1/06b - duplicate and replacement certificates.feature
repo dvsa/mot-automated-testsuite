@@ -7,17 +7,17 @@ Feature: 06b - duplicate and replacement certificates
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
     And I press the "Edit this MOT test result" button
-    And I edit the vehicle vin with "DVLA304050921020"
-    And I edit the vehicle registration with "DVLA903"
+    And I edit the vehicle vin with "DVLA304050921024"
+    And I edit the vehicle registration with "DVLA904"
     When I submit the certificate changes
-    And I check the registration on the confirmation page is "DVLA903"
-    And I check the vin on the confirmation page is "DVLA304050921020"
+    And I check the registration on the confirmation page is "DVLA904"
+    And I check the vin on the confirmation page is "DVLA304050921024"
     Then I press the "Finish changes and print certificate" button
     And The page title contains "Test Results Updated Successfully"
     And I click "Print" and check the PDF contains:
       | VT                              |
-      | DVLA903                         |
-      | DVLA304050921020                |
+      | DVLA904                         |
+      | DVLA304050921024                |
 
 
   Scenario: DVLA Manager edits VRM / VIN on historic certificate

@@ -28,7 +28,7 @@ Feature: 06a - duplicate and replacement certificates
 
   Scenario Outline: <user> user issues duplicate certificate
     Given I login without 2FA using "<dataScript>" as {<user>}
-    And I load immediately "VEHICLE_CLASS_4_MOT_LAST_10_DAYS" as {reg}, {vin}, {mileage}
+    And I load "VEHICLE_CLASS_4_MOT_LAST_10_DAYS" as {reg}, {vin}, {mileage}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
     And I check there is a "Print certificate" link
@@ -44,7 +44,7 @@ Feature: 06a - duplicate and replacement certificates
 
   @regressiondata
   Scenario: Tester completes a test then issues duplicate certificate and can edit test
-    Given I load uniquely "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
     When I start an MOT test for {registration1}, {vin1}, {site}
@@ -52,7 +52,7 @@ Feature: 06a - duplicate and replacement certificates
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I enter decelerometer results of service brake 51 and parking brake 16
+    And I enter decelerometer results of service brake 58 and parking brake 16
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"

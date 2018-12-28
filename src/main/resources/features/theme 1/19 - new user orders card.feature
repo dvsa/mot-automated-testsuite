@@ -36,7 +36,7 @@ Feature: 19 - New trade user orders and activates 2FA card
 
     # AO1 user assigns role of AEDM to the new user
     And I load immediately "LATEST_TEST_USER" as {username}
-    And I load immediately "AE_WITH_NO_AEDM" as {aeReference}, {aeName}, {unused1}, {unused2}
+    And I load "AE_WITH_NO_AEDM" as {aeReference}, {aeName}, {unused1}, {unused2}
     And I login without 2FA using "AO1_USER" as {ao1User}
     And I click the "AE information" link
     And I enter {aeReference} in the "Authorised Examiner ID" field
@@ -72,7 +72,7 @@ Feature: 19 - New trade user orders and activates 2FA card
     And I click the "Continue to home" link
     And I click the "Nomination for Authorised Examiner Designated Manager - activate your security card" link
     And The page contains "You will receive the role of Authorised Examiner Designated Manager at {aeName} once you have activated the card."
-    And I load immediately "2FA_CARD_UNUSED" as {serialNumber}
+    And I load "2FA_CARD_UNUSED" as {serialNumber}
     And I click the "Activate your security card" link
     And I generate 2FA PIN with drift +0 as {pin}
     And I enter {serialNumber} in the "Serial number" field
@@ -180,7 +180,7 @@ Feature: 19 - New trade user orders and activates 2FA card
     And I click the "Continue to home" link
 
     # Activate the security card
-    And I load immediately "2FA_CARD_UNUSED" as {serialNumber}
+    And I load "2FA_CARD_UNUSED" as {serialNumber}
     And I click the "Your profile" link
     And The page title contains "Your profile"
     And I click the "Activate your security card" link

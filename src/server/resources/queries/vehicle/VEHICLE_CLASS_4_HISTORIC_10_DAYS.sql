@@ -16,6 +16,8 @@ and veh.registration is not null -- nullable in PP/Prod
 and veh.registration <> 'R3GHAU5' -- Exclude vehicles that have already been modified by automation
 and veh.registration <> 'R3GHA01' -- Exclude vehicles that have already been modified by automation
 and veh.registration <> 'R3GHDVL5' -- Exclude vehicles that have already been modified by automation
+and veh.registration <> 'DVLA903' -- Exclude vehicles that have already been modified by automation
+and veh.registration <> 'DVLA904' -- Exclude vehicles that have already been modified by automation
 and veh.vin is not null -- nullable in PP/Prod
 and not exists (
     select 1 from vehicle v
@@ -32,4 +34,5 @@ and not exists (
 and DATE(mtc.issued_date) < date_sub(CURDATE(), INTERVAL 14 DAY) -- Oldest certificate older than 10 days
 and DATE(mtc.issued_date) > date_sub(CURDATE(), INTERVAL 4 YEAR) -- Testers can only see 4 years worth
 AND DATE(mtc.issued_date) != CURDATE()
+and veh.registration LIKE 'S%'
 limit 50

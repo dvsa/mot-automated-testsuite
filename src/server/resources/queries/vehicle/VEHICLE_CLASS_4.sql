@@ -16,6 +16,7 @@ and veh.registration is not null -- nullable in PP/Prod
 and veh.registration <> 'R3GHAU5' -- Exclude vehicles that have already been modified by automation
 and veh.registration <> 'R3GHA01' -- Exclude vehicles that have already been modified by automation
 and veh.registration <> 'R3GHDVL5' -- Exclude vehicles that have already been modified by automation
+and veh.registration <> 'DVLA903' -- Exclude vehicles that have already been modified by automation
 and veh.vin is not null -- nullable in PP/Prod
 and mtc.vehicle_version = veh.version
 and not exists (
@@ -30,4 +31,6 @@ and not exists (
     group by v.vin
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
-limit 100
+and veh.registration LIKE 'I%'
+ORDER BY veh.registration DESC
+limit 50
