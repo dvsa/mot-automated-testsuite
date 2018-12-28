@@ -66,12 +66,12 @@ Feature: 12a - Vehicle Examiner
 
 
   Scenario Outline: VE re-inspection Pass to Major Verified Fail
-    Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     When I start an MOT test for {registration1}, {vin1}, {site}
     And I click the "Enter test results" link
     And I enter an odometer reading in miles of {mileage1} plus 1000
-    And I enter decelerometer results of service brake 90 and parking brake 99
+    And I enter decelerometer results of service brake 60 and parking brake 60
     And I press the "Review test" button
     And I check the test information section of the test summary is "Pass"
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}

@@ -17,7 +17,7 @@ Feature: 07 - Tester records Contingency Test
     And I enter {code} in the "Contingency code" field
     And I press the "Confirm contingency test" button
 
-    And I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
+    And I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I enter {registration1} in the "Registration mark" field
     And I enter {vin1} in the "VIN" field
     And I press the "Search" button
@@ -25,7 +25,7 @@ Feature: 07 - Tester records Contingency Test
     And I click the "Select vehicle" link
     And I press the "Confirm and start test" button
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I enter decelerometer results of service brake 51 and parking brake 16
+    And I enter decelerometer results of service brake 58 and parking brake 16
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
@@ -59,7 +59,7 @@ Feature: 07 - Tester records Contingency Test
     And I enter {code} in the "Contingency code" field
     And I press the "Confirm contingency test" button
 
-    And I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
+    And I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I enter {registration1} in the "Registration mark" field
     And I enter {vin1} in the "VIN" field
     And I press the "Search" button
@@ -67,7 +67,7 @@ Feature: 07 - Tester records Contingency Test
     And I click the "Select vehicle" link
     And I press the "Confirm and start test" button
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I enter decelerometer results of service brake 51 and parking brake 16
+    And I enter decelerometer results of service brake 58 and parking brake 16
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
@@ -100,7 +100,7 @@ Feature: 07 - Tester records Contingency Test
     And I enter {code} in the "Contingency code" field
     And I press the "Confirm contingency test" button
 
-    And I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
+    And I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I enter {registration1} in the "Registration mark" field
     And I enter {vin1} in the "VIN" field
     And I press the "Search" button
@@ -108,7 +108,7 @@ Feature: 07 - Tester records Contingency Test
     And I click the "Select vehicle" link
     And I press the "Confirm and start test" button
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I enter decelerometer results of service brake 51 and parking brake 10
+    And I enter decelerometer results of service brake 58 and parking brake 10
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
@@ -140,7 +140,7 @@ Feature: 07 - Tester records Contingency Test
     And I enter {code} in the "Contingency code" field
     And I press the "Confirm contingency test" button
 
-    And I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
+    And I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I enter {registration1} in the "Registration mark" field
     And I enter {vin1} in the "VIN" field
     And I press the "Search" button
@@ -305,7 +305,7 @@ Feature: 07 - Tester records Contingency Test
     And I enter {code} in the "Contingency code" field
     And I press the "Confirm contingency test" button
 
-    And I load uniquely "VEHICLE_CLASS_4_BEFORE_2010" as {registration}, {vin}, {mileage}
+    And I load "VEHICLE_CLASS_4" as {registration}, {vin}, {mileage}
     And I enter {registration} in the "Registration mark" field
     And I enter {vin} in the "VIN" field
     And I press the "Search" button

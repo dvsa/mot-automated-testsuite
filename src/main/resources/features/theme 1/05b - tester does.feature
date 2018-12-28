@@ -142,7 +142,7 @@ Feature: 05b - Tester does...
 
   @smoke
   Scenario: Tester enters a class 4 MOT retest pass, all failures repaired, no need to repeat brake test
-    Given I load "VEHICLE_CLASS_4_AFTER_2010" as {registration1}, {vin1}, {mileage1}
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
     And I start an MOT test for {registration1}, {vin1}, {site}
@@ -214,7 +214,7 @@ Feature: 05b - Tester does...
 
 
   Scenario: Tester enters a class 4 MOT retest fail, with brake test re-entry
-    Given I load "VEHICLE_CLASS_4_AFTER_2010" as {registration1}, {vin1}, {mileage1}
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
     And I start an MOT test for {registration1}, {vin1}, {site}
