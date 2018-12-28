@@ -405,7 +405,7 @@ Feature: 12a - Vehicle Examiner
 
   Scenario: Vehicle information test history search table validation
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
-    And I load "VEHICLE_CLASS_4_AFTER_2010" as {reg}, {vin}, {odo}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {odo}
     And I click the "Vehicle information" link
     When I search for vehicle information by "Registration (VRM)" with {reg}
     Then I check the reg {reg}, vin {vin} on vehicle information
