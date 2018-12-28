@@ -24,20 +24,17 @@ and p.id = pscm.person_id
 and sc.id = pscm.security_card_id
 and sc.security_card_status_lookup_id = 1 -- only assigned cards
 and not exists ( -- not all security_card have a corresponding security_card_drift
- select 1 from security_card_drift scd
- where sc.id = scd.security_card_id
- and (scd.last_observed_drift > 60 or scd.last_observed_drift < -60) -- no drift beyond +/-2
-)
+    select 1 from security_card_drift scd
+    where sc.id = scd.security_card_id
+    and (scd.last_observed_drift > 60 or scd.last_observed_drift < -60)) -- no drift beyond +/-2
 and not exists (
- select 1 from mot_test_current mtc
- where p.id = mtc.last_updated_by
- and mtc.status_id = 4 -- exclude any testers with active tests
-)
+    select 1 from mot_test_current mtc
+    where p.id = mtc.last_updated_by
+    and mtc.status_id = 4) -- exclude any testers with active tests
 and not exists (
     select 1 from site_business_role_map sbrm
     where p.id = sbrm.person_id
     group by sbrm.person_id
     having count(*)>1)
 and p.username is not null -- exclude dodgy test data
-ORDER BY RAND()
 limit 10
