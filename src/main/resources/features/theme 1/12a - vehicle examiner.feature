@@ -71,7 +71,7 @@ Feature: 12a - Vehicle Examiner
     When I start an MOT test for {registration1}, {vin1}, {site}
     And I click the "Enter test results" link
     And I enter an odometer reading in miles of {mileage1} plus 1000
-    And I enter decelerometer results of service brake 51 and parking brake 16
+    And I enter decelerometer results of service brake 90 and parking brake 99
     And I press the "Review test" button
     And I check the test information section of the test summary is "Pass"
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
@@ -231,7 +231,7 @@ Feature: 12a - Vehicle Examiner
     When I start an MOT test for {registration1}, {vin1}, {site}
     And I click the "Enter test results" link
     And I enter an odometer reading in miles of {mileage1} plus 75
-    And I enter decelerometer results of service brake 55 and parking brake 32
+    And I enter decelerometer results of service brake 90 and parking brake 90
     And I press the "Review test" button
     And I check the test information section of the test summary is "Pass"
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
@@ -304,7 +304,7 @@ Feature: 12a - Vehicle Examiner
     And I enter "AB1236T" in the field with id "complaintRef"
     And I press the "Start inspection" button
     And I enter an odometer reading in miles of {mileage1} plus 80
-    And I enter decelerometer results of service brake 50 and parking brake 32
+    And I enter decelerometer results of service brake 90 and parking brake 90
     And I press the "Review test" button
     And I check the test information section of the test summary is "Pass"
     And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
