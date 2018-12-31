@@ -2,18 +2,17 @@
 Feature: 05a - Tester does...
 
   @smoke
-  Scenario: Tester enters a class 4 MOT test pass, with no defects and confirms a slot is consumed
+  Scenario: Tester enters a class 4 MOT test pass, with no defects
 
-    Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
-    And I login with 2FA using "MOT_TESTER_CLASS_4_WITH_ONLY_ONE_SITE" as {username1}, {site}
-    And I get the slot count from the homepage for site {site}
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
 
     When I start an MOT test for {registration1}, {vin1}, {site}
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I enter decelerometer results of service brake 51 and parking brake 16
+    And I enter decelerometer results of service brake 58 and parking brake 16
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
@@ -34,11 +33,10 @@ Feature: 05a - Tester does...
       | {registration1} |
       | {vin1}          |
     And I click the "Back to user home" link
-    And I check a slot was successfully used for site {site}
 
 
   Scenario: Tester enters a class 4 MOT test fail, with brake test failure and checks slot value
-    Given I load "VEHICLE_CLASS_4_BEFORE_2010" as {registration1}, {vin1}, {mileage1}
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4_WITH_ONLY_ONE_SITE" as {username1}, {site}
     And I get the slot count from the homepage for site {site}
 
@@ -152,10 +150,11 @@ Feature: 05a - Tester does...
       | {vin1}                       |
       | Brake performance not tested |
 
-
-  Scenario: Tester enters a class 4 MOT test pass, with advisory defects
+  @smoke
+  Scenario: Tester enters a class 4 MOT test pass, with advisory defects and confirms a slot is consumed
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
-    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+    And I login with 2FA using "MOT_TESTER_CLASS_4_WITH_ONLY_ONE_SITE" as {username1}, {site}
+    And I get the slot count from the homepage for site {site}
 
     When I start an MOT test for {registration1}, {vin1}, {site}
     And The page title contains "Your home"
@@ -203,4 +202,5 @@ Feature: 05a - Tester does...
     | Test advisory 3                                                                                  |
     | Test advisory 4                                                                                  |
     | Test manual advisory                                                                             |
-
+    And I click the "Back to user home" link
+    And I check a slot was successfully used for site {site}

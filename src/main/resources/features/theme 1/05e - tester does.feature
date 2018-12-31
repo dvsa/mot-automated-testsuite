@@ -252,7 +252,7 @@ Feature: 05e - Tester does...
 
     And The page title contains "Your home"
     And I click the "Enter test results" link
-    And I search for defect "brake" and open the "1.1.12 (d)" manual link, I expect the "Section 1 Brakes" manual page
+    And I search for defect "brake hose" and open the "1.1.12 (d)" manual link, I expect the "Section 1 Brakes" manual page
 
     And I click the "Finish and return to MOT test results" link
     And I click the "Cancel test" link
