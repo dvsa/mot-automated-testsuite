@@ -25,5 +25,4 @@ and not exists (
     group by v.vin
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
-and md.fuel_type_id = 1 -- 1 = Petrol, 2 = Diesel
 limit 50
