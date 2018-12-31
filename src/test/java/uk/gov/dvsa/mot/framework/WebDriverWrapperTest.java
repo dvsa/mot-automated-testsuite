@@ -1269,6 +1269,26 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>getTextFromTableRowThirdCell()</code> with a matching example (no thead/tbody).
+     */
+    @Test
+    public void testGetTextFromTableRowThirdCellMatching() {
+        browseTo("/getTextFromTableRowThirdCell-1.html", "getTextFromTableRowThirdCell - 1");
+        assertEquals("Should find matching text",
+                "ggg", driverWrapper.getTextFromTableRowThirdCell("eee"));
+    }
+
+    /**
+     * Tests <code>getTextFromTableRowThirdCell()</code> with a matching example (no thead/tbody).
+     */
+    @Test
+    public void testGetTextFromTableRowThirdCellNotMatching() {
+        browseTo("/getTextFromTableRowThirdCell-1.html", "getTextFromTableRowThirdCell - 1");
+        assertEquals("Should not find any text",
+                "", driverWrapper.getTextFromTableRowThirdCell("mmm"));
+    }
+
+    /**
      * Tests <code>checkTableHasRows()</code> with a matching example (no thead/tbody) that does have sufficient rows.
      */
     @Test
