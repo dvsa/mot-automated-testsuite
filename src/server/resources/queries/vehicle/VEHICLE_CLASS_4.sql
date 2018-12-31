@@ -33,4 +33,4 @@ and not exists (
 )
 and veh.registration LIKE 'I%'
 ORDER BY veh.registration DESC
-limit 50
+limit 100
