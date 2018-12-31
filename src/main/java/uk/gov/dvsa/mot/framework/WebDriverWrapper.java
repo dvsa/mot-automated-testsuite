@@ -1013,6 +1013,20 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Fetches the data in the third td cell in the same row as the first td element.
+     * @param rowText       The text that will find the row
+     * @return The text found in the table, or an empty string
+     */
+    public String getTextFromTableRowThirdCell(String rowText) {
+        try {
+            return webDriver.findElement(By.xpath("//td[contains(text(),'" + rowText + "')]/../td[3]")).getText();
+
+        } catch (NoSuchElementException ex) {
+            return "";
+        }
+    }
+
+    /**
      * Fetches the data in the td column in the same row as a tr element.
      * @param rowText       The text that will find the first row
      * @return The text found in the table, or an empty string

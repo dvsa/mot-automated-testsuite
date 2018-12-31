@@ -1,10 +1,10 @@
 @regression
   Feature: 25a - site review for white sites
-    
+
     Scenario: VE user creates a first site review
 
       #Search for a site which has no previous site reviews
-      Given I load "WHITE_SITE" as {siteNumber}, {siteName}
+      Given I load "WHITE_SITE" as {siteNumber}, {siteName}, {organisationName}
       And I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
       And I search for Site information by site number with {siteNumber}
 
@@ -71,17 +71,17 @@
 
       #Submit site review and check it's submitted successfully
       And I click the "Save and confirm" button
-      And The page contains "Site review has been saved"
+      Then The page contains "Site review has been saved"
       And I click the "Back" link
       And I check the "Current" field row has value "Satisfactory"
 
       #Check the summary
       And I click the "View summary" link
-      And I check the "Compliance" field row has value "Satisfactory"
+      Then I check the "Compliance" field row has value "Satisfactory"
       And I check the "Premises" field row has value "Satisfactory"
       And I check the "Management and quality" field row has value "Satisfactory"
       And I check the "People" field row has value "Satisfactory"
-      Then I check the "Activity" field row has value "Activity performed"
+      And I check the "Activity" field row has value "Activity performed"
       And I check the "Activity" field row has value "Satisfactory"
       And I check the "Activity" field row has value "MOT test number: 123456789012"
       And I check the "Compliance" field row has value "Comment: Compliance outcome comment"
@@ -96,3 +96,10 @@
       And I click the "Site review" link
       Then I check there is a "Record a site review" link
       And I check the "Site review outcome" field row has value "Satisfactory"
+      And I click the "Return to VTS overview" link
+
+      #Check that the site review outcome is shown on the organisation's service reports
+      And I click the first {organisationName} link
+      And I click the "Service reports" link
+      And I find the {siteName} site in the service reports
+      And I check the row with first cell value {siteNumber} has value "Satisfactory" in third cell

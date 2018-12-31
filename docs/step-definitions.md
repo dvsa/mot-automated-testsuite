@@ -69,6 +69,7 @@ High level:
 * I check the table with heading ```"..text.."``` has at least ```..num..``` rows
    * Note: counts the number of table rows, excluding the heading row
 * I check the ```"..heading text.."``` field row has value ```"..value.."```
+* I check the row with first cell value ```{key}``` has value ```"..cell text.."``` in third cell
 * I check the ```"..heading text.."``` field row has value ```{key}```
    * Note: these steps check the contents of a ```td``` element in the same row as a ```th``` element with the heading text 
 * I check the ```"..heading text.."``` field column has value ```"..value.."```
@@ -295,3 +296,4 @@ These steps are specific to the DVSA MOT application screens.
 ### SiteReviewStepDefinitions
 
 * I enter the date of site visit as ```..days..``` days ago
+* I find the ```{siteNameKey}``` site in the service reports

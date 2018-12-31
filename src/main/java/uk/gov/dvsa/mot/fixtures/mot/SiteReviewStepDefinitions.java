@@ -32,6 +32,9 @@ public class SiteReviewStepDefinitions implements En {
                 (Integer daysAgo) -> {
                     enterDateOfSiteVisit(daysAgo);
                 });
+
+        And("I find the \\{([^\\}]+)\\} site in the service reports$",
+                (String siteNameKey) -> findSiteInServiceReports(siteNameKey));
     }
 
     /**
@@ -45,5 +48,24 @@ public class SiteReviewStepDefinitions implements En {
         driverWrapper.enterIntoFieldWithId(theDate.getMonthValue(), "dateMonth");
         driverWrapper.enterIntoFieldWithId(theDate.getYear(), "dateYear");
 
+    }
+
+    /**
+     * Finds the site in the service report list.
+     * @param siteNameKey The data key for the site name to find
+     */
+    private void findSiteInServiceReports(String siteNameKey) {
+        boolean finished = false;
+
+        while (!finished) {
+            if (driverWrapper.hasLink(driverWrapper.getData(siteNameKey))) {
+                finished = true;
+            } else if (driverWrapper.hasLink("Next")) {
+                driverWrapper.clickLink("Next");
+            } else {
+                logger.error("Site not found in service report list");
+                finished = true;
+            }
+        }
     }
 }
