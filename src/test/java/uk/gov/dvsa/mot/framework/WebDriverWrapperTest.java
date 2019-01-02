@@ -1269,23 +1269,33 @@ public class WebDriverWrapperTest {
     }
 
     /**
-     * Tests <code>getTextFromTableRowThirdCell()</code> with a matching example (no thead/tbody).
+     * Tests <code>checkTextFromTableRowNoHeader()</code> with a matching example (no thead/tbody).
      */
     @Test
-    public void testGetTextFromTableRowThirdCellMatching() {
-        browseTo("/getTextFromTableRowThirdCell-1.html", "getTextFromTableRowThirdCell - 1");
-        assertEquals("Should find matching text",
-                "ggg", driverWrapper.getTextFromTableRowThirdCell("eee"));
+    public void testCheckTextFromTableRowNoHeaderMatching1() {
+        browseTo("/checkTextFromTableRowNoHeader-1.html", "checkTextFromTableRowNoHeader - 1");
+        assertTrue("Should find matching text",
+                driverWrapper.checkTextFromTableRowNoHeader("eee", "ggg"));
     }
 
     /**
-     * Tests <code>getTextFromTableRowThirdCell()</code> with a matching example (no thead/tbody).
+     * Tests <code>checkTextFromTableRowNoHeader()</code> with a matching example (no thead/tbody).
      */
     @Test
-    public void testGetTextFromTableRowThirdCellNotMatching() {
-        browseTo("/getTextFromTableRowThirdCell-1.html", "getTextFromTableRowThirdCell - 1");
-        assertEquals("Should not find any text",
-                "", driverWrapper.getTextFromTableRowThirdCell("mmm"));
+    public void testCheckTextFromTableRowNoHeaderMatching2() {
+        browseTo("/checkTextFromTableRowNoHeader-1.html", "checkTextFromTableRowNoHeader - 1");
+        assertTrue("Should find matching text",
+                driverWrapper.checkTextFromTableRowNoHeader("iii", "lll"));
+    }
+
+    /**
+     * Tests <code>checkTextFromTableRowNoHeader()</code> with no matching example (no thead/tbody).
+     */
+    @Test
+    public void testCheckTextFromTableRowNoHeaderNotMatching() {
+        browseTo("/checkTextFromTableRowNoHeader-1.html", "checkTextFromTableRowNoHeader - 1");
+        assertFalse("Should not find matching text",
+                driverWrapper.checkTextFromTableRowNoHeader("aaa", "ggg"));
     }
 
     /**

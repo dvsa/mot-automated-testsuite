@@ -176,10 +176,11 @@ public class WebStepDefinitions implements En {
                 (String fieldName, String value) -> Assert.assertTrue("Wrong field value",
                         driverWrapper.getTextFromTableRow(fieldName).contains(value)));
 
-        And("^I check the row with first cell value \\{([^\\}]+)\\} has value \"([^\"]+)\" in third cell$",
-                (String firstValue, String secondValue) -> Assert.assertTrue("Wrong field value",
-                        driverWrapper.getTextFromTableRowThirdCell(driverWrapper.getData(firstValue))
-                                .contains(secondValue)));
+        And("^I check the row with value \\{([^\\}]+)\\} also has value \"([^\"]+)\"$",
+                (String firstValue, String secondValue) ->
+                        Assert.assertTrue("Row does not contain expected value",
+                        driverWrapper.checkTextFromTableRowNoHeader(driverWrapper.getData(firstValue),
+                                secondValue)));
 
         And("^I check the \"([^\"]+)\" field row has value \\{([^\\}]+)\\}$",
                 (String fieldName, String valueKey) -> Assert.assertTrue("Wrong field value",

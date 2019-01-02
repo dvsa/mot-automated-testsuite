@@ -69,9 +69,10 @@ High level:
 * I check the table with heading ```"..text.."``` has at least ```..num..``` rows
    * Note: counts the number of table rows, excluding the heading row
 * I check the ```"..heading text.."``` field row has value ```"..value.."```
-* I check the row with first cell value ```{key}``` has value ```"..cell text.."``` in third cell
 * I check the ```"..heading text.."``` field row has value ```{key}```
    * Note: these steps check the contents of a ```td``` element in the same row as a ```th``` element with the heading text 
+* I check the row with value ```{key}``` also has value ```"..value.."```
+   * Note: this step checks a td element is present in the same row as another td element (without a th element)
 * I check the ```"..heading text.."``` field column has value ```"..value.."```
 * I check the ```"..heading text.."``` field column has value ```{key}```
    * Note: these steps check the contents of the ```td``` element in the first row and same column as a ```th``` element with the heading text    

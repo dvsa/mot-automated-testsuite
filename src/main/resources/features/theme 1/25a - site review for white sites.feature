@@ -102,4 +102,4 @@
       And I click the first {organisationName} link
       And I click the "Service reports" link
       And I find the {siteName} site in the service reports
-      And I check the row with first cell value {siteNumber} has value "Satisfactory" in third cell
+      And I check the row with value {siteNumber} also has value "Satisfactory"
