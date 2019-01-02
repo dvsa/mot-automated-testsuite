@@ -1013,17 +1013,18 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Fetches the data in the third td cell in the same row as the first td element.
-     * @param rowText       The text that will find the row
-     * @return The text found in the table, or an empty string
+     * Checks whether the expected text is present within any of the td columns present in the same row as another
+     * td cell text (use when the table does not contain a header cell th)
+     * @param rowText       The td cell text in the row to look for
+     * @param expectedText  The text to check for in the matching row
+     * @return <code>true</code> if at least one match is found.
      */
-    public String getTextFromTableRowThirdCell(String rowText) {
-        try {
-            return webDriver.findElement(By.xpath("//td[contains(text(),'" + rowText + "')]/../td[3]")).getText();
-
-        } catch (NoSuchElementException ex) {
-            return "";
-        }
+    public boolean checkTextFromTableRowNoHeader(String rowText, String expectedText) {
+        return webDriver.findElements(By.xpath("//td[contains(text(),'" + rowText + "')]/../td")).stream()
+                .anyMatch((WebElement e) -> {
+                    String text = e.getText();
+                    return (text != null && text.contains(expectedText));
+                });
     }
 
     /**
