@@ -108,7 +108,6 @@ public class WebStepDefinitions implements En {
 
         When("^I enter \\{([^\\}]+)\\} in the field with id \"([^\"]+)\"$", (String dataKey, String id) ->
                 driverWrapper.enterIntoFieldWithId(driverWrapper.getData(dataKey), id));
-
         When("^I select \"([^\"]+)\" in the \"([^\"]+)\" field$", (String optionText, String label) ->
                 driverWrapper.selectOptionInField(optionText, label));
 
@@ -203,7 +202,11 @@ public class WebStepDefinitions implements En {
 
         And("^I delete the \"([^\"]+)\" cookie$", (String cookieName) -> driverWrapper.deleteCookie(cookieName));
 
-        And("^I wait for \"(\\d+)\" seconds$", (Integer time) -> driverWrapper.timeWait(time));
+        And("^I wait for \"([^\"]+)\" seconds$", (Integer time) -> driverWrapper.timeWait(time));
+
+        And("^I wait \"([^\"]+)\" seconds then \"([^\"]+)\" the page until \"([^\"]+)\" button displays$",
+                (Integer seconds, Integer refresh, String buttonText) ->
+                        driverWrapper.waitForButton(seconds, refresh, buttonText));
 
         And("^I click the accordion section with the id \"([^\"]+)\"$", (String accordionId) ->
                 driverWrapper.accordionClick(accordionId));
