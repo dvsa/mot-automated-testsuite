@@ -33,6 +33,7 @@ import uk.gov.dvsa.mot.framework.csv.CsvException;
 import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
 import uk.gov.dvsa.mot.framework.pdf.PdfException;
 
+import java.io.Console;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -713,6 +714,7 @@ public class WebDriverWrapper {
 
     /**
      * Enters the specified text into the field.
+     *
      * @param text  The text to enter
      * @param label The field label
      */
@@ -1731,5 +1733,31 @@ public class WebDriverWrapper {
     public void switchToTab(int tabNumber) {
         ArrayList<String> tabs = new ArrayList<String>(webDriver.getWindowHandles());
         webDriver.switchTo().window(tabs.get(tabNumber));
+    }
+
+    /**
+     * wait for the specified button.
+     *
+     * @param buttonText The button text
+     */
+    public void waitForButton(Integer seconds, Integer refresh, String buttonText) {
+
+        for (int i = 0; i < refresh; i++) {
+            List<WebElement> button = findLinks(buttonText);
+
+            if (button.size() == 1) {
+                String message = "button found with text: " + buttonText;
+                logger.info(message);
+
+            } else if (button.size() == 0) {
+                webDriver.navigate().refresh();
+                timeWait(seconds);
+
+            } else {
+                String message = "button not found in time allocated: " + buttonText;
+                logger.warn(message);
+                throw new IllegalArgumentException(message);
+            }
+        }
     }
 }
