@@ -6,13 +6,13 @@ Feature: 10 - Refund slots as Finance User
     Given I login with 2FA using "AEDM_USER_WITH_TRANSACTIONS" as {AEDM}, {ORGANISATION}, {TRANSACTIONS}, {AEREF}
     And I click the first {ORGANISATION} link
     And I order 100 slots
-    And I enter the card details "4462030000000000", "12/18", "654"
+    And I enter the card details "4462030000000000", "12/19", "654"
     And I enter the card holders name as "Purchase One"
     And I make the payment for card "4462030000000000"
     And I check that 100 slots were bought successfully
     And I click the "Back to Authorised Examiner" link
     And I order 150 slots
-    And I enter the card details "4462030000000000", "12/18", "654"
+    And I enter the card details "4462030000000000", "12/19", "654"
     And I enter the card holders name as "Purchase Two"
     And I make the payment for card "4462030000000000"
     And I check that 150 slots were bought successfully
