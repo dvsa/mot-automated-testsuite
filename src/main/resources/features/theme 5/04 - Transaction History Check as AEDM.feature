@@ -40,13 +40,13 @@ Feature: 04 - Transaction History Check as AEDM
 
     When I enter "01" in the "Day" field in fieldset "From"
     And I enter "10" in the "Month" field in fieldset "From"
-    And I enter "2017" in the "Year" field in fieldset "From"
+    And I enter "2018" in the "Year" field in fieldset "From"
     And I enter "09" in the "Day" field in fieldset "To"
     And I enter "10" in the "Month" field in fieldset "To"
-    And I enter "2017" in the "Year" field in fieldset "To"
+    And I enter "2018" in the "Year" field in fieldset "To"
 
     And I click the "Update results" button
-    Then The summary line contains "01/10/2017 and 09/10/2017"
+    Then The summary line contains "01/10/2018 and 09/10/2018"
 
 
   Scenario: AEDM can see Print button on the Transaction Details page
