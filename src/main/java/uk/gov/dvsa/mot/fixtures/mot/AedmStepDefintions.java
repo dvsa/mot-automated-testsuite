@@ -43,17 +43,19 @@ public class AedmStepDefintions implements En {
 
     /**
      * Checks the latest row in the test log a test completed.
-     * @param registration      The data key for the vehicle reg
-     * @param username          The data key for the tester's username
+     * @param regKey            The data key for the vehicle reg
+     * @param testerUsernameKey The data key for the tester's username
      */
-    private void checkSiteTestLog(String registration, String username) {
+    private void checkSiteTestLog(String regKey, String testerUsernameKey) {
         //And I check the registration is correct
         assertTrue("The reg does not match the test log",
-                driverWrapper.tableColumnContainsValue("VRM", driverWrapper.getData(registration)));
+                driverWrapper.getTextFromTableColumn("VRM")
+                        .contains(driverWrapper.getData(regKey)));
 
         //And I check the tester username key is correct
         assertTrue("The tester username is incorrect",
-                driverWrapper.tableColumnContainsValue("User/Site Id", driverWrapper.getData(username)));
+                driverWrapper.getTextFromTableColumn("User/Site Id")
+                        .contains(driverWrapper.getData(testerUsernameKey)));
     }
 
     /**

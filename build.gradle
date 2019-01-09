@@ -171,10 +171,14 @@ task('cucumber-tag') {
 }
 
 task('cucumber-rerun') {
-    description 'Reruns all failed tests as listed within target/rerun.txt'
+    description 'Reruns all failed tests as listed within target/rerun.txt or file provided using -Pfile='
     dependsOn assemble, compileJava, check
     finalizedBy 'cucumber-reporting'
     doLast {
+        String rerunFile = 'target/rerun.txt'
+        if (project.hasProperty('file')) {
+            rerunFile = file
+        }
         copy {
             into "build/server-libs"
             from configurations.serverRuntime + sourceSets.server.output
@@ -189,7 +193,7 @@ task('cucumber-rerun') {
                 classpath = configurations.cucumberRuntime + sourceSets.main.output
 
                 // Find all the features to be rerun
-                String fileContents = new File('target/rerun.txt').text
+                String fileContents = new File(rerunFile).text
                 fileContents = fileContents.replaceAll('src/main/resources/features/', '')
                 String[] features = fileContents.split('(?=theme)|(?=smoke)|(?=moth)')
 
