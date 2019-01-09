@@ -1738,7 +1738,9 @@ public class WebDriverWrapper {
     /**
      * wait for the specified button.
      *
-     * @param buttonText The button text
+     * @param buttonText The Download Report button text
+     * @param seconds The delay between each screen refresh
+     * @param refresh refresh the screen once the wait time has passed
      */
     public void waitForButton(Integer seconds, Integer refresh, String buttonText) {
 
