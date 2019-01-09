@@ -3,12 +3,21 @@ package uk.gov.dvsa.mot.fixtures.mot;
 import static junit.framework.TestCase.assertTrue;
 
 import cucumber.api.java8.En;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -36,22 +45,20 @@ public class PurchaseSlotsStepDefinitions implements En {
             orderSlots(slots);
         });
 
-        And("^I enter the card details \"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"$",
-                (String cardNumber, String expiryDate, String securityCode) -> {
-                    String [] expiryDates = expiryDate.split("/");
-                    enterCardInformation(cardNumber, expiryDates[0], expiryDates[1], securityCode);
-            });
+        And("^I enter card details from csv \"([^\"]+)\"$", (String csvName) -> {
+            enterCardDetailsFromCsv(csvName);
+        });
 
         And("^I enter the card holders name as \"([^\"]+)\"$", (String cardHolderName) -> {
             enterCardholdersName(cardHolderName);
         });
 
-        And("^I make the payment for card \"([^\"]+)\"$", (String cardNumber) -> {
-            makeCompletePayment(cardNumber);
+        And("^I make the payment for card from csv \"([^\"]+)\"$", (String csvName) -> {
+            makeCompletePayment(csvName);
         });
 
-        And("^I make an orphan payment for card \"([^\"]+)\"$", (String cardNumber) -> {
-            makePayment(cardNumber);
+        And("^I make an orphan payment for card from csv \"([^\"]+)\"$", (String csvName) -> {
+            makePayment(csvName);
         });
         And("^I check that (\\d+) slots were bought successfully$", (Integer slots) -> {
             checkTheSummaryInformation(slots);
@@ -98,30 +105,54 @@ public class PurchaseSlotsStepDefinitions implements En {
     }
 
     /**
-     * Enters the payment details on the card details screen.
-     * @param cardNumber    The number on the card
-     * @param expiryMonth   The expiry month for the card
-     * @param expiryYear    The expiry year for the card
-     * @param securityCode  The secuirty code for the card
+     * Enters the card details in the card payment screen with the data given in the csv.
+     * @param csvName       The name of the CSV which will correspond to the CSV file name in resources
      */
-    private void enterCardInformation(String cardNumber, String expiryMonth, String expiryYear, String securityCode) {
-        //And I check i am on the CPMS page
-        driverWrapper.checkCurrentPageTitle("Customer Payment Management System");
+    private void enterCardDetailsFromCsv(String csvName) {
 
-        //And I enter the card number
-        driverWrapper.enterIntoField(cardNumber, "Card Number*");
+        for (CSVRecord record: processCsvData(csvName)) {
 
-        //And I enter the expiry month
-        driverWrapper.enterIntoFieldWithId(expiryMonth, "scp_cardPage_expiryDate_input");
+            LocalDate expiryDate = LocalDate.now();
+            expiryDate = expiryDate.plusYears(1);
 
-        //And I enter the expiry year
-        driverWrapper.enterIntoFieldWithId(expiryYear, "scp_cardPage_expiryDate_input2");
+            //And I check i am on the CPMS page
+            driverWrapper.checkCurrentPageTitle("Customer Payment Management System");
 
-        //And I enter the security code of the card
-        driverWrapper.enterIntoField(securityCode, "Security Code*");
+            //And I enter the card number
+            driverWrapper.enterIntoField(record.get(0), "Card Number*");
 
-        //And I press the continue button
-        driverWrapper.clickButton("Continue");
+            //And I enter the expiry month
+            driverWrapper.enterIntoFieldWithId("12", "scp_cardPage_expiryDate_input");
+
+            //And I enter the expiry year
+            driverWrapper.enterIntoFieldWithId(expiryDate.getYear(), "scp_cardPage_expiryDate_input2");
+
+            //And I enter the security code of the card
+            driverWrapper.enterIntoField(record.get(1), "Security Code*");
+
+            //And I press the continue button
+            driverWrapper.clickButton("Continue");
+        }
+    }
+
+    /**
+     * Processes a csv file to provide the data in a particular csv file.
+     * @param csvFile the csv file to be processed
+     * @return returns an array list of csv records
+     */
+    private ArrayList<CSVRecord> processCsvData(String csvFile) {
+        ArrayList<CSVRecord> records = new ArrayList<>();
+
+        File csvData = new File("src/main/resources/csv/" + csvFile + ".csv");
+
+        try {
+            CSVParser parser = CSVParser.parse(csvData, Charset.defaultCharset(), CSVFormat.EXCEL);
+            records.addAll(parser.getRecords());
+        } catch (IOException exception) {
+            logger.error("Unable to parse CSV file: " + exception.getMessage());
+        }
+
+        return records;
     }
 
     /**
@@ -138,41 +169,46 @@ public class PurchaseSlotsStepDefinitions implements En {
 
     /**
      * Clicks the make payment button and enters the password for the card.
-     * @param cardNumber    The card number used in the payment
+     * @param csvName    The csv name that contains card the number used in the payment
      */
-    private void makePayment(String cardNumber) {
+    private void makePayment(String csvName) {
         //And I click the make payment button
         driverWrapper.clickButton("Make Payment");
 
         //Check the page title
         System.out.print(driverWrapper.getCurrentPageTitle());
 
-        // If 3 D Secure Authorisation screen present fill it in
-        if (driverWrapper.containsMessage("3 D Secure Authorisation")) {
-            //Switch to password frame
-            driverWrapper.switchToFrame("scp_threeDSecure_iframe");
+        for (CSVRecord record: processCsvData(csvName)) {
 
-            String passwordPrefix = "Test_";
-            String passwordSuffix = cardNumber.substring(cardNumber.length() - 4);
+            // If 3 D Secure Authorisation screen present fill it in
+            if (driverWrapper.containsMessage("3 D Secure Authorisation")) {
+                //Switch to password frame
+                driverWrapper.switchToFrame("scp_threeDSecure_iframe");
 
-            String password = passwordPrefix.concat(passwordSuffix);
+                String cardNumber = record.get(0);
 
-            //And I enter the password into the input
-            driverWrapper.enterIntoField(password, "Password");
+                String passwordPrefix = "Test_";
+                String passwordSuffix = cardNumber.substring(cardNumber.length() - 4);
 
-            //And I click the continue button
-            driverWrapper.clickButton("Continue");
+                String password = passwordPrefix.concat(passwordSuffix);
+
+                //And I enter the password into the input
+                driverWrapper.enterIntoField(password, "Password");
+
+                //And I click the continue button
+                driverWrapper.clickButton("Continue");
+            }
         }
     }
 
     /**
      * Clicks the make payment button and enters the password for the card.
      * Saves the payment to the account
-     * @param cardNumber    The card number used in the payment
+     * @param csvName    The csv name that contains the card number used in the payment
      */
-    private void makeCompletePayment(String cardNumber) {
+    private void makeCompletePayment(String csvName) {
         //And I click the make payment button
-        makePayment(cardNumber);
+        makePayment(csvName);
 
         //And I click the save button to save the payment to the account
         driverWrapper.clickButton("Cancel");

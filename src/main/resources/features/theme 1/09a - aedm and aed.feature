@@ -6,9 +6,9 @@ Feature: 09a - AEDM and AED
     Given I login with 2FA using "AEDM_USER" as {AEDM}, {ORGANISATION}
     And I click the first {ORGANISATION} link
     And I order 25 slots
-    And I enter the card details "4462030000000000", "12/19", "654"
+    And I enter card details from csv "CARD_DETAILS"
     And I enter the card holders name as "Jimi Hendrix"
-    And I make the payment for card "4462030000000000"
+    And I make the payment for card from csv "CARD_DETAILS"
     And I check that 25 slots were bought successfully
 
 
