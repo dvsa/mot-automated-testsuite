@@ -44,7 +44,7 @@ Feature: 07 - Tester records Contingency Test
     And I click the "Back to user home" link
     And I check a slot was successfully used for site {site}
 
-  @regressiondata
+  @regressiondata @OpenInterfaceTests
   Scenario: A tester record a pass contingency test 1 day ago
     Given I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     Then I start a contingency MOT test at site {site}
