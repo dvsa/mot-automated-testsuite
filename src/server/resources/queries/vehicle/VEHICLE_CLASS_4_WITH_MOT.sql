@@ -31,5 +31,4 @@ and not exists (
     group by v.vin
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
-and veh.registration LIKE 'O%'
 limit 50

@@ -4,7 +4,7 @@ from vehicle veh, model_detail md, model mo, make ma,
    group by vehicle_id
    limit 100000) as latest_mot,
    mot_test_current mtc
-where length(veh.registration) > 8
+where length(veh.registration) > 7
 and veh.model_detail_id = md.id
 and md.vehicle_class_id = 4 -- cars only
 and veh.id = latest_mot.vehicle_id

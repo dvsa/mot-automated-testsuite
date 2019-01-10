@@ -36,5 +36,4 @@ and not exists (
 	and mtc2.completed_date > date_sub(CURDATE(), INTERVAL 7 DAY)  -- test not completed in last 7 days
 	)
 and veh.last_updated_on < date_sub(CURDATE(), INTERVAL 7 DAY) -- vehicles not updated 7 days ago
-and veh.registration LIKE 'V%'
 limit 50

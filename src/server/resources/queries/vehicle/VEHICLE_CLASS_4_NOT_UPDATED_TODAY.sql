@@ -37,5 +37,4 @@ and not exists (
 	and mtc2.completed_date = CURDATE() -- test not completed in today
 	)
 and veh.last_updated_on < CURDATE() -- vehicles not updated today
-and veh.registration LIKE 'U%'
 limit 5
