@@ -57,7 +57,7 @@ MOT:
 * **@extended** = Extended regression tests
 * **@regressiondata** = Generate data for manual checking
 * **@VEinspection** = Vehicle Examiner Inspection test suite
-* **@OpenInterfaceTests = Covers MOT tests for OpenIF
+* **@OpenInterfaceTests** = Covers MOT tests for OpenIF
 
 MOT History:
 * **@mothint** = MOT History regression tests on the INT Environment
