@@ -199,13 +199,16 @@ These steps are specific to the DVSA MOT application screens.
 * I get the slot count from the homepage for site ```{..siteKey..}```
 * I check a slot was successfully used for site ```{..siteKey..}```
 * I check a slot was not used for site ```{..siteKey..}```
+* I get the slot count for organisation ```{..organisationKey..}```
+* I check a slot was not used for organisation ```{..organisationKey..}```
 
 ### PurchaseSlotsStepDefinitions
 
 * I order ```..amount..``` slots
-* I enter the card details ```"..cardNumber.."```, ```"..expiryDate.."```, ```"..securityCode.."```
+* I enter card details from csv ```"..csvName.."```
 * I enter the card holders name as ```"..name.."```
-* I make the payment for card ```"..cardNumber.."```
+* I make the payment for card from csv ```"..csvName.."```
+* I make an orphan payment for card from csv ```"..csvName.."```
 * I check that ```..amount..``` slots were bought successfully
 
 ### SiteAdminStepDefinitions
