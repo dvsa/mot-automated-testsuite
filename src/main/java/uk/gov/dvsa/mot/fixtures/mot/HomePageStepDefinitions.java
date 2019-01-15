@@ -48,6 +48,13 @@ public class HomePageStepDefinitions implements En {
                 (String siteNumberKey, String siteNameKey) -> {
                     getSiteNumberByName(siteNumberKey, siteNameKey);
                 });
+        And("^I get the slot count for organisation \\{([^\\}]+)\\}$", (String organisationKey) -> {
+            getOrganisationSlotsCount(organisationKey);
+        });
+
+        And("^I check a slot was not used for organisation \\{([^\\}]+)\\}$", (String organisationKey) -> {
+            checkOrganisationSlotCountNoChange(organisationKey);
+        });
     }
 
     /**
@@ -77,7 +84,7 @@ public class HomePageStepDefinitions implements En {
     }
 
     /**
-     * Checks that the slot balance of an AE decreased by 1.
+     * Checks that the slot balance of an AE has not changed.
      * @param siteKey   The key of the site name to be used
      */
     private void checkSlotsBalanceNoChange(String siteKey) {
@@ -103,5 +110,32 @@ public class HomePageStepDefinitions implements En {
         if (matcher.find()) {
             driverWrapper.setData(siteNumberKey, matcher.group(1));
         }
+    }
+
+    /**
+     * Gets the slot number from the homepage by using the organisation name.
+     * @param organisationKey The key of the organisation name to be used
+     */
+    private void getOrganisationSlotsCount(String organisationKey) {
+
+        driverWrapper.clickLink(driverWrapper.getData(organisationKey));
+
+        String slots = driverWrapper.getElementText("slot-count");
+
+        driverWrapper.setData("slotCount", slots);
+    }
+
+    /**
+     * Checks that the slot balance of an AE has not changed.
+     * @param organisationKey   The key of the organisation name to be used
+     */
+    private void checkOrganisationSlotCountNoChange(String organisationKey) {
+
+        driverWrapper.clickLink(driverWrapper.getData(organisationKey));
+
+        String slots = driverWrapper.getElementText("slot-count");
+
+        String noChangeSlots = String.valueOf(driverWrapper.getData("slotCount"));
+        assertTrue("The slot balance did not decrease", slots.contains(String.valueOf(noChangeSlots)));
     }
 }
