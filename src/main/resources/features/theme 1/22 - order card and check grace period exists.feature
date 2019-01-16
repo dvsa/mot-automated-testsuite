@@ -1,5 +1,4 @@
-#@regression
-#  Removed tag due to feature change, will be enabled again in the future.
+@regression
 Feature: 22 - order card and check grace period exists
 
   Scenario: User logs in with temporary login and checks grace period is created, orders a card and checks that grace period is still active.
