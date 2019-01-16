@@ -23,7 +23,7 @@ Feature: 12b - Vehicle Examiner
     And I click "Print certificate" and check the PDF contains:
       | Duplicate certificate          |
 
-  Scenario: MOT test search by site
+  Scenario: MOT test search by site by date range
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
     And I load "SITE" as {siteNumber}, {siteName}
     And I click the "MOT tests" link
@@ -34,11 +34,37 @@ Feature: 12b - Vehicle Examiner
     And I click "Print certificate" and check the PDF contains:
       | Duplicate certificate          |
 
-  Scenario: MOT test search by tester
+  Scenario: MOT test search by tester by date range
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
     And I load "TESTER_WITH_10_DAY_HISTORY" as {tester}
     And I click the "MOT tests" link
     When I search for an mot by "Tester (by date range)" with {tester} from 2 months ago
+    And I click the first "View" link
+    Then The page contains "summary"
+    And I check there is a "Print certificate" link
+    And I click "Print certificate" and check the PDF contains:
+      | Duplicate certificate          |
+
+  Scenario: MOT test search by site recent tests
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+    When I start an MOT test for {registration1}, {vin1}, {site}
+    And I click the "Enter test results" link
+    And I enter an odometer reading in miles of {mileage1} plus 1000
+    And I enter decelerometer results of service brake 92 and parking brake 85
+    And I press the "Review test" button
+    And I check the test information section of the test summary is "Pass"
+    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
+    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the brake results section of the test summary is "Pass"
+    And I press the "Save test result" button
+    And The page title contains "MOT test complete"
+    And I click the "Back to user home" link
+
+    Then I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
+    And I load "SITE" as {siteNumber}, {siteName}
+    And I click the "MOT tests" link
+    When I search for an mot by "Site (recent tests)" with {siteNumber}
     And I click the first "View" link
     Then The page contains "summary"
     And I check there is a "Print certificate" link

@@ -1,7 +1,7 @@
 @regression
 Feature: 05a - Tester does...
 
-  @smoke
+  @smoke @OpenInterfaceTests
   Scenario: Tester enters a class 4 MOT test pass, with no defects
 
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}

@@ -192,6 +192,8 @@ These steps are specific to the DVSA MOT application screens.
 
 * I click the link ```"..name.."``` with id ```"..id.."```
 * I enter the last 8 characters of ```..paymentRef..``` in the field with id ```"..id.."```
+* And I click ```"..text.."``` and check the CSV contains:
+* I wait ``"..number.."``` seconds then ``"..refresh.."``` the page until ```"..text.."``` button displays
 
 ### HomePageStepDefinitions
 

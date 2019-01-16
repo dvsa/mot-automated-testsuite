@@ -33,5 +33,4 @@ and not exists (
     having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
 and veh.first_used_date < str_to_date('01/09/2010', '%d/%m/%Y') -- vehicle first used before 01/09/2010
-and veh.registration LIKE 'H%'
 limit 50

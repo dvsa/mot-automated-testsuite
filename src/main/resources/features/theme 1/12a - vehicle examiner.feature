@@ -427,4 +427,3 @@ Feature: 12a - Vehicle Examiner
     And The page contains "Previous"
     And The page contains "Next"
 
-
