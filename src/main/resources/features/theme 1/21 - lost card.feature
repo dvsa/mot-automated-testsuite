@@ -1,4 +1,4 @@
-@regression @karl
+@regression
 Feature: 21 - Existing user has lost 2FA card
 
   Scenario: Existing user orders new card via security questions screens, then activates it, then logs in
