@@ -32,7 +32,7 @@ FROM
    JOIN auth_for_ae afa
        ON o.id = afa.organisation_id
 WHERE
-   -- Check the secuirty card assigned to them is active
+   -- Check the security card assigned to them is active
    sc.security_card_status_lookup_id = 1
    -- Check last 2FA input was within +/-2 windows
    AND scd.last_observed_drift BETWEEN -60 AND 60
