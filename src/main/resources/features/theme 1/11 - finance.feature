@@ -98,6 +98,7 @@ Feature: 11 - Finance
     And I get the date <endDate> days ago as {end_day}, {end_month}, {end_year}
     And I set the finance report to date to {end_day} {end_month} {end_year}
     And I press the "Generate report" button
+    And I record the finance report URL
     And I wait "<seconds>" seconds then "<refresh>" the page until "Download Report" button displays
     And I click "Download Report" and check the CSV contains:
       | receipt_reference            |
@@ -105,7 +106,6 @@ Feature: 11 - Finance
       | status_description           |
       | Successful payment received  |
       | payment_type                 |
-    Then I record the finance report URL
 
     Examples:
       | report                | startDate | endDate | seconds  | refresh |
@@ -123,6 +123,7 @@ Feature: 11 - Finance
     And I get the date <endDate> days ago as {end_day}, {end_month}, {end_year}
     And I set the finance report to date to {end_day} {end_month} {end_year}
     And I press the "Generate report" button
+    And I record the finance report URL
     And I wait "<seconds>" seconds then "<refresh>" the page until "Download Report" button displays
     And I click "Download Report" and check the CSV contains:
       | Co                     |
@@ -131,7 +132,6 @@ Feature: 11 - Finance
       | Debit                  |
       | Credit                 |
       | Line Description       |
-    Then I record the finance report URL
 
     Examples:
       | report                | startDate | endDate | seconds  | refresh |
@@ -149,6 +149,7 @@ Feature: 11 - Finance
     And I get the date <endDate> days ago as {end_day}, {end_month}, {end_year}
     And I set the finance report to date to {end_day} {end_month} {end_year}
     And I press the "Generate report" button
+    And I record the finance report URL
     And I wait "<seconds>" seconds then "<refresh>" the page until "Download Report" button displays
     And I click "Download Report" and check the CSV contains:
       | Order No                   |
@@ -157,7 +158,6 @@ Feature: 11 - Finance
       | Net Amount                 |
       | VAT Charged                |
       | Total Value                |
-    Then I record the finance report URL
 
     Examples:
       | report                | startDate | endDate | seconds  | refresh |
@@ -175,6 +175,7 @@ Feature: 11 - Finance
     And I get the date <endDate> days ago as {end_day}, {end_month}, {end_year}
     And I set the finance report to date to {end_day} {end_month} {end_year}
     And I press the "Generate report" button
+    And I record the finance report URL
     And I wait "<seconds>" seconds then "<refresh>" the page until "Download Report" button displays
     And I click "Download Report" and check the CSV contains:
           | receipt_reference            |
@@ -182,7 +183,6 @@ Feature: 11 - Finance
           | status_description           |
           | Successful payment received  |
           | payment_type                 |
-    Then I record the finance report URL
  
     Examples:
       | report                | startDate | endDate | seconds  | refresh |
