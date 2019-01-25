@@ -1,22 +1,7 @@
-Karl
-
-
-
-
-
-
-
-Message List
-
-Karl Beckett [11:20 AM]
-MOT_TESTER_CLASS_4_WITH_ONLY_ONE_SITE.sql 
-/* Description */
-/* This SQL is to obtain an active MOT tester, with valid 2FA, who can perform an MOT test on class 4 only */
-​
-​
 SELECT DISTINCT
-  p.username,
-  s.name AS site
+  p.username as username,
+  s.name as site
+
 FROM
   person p
   -- Check that user has logged in with 2fa
