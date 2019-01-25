@@ -1,6 +1,7 @@
 SELECT DISTINCT
-  p.username,
-  s.name AS site
+  p.username as username,
+  s.name as site
+
 FROM
   person p
   -- Check that user has logged in with 2fa
