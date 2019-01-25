@@ -78,7 +78,7 @@ WHERE
       special_notice
     WHERE
       is_acknowledged = 0
-​
+
   UNION
     SELECT
       person_id
