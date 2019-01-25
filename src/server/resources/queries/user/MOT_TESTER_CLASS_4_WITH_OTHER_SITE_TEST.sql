@@ -100,5 +100,5 @@ WHERE
            mot_test_current
        WHERE
            status_id = 4
-   )
+           )
    LIMIT 100
