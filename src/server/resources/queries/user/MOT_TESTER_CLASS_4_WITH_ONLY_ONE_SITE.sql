@@ -1,7 +1,7 @@
 SELECT DISTINCT
-  p.username as username,
-  s.name as site
-
+  p.username,
+  s.name AS site
+>>>>>>> Updates to only one site and with other site sql
 FROM
   person p
   -- Check that user has logged in with 2fa
