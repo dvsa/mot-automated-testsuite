@@ -87,21 +87,4 @@ WHERE
     WHERE
       status_id = 4
   )
-  LIMIT 100;
-Collapse 
-
-
-John Reynolds [9:31 AM]
-Hi Mate
-
-Karl Beckett [9:31 AM]
-Hey
-
-John Reynolds [9:32 AM]
-WFH, Car came back with me. Apparently the job will take 2 days :disappointed: and I need it for the weekend so its going back in feb. Still looking at that sql, should have it done today
-
-Karl Beckett [9:38 AM]
-2 days for a light bulb?
-Message Input
-
-Message Karl Beckett 
+  LIMIT 100
