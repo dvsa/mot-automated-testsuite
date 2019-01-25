@@ -66,6 +66,7 @@ WHERE
    -- AE linked to site
    AND osm.status_id = 2
    -- AE has slots available
+<<<<<<< HEAD
    AND o.slots_balance > 15
    -- Tester has a username
    AND p.username IS NOT NULL
@@ -86,6 +87,23 @@ WHERE
       HAVING
         COUNT(*) > 1
     )
+   AND o.slots_balance > 15  
+   -- tester is only a tester at one site
+   AND p.id IN (
+       SELECT
+           person_id
+       FROM
+           site_business_role_map
+       WHERE
+           -- User is a tester
+           site_business_role_id = 1
+           -- Tester is active
+           AND status_id = 1
+       GROUP BY
+           person_id
+       HAVING
+           COUNT(*) > 1
+   )
    -- Check users have acknowledge all special notices
    -- Check users don’t have active tests
    AND p.id NOT IN (

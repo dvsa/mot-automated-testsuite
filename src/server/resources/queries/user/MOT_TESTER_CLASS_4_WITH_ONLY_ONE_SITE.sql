@@ -27,7 +27,6 @@ FROM
     ON osm.organisation_id = o.id
   JOIN auth_for_ae afa
     ON o.id = afa.organisation_id
-
 WHERE
   -- Check the security card assigned to them is active
   sc.security_card_status_lookup_id = 1
@@ -72,6 +71,22 @@ WHERE
      HAVING
        COUNT(*) > 1
    )
+  -- tester is only a tester at one site
+  AND p.id NOT IN (
+    SELECT
+      person_id
+    FROM
+      site_business_role_map
+    WHERE
+      -- User is a tester
+      site_business_role_id = 1
+      -- Tester is active
+      AND status_id = 1
+    GROUP BY
+      person_id
+    HAVING
+      COUNT(*) > 1
+  )
   -- Check users have acknowledge all special notices
   -- Check users don’t have active tests
   AND p.id NOT IN (
