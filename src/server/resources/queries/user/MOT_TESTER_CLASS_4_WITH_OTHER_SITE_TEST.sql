@@ -100,4 +100,4 @@ WHERE
        WHERE
            status_id = 4
    )
-   LIMIT 100;
+   LIMIT 100
