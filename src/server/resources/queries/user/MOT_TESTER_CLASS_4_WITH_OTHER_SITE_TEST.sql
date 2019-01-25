@@ -27,7 +27,8 @@ FROM
  	and mot_test_type_id in ( 1, 9 ) -- Normal tests or retest
  	and document_id IS NOT NULL  -- exclude where there are no MOT certificates
   group by vehicle_id) mtc
-   	   ON s.id = mtc.mtcId
+  -- Select a vehicle that was not MOT'd at the same site
+   	   ON s.id <> mtc.mtcId
  -- map against the vehicle registration
   JOIN vehicle v
 	   ON v.id = mtc.mtcVid      
