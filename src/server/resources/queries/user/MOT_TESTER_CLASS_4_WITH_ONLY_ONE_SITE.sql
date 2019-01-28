@@ -1,5 +1,5 @@
 /* Description */
-/* This SQL is to obtain an active MOT tester, with  valid  2FA, who can perform an MOT test on class 4 only */
+/* This SQL is to obtain an active MOT tester, with only 1 assigned VTS, with valid  2FA, who can perform an MOT test on class 4 only */
 
 
 SELECT DISTINCT
