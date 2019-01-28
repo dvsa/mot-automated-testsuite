@@ -9,7 +9,7 @@ FROM
   JOIN security_card sc
     ON pscm.security_card_id = sc.id
   JOIN security_card_drift scd
-    ON sc.id = scd.security_card_id
+    ON sc.id <> scd.security_card_id
   -- Checking tester is authorised to test
   JOIN auth_for_testing_mot aftm
     ON p.id = aftm.person_id
@@ -27,6 +27,7 @@ FROM
     ON osm.organisation_id = o.id
   JOIN auth_for_ae afa
     ON o.id = afa.organisation_id
+
 WHERE
   -- Check the security card assigned to them is active
   sc.security_card_status_lookup_id = 1
@@ -52,6 +53,8 @@ WHERE
   AND osm.status_id = 2
   -- AE has slots available
   AND o.slots_balance > 15
+  -- Tester has a valid username
+  AND p.username IS NOT NULL
   -- tester is only a tester at one site
   AND p.id NOT IN (
     SELECT
