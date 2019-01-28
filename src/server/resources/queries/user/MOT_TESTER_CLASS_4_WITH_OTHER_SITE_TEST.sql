@@ -67,6 +67,7 @@ WHERE
    AND osm.status_id = 2
    -- AE has slots available
 <<<<<<< HEAD
+<<<<<<< HEAD
    AND o.slots_balance > 15
    -- Tester has a username
    AND p.username IS NOT NULL
@@ -87,7 +88,9 @@ WHERE
       HAVING
         COUNT(*) > 1
     )
-   AND o.slots_balance > 15  
+   AND o.slots_balance > 15
+   -- Tester has a username
+   AND p.username IS NOT NULL
    -- tester is only a tester at one site
    AND p.id IN (
        SELECT

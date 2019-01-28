@@ -26,6 +26,7 @@ SELECT DISTINCT
     ON osm.organisation_id = o.id
   JOIN auth_for_ae afa
     ON o.id = afa.organisation_id
+
 WHERE
   -- Check the security card assigned to them is active
   sc.security_card_status_lookup_id = 1
