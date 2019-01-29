@@ -23,15 +23,15 @@ FROM
   -- Check current MOT test details     
    JOIN (select distinct(vehicle_id) as mtcVid, max(id) as Id, site_id as mtcId, number as TestNumber
   FROM mot_test_current 
- 	where  status_id = 6 -- Passed tests only
- 	and mot_test_type_id in ( 1, 9 ) -- Normal tests or retest
- 	and document_id IS NOT NULL  -- exclude where there are no MOT certificates
+   where  status_id = 6 -- Passed tests only
+   and mot_test_type_id in ( 1, 9 ) -- Normal tests or retest
+   and document_id IS NOT NULL  -- exclude where there are no MOT certificates
   group by vehicle_id) mtc
   -- Select a vehicle that was not MOT'd at the same site
-   	   ON s.id <> mtc.mtcId
+          ON s.id <> mtc.mtcId
  -- map against the vehicle registration
   JOIN vehicle v
-	   ON v.id = mtc.mtcVid      
+      ON v.id = mtc.mtcVid
    JOIN auth_for_testing_mot_at_site afts
        ON s.id = afts.site_id
    -- Checking AE is authorised to test
@@ -41,7 +41,7 @@ FROM
        ON osm.organisation_id = o.id
    JOIN auth_for_ae afa
        ON o.id = afa.organisation_id
-          
+
 WHERE
    -- Check the security card assigned to them is active
    sc.security_card_status_lookup_id = 1
