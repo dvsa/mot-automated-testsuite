@@ -29,12 +29,12 @@ FROM
        GROUP BY vehicle_id) mtc
   -- Select a vehicle that was not MOT'd at the same site
    	ON s.id <> mtc.mtcId
- -- map against the vehicle registration
+  -- map against the vehicle registration
   JOIN vehicle v
     ON v.id = mtc.mtcVid
   JOIN auth_for_testing_mot_at_site afts
     ON s.id = afts.site_id
-   -- Checking AE is authorised to test
+  -- Checking AE is authorised to test
   JOIN organisation_site_map osm
     ON s.id = osm.site_id
   JOIN organisation o
@@ -123,17 +123,17 @@ WHERE
       person_id
     FROM
       site_business_role_map
-   -- Tester is active
+  -- Tester is active
     WHERE
       status_id = 1
     GROUP BY
       person_id
-   -- User is a tester only
+  -- User is a tester only
     HAVING
       COUNT(*) > 1
     )
-   -- Check users have acknowledge all special notices
-   -- Check users don’t have active tests
+  -- Check users have acknowledge all special notices
+  -- Check users don’t have active tests
   AND p.id NOT IN (
     SELECT
       person_id
