@@ -42,6 +42,9 @@ public class WebStepDefinitions implements En {
         When("^I click the button with class name \"([^\"]+)\"$", (String className) ->
                 driverWrapper.clickButtonByClassName(className));
 
+        When("^I click the button with id \"([^\"]+)\"$", (String buttonId) ->
+                driverWrapper.clickElement(buttonId));
+
         When("^I click the \"([^\"]+)\" link$", (String linkText) ->
                 driverWrapper.clickLink(linkText));
 
@@ -172,6 +175,12 @@ public class WebStepDefinitions implements En {
         And("^I check the \"([^\"]+)\" field row has value \"([^\"]+)\"$",
                 (String fieldName, String value) -> Assert.assertTrue("Wrong field value",
                         driverWrapper.getTextFromTableRow(fieldName).contains(value)));
+
+        And("^I check the row with value \\{([^\\}]+)\\} also has value \"([^\"]+)\"$",
+                (String firstValue, String secondValue) ->
+                        Assert.assertTrue("Row does not contain expected value",
+                        driverWrapper.checkTextFromTableRowNoHeader(driverWrapper.getData(firstValue),
+                                secondValue)));
 
         And("^I check the \"([^\"]+)\" field row has value \\{([^\\}]+)\\}$",
                 (String fieldName, String valueKey) -> Assert.assertTrue("Wrong field value",

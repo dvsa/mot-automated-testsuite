@@ -71,6 +71,8 @@ High level:
 * I check the ```"..heading text.."``` field row has value ```"..value.."```
 * I check the ```"..heading text.."``` field row has value ```{key}```
    * Note: these steps check the contents of a ```td``` element in the same row as a ```th``` element with the heading text 
+* I check the row with value ```{key}``` also has value ```"..value.."```
+   * Note: this step checks a td element is present in the same row as another td element (without a th element)
 * I check the ```"..heading text.."``` field column has value ```"..value.."```
 * I check the ```"..heading text.."``` field column has value ```{key}```
    * Note: these steps check the contents of the ```td``` element in the first row and same column as a ```th``` element with the heading text    
@@ -296,3 +298,8 @@ These steps are specific to the DVSA MOT application screens.
 
 * I query elastic search with ```"..csv file name.."``` as ```"..data key.."```
 * I compare the search results for ```"..result set key.."``` and ```"..result set key.."``` with data ```"..csv data file.."```
+
+### SiteReviewStepDefinitions
+
+* I enter the date of site visit as ```..days..``` days ago
+* I find the ```{siteNameKey}``` site in the service reports

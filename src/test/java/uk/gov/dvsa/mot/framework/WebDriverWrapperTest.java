@@ -1269,6 +1269,36 @@ public class WebDriverWrapperTest {
     }
 
     /**
+     * Tests <code>checkTextFromTableRowNoHeader()</code> with a matching example (no thead/tbody).
+     */
+    @Test
+    public void testCheckTextFromTableRowNoHeaderMatching1() {
+        browseTo("/checkTextFromTableRowNoHeader-1.html", "checkTextFromTableRowNoHeader - 1");
+        assertTrue("Should find matching text",
+                driverWrapper.checkTextFromTableRowNoHeader("eee", "ggg"));
+    }
+
+    /**
+     * Tests <code>checkTextFromTableRowNoHeader()</code> with a matching example (no thead/tbody).
+     */
+    @Test
+    public void testCheckTextFromTableRowNoHeaderMatching2() {
+        browseTo("/checkTextFromTableRowNoHeader-1.html", "checkTextFromTableRowNoHeader - 1");
+        assertTrue("Should find matching text",
+                driverWrapper.checkTextFromTableRowNoHeader("iii", "lll"));
+    }
+
+    /**
+     * Tests <code>checkTextFromTableRowNoHeader()</code> with no matching example (no thead/tbody).
+     */
+    @Test
+    public void testCheckTextFromTableRowNoHeaderNotMatching() {
+        browseTo("/checkTextFromTableRowNoHeader-1.html", "checkTextFromTableRowNoHeader - 1");
+        assertFalse("Should not find matching text",
+                driverWrapper.checkTextFromTableRowNoHeader("aaa", "ggg"));
+    }
+
+    /**
      * Tests <code>checkTableHasRows()</code> with a matching example (no thead/tbody) that does have sufficient rows.
      */
     @Test
