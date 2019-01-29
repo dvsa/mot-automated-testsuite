@@ -12,7 +12,7 @@ FROM
        ON p.id = pscm.person_id
    JOIN security_card sc
        ON pscm.security_card_id = sc.id
-   LEFT JOIN security_card_drift scd
+   JOIN security_card_drift scd
        ON sc.id = scd.security_card_id
    -- Checking tester is authorised to test
    JOIN auth_for_testing_mot aftm
@@ -37,14 +37,7 @@ WHERE
    -- Check the security card assigned to them is active
    AND sc.security_card_status_lookup_id = 1
    -- Check last 2FA input was within +/-2 windows
-   AND NOT EXISTS (
-      	SELECT
-         	1
-      	FROM
-       	  	security_card_drift
-      	WHERE
-         	(last_observed_drift > 60 or last_observed_drift < -60)
-   )
+   AND scd.last_observed_drift BETWEEN -60 AND 60
    -- Check user doesn’t need to claim account
    AND p.is_account_claim_required = 0
    -- Check user doesn’t need to change password
@@ -100,5 +93,5 @@ WHERE
            status_id = 4
    )
    -- Changes the ordering so the same users are not used in other SQL results
-   ORDER BY p.username DESC
+   ORDER BY RAND()
    LIMIT 100;
