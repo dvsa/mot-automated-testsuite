@@ -1,14 +1,15 @@
 SELECT DISTINCT
   p.username,
   s.name AS site
+FROM
   person p
   -- Check that user has logged in with 2fa
   JOIN person_security_card_map pscm
     ON p.id = pscm.person_id
   JOIN security_card sc
     ON pscm.security_card_id = sc.id
-  JOIN security_card_drift scd
-    ON sc.id <> scd.security_card_id
+  LEFT JOIN security_card_drift scd
+    ON sc.id = scd.security_card_id
   -- Checking tester is authorised to test
   JOIN auth_for_testing_mot aftm
     ON p.id = aftm.person_id
@@ -26,12 +27,14 @@ SELECT DISTINCT
     ON osm.organisation_id = o.id
   JOIN auth_for_ae afa
     ON o.id = afa.organisation_id
-
 WHERE
   -- Check the security card assigned to them is active
   sc.security_card_status_lookup_id = 1
   -- Check last 2FA input was within +/-2 windows
-  AND scd.last_observed_drift BETWEEN -60 AND 60
+  AND (
+    scd.last_observed_drift BETWEEN -60 AND 60
+    OR scd.last_observed_drift IS NULL
+  )
   -- Check user doesn’t need to claim account
   AND p.is_account_claim_required = 0
   -- Check user doesn’t need to change password
@@ -54,9 +57,7 @@ WHERE
   AND o.slots_balance > 15
   -- Tester has a valid username
   AND p.username IS NOT NULL
-  -- Tester only
-  AND sbrm.site_business_role_id = 1
-  -- tester is only a tester at one site
+  -- Tester is only a tester at one site
   AND p.id  NOT IN (
     SELECT
       person_id
@@ -64,7 +65,7 @@ WHERE
       site_business_role_map
       -- Tester is active
     WHERE
-      status_id = 1
+       status_id = 1
     GROUP BY
       person_id
       -- User is a tester only
@@ -87,6 +88,16 @@ WHERE
     HAVING
       COUNT(*) > 1
   )
+  -- Tester does not have an AED or AEDM role
+  AND NOT EXISTS (
+    SELECT
+      1
+    FROM
+      organisation_business_role_map obrm
+    WHERE
+      p.id = obrm.person_id
+      AND obrm.id IN (1, 2)
+  )
   -- Check users have acknowledge all special notices
   -- Check users don’t have active tests
   AND p.id NOT IN (
@@ -104,4 +115,4 @@ WHERE
     WHERE
       status_id = 4
   )
-  LIMIT 100
+     LIMIT 100

@@ -2,7 +2,7 @@ SELECT DISTINCT
   p.username as username,
   s.name as site,
   v.registration as registration
-  
+
 FROM
   person p
   -- Check that user has logged in with 2fa
@@ -20,7 +20,7 @@ FROM
     ON p.id = sbrm.person_id
   JOIN site s
     ON sbrm.site_id = s.id
-  -- Check current MOT test details     
+  -- Check current MOT test details
   JOIN (SELECT DISTINCT(vehicle_id) AS mtcVid, MAX(id) AS Id, site_id AS mtcId, number AS TestNumber
        FROM mot_test_current
  	   WHERE status_id = 6 -- Passed tests only
@@ -41,7 +41,6 @@ FROM
     ON osm.organisation_id = o.id
   JOIN auth_for_ae afa
     ON o.id = afa.organisation_id
-
 WHERE
    -- Check the security card assigned to them is active
    sc.security_card_status_lookup_id = 1
