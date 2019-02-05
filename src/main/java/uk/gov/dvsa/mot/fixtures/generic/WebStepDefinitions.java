@@ -54,8 +54,12 @@ public class WebStepDefinitions implements En {
         When("^I click the \"([^\"]+)\" radio button$", (String labelText) ->
                 driverWrapper.selectRadio(labelText));
 
+        When("^I select the first radio button$", () ->
+                    driverWrapper.selectFirstRadio());
+
         When("^I click the \\{([^\\}]+)\\} radio button$", (String labelTextKey) ->
                 driverWrapper.selectRadio(driverWrapper.getData(labelTextKey)));
+
 
         When("^I click the \"([^\"]+)\" radio button in fieldset \"([^\"]+)\"$",
                 (String labelText, String fieldsetLegend) ->
@@ -217,5 +221,11 @@ public class WebStepDefinitions implements En {
 
         And("^I set the starting url key as \"([^\"]+)\"$", (String startingUrlKey) ->
                 driverWrapper.setStartingUrl(startingUrlKey));
+
+        And("^The \"([^\"]+)\" link is visible", (String hyperlinkText) ->
+                driverWrapper.checkLinkVisible(hyperlinkText));
+
+        And("^The \"([^\"]+)\" link is not visible", (String hyperlinkTextInvisible) ->
+                driverWrapper.checkLinkInvisible(hyperlinkTextInvisible));
     }
 }

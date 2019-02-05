@@ -1,6 +1,8 @@
 package uk.gov.dvsa.mot.framework;
 
+import org.apache.http.MethodNotSupportedException;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.poi.util.SystemOutLogger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -802,6 +804,17 @@ public class WebDriverWrapper {
                 }).click();
         }
     }
+
+    /**
+     * Selects the specified radio button. Supports well-formed labels and radio buttons nested inside the label.
+     *    The radio button label
+     */
+    public void selectFirstRadio() {
+
+        webDriver.findElement(By.name("roleId")).click();
+
+    }
+
 
     /**
      * Selects the specified radio button, within the specified fieldset. Supports well-formed labels and radio buttons
@@ -1762,4 +1775,24 @@ public class WebDriverWrapper {
             }
         }
     }
+
+    /**
+     * Sets the starting url using a key for the config file.
+     * @param hyperlinkText the name of the starting url key in the config
+     */
+    public void checkLinkVisible(String hyperlinkText) {
+        webDriver.findElement(By.linkText(hyperlinkText));
+
+    }
+
+    /**
+     * Sets the starting url using a key for the config file.
+     * @param hyperlinkTextInvisible the name of the starting url key in the config
+     */
+    public void checkLinkInvisible(String hyperlinkTextInvisible) {
+
+        // return webDriver.findElement(By.linkText(hyperlinkTextInvisible)).size != 0;
+
+    }
 }
+
