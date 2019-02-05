@@ -3,6 +3,7 @@ package uk.gov.dvsa.mot.framework;
 import com.deque.axe.AXE;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.json.JSONObject;
+import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -18,6 +19,8 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
@@ -35,7 +38,6 @@ import uk.gov.dvsa.mot.framework.csv.CsvException;
 import uk.gov.dvsa.mot.framework.pdf.MotCertFormFields;
 import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
 import uk.gov.dvsa.mot.framework.pdf.PdfException;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,9 +45,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -149,7 +151,7 @@ public class WebDriverWrapper {
             LoggingPreferences loggingPreferences = new LoggingPreferences();
 
             // logging turned off completely
-            loggingPreferences.enable(LogType.BROWSER, Level.OFF);
+            loggingPreferences.enable(LogType.BROWSER, Level.ALL);
             loggingPreferences.enable(LogType.PERFORMANCE, Level.OFF);
             loggingPreferences.enable(LogType.PROFILER, Level.OFF);
             loggingPreferences.enable(LogType.SERVER, Level.OFF);
@@ -182,6 +184,16 @@ public class WebDriverWrapper {
             String message = "Unsupported browser: " + browser;
             logger.error(message);
             throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * Analyses the browser logs.
+     */
+    public void analyseLog() {
+        LogEntries logEntries = webDriver.manage().logs().get(LogType.BROWSER);
+        for (LogEntry entry : logEntries) {
+            System.out.println(new Date(entry.getTimestamp()) + " " + entry.getLevel() + " " + entry.getMessage());
         }
     }
 

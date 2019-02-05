@@ -58,6 +58,9 @@ public class LifecycleHooks {
     public void teardown(Scenario scenario) {
         logger.debug("After cucumber scenario: ********** {} **********", scenario.getName());
 
+        //gets browser logs
+        driverWrapper.analyseLog();
+
         // add to the test report
         outputDataUse(scenario);
         outputFinalScreenshot(scenario);
