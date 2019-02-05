@@ -1,5 +1,5 @@
 @extended
-Feature: MTS Notification - Create RN a
+Feature: MTS Notification - Create RN
 
   Scenario: Verify that a RN can be created for a tester and then can be clicked from the RN alert on the homepage and then accepted. When accepted it can then be archived and viewed in the correct archived tab.
 

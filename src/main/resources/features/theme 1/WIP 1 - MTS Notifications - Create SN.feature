@@ -9,7 +9,7 @@ Feature: MTS Notifications - Create and remove SN
     And I click the "Create a message" link
 
     #Select the SN radio button and continue, populate all details within the page
-    And I click the "Special notice" radio button2
+    And I click the "Special notice" radio button
     And I press the "Continue" button
     And The page title contains "Enter content, audience and publish date - MOT testing service"
     And I click the id "dvsa-roles" checkbox

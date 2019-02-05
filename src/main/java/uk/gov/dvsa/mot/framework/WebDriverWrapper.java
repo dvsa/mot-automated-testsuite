@@ -1,8 +1,6 @@
 package uk.gov.dvsa.mot.framework;
 
-import org.apache.http.MethodNotSupportedException;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.apache.poi.util.SystemOutLogger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
