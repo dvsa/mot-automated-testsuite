@@ -2,10 +2,6 @@ package uk.gov.dvsa.mot.framework;
 
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.After;
-<<<<<<< HEAD
-import org.junit.Assert;
-=======
->>>>>>> enable browser logging
 import org.junit.Before;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -46,15 +42,21 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> fix errors
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+<<<<<<< HEAD
 =======
 import java.util.*;
 >>>>>>> enable browser logging
+=======
+>>>>>>> fix errors
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
@@ -198,6 +200,7 @@ public class WebDriverWrapper {
         for (LogEntry entry : logEntries) {
             System.out.println(new Date(entry.getTimestamp()) + " " + entry.getLevel() + " " + entry.getMessage());
         }
+    }
 
     /**
      * Resets the web driver between test scenarios.
