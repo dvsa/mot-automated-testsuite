@@ -2,6 +2,7 @@ package uk.gov.dvsa.mot.framework;
 
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -188,7 +189,8 @@ public class WebDriverWrapper {
     public void analyseLog() {
         LogEntries logEntries = webDriver.manage().logs().get(LogType.BROWSER);
         for (LogEntry entry : logEntries) {
-            System.out.println(new Date(entry.getTimestamp()) + " " + entry.getLevel() + " " + entry.getMessage());
+            Assert.fail("The following console error has been found: " + new Date(entry.getTimestamp())
+                    + " " + entry.getLevel() + " " + entry.getMessage());
         }
     }
 
