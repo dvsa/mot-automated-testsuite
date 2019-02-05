@@ -193,7 +193,8 @@ public class WebDriverWrapper {
     public void analyseLog() {
         LogEntries logEntries = webDriver.manage().logs().get(LogType.BROWSER);
         for (LogEntry entry : logEntries) {
-            System.out.println(new Date(entry.getTimestamp()) + " " + entry.getLevel() + " " + entry.getMessage());
+            Assert.fail("The following console error has been found: " + new Date(entry.getTimestamp())
+                    + " " + entry.getLevel() + " " + entry.getMessage());
         }
     }
 
