@@ -1,7 +1,7 @@
 SELECT DISTINCT
   p.username as username,
   s.name as site,
-  v.registration as registration
+  registration as registration
 
 FROM
   person p
@@ -21,17 +21,17 @@ FROM
   JOIN site s
     ON sbrm.site_id = s.id
   -- Check current MOT test details
-  JOIN (SELECT DISTINCT(vehicle_id) AS mtcVid, MAX(id) AS Id, site_id AS mtcId, number AS TestNumber
-       FROM mot_test_current
- 	   WHERE status_id = 6 -- Passed tests only
- 	   AND mot_test_type_id IN ( 1, 9 ) -- Normal tests or retest
- 	   AND document_id IS NOT NULL  -- exclude where there are no MOT certificates
-       GROUP BY vehicle_id) mtc
-  -- Select a vehicle that was not MOT'd at the same site
-   	ON s.id <> mtc.mtcId
-  -- map against the vehicle registration
-  JOIN vehicle v
-    ON v.id = mtc.mtcVid
+  LEFT JOIN (SELECT DISTINCT(mtc.site_id) AS mtcsId, max(mtc.id) AS Id, mtc.vehicle_id AS mtcVid, mtc.number AS TestNumber, v.registration as registration
+       FROM mot_test_current mtc, vehicle v
+ 	   WHERE mtc.status_id = 6 -- Passed tests only
+ 	   And v.id = mtc.vehicle_id
+ 	   AND mtc.mot_test_type_id IN ( 1, 9 ) -- Normal tests or retest
+ 	   AND mtc.document_id IS NOT NULL  -- exclude where there are no MOT certificates
+ 	   AND mtc.created_on > current_date - interval '3' month
+       GROUP BY mtc.site_id) mtc
+  -- Select a different site to that where the vehicle was MOT'd
+   	ON s.id != mtc.mtcsId
+
   JOIN auth_for_testing_mot_at_site afts
     ON s.id = afts.site_id
   -- Checking AE is authorised to test
@@ -140,7 +140,6 @@ WHERE
       special_notice
     WHERE
       is_acknowledged = 0
-
   UNION
     SELECT
       person_id
@@ -149,4 +148,4 @@ WHERE
     WHERE
       status_id = 4
    )
-   LIMIT 100
+     LIMIT 10
