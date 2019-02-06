@@ -13,7 +13,7 @@ Feature: MTS Notification - Create RN
     #Search for the tester's username and assign a role to them
     And I enter {testerUsername} in the field with id "userSearchBox"
     And I click the "Search" button
-    And I select the first radio button
+    And I select the first radio button with ID "site-role-TESTER"
     And I click the "Choose role" button
     And I click the "Assign role" button
 

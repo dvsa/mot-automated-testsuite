@@ -54,8 +54,8 @@ public class WebStepDefinitions implements En {
         When("^I click the \"([^\"]+)\" radio button$", (String labelText) ->
                 driverWrapper.selectRadio(labelText));
 
-        When("^I select the first radio button$", () ->
-                    driverWrapper.selectFirstRadio());
+        When("^I select the first radio button with ID \"([^\"]+)\"$", (String radioButtonId) ->
+                driverWrapper.selectFirstRadio(driverWrapper.getData(radioButtonId)));
 
         When("^I click the \\{([^\\}]+)\\} radio button$", (String labelTextKey) ->
                 driverWrapper.selectRadio(driverWrapper.getData(labelTextKey)));
@@ -225,7 +225,5 @@ public class WebStepDefinitions implements En {
         And("^The \"([^\"]+)\" link is visible", (String hyperlinkText) ->
                 driverWrapper.checkLinkVisible(hyperlinkText));
 
-        And("^The \"([^\"]+)\" link is not visible", (String hyperlinkTextInvisible) ->
-                driverWrapper.checkLinkInvisible(hyperlinkTextInvisible));
     }
 }

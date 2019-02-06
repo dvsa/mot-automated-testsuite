@@ -807,9 +807,9 @@ public class WebDriverWrapper {
      * Selects the specified radio button. Supports well-formed labels and radio buttons nested inside the label.
      *    The radio button label
      */
-    public void selectFirstRadio() {
+    public void selectFirstRadio(String radioButtonId) {
 
-        webDriver.findElement(By.name("roleId")).click();
+        webDriver.findElement(By.id(radioButtonId)).click();
 
     }
 
@@ -1783,14 +1783,5 @@ public class WebDriverWrapper {
 
     }
 
-    /**
-     * Sets the starting url using a key for the config file.
-     * @param hyperlinkTextInvisible the name of the starting url key in the config
-     */
-    public void checkLinkInvisible(String hyperlinkTextInvisible) {
-
-        // return webDriver.findElement(By.linkText(hyperlinkTextInvisible)).size != 0;
-
-    }
 }
 
