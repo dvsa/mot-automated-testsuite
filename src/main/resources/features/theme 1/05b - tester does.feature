@@ -59,6 +59,7 @@ Feature: 05b - Tester does...
 
     When I start an MOT test for {registration1}, {vin1}, {site}
     And The page title contains "Your home"
+    And The page title contains "Your home"
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000

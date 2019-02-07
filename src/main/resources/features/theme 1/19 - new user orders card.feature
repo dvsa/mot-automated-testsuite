@@ -56,6 +56,8 @@ Feature: 19 - New trade user orders and activates 2FA card
     And I enter "MyPassword1234" in the "Password" field
     And I press the "Sign in" button
     And The page title contains "Your home"
+    And I click the link "notifications" with id "notification-alert"
+    # Bal
     And I click the "Nomination for Authorised Examiner Designated Manager - order a security card" link
     And The page contains "You have been nominated for Authorised Examiner Designated Manager at {aeName}."
     And I click the "Order a security card" link
@@ -70,6 +72,7 @@ Feature: 19 - New trade user orders and activates 2FA card
 
     # Activate the card
     And I click the "Continue to home" link
+    And I click the "View all messages" link
     And I click the "Nomination for Authorised Examiner Designated Manager - activate your security card" link
     And The page contains "You will receive the role of Authorised Examiner Designated Manager at {aeName} once you have activated the card."
     And I load "2FA_CARD_UNUSED" as {serialNumber}
@@ -96,6 +99,7 @@ Feature: 19 - New trade user orders and activates 2FA card
     And I enter {newPin} in the "Security card PIN" field
     And I press the "Sign in" button
     And The page title contains "Your home"
+    And I click the "View all messages" link
     And I click the "Authorised Examiner Designated Manager role notification" link
     And The page contains "You have been assigned a role of Authorised Examiner Designated Manager for {aeName} by DVSA administration."
 
