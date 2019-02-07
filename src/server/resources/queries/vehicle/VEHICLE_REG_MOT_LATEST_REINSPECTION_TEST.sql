@@ -1,4 +1,4 @@
-SELECT veh.registration, veh.vin, mtc.odometer_value, mtc.vehicle_id
+SELECT veh.registration, veh.vin, mtc.odometer_value
 FROM vehicle veh, model_detail md, model mo, make ma, mot_test_current mtc
 INNER JOIN (SELECT  vehicle_id, max(id) AS id
 			FROM mot_test_current
