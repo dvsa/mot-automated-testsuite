@@ -2,7 +2,7 @@ SELECT veh.registration, veh.vin, mtc.odometer_value
 FROM vehicle veh, model_detail md, model mo, make ma, mot_test_current mtc
 INNER JOIN (SELECT  vehicle_id, max(id) AS id
 			FROM mot_test_current
-	 	    WHERE created_on > current_date - interval '6' month -- only current certificates can be pulled
+	 	    WHERE created_on > current_date - interval '1' day -- only current certificates can be pulled
  	   		GROUP BY vehicle_id) AS mtcId
  	  ON mtc.id = mtcId.id
 WHERE veh.model_detail_id = md.id
