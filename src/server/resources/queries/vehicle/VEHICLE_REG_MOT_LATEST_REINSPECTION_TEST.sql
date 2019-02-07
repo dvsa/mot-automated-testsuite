@@ -1,31 +1,33 @@
-select veh.registration, veh.vin, mtc.odometer_value
-from vehicle veh, model_detail md, model mo, make ma,
-  (select max(id) as id, vehicle_id  from mot_test_current
-   group by vehicle_id
-   limit 100000) as latest_mot,
-   mot_test_current mtc
-where veh.model_detail_id = md.id
-and mtc.mot_test_type_id in (4,5,6,7) -- Latest Reinspection Test
-and md.vehicle_class_id = 4 -- cars only
-and veh.id = latest_mot.vehicle_id
-and md.model_id = mo.id
-and mo.make_id = ma.id
-and mtc.id = latest_mot.id
-and mtc.status_id = 6 -- status pass
-and odometer_result_type = 'OK'
-and veh.registration not like "%-%" -- exclude dodgy test data on ACPT
-and veh.registration is not null -- nullable in PP/Prod
-and veh.vin is not null -- nullable in PP/Prod
-and not exists (
-    select 1 from vehicle v
-    where v.registration = veh.registration
-    group by v.registration
-    having count(v.registration) > 1 -- exclude where same registration has been entered as different vehicles
+SELECT veh.registration, veh.vin, mtc.odometer_value, mtc.vehicle_id
+FROM vehicle veh, model_detail md, model mo, make ma, mot_test_current mtc
+INNER JOIN (SELECT  vehicle_id, max(id) AS id
+			FROM mot_test_current
+	 	    WHERE created_on > current_date - interval '6' month -- only current certificates can be pulled
+ 	   		GROUP BY vehicle_id) AS mtcId
+ 	  ON mtc.id = mtcId.id
+WHERE veh.model_detail_id = md.id
+AND mtc.status_id = 6 -- Passed tests only
+AND mtc.document_id IS NOT NULL  -- exclude where there are no MOT certificates
+AND mtc.mot_test_type_id in (4,5,6,7) -- Latest Reinspection Test
+AND md.vehicle_class_id = 4 -- cars only
+AND veh.id = mtc.vehicle_id
+AND md.model_id = mo.id
+AND mo.make_id = ma.id
+AND mtc.status_id = 6 -- status pass
+AND odometer_result_type = 'OK'
+AND veh.registration not like "%-%" -- exclude dodgy test data on ACPT
+AND veh.registration is not null -- nullable in PP/Prod
+AND veh.vin is not null -- nullable in PP/Prod
+AND not exists (
+    SELECT 1 FROM vehicle v
+    WHERE v.registration = veh.registration
+    GROUP BY v.registration
+    HAVING count(v.registration) > 1 -- exclude where same registration has been entered as different vehicles
 )
-and not exists (
-    select 1 from vehicle v
-    where v.vin = veh.vin
-    group by v.vin
-    having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
+AND not exists (
+    SELECT 1 FROM vehicle v
+    WHERE v.vin = veh.vin
+    GROUP BY v.vin
+    HAVING count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
 )
-limit 10
+LIMIT 10

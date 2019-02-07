@@ -27,7 +27,7 @@ FROM
  	   And v.id = mtc.vehicle_id
  	   AND mtc.mot_test_type_id IN ( 1, 9 ) -- Normal tests or retest
  	   AND mtc.document_id IS NOT NULL  -- exclude where there are no MOT certificates
- 	   AND mtc.created_on > current_date - interval '0' month -- only current certificates can be pulled
+ 	   AND mtc.created_on > date_sub(CURDATE(), INTERVAL 0 MONTH) -- only current certificates can be pulled
        GROUP BY mtc.site_id) mtc
   -- Select a different site to that where the vehicle was MOT'd
    	ON s.id != mtc.mtcsId
