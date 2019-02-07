@@ -563,7 +563,7 @@ public class TesterDoesStepDefinitions implements En {
         }
 
         // And The page title contains "Find a vehicle"
-        driverWrapper.checkCurrentPageTitle("Find a vehicle");
+        // driverWrapper.checkCurrentPageTitle("Find a vehicle");
         //And I enter <registration1> in the "Registration mark" field
         driverWrapper.enterIntoField(registration, "Registration mark");
         //And I enter <vin1> in the "VIN" field
