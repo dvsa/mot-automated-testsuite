@@ -582,7 +582,8 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.clickLink("Start MOT test");
 
         // if page title Select your current site
-        if (driverWrapper.getCurrentPageTitle().contains("Select your current site")) {
+        // if (driverWrapper.getCurrentPageTitle().contains("Select your current site")) {
+        if (driverWrapper.containsMessage("Select your current site")) {
             // select the first site
             driverWrapper.clickRadioButtonByText(siteName);
             // press "Confirm" button
@@ -590,7 +591,7 @@ public class TesterDoesStepDefinitions implements En {
         }
 
         // And The page title contains "Find a vehicle"
-        // driverWrapper.checkCurrentPageTitle("Find a vehicle");
+        driverWrapper.checkCurrentPageTitle("Find a vehicle");
         //And I enter <registration1> in the "Registration mark" field
         driverWrapper.enterIntoField(registration, "Registration mark");
         //And I enter <vin1> in the "VIN" field
