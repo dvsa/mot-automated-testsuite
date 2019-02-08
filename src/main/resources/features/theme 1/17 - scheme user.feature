@@ -1,5 +1,5 @@
 @regression
-Feature: Scheme user creates and removes SN
+Feature: 17 - Scheme user
 
   Scenario: Verify that the scheme user is able to create a new SN from the new inbox, preview the SN and then save as a draft and then publish and finally delete the SN from the new inbox.
     #Login as a scheme user and click the 'View all messages' link on homepage and then 'Create a message'
