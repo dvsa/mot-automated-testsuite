@@ -562,7 +562,7 @@ public class TesterDoesStepDefinitions implements En {
             // select the first site
             driverWrapper.clickRadioButtonByText(siteName);
             // press "Confirm" button
-            driverWrapper.pressButton("Confirm");
+            driverWrapper.clickButton("Confirm");
         }
 
         // And The page title contains "Find a vehicle"
@@ -580,12 +580,12 @@ public class TesterDoesStepDefinitions implements En {
         if (registration != null && registration.trim().length() > 0) {
             //Check added because this is an area of previous defects - e.g. DVSA and DVLA vehicle ids being mixed up
             //And I check that the search results has Registration that was searched for
-            assertEquals(registration, driverWrapper.getTextFromTableColumn("Registration mark"));
+            assertTrue(driverWrapper.containsMessage(registration));
         }
 
         if (vin != null && vin.trim().length() > 0) {
             //And I check that the search results has VIN that was searched for
-            assertEquals(vin, driverWrapper.getTextFromTableColumn("VIN"));
+            assertTrue(driverWrapper.containsMessage(vin));
         }
     }
 
