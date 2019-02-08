@@ -57,7 +57,6 @@ Feature: 19 - New trade user orders and activates 2FA card
     And I press the "Sign in" button
     And The page title contains "Your home"
     And I click the link "notifications" with id "notification-alert"
-    # Bal
     And I click the "Nomination for Authorised Examiner Designated Manager - order a security card" link
     And The page contains "You have been nominated for Authorised Examiner Designated Manager at {aeName}."
     And I click the "Order a security card" link
