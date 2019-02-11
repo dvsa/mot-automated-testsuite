@@ -419,9 +419,6 @@ public class TesterDoesStepDefinitions implements En {
         searchForVehicle(registration, vin, siteName);
 
         if (isRetest) {
-            // check for the retest marker next to the select vehicle link
-            // String actual = driverWrapper.getElementText("a", "Select vehicle", "../span");
-            // assertEquals("Missing retest marker next to select vehicle link", "For retest", actual);
 
             //And I click the "Select vehicle" link
             driverWrapper.clickLink("Select vehicle");
