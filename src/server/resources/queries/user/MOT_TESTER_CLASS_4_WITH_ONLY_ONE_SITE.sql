@@ -1,6 +1,6 @@
 SELECT DISTINCT
-  p.username,
-  s.name AS site
+  p.username as username,
+  s.name as site
 FROM
   person p
   -- Check that user has logged in with 2fa
@@ -69,22 +69,6 @@ WHERE
     GROUP BY
       person_id
       -- User is a tester only
-    HAVING
-      COUNT(*) > 1
-   )
-  -- tester is only a tester at one site
-  AND p.id NOT IN (
-    SELECT
-      person_id
-    FROM
-      site_business_role_map
-    WHERE
-      -- User is a tester
-      site_business_role_id = 1
-      -- Tester is active
-      AND status_id = 1
-    GROUP BY
-      person_id
     HAVING
       COUNT(*) > 1
   )
