@@ -585,8 +585,7 @@ public class TesterDoesStepDefinitions implements En {
         driverWrapper.clickLink("Start MOT test");
 
         // if page title Select your current site
-        // if (driverWrapper.getCurrentPageTitle().contains("Select your current site")) {
-        if (driverWrapper.containsMessage("Select your current site")) {
+        if (driverWrapper.getCurrentPageTitle().contains("Select your current site")) {
             // select the first site
             driverWrapper.clickRadioButtonByText(siteName);
             // press "Confirm" button
