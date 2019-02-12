@@ -13,6 +13,7 @@ AND mtc.status_id = 6 -- Passed tests only
 AND odometer_result_type = 'OK'
 AND veh.registration NOT LIKE "%-%" -- exclude dodgy test data on ACPT
 AND veh.registration IS NOT NULL -- nullable in PP/Prod
+and veh.registration NOT IN ('R3GHAU5','DVLA903','DVLA904') -- Exclude vehicles that have already been modified by automation
 AND veh.vin IS NOT NULL -- nullable in PP/Prod
 AND NOT EXISTS (
     SELECT 1 FROM vehicle v
