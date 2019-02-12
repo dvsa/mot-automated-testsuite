@@ -4,7 +4,7 @@ INNER JOIN (SELECT  vehicle_id, MAX(id) AS id
 			FROM mot_test_current
 	 	    WHERE created_on > CURRENT_DATE - INTERVAL 1 MONTH -- only current certificates can be pulled
  	   		GROUP BY vehicle_id) AS mtcId
- 	  ON mtc.id = mtcId.id
+ 	   		ON mtc.id = mtcId.id
 WHERE veh.id = mtc.vehicle_id
 AND veh.model_detail_id = md.id
 AND mtc.document_id IS NOT NULL  -- exclude where there are no MOT certificates
