@@ -1,23 +1,21 @@
-select veh.registration, veh.vin, mtc.odometer_value, mtc.number as number
-from vehicle veh, model_detail md,
-  (select count(vehicle_id) as test_count, min(id) as id, vehicle_id  from mot_test_current
-   group by vehicle_id
-   limit 100000) as oldest_mot,
-   mot_test_current mtc
+SELECT veh.registration, veh.vin, mtc.odometer_value, mtc.number AS number
+FROM vehicle veh, model_detail md, mot_test_current mtc
+INNER JOIN (SELECT count(vehicle_id) as test_count, min(id) as id, vehicle_id
+			from mot_test_current
+			WHERE created_on > CURRENT_DATE - INTERVAL 4 YEAR -- only current certificates can be pulled
+ 	   		GROUP BY vehicle_id
+ 	   		limit 100000) AS oldest_mot
+ 	   		ON mtc.id = oldest_mot.id
 where veh.model_detail_id = md.id
 and md.vehicle_class_id = 4 -- cars only
 and veh.id = oldest_mot.vehicle_id
 and mtc.id = oldest_mot.id
 and oldest_mot.test_count > 1 -- More than one test for the vehicle
-and mtc.status_id not in (4,5) -- exclude vehicles whose latest status is under test
+and mtc.status_id = 6 -- Passed tests only
 and odometer_result_type = 'OK'
 and veh.registration not like "%-%" -- exclude dodgy test data on ACPT
 and veh.registration is not null -- nullable in PP/Prod
-and veh.registration <> 'R3GHAU5' -- Exclude vehicles that have already been modified by automation
-and veh.registration <> 'R3GHA01' -- Exclude vehicles that have already been modified by automation
-and veh.registration <> 'R3GHDVL5' -- Exclude vehicles that have already been modified by automation
-and veh.registration <> 'DVLA903' -- Exclude vehicles that have already been modified by automation
-and veh.registration <> 'DVLA904' -- Exclude vehicles that have already been modified by automation
+and veh.registration NOT IN ('R3GHAU5','DVLA903','DVLA904') -- Exclude vehicles that have already been modified by automation
 and veh.vin is not null -- nullable in PP/Prod
 and not exists (
     select 1 from vehicle v
