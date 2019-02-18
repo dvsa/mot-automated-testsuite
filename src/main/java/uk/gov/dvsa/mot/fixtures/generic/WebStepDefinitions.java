@@ -226,5 +226,7 @@ public class WebStepDefinitions implements En {
 
         And("^I set the starting url key as \"([^\"]+)\"$", (String startingUrlKey) ->
                 driverWrapper.setStartingUrl(startingUrlKey));
+
+        And("^I analyze the browser logs$", () -> driverWrapper.analyseLog());
     }
 }
