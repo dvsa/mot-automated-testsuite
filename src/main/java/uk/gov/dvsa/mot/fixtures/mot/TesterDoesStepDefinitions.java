@@ -453,8 +453,8 @@ public class TesterDoesStepDefinitions implements En {
             }
 
             if (colour.isPresent()) {
-                //And I click the "Change" link for the colour
-                driverWrapper.clickLink("th", "Colour", "../td/", "Change");
+                //And I click the "Change" link for the colour by clicking the link containing change-under-test/colour
+                driverWrapper.clickLinkContainingHrefValue("change-under-test/colour");
 
                 //And I select <colour> in the "Primary Colour" field
                 driverWrapper.selectOptionInField(colour.get(), "Primary colour");
@@ -467,8 +467,8 @@ public class TesterDoesStepDefinitions implements En {
             }
 
             if (fuelType.isPresent() || capacity.isPresent()) {
-                //And I click the "Change" link for the engine
-                driverWrapper.clickLink("th", "Engine", "../td/", "Change");
+                //And I click the "Change" link for the engine by clicking the link containing change-under-test/engine
+                driverWrapper.clickLinkContainingHrefValue("change-under-test/engine");
 
                 fuelType.ifPresent(value -> {
                     //And I select <fuel type> in the "Fuel type" field
