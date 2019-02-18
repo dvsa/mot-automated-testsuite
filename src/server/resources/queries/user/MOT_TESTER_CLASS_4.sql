@@ -35,4 +35,5 @@ and not exists (
 )
 and p.username is not null -- exclude dodgy test data
 and (select count(*) from organisation_site_map osm2 where o.id = osm2.organisation_id) < 6
+ORDER BY RAND()
 limit 100
