@@ -1139,6 +1139,18 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Fetches the text within a span element that also has the specified text.
+     * @param spanText  The heading text
+     * @param actualText  The heading text
+     * @return The text found
+     */
+    public boolean checkTextInSpan(String spanText, String actualText) {
+        return webDriver.findElements(
+                By.xpath("//span[contains(text(),'" + spanText + "')]/../../h2[contains(normalize-space(),'"
+                        + actualText + "')]")).size() > 0;
+    }
+
+    /**
      * Fetches the text from the p element within a div following a h2 element within a div that has the specified text.
      * @param headingText  The heading text
      * @return The relative text found

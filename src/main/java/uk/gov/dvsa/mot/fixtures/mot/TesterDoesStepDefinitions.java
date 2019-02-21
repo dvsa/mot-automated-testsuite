@@ -576,6 +576,18 @@ public class TesterDoesStepDefinitions implements En {
         if (registration != null && registration.trim().length() > 0) {
             //Check added because this is an area of previous defects - e.g. DVSA and DVLA vehicle ids being mixed up
             //And I check that the search results has Registration that was searched for
+            assertTrue(driverWrapper.checkTextInSpan("Registration number", registration));
+        }
+
+        if (vin != null && vin.trim().length() > 0) {
+            //And I check that the search results has VIN that was searched for
+            assertTrue(driverWrapper.checkTextInSpan("VIN", vin));
+        }
+
+
+        if (registration != null && registration.trim().length() > 0) {
+            //Check added because this is an area of previous defects - e.g. DVSA and DVLA vehicle ids being mixed up
+            //And I check that the search results has Registration that was searched forv
             assertTrue(driverWrapper.containsMessage(registration));
         }
 
