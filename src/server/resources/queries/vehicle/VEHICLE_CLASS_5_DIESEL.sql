@@ -1,30 +1,36 @@
-select veh.registration, veh.vin, mtc.odometer_value
-from vehicle veh, model_detail md,
-  (select max(id) as id, vehicle_id  from mot_test_current
-   group by vehicle_id
-   limit 100000) as latest_mot,
-   mot_test_current mtc
-where veh.model_detail_id = md.id
-and md.vehicle_class_id = 5 -- class 5 only
-and veh.id = latest_mot.vehicle_id
-and mtc.id = latest_mot.id
-and mtc.status_id = 6 -- Passed MOT tests
-and mtc.mot_test_type_id = 1 -- Normal MOT test
-and odometer_result_type = 'OK'
-and veh.registration not like "%-%" -- exclude dodgy test data on ACPT
-and veh.registration is not null -- nullable in PP/Prod
-and veh.vin is not null -- nullable in PP/Prod
-and not exists (
-    select 1 from vehicle v
-    where v.registration = veh.registration
-    group by v.registration
-    having count(v.registration) > 1 -- exclude where same registration has been entered as different vehicles
-)
-and not exists (
-    select 1 from vehicle v
-    where v.vin = veh.vin
-    group by v.vin
-    having count(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
-)
-and md.fuel_type_id = 2 -- 1 = Petrol, 2 = Diesel
-limit 50
+SELECT veh.registration, veh.vin, mtc.odometer_value
+FROM vehicle veh
+   JOIN mot_test_current mtc
+     ON mtc.vehicle_id = veh.id
+   JOIN (SELECT id
+  		   FROM model_detail
+  		   WHERE vehicle_class_id = 5 -- class 5 only
+  		   AND fuel_type_id = 2) AS md -- 1 = Petrol, 2 = Diesel
+  		   ON md.id = veh.model_detail_id
+   JOIN (SELECT max(submitted_date) AS subDate, vehicle_id
+           FROM mot_test_current
+           GROUP BY vehicle_id
+           LIMIT 100000) AS lmot -- Latest MOT to extract odometer reading
+     ON lmot.subDate = mtc.submitted_date AND lmot.vehicle_id = mtc.vehicle_id
+WHERE veh.model_detail_id = md.id
+   AND veh.id = mtc.vehicle_id
+   AND mtc.status_id not in (4,5) -- Not failed or active MOT tests
+   AND mtc.mot_test_type_id = 1 -- Normal MOT test
+   AND odometer_result_type = 'OK'
+   AND mtc.odometer_value < 994999
+   AND veh.registration NOT LIKE "%-%" -- exclude dodgy test data on ACPT
+   AND veh.registration IS NOT NULL -- nullable in PP/Prod
+   AND veh.vin IS NOT NULL -- nullable in PP/Prod
+   AND NOT EXISTS (
+          SELECT 1 FROM vehicle v
+             WHERE v.registration = veh.registration
+             GROUP BY v.registration
+             HAVING COUNT(v.registration) > 1 -- exclude where same registration has been entered as different vehicles
+             )
+   AND NOT EXISTS (
+          SELECT 1 FROM vehicle v
+          WHERE v.vin = veh.vin
+          GROUP BY v.vin
+          HAVING COUNT(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
+          )
+limit 10
