@@ -33,6 +33,7 @@ WHERE
   -- Person has a valid username
   AND p.username IS NOT NULL
   -- To see the actual transactions (minus amendments) use completed_on.
+<<<<<<< HEAD
   AND tst.completed_on >= DATE_SUB(CURDATE(), INTERVAL 7 YEAR)
 GROUP BY p.username, o.name
 ORDER BY transaction_count DESC
