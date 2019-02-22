@@ -1139,7 +1139,7 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Fetches the text within a span element that also has the specified text.
+     * Checks the text in a h2 element, within a named span element that also has the specified text.
      * @param spanText  The heading text
      * @param actualText  The heading text
      * @return The text found
