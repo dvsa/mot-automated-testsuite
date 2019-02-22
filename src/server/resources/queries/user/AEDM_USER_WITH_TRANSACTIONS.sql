@@ -36,4 +36,4 @@ WHERE
   AND tst.completed_on >= DATE_SUB(CURDATE(), INTERVAL 7 YEAR)
 GROUP BY p.username, o.name
 ORDER BY transaction_count DESC
-LIMIT 50;
+LIMIT 50
