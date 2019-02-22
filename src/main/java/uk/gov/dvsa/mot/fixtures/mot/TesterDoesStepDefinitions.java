@@ -419,9 +419,6 @@ public class TesterDoesStepDefinitions implements En {
         searchForVehicle(registration, vin, siteName);
 
         if (isRetest) {
-            // check for the retest marker next to the select vehicle link
-            String actual = driverWrapper.getElementText("a", "Select vehicle", "../span");
-            assertEquals("Missing retest marker next to select vehicle link", "For retest", actual);
 
             //And I click the "Select vehicle" link
             driverWrapper.clickLink("Select vehicle");
@@ -486,7 +483,7 @@ public class TesterDoesStepDefinitions implements En {
             }
 
             //And I press the "Confirm and start test" button
-            driverWrapper.pressButton("Confirm and start test");
+            driverWrapper.clickButton("Confirm and start test");
 
             //And The page title contains "MOT test started - MOT testing service"
             driverWrapper.checkCurrentPageTitle("MOT test started - MOT testing service");
@@ -561,7 +558,7 @@ public class TesterDoesStepDefinitions implements En {
             // select the first site
             driverWrapper.clickRadioButtonByText(siteName);
             // press "Confirm" button
-            driverWrapper.pressButton("Confirm");
+            driverWrapper.clickButton("Confirm");
         }
 
         // And The page title contains "Find a vehicle"
@@ -579,12 +576,24 @@ public class TesterDoesStepDefinitions implements En {
         if (registration != null && registration.trim().length() > 0) {
             //Check added because this is an area of previous defects - e.g. DVSA and DVLA vehicle ids being mixed up
             //And I check that the search results has Registration that was searched for
-            assertEquals(registration, driverWrapper.getTextFromTableColumn("Registration mark"));
+            assertTrue(driverWrapper.checkTextInSpan("Registration number", registration));
         }
 
         if (vin != null && vin.trim().length() > 0) {
             //And I check that the search results has VIN that was searched for
-            assertEquals(vin, driverWrapper.getTextFromTableColumn("VIN"));
+            assertTrue(driverWrapper.checkTextInSpan("VIN", vin));
+        }
+
+
+        if (registration != null && registration.trim().length() > 0) {
+            //Check added because this is an area of previous defects - e.g. DVSA and DVLA vehicle ids being mixed up
+            //And I check that the search results has Registration that was searched forv
+            assertTrue(driverWrapper.containsMessage(registration));
+        }
+
+        if (vin != null && vin.trim().length() > 0) {
+            //And I check that the search results has VIN that was searched for
+            assertTrue(driverWrapper.containsMessage(vin));
         }
     }
 
