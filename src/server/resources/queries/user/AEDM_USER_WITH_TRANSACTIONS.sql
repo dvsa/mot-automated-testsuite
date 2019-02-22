@@ -33,7 +33,14 @@ WHERE
   -- Person has a valid username
   AND p.username IS NOT NULL
   -- To see the actual transactions (minus amendments) use completed_on.
+<<<<<<< HEAD
   AND tst.completed_on >= DATE_SUB(CURDATE(), INTERVAL 7 YEAR)
 GROUP BY p.username, o.name
 ORDER BY transaction_count DESC
 LIMIT 50
+=======
+  AND tst.completed_on >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
+GROUP BY p.username, o.name
+ORDER BY transaction_count DESC
+LIMIT 50;
+>>>>>>> changes to AEDM with trans and diesel class 5
