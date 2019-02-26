@@ -425,6 +425,9 @@ public class TesterDoesStepDefinitions implements En {
 
         if (isRetest) {
 
+            //And I click the "Select vehicle" link
+            driverWrapper.clickLink("Select vehicle");
+
             //And The page title contains "Confirm vehicle for retest"
             driverWrapper.checkCurrentPageTitle("Confirm vehicle for retest");
 
