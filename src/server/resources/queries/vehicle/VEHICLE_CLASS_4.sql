@@ -15,7 +15,7 @@ SELECT
  WHERE md.vehicle_class_id = 4 -- cars only
    AND mtc.mot_test_type_id = 1 -- Normal MOT test
    AND mtc.odometer_result_type = 'OK'
-   AND mtc.odometer_value < 888888
+   AND mtc.odometer_value < 994999
    AND mtc.status_id = 6 -- Passed MOT tests
    AND veh.vin IS NOT NULL
    AND veh.registration NOT IN ('R3GHAU5', 'R3GHA01', 'R3GHDVL5', 'DVLA903') -- Exclude vehicles that have already been modified by automation
@@ -32,4 +32,4 @@ SELECT
       GROUP BY v.vin
       HAVING COUNT(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
       )
-LIMIT 10
+LIMIT 100
