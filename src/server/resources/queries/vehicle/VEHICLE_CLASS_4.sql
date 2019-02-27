@@ -32,4 +32,5 @@ SELECT
       GROUP BY v.vin
       HAVING COUNT(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
       )
+ORDER BY RAND()
 LIMIT 100
