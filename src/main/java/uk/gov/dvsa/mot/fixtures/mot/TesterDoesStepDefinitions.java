@@ -627,6 +627,7 @@ public class TesterDoesStepDefinitions implements En {
     private void enterOdometerReading(OdometerJourney journey, int amount) {
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
+
         // And I click the "Add reading" link
         driverWrapper.clickLink("Add reading");
 
@@ -635,6 +636,9 @@ public class TesterDoesStepDefinitions implements En {
 
         switch (journey) {
             case EnterInMiles:
+                //And i click the odometer textbox - this method added as temporary measure due to regressed issue found
+                driverWrapper.clickTextBoxWithId("odometer");
+
                 // And I enter <n> in the odometer field
                 driverWrapper.enterIntoFieldWithId(String.valueOf(amount), "odometer");
 
