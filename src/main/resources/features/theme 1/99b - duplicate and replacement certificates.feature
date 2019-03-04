@@ -82,8 +82,8 @@ Feature: 06b - duplicate and replacement certificates
 
     And The page title contains "MOT test summary"
     And I check the vehicle summary section of the test summary has "Result" of "PASS"
-    And I check the registration number {registration1} is shown within the Registration number span text
-    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the registration number {reg} is shown within the Registration number span text
+    And I check the VIN {vin} is shown within the VIN span text
     And I check the brake results section of the test summary is "Pass"
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the major failures section of the test summary has "None recorded"
