@@ -10,7 +10,7 @@ SELECT
                vehicle_id
           FROM mot_test_current
          GROUP BY vehicle_id
-       LIMIT 100000) as lmot -- Latest MOT
+       LIMIT 10000) as lmot -- Latest MOT
     ON lmot.max_date = mtc.submitted_date AND lmot.vehicle_id = mtc.vehicle_id
  WHERE md.vehicle_class_id = 4 -- cars only
    AND mtc.mot_test_type_id = 1 -- Normal MOT test
@@ -32,4 +32,5 @@ SELECT
       GROUP BY v.vin
       HAVING COUNT(v.vin) > 1 -- exclude where same vin has been entered as different vehicles
       )
+ORDER BY RAND()
 LIMIT 100
