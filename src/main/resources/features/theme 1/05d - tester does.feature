@@ -38,9 +38,9 @@ Feature: 05d - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+    And I check the registration number {registration1} is shown within the Registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake results section of the test summary is "Pass"
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the major failures section of the test summary has "None recorded"
@@ -82,10 +82,16 @@ Feature: 05d - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of "ANDY1"
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of "111111"
-    And I check the vehicle summary section of the test summary has "Colour" of "Blue"
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+
+    #Needs more thorough method of checking that the registration/VIN number/colour is in the correct location on page after UI changes
+    #And I check the vehicle summary section of the test summary has "Registration number" of "ANDY1"
+    #And I check the vehicle summary section of the test summary has "VIN/Chassis number" of "111111"
+    #And I check the vehicle summary section of the test summary has "Colour" of "Blue"
+    And The page contains "ANDY1"
+    And The page contains "111111"
+    And The page contains "Blue"
+
     And I check the brake results section of the test summary is "Pass"
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the major failures section of the test summary has "None recorded"
