@@ -782,16 +782,6 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Enters the specified text into the field.
-     * <p>Note: This is a temporary method put into place due to a regressed issue found.</p>
-     * @param id    The field id
-     */
-    public void clickTextBoxWithId(String id) {
-        WebElement textElement = webDriver.findElement(By.id(id));
-        textElement.click();
-    }
-
-    /**
      * Selects the specified radio button. Supports well-formed labels and radio buttons nested inside the label.
      * @param labelText  The radio button label
      */
