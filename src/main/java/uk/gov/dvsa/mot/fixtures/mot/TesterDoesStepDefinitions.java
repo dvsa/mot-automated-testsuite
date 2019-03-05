@@ -466,7 +466,7 @@ public class TesterDoesStepDefinitions implements En {
 
             if (vehicleClass.isPresent()) {
                 //And I click the "Change" link for the MOT test class
-                driverWrapper.clickLink("th", "MOT test class", "../td/", "Change");
+                driverWrapper.clickLink("dt", "MOT test class", "../dd/", "Change");
 
                 //And I select the "Class <n>" radio button
                 driverWrapper.selectRadio("Class " + vehicleClass.get());
