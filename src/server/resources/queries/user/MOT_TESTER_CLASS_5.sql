@@ -83,4 +83,4 @@ WHERE
         WHERE status_id = 4
         )
 ORDER BY RAND()
-limit 100
+limit 10
