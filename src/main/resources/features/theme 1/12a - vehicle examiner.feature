@@ -357,7 +357,7 @@ Feature: 12a - Vehicle Examiner
 
   Scenario: Vehicle information MOT test summary search
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
-    And I load "VEHICLE_REG_MOT_LATEST_TEST" as {reg}, {vin}, {odo}
+    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {odo}
     And I click the "Vehicle information" link
     When I search for vehicle information by "Registration (VRM)" with {reg}
     Then I check the reg {reg}, vin {vin} on vehicle information
@@ -426,4 +426,3 @@ Feature: 12a - Vehicle Examiner
     And The page contains "User ID"
     And The page contains "Previous"
     And The page contains "Next"
-
