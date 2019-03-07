@@ -80,7 +80,7 @@ WHERE
       organisation_business_role_map obrm
     WHERE
       p.id = obrm.person_id
-      AND obrm.id IN (1, 2)
+      AND obrm.business_role_id IN (1, 2)
   )
   -- Check users have acknowledge all special notices
   -- Check users don’t have active tests

@@ -1,3 +1,4 @@
+--  this sql statement will only select users with test capability only. Testers with multiple roles are not covered here
 SELECT DISTINCT
   p.username as username,
   s.name as site
@@ -65,7 +66,7 @@ WHERE
       organisation_business_role_map obrm
     WHERE
       p.id = obrm.person_id
-      AND obrm.id IN (1, 2)
+      AND obrm.business_role_id IN (1, 2)
   )
   -- Check users have acknowledge all special notices
   -- Check users don’t have active tests
