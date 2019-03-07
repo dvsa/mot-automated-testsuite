@@ -404,7 +404,6 @@ public class AuthenticationStepDefinitions implements En {
             // try to login
             switch (handlePasswordScreen(username, password)) {
                 case PasswordFailed:
-                    // login failed, loop around to try again
                     break;
 
                 default:
