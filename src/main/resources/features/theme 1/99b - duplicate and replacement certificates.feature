@@ -1,3 +1,6 @@
+# The themes 99a and 99b need to be ran last as they change vehicle data that
+# other tests may use and would have cached prior to other tests running
+# subsequently this can cause errors such as vehicle not found if these tests change in running order
 @regression
 Feature: 06b - duplicate and replacement certificates
 
