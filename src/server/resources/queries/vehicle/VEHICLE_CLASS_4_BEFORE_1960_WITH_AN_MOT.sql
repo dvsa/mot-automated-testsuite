@@ -2,7 +2,7 @@ select d.registration as registration, d.vin as vin, mtc.odometer_value as milea
 from dvla_vehicle d, (
      select max(id) as id, vehicle_id  from mot_test_current
      group by vehicle_id
-     limit 100000) as latest_mot,
+     limit 1000000) as latest_mot,
      mot_test_current mtc
 where d.registration is not null -- nullable in PP/Prod
 and d.vin is not null -- nullable in PP/Prod
