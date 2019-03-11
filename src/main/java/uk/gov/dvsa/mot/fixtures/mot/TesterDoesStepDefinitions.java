@@ -540,6 +540,9 @@ public class TesterDoesStepDefinitions implements En {
             hour = "12";
         }
         String minute = String.valueOf(currentDate.get(Calendar.MINUTE));
+        if (minute.equals("0")) {
+            minute = "00";
+        }
         String ampm = currentDate.get(Calendar.AM_PM) == 0 ? "am" : "pm";
 
         driverWrapper.setData("Contingency time", hour + ':' + minute + ' ' + ampm);
