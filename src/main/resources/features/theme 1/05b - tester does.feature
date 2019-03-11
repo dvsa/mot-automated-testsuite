@@ -20,7 +20,7 @@ Feature: 05b - Tester does...
 
     Then The page title contains "MOT test summary"
     And I check the vehicle summary section of the test summary has "Result" of "PASS"
-    And I check the registration number {registration1} is shown within the Registration number span text
+    And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake test summary section has "Brake results overall" of "Pass"
 
@@ -85,7 +85,7 @@ Feature: 05b - Tester does...
 
     Then The page title contains "MOT test summary"
     And I check the vehicle summary section of the test summary has "Result" of "FAIL"
-    And I check the registration number {registration1} is shown within the Registration number span text
+    And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake test summary section has "Brake results overall" of "Pass"
 
@@ -160,7 +160,7 @@ Feature: 05b - Tester does...
 
     And The page title contains "MOT test summary"
     And I check the vehicle summary section of the test summary has "Result" of "FAIL"
-    And I check the registration number {registration1} is shown within the Registration number span text
+    And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake results section of the test summary is "Pass"
     And I check the dangerous failures section of the test summary has "Engine mounting fractured"
@@ -199,7 +199,7 @@ Feature: 05b - Tester does...
 
     Then The page title contains "MOT re-test summary"
     And I check the vehicle summary section of the test summary has "Result" of "PASS"
-    And I check the registration number {registration1} is shown within the Registration number span text
+    And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake results section of the test summary is "None Recorded"
     And I check the dangerous failures section of the test summary has "None recorded"
@@ -233,7 +233,7 @@ Feature: 05b - Tester does...
 
     And The page title contains "MOT test summary"
     And I check the vehicle summary section of the test summary has "Result" of "FAIL"
-    And I check the registration number {registration1} is shown within the Registration number span text
+    And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake results section of the test summary is "Fail"
     And I check the dangerous failures section of the test summary has "Engine mounting bracket excessively loose"
@@ -281,7 +281,7 @@ Feature: 05b - Tester does...
 
     Then The page title contains "MOT re-test summary"
     And I check the vehicle summary section of the test summary has "Result" of "FAIL"
-    And I check the registration number {registration1} is shown within the Registration number span text
+    And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
     And I check the major failures section of the test summary has "Wheel hub spigot mounting excessively worn"
     And I check the major failures section of the test summary has "Test defect 2"
