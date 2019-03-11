@@ -99,6 +99,11 @@ public class TesterDoesStepDefinitions implements En {
                     String comment) -> addDefectFromBrowse(defectType, category, Optional.of(subcategory),
                     Optional.empty(), defect, comment));
 
+        And("^I browse for a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\"\\) "
+                + "with comment \"([^\"]+)\" with a first use date alert$", (String defectType, String category,
+                    String subcategory, String defect, String comment) -> addDefectFromBrowseAlert(defectType, category,
+                    Optional.of(subcategory), Optional.empty(), defect, comment));
+
         And("^I browse for a \"([^\"]+)\" defect of \\(\"([^\"]+)\", \"([^\"]+)\", \"([^\"]+)\", "
                 + "\"([^\"]+)\"\\) with comment \"([^\"]+)\"$", (String defectType, String category,
                     String subcategory, String subsubcategory, String defect, String comment) ->
@@ -112,11 +117,11 @@ public class TesterDoesStepDefinitions implements En {
 
         And("^I edit the \"([^\"]+)\" defect of \"([^\"]+)\" with comment \"([^\"]+)\" and not dangerous$",
                 (String defectType, String defect, String updatedComment) ->
-                    editDefect(defectType, defect, updatedComment, false));
+                    editDefect(defectType, defect, updatedComment, false, false));
 
         And("^I edit the \"([^\"]+)\" defect of \"([^\"]+)\" with comment \"([^\"]+)\" and is dangerous$",
                 (String defectType, String defect, String updatedComment) ->
-                    editDefect(defectType, defect, updatedComment, true));
+                    editDefect(defectType, defect, updatedComment, true, false));
 
         And("^I remove the \"([^\"]+)\" defect of \"([^\"]+)\"$", this::removeDefect);
 
@@ -1635,18 +1640,20 @@ public class TesterDoesStepDefinitions implements En {
     /**
      * Edits the specified defect, updating the comment, and possibly marking as dangerous. Refactored repeated
      * cucumber steps, the original steps are detailed below.
-     * @param defectType        The defect type, must be "Advisory", "PRS" or "Failure"
-     * @param defect            The defect
-     * @param updatedComment    The updated comment
-     * @param isDangerous       Whether this defect should be marked as dangerous
+     * @param defectType            The defect type, must be "Advisory", "PRS" or "Failure"
+     * @param defect                The defect
+     * @param updatedComment        The updated comment
+     * @param isDangerous           Whether this defect should be marked as dangerous
+     * @param isFirstUseDateWarning Whether this defect should be marked as dangerous
      */
-    private void editDefect(String defectType, String defect, String updatedComment, boolean isDangerous) {
+    private void editDefect(String defectType, String defect, String updatedComment, boolean isDangerous,
+                            boolean isFirstUseDateWarning) {
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
 
         // edit the defect
         handleDefect(DefectJourney.EditFromSummary, defect, DefectType.fromString(defectType), updatedComment,
-                isDangerous);
+                isDangerous, isFirstUseDateWarning);
 
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
@@ -1689,7 +1696,26 @@ public class TesterDoesStepDefinitions implements En {
 
         // Add the defect
         addDefectAndReturnToResults(DefectJourney.AddFromBrowse, defect, DefectType.fromString(defectType),
-                comment, false, "Defects");
+                comment, false, false,"Defects");
+    }
+
+    /**
+     * Adds a First use Date warning defect to the current mot tests by browsing through the specified category.
+     * @param defectType        The defect type, must be "Advisory", "PRS" or "Failure"
+     * @param category          The defect category
+     * @param subcategory       The defect sub-category (if any)
+     * @param subSubCategory    The defect second sub-category (if any)
+     * @param defect            The defect
+     * @param comment           The comment to use
+     */
+    private void addDefectFromBrowseAlert(String defectType, String category, Optional<String> subcategory,
+                                     Optional<String> subSubCategory, String defect, String comment) {
+        // Browse to the desired defect
+        browseForDefect(category, subcategory, subSubCategory);
+
+        // Add the defect
+        addDefectAndReturnToResults(DefectJourney.AddFromBrowse, defect, DefectType.fromString(defectType),
+                comment, false, true,"Defects");
     }
 
     /**
@@ -1730,9 +1756,10 @@ public class TesterDoesStepDefinitions implements En {
      * @param pageTitle     The title of the page the journey returns to after adding the defect
      */
     private void addDefectAndReturnToResults(DefectJourney journey, String defect, DefectType defectType,
-                                             String comment, boolean isDangerous, String pageTitle) {
+                                             String comment, boolean isDangerous, boolean isFirstUseDateWarning,
+                                             String pageTitle) {
         // Add the defect
-        handleDefect(journey, defect, defectType, comment, isDangerous);
+        handleDefect(journey, defect, defectType, comment, isDangerous, isFirstUseDateWarning);
         // And The page title contains "Search for a defect"
         driverWrapper.checkCurrentPageTitle(pageTitle);
         // And I click the "Finish and return to MOT test results" link
@@ -1804,7 +1831,7 @@ public class TesterDoesStepDefinitions implements En {
 
         //Add the defect and return to results
         addDefectAndReturnToResults(DefectJourney.AddFromSearch, defect, DefectType.fromString(defectType),
-                comment, false, "Search for a defect");
+                comment, false, false,"Search for a defect");
     }
 
     /**
@@ -1845,9 +1872,10 @@ public class TesterDoesStepDefinitions implements En {
      * @param defectType                The defect type
      * @param comment                   The comment to add/update
      * @param isDangerous               Whether to mark this defect as dangerous
+     * @param isFirstUseDateWarning     Whether this defect will trigger the First use date Warning Page
      */
     private void handleDefect(DefectJourney journey, String defect, DefectType defectType, String comment,
-                              boolean isDangerous) {
+                              boolean isDangerous, boolean isFirstUseDateWarning) {
         switch (journey) {
             case AddFromSearch:
                 // And I click the <Advisory> button for the specified defect
@@ -1875,6 +1903,14 @@ public class TesterDoesStepDefinitions implements En {
 
             default:
                 break;
+        }
+
+        if (isFirstUseDateWarning) {
+            // And I check for the correct page text for the defect warning
+            // And I click the "Defect is correct — continue" button
+            assertTrue(driverWrapper.containsMessage("This defect is for vehicles newer than the one you're testing"));
+            assertTrue(driverWrapper.containsMessage(defect.toLowerCase()));
+            driverWrapper.clickLink("Defect is correct — continue");
         }
 
         // Note: new page title at this point is not always populated

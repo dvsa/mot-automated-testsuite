@@ -237,6 +237,7 @@ These steps are specific to the DVSA MOT application screens.
 * I start an MOT test for ```{..reg key..}```, ```{..vin key..}``` with engine changed to ```"..fuel type.."```  with capacity ```..cc's..```
 * I browse for a ```"Failure or PRS or Advisory"``` defect of (```"..category.."```, ```"..defect.."```) with comment ```"..comment.."```
 * I browse for a ```"Failure or PRS or Advisory"``` defect of (```"..category.."```, ```"..sub-category.."```, ```"..defect.."```) with comment ```"..comment.."```
+* I browse for a ```"Failure or PRS or Advisory"``` defect of (```"..category.."```, ```"..sub-category.."```, ```"..defect.."```) with comment ```"..comment.."``` with a first use date alert
 * I search for a ```"Failure or PRS or Advisory"``` defect of ```"..category.."``` with comment ```"..comment.."```
 * I add a manual advisory of ```"..defect.."```
 * I edit the ```"Failure or PRS or Advisory"``` defect of ```"..defect.."``` with comment ```"..comment.."``` and not dangerous
