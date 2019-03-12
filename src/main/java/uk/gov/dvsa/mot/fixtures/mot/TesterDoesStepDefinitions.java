@@ -1644,7 +1644,7 @@ public class TesterDoesStepDefinitions implements En {
      * @param defect                The defect
      * @param updatedComment        The updated comment
      * @param isDangerous           Whether this defect should be marked as dangerous
-     * @param isFirstUseDateWarning Whether this defect should be marked as dangerous
+     * @param isFirstUseDateWarning Whether this defect will trigger the First use date Warning Page
      */
     private void editDefect(String defectType, String defect, String updatedComment, boolean isDangerous,
                             boolean isFirstUseDateWarning) {
@@ -1696,7 +1696,7 @@ public class TesterDoesStepDefinitions implements En {
 
         // Add the defect
         addDefectAndReturnToResults(DefectJourney.AddFromBrowse, defect, DefectType.fromString(defectType),
-                comment, false, false,"Defects");
+                comment, false, false, "Defects");
     }
 
     /**
@@ -1715,7 +1715,7 @@ public class TesterDoesStepDefinitions implements En {
 
         // Add the defect
         addDefectAndReturnToResults(DefectJourney.AddFromBrowse, defect, DefectType.fromString(defectType),
-                comment, false, true,"Defects");
+                comment, false, true, "Defects");
     }
 
     /**
@@ -1831,7 +1831,7 @@ public class TesterDoesStepDefinitions implements En {
 
         //Add the defect and return to results
         addDefectAndReturnToResults(DefectJourney.AddFromSearch, defect, DefectType.fromString(defectType),
-                comment, false, false,"Search for a defect");
+                comment, false, false, "Search for a defect");
     }
 
     /**
