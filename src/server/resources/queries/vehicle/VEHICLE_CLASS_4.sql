@@ -1,4 +1,4 @@
--- The SQL is to to find the most recent Odometer value for any vehicle tested
+-- The SQL is to to find the most recent Odometer value for a class 4 vehicle
 SELECT
        veh.registration,
        veh.vin,
@@ -13,6 +13,7 @@ SELECT
        LIMIT 5000) as lmot -- Latest MOT
     ON lmot.max_date = mtc.submitted_date AND lmot.vehicle_id = mtc.vehicle_id
  WHERE md.vehicle_class_id = 4 -- cars only
+   AND mtc.status_id not in (4,5) -- exclude vehicles whose latest status is under test or failed
    AND mtc.mot_test_type_id = 1 -- Normal MOT test
    AND mtc.odometer_result_type = 'OK'
    AND mtc.odometer_value < 994999

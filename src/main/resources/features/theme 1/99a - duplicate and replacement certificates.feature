@@ -2,7 +2,7 @@
 # other tests may use and would have cached prior to other tests running
 # subsequently this can cause errors such as vehicle not found if these tests change in running order
 @regression
-Feature: 06a - duplicate and replacement certificates
+Feature: 99a - duplicate and replacement certificates
 
   @smoke
   Scenario: AO1 edits non-vehicle details on certificate
@@ -135,7 +135,7 @@ Feature: 06a - duplicate and replacement certificates
   @regressiondata
   Scenario: DVLA user edits vehicle details on latest certificate
     Given I login without 2FA using "DVLA_OPERATIVE_USER" as {AO1}
-    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
+    And I load "VEHICLE_CLASS_4_LATEST" as {reg}, {vin}, {mileage}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
     And I record the MOT test number

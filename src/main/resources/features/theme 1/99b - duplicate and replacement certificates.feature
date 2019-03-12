@@ -2,7 +2,7 @@
 # other tests may use and would have cached prior to other tests running
 # subsequently this can cause errors such as vehicle not found if these tests change in running order
 @regression
-Feature: 06b - duplicate and replacement certificates
+Feature: 99b - duplicate and replacement certificates
 
   Scenario: DVLA Manager edits VRM / VIN on latest certificate
     Given I login without 2FA using "DVLA_MANAGER_USER" as {DVLAManger}
