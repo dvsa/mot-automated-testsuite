@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.inject.Inject;
 
@@ -48,6 +49,8 @@ public class SiteReviewStepDefinitions implements En {
         driverWrapper.enterIntoFieldWithId(theDate.getMonthValue(), "dateMonth");
         driverWrapper.enterIntoFieldWithId(theDate.getYear(), "dateYear");
 
+        String dateOfSiteVisit = theDate.format(DateTimeFormatter.ofPattern("d MMMM yyyy"));
+        driverWrapper.setData("dateOfSiteVisit", dateOfSiteVisit);
     }
 
     /**
