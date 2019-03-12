@@ -207,11 +207,11 @@ Feature: 05b - Tester does...
     And I check the advisory section of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
-    And I record the MOT test number
     And I click "Print documents" and check the PDF contains:
       | VT20            |
       | {registration1} |
       | {vin1}          |
+    And I record the MOT test number
     And I click the "Back to user home" link
 
 
