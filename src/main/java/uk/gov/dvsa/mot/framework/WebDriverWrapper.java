@@ -156,6 +156,7 @@ public class WebDriverWrapper {
 
             // path to driver executable
             System.setProperty("webdriver.chrome.driver", env.getRequiredProperty("driver"));
+            System.out.println(env.getRequiredProperty("driver"));
 
             //If gridURL is set create a remote webdriver instance
             if (env.containsProperty("gridURL")) {
@@ -1525,11 +1526,37 @@ public class WebDriverWrapper {
         List<String> newTab = new ArrayList<String>(webDriver.getWindowHandles());
         newTab.remove(oldTab);
         int numTabs = newTab.size();
+        
+        // temp test - is this really a timing problem? 
+        timeWait(5);
+
         if (numTabs > 2) {
             String message = "Too many tabs. Expected 2 but there are " + numTabs;
             logger.error(message);
             throw new IllegalStateException(message);
         }
+
+        // if there's only 1 tab, we will wait for up to 5 seconds for a new
+        // tab to appear, then give up.
+        if (numTabs == 1) {
+            for (int i = 0; i < 5; i++) {
+                String message = "Waiting a second for a new tab...";
+                logger.info(message);
+                // wait slightly longer each time
+                timeWait(i);
+                if ( getCurrentTabsCount() > 1) {
+                    break;
+                }
+            }
+        }
+
+        // we've waited, and still only 1 tab.
+        if ( getCurrentTabsCount() == 1) {
+            String message = "Trying to switch to next tab, but there is only one";
+            logger.error(message);
+            throw new IllegalStateException(message);
+        }
+        
         // change focus to new tab
         webDriver.switchTo().window(newTab.get(0));
     }
