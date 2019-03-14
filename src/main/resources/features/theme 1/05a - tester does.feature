@@ -6,9 +6,11 @@ Feature: 05a - Tester does...
 
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+
     When I start an MOT test for {registration1}, {vin1}, {site}
     And The page title contains "Your home"
     And I click the "Enter test results" link
+
     And I enter an odometer reading in miles of {mileage1} plus 5000
     And I enter decelerometer results of service brake 58 and parking brake 16
     And I press the "Review test" button
@@ -16,7 +18,7 @@ Feature: 05a - Tester does...
     Then The page title contains "MOT test summary"
     And I check the vehicle summary section of the test summary has "Result" of "PASS"
     And I check the brake test summary section has "Brake results overall" of "Pass"
-    And I check the registration number {registration1} is shown within the Registration number span text
+    And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
     And I check the defect section has "Dangerous failures" with value "None recorded"
     And I check the defect section has "Major failures" with value "None recorded"
@@ -46,11 +48,12 @@ Feature: 05a - Tester does...
     And I enter an odometer reading in miles of {mileage1} plus 5000
     And I enter decelerometer results of service brake 50 and parking brake 15
     And I press the "Review test" button
+
     Then The page title contains "MOT test summary"
 
 
     And I check the vehicle summary section of the test summary has "Result" of "FAIL"
-    And I check the registration number {registration1} is shown within the Registration number span text
+    And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
 
     And I check the brake test summary section has "Brake results overall" of "Fail"
@@ -88,7 +91,7 @@ Feature: 05a - Tester does...
 
     Then The page title contains "MOT test summary"
     And I check the vehicle summary section of the test summary has "Result" of "FAIL"
-    And I check the registration number {registration1} is shown within the Registration number span text
+    And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake test summary section has "Brake results overall" of "Pass"
 
@@ -138,7 +141,7 @@ Feature: 05a - Tester does...
 
     Then The page title contains "MOT test summary"
     And I check the vehicle summary section of the test summary has "Result" of "FAIL"
-    And I check the registration number {registration1} is shown within the Registration number span text
+    And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
 
     And I check the brake test summary section has "Brake results overall" of "Not tested"
@@ -175,7 +178,7 @@ Feature: 05a - Tester does...
 
     Then The page title contains "MOT test summary"
     And I check the vehicle summary section of the test summary has "Result" of "PASS"
-    And I check the registration number {registration1} is shown within the Registration number span text
+    And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake test summary section has "Brake results overall" of "Pass"
     And I check the advisory section of the test summary has "Bumper mountings corroded but not likely to become detached"

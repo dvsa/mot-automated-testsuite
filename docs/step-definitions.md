@@ -263,6 +263,11 @@ These steps are specific to the DVSA MOT application screens.
 * I enter the current time for the contingency test
 * I search for defect ```"..defect.."``` and open the ```"..manualLinkText.."``` manual link, I expect the ```".manualPageTitle."``` manual page
 * I record the MOT test number
+* I check the registration plate ```{..reg key..}``` is shown within the registration number span text
+* I check the VIN ```{..vin key..}``` is shown within the VIN span text
+* I check the brake test summary section has ```"..text.."``` of ```"Pass or Fail"```
+* I check the defect section has ```"..text.."``` with value ```"..text.."```
+* I check the defect section contains ```"..text.."``` with value ```"..text.."```
 
 ### VehicleExaminerStepDefinitions
 

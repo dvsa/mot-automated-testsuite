@@ -60,7 +60,7 @@ Feature: 99a - duplicate and replacement certificates
 
     Then The page title contains "MOT test summary"
     And I check the vehicle summary section of the test summary has "Result" of "PASS"
-    And I check the registration number {registration1} is shown within the Registration number span text
+    And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake results section of the test summary is "Pass"
     And I check the dangerous failures section of the test summary has "None recorded"

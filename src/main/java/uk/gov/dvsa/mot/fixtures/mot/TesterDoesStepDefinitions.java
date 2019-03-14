@@ -352,7 +352,7 @@ public class TesterDoesStepDefinitions implements En {
                 (String field, String value) ->
                         assertEquals(value, driverWrapper.getTextFromDefinitionList(field)));
 
-        And("^I check the registration number \\{([^\\}]+)\\} is shown within the Registration number span text",
+        And("^I check the registration plate \\{([^\\}]+)\\} is shown within the registration number span text",
                 (String registration) ->
                 assertTrue(driverWrapper.checkTextInSpan("Registration number", driverWrapper.getData(registration))));
 
