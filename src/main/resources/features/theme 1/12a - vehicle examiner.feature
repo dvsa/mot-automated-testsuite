@@ -40,9 +40,9 @@ Feature: 12a - Vehicle Examiner
     And I enter an odometer reading in miles of {mileage1} plus 1000
     And I enter decelerometer results of service brake 60 and parking brake 60
     Then I press the "Review test" button
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake results section of the test summary is "Pass"
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the major failures section of the test summary has "None recorded"
@@ -73,9 +73,9 @@ Feature: 12a - Vehicle Examiner
     And I enter an odometer reading in miles of {mileage1} plus 1000
     And I enter decelerometer results of service brake 60 and parking brake 60
     And I press the "Review test" button
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake results section of the test summary is "Pass"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
@@ -91,9 +91,9 @@ Feature: 12a - Vehicle Examiner
     And I enter an odometer reading in miles of {mileage1} plus 1125
     And I enter decelerometer results of service brake 30 and parking brake 16
     And I press the "Review test" button
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake results section of the test summary is "Fail"
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the major failures section of the test summary has "Service brake efficiency below requirements"
@@ -124,9 +124,9 @@ Feature: 12a - Vehicle Examiner
     And I enter an odometer reading in miles of {mileage1} plus 1000
     And I enter decelerometer results of service brake 31 and parking brake 10
     And I press the "Review test" button
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake results section of the test summary is "Fail"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
@@ -142,9 +142,9 @@ Feature: 12a - Vehicle Examiner
     And I enter an odometer reading in miles of {mileage1} plus 1125
     And I enter decelerometer results of service brake 88 and parking brake 88
     And I press the "Review test" button
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake results section of the test summary is "Pass"
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the major failures section of the test summary has "None recorded"
@@ -175,9 +175,9 @@ Feature: 12a - Vehicle Examiner
     And I enter an odometer reading in miles of {mileage1} plus 1000
     And I enter decelerometer results of service brake 75 and parking brake 42
     And I press the "Review test" button
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake results section of the test summary is "Pass"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
@@ -198,9 +198,9 @@ Feature: 12a - Vehicle Examiner
     And I browse for a "Major" defect of ("Identification of the vehicle", "Registration plates", "Incorrect") with comment "Test Major 1"
     And I browse for a "Dangerous" defect of ("Road wheels", "Condition", "Fractured") with comment "Test Dangerous 1"
     And I press the "Review test" button
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake results section of the test summary is "Fail"
     And I check the dangerous failures section of the test summary has "Road wheel fractured"
     And I check the dangerous failures section of the test summary has "Service brake efficiency less than"
@@ -233,9 +233,9 @@ Feature: 12a - Vehicle Examiner
     And I enter an odometer reading in miles of {mileage1} plus 75
     And I enter decelerometer results of service brake 90 and parking brake 90
     And I press the "Review test" button
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake results section of the test summary is "Pass"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
@@ -257,9 +257,9 @@ Feature: 12a - Vehicle Examiner
     And I browse for a "Major" defect of ("Identification of the vehicle", "Registration plates", "Incorrect") with comment "Test Major 1"
     And I browse for a "Dangerous" defect of ("Road wheels", "Condition", "Fractured") with comment "Test Dangerous 1"
     And I press the "Review test" button
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake results section of the test summary is "Fail"
     And I check the dangerous failures section of the test summary has "Road wheel fractured"
     And I check the dangerous failures section of the test summary has "Service brake efficiency less than"
@@ -279,7 +279,7 @@ Feature: 12a - Vehicle Examiner
     And I check the case outcome "Disciplinary action report" is saved
 
 
-  Scenario: VE re-inspection Fail to Satutory Appeal Verified Pass
+  Scenario: VE re-inspection Fail to Statutory Appeal Verified Pass
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     When I start an MOT test for {registration1}, {vin1}, {site}
@@ -287,9 +287,9 @@ Feature: 12a - Vehicle Examiner
     And I enter an odometer reading in miles of {mileage1} plus 75
     And I enter decelerometer results of service brake 28 and parking brake 12
     And I press the "Review test" button
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake results section of the test summary is "Fail"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
@@ -306,9 +306,9 @@ Feature: 12a - Vehicle Examiner
     And I enter an odometer reading in miles of {mileage1} plus 80
     And I enter decelerometer results of service brake 90 and parking brake 90
     And I press the "Review test" button
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
     And I check the brake results section of the test summary is "Pass"
     And I press the "Finish reinspection" button
     And The page title contains "MOT reinspection complete"

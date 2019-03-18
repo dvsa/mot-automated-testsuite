@@ -352,46 +352,66 @@ public class TesterDoesStepDefinitions implements En {
                 (String field, String value) ->
                         assertEquals(value, driverWrapper.getTextFromDefinitionList(field)));
 
+        And("^I check the registration plate \\{([^\\}]+)\\} is shown within the registration number span text",
+                (String registration) ->
+                assertTrue(driverWrapper.checkTextInSpan("Registration number", driverWrapper.getData(registration))));
+
+        And("^I check the VIN \\{([^\\}]+)\\} is shown within the VIN span text",
+                (String vin) ->
+                        assertTrue(driverWrapper.checkTextInSpan("VIN", driverWrapper.getData(vin))));
+
+        And("^I check the brake test summary section has \"([^\"]+)\" of \"([^\"]+)\"$",
+                (String field, String value) ->
+                        assertEquals(value, driverWrapper.getTextFromDefinitionList(field)));
+
+        And("^I check the defect section has \"([^\"]+)\" with value \"([^\"]+)\"$",
+                (String field, String value) ->
+                        assertEquals(value, driverWrapper.getTextFromDefinitionList(field)));
+
+        And("^I check the defect section contains \"([^\"]+)\" with value \"([^\"]+)\"$",
+                (String field, String value) ->
+                        assertEquals(value, driverWrapper.getTextFromDefinitionList(field)));
+
         And("^I check the test information section of the test summary is \"([^\"]+)\"$", (String text) ->
                 assertTrue(driverWrapper.getTextFromHeading("Test information").contains(text)));
 
         And("^I check the brake results section of the test summary is \"([^\"]+)\"$", (String text) ->
-                assertEquals(text, driverWrapper.getRelativeTextFromHeading("Brake results overall")));
+                assertEquals(text, driverWrapper.getTextFromDefinitionList("Brake results overall")));
 
         And("^I check the fails section of the test summary has \"([^\"]+)\"$", (String text) ->
                 assertTrue(driverWrapper.getTextFromUnorderedList("Fails").contains(text)));
 
         And("^I check the dangerous failures section of the test summary has \"([^\"]+)\"$", (String text) ->
-                assertTrue(driverWrapper.getTextFromUnorderedList("Dangerous failures").contains(text)));
+                assertTrue(driverWrapper.getTextFromDefinitionList("Dangerous failures").contains(text)));
 
         And("^I check the major failures section of the test summary has \"([^\"]+)\"$", (String text) ->
-                assertTrue(driverWrapper.getTextFromUnorderedList("Major failures").contains(text)));
+                assertTrue(driverWrapper.getTextFromDefinitionList("Major failures").contains(text)));
 
         And("^I check the prs section of the test summary has \"([^\"]+)\"$", (String text) ->
-                assertTrue(driverWrapper.getTextFromUnorderedList("PRS").contains(text)));
+                assertTrue(driverWrapper.getTextFromDefinitionList("PRS").contains(text)));
 
         And("^I check the minors section of the test summary has \"([^\"]+)\"$", (String text) ->
-                assertTrue(driverWrapper.getTextFromUnorderedList("Minors").contains(text)));
+                assertTrue(driverWrapper.getTextFromDefinitionList("Minors").contains(text)));
 
         And("^I check the advisory section of the test summary has \"([^\"]+)\"$", (String text) ->
-                assertTrue(driverWrapper.getTextFromUnorderedList("Advisory text").contains(text)));
+                assertTrue(driverWrapper.getTextFromDefinitionList("Advisory text").contains(text)));
 
         And("^I check the fails section of the test summary does not have \"([^\"]+)\"$", (String text) ->
                 assertFalse(driverWrapper.getTextFromUnorderedList("Fails").contains(text)));
 
         And("^I check the dangerous failures section of the test summary does not have \"([^\"]+)\"$",
                 (String text) ->
-                assertFalse(driverWrapper.getTextFromUnorderedList("Dangerous failures").contains(text)));
+                assertFalse(driverWrapper.getTextFromDefinitionList("Dangerous failures").contains(text)));
 
         And("^I check the major failures section of the test summary does not have \"([^\"]+)\"$",
                 (String text) ->
-                assertFalse(driverWrapper.getTextFromUnorderedList("Major failures").contains(text)));
+                assertFalse(driverWrapper.getTextFromDefinitionList("Major failures").contains(text)));
 
         And("^I check the prs section of the test summary does not have \"([^\"]+)\"$", (String text) ->
-                assertFalse(driverWrapper.getTextFromUnorderedList("PRS").contains(text)));
+                assertFalse(driverWrapper.getTextFromDefinitionList("PRS").contains(text)));
 
         And("^I check the advisory section of the test summary does not have \"([^\"]+)\"$", (String text) ->
-                assertFalse(driverWrapper.getTextFromUnorderedList("Advisory text").contains(text)));
+                assertFalse(driverWrapper.getTextFromDefinitionList("Advisory text").contains(text)));
 
         And("^I enter the current time for the contingency test$", () ->
                 selectContingencyTestTime());
@@ -425,8 +445,8 @@ public class TesterDoesStepDefinitions implements En {
 
         if (isRetest) {
 
-            //And I click the "Select vehicle" link
-            driverWrapper.clickLink("Select vehicle");
+            //And I click the "Select vehicle for retest" link
+            driverWrapper.clickLink("Select vehicle for retest");
 
             //And The page title contains "Confirm vehicle for retest"
             driverWrapper.checkCurrentPageTitle("Confirm vehicle for retest");
@@ -446,7 +466,7 @@ public class TesterDoesStepDefinitions implements En {
 
             if (vehicleClass.isPresent()) {
                 //And I click the "Change" link for the MOT test class
-                driverWrapper.clickLink("th", "MOT test class", "../td/", "Change");
+                driverWrapper.clickLink("dt", "MOT test class", "../dd/", "Change");
 
                 //And I select the "Class <n>" radio button
                 driverWrapper.selectRadio("Class " + vehicleClass.get());
@@ -456,8 +476,8 @@ public class TesterDoesStepDefinitions implements En {
             }
 
             if (colour.isPresent()) {
-                //And I click the "Change" link for the colour
-                driverWrapper.clickLink("th", "Colour", "../td/", "Change");
+                //And I click the "Change" link for the colour by clicking the link containing change-under-test/colour
+                driverWrapper.clickLinkContainingHrefValue("change-under-test/colour");
 
                 //And I select <colour> in the "Primary Colour" field
                 driverWrapper.selectOptionInField(colour.get(), "Primary colour");
@@ -470,8 +490,8 @@ public class TesterDoesStepDefinitions implements En {
             }
 
             if (fuelType.isPresent() || capacity.isPresent()) {
-                //And I click the "Change" link for the engine
-                driverWrapper.clickLink("th", "Engine", "../td/", "Change");
+                //And I click the "Change" link for the engine by clicking the link containing change-under-test/engine
+                driverWrapper.clickLinkContainingHrefValue("change-under-test/engine");
 
                 fuelType.ifPresent(value -> {
                     //And I select <fuel type> in the "Fuel type" field
@@ -607,6 +627,7 @@ public class TesterDoesStepDefinitions implements En {
     private void enterOdometerReading(OdometerJourney journey, int amount) {
         // And The page title contains "MOT test results"
         driverWrapper.checkCurrentPageTitle("MOT test results");
+
         // And I click the "Add reading" link
         driverWrapper.clickLink("Add reading");
 
