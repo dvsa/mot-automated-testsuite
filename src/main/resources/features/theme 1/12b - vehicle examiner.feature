@@ -53,9 +53,9 @@ Feature: 12b - Vehicle Examiner
     And I enter an odometer reading in miles of {mileage1} plus 1000
     And I enter decelerometer results of service brake 92 and parking brake 85
     And I press the "Review test" button
-    And I check the vehicle summary section of the test summary has "Result" of "PASS"
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
     And I check the brake results section of the test summary is "Pass"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"

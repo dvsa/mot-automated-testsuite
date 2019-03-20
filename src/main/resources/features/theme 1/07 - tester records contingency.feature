@@ -29,10 +29,10 @@ Feature: 07 - Tester records Contingency Test
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the vehicle summary section of the test summary has "Result" of "PASS"
-    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate}
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate}
     And I check the brake results section of the test summary is "Pass"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
@@ -71,10 +71,10 @@ Feature: 07 - Tester records Contingency Test
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the vehicle summary section of the test summary has "Result" of "PASS"
-    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate}
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate}
     And I check the brake results section of the test summary is "Pass"
     And I record the MOT test number
     And I press the "Save test result" button
@@ -112,10 +112,10 @@ Feature: 07 - Tester records Contingency Test
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
-    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate}
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate}
     And I check the brake results section of the test summary is "Fail"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
@@ -154,10 +154,10 @@ Feature: 07 - Tester records Contingency Test
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
-    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate}
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate}
     And I check the brake results section of the test summary is "Pass"
     And I check the dangerous failures section of the test summary has "Steering column fractured to the extent that steering is affected"
     And I check the dangerous failures section of the test summary has "Test defect 1"
@@ -199,10 +199,10 @@ Feature: 07 - Tester records Contingency Test
     And I press the "Review test" button
 
     Then The page title contains "MOT re-test summary"
-    And I check the vehicle summary section of the test summary has "Result" of "PASS"
-    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate2}
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate2}
     And I check the brake results section of the test summary is "None Recorded"
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the major failures section of the test summary has "None recorded"
@@ -245,10 +245,10 @@ Feature: 07 - Tester records Contingency Test
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
-    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate}
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate}
     And I check the brake results section of the test summary is "Pass"
     And I check the major failures section of the test summary has "Vehicle Identification Number incomplete"
     And I check the major failures section of the test summary has "Test defect 1"
@@ -277,9 +277,9 @@ Feature: 07 - Tester records Contingency Test
     And I press the "Review test" button
 
     Then The page title contains "MOT re-test summary"
-    And I check the vehicle summary section of the test summary has "Result" of "PASS"
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
     And I check the brake results section of the test summary is "None Recorded"
     And I check the major failures section of the test summary has "None recorded"
     And I check the advisory section of the test summary has "None recorded"
@@ -352,9 +352,9 @@ Feature: 07 - Tester records Contingency Test
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the brake results section of the test summary is "Pass"
     And I check the dangerous failures section of the test summary has "Steering column deformed to the extent that steering is affected"
     And I check the dangerous failures section of the test summary has "Test defect 1"
@@ -411,10 +411,10 @@ Feature: 07 - Tester records Contingency Test
     And I press the "Review test" button
 
     Then The page title contains "MOT re-test summary"
-    And I check the vehicle summary section of the test summary has "Result" of "PASS"
-    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate2}
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+    And I check the Test Information summary section of the test summary has "Issue date" of {issueDate2}
     And I check the brake results section of the test summary is "None Recorded"
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the major failures section of the test summary has "None recorded"
