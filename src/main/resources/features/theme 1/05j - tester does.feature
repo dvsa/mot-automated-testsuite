@@ -18,10 +18,10 @@ Feature: 05j - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Fail"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the brake test summary section has "Brake results overall" of "Fail"
     And I check the major failures section of the test summary has "Brakes imbalanced across an axle"
     And I check the major failures section of the test summary has "Axle 3"
     And I check the dangerous failures section of the test summary has "None recorded"
@@ -57,10 +57,10 @@ Feature: 05j - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Fail"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the brake test summary section has "Brake results overall" of "Fail"
     And I check the dangerous failures section of the test summary has "Brakes imbalanced across an axle by more than 50%"
     And I check the dangerous failures section of the test summary has "Axle 1"
     And I check the major failures section of the test summary has "None recorded"
@@ -94,10 +94,10 @@ Feature: 05j - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Fail"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the brake test summary section has "Brake results overall" of "Fail"
     And I check the major failures section of the test summary has "Service brake efficiency below requirements"
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the minors section of the test summary has "None recorded"
@@ -130,10 +130,10 @@ Feature: 05j - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Fail"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the brake test summary section has "Brake results overall" of "Fail"
     And I check the dangerous failures section of the test summary has "Service brake efficiency less than 50% of the required value"
     And I check the major failures section of the test summary has "None recorded"
     And I check the minors section of the test summary has "None recorded"
@@ -164,10 +164,10 @@ Feature: 05j - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Fail"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the brake test summary section has "Brake results overall" of "Fail"
     And I check the major failures section of the test summary has "Parking brake efficiency below requirements"
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the minors section of the test summary has "None recorded"
@@ -199,10 +199,10 @@ Feature: 05j - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Fail"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the brake test summary section has "Brake results overall" of "Fail"
     And I check the dangerous failures section of the test summary has "Parking brake efficiency less than 50% of the required value"
     And I check the major failures section of the test summary has "None recorded"
     And I check the minors section of the test summary has "None recorded"
