@@ -16,10 +16,10 @@ Feature: 05a - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the vehicle summary section of the test summary has "Result" of "PASS"
-    And I check the brake test summary section has "Brake results overall" of "Pass"
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+    And I check the brake test summary section has "Brake results overall" of "Pass"
     And I check the defect section has "Dangerous failures" with value "None recorded"
     And I check the defect section has "Major failures" with value "None recorded"
     And I check the defect section has "Minors" with value "None recorded"
@@ -51,10 +51,9 @@ Feature: 05a - Tester does...
 
     Then The page title contains "MOT test summary"
 
-
-    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
 
     And I check the brake test summary section has "Brake results overall" of "Fail"
     And I check the defect section has "Dangerous failures" with value "None recorded"
@@ -90,9 +89,9 @@ Feature: 05a - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the brake test summary section has "Brake results overall" of "Pass"
 
     And I check the dangerous failures section of the test summary has "Steering column deformed to the extent that steering is affected"
@@ -140,9 +139,9 @@ Feature: 05a - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
 
     And I check the brake test summary section has "Brake results overall" of "Not tested"
     And I check the defect section has "Dangerous failures" with value "None recorded"
@@ -177,9 +176,9 @@ Feature: 05a - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the vehicle summary section of the test summary has "Result" of "PASS"
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
     And I check the brake test summary section has "Brake results overall" of "Pass"
     And I check the advisory section of the test summary has "Bumper mountings corroded but not likely to become detached"
     And I check the advisory section of the test summary has "Nail in tyre"

@@ -83,7 +83,6 @@ Feature: 08 - Create Vehicle
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the vehicle summary section of the test summary has "Result" of "PASS"
 
     #Temp fix put in place where it checks the VIN and REG on page but not the location. Permanent check needed
     #And I check the vehicle summary section of the test summary has "Registration number" of "<reg>"
@@ -91,6 +90,7 @@ Feature: 08 - Create Vehicle
     And The page contains "<reg>"
     And The page contains "<vin>"
 
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
     And I check the brake results section of the test summary is "Pass"
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the major failures section of the test summary has "None recorded"
