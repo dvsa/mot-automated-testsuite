@@ -70,13 +70,14 @@ Feature: 99b - duplicate and replacement certificates
       | FOCUS                           |
 
   Scenario: Tester edits odometer and vehicle colour on certificate
-    Given I login with 2FA using "MOT_TESTER_CLASS_4" as {tester}, {site}
-    And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
-    And I start an MOT test for {reg}, {vin}, {site}
+    Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
+    And I login with 2FA using "MOT_TESTER_CLASS_4" as {tester}, {site}
+
+    When I start an MOT test for {registration1}, {vin1}, {site}
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
-    And I enter an odometer reading in miles of {mileage} plus 5000
+    And I enter an odometer reading in miles of {mileage1} plus 5000
     And I enter decelerometer results of service brake 70 and parking brake 30
     And I press the "Review test" button
 
@@ -93,12 +94,12 @@ Feature: 99b - duplicate and replacement certificates
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
-      | VT20                  |
-      | {reg}                 |
-      | {vin}                 |
+      | VT20            |
+      | {registration1} |
+      | {vin1}          |
     And I click the "Back to user home" link
 
-    When I search for certificates with reg {reg}
+    And I search for certificates with reg {registration1}
     And I click the first "View certificate" link
     And I press the "Edit this MOT test result" button
     And I update the odometer reading by 3000
@@ -111,5 +112,5 @@ Feature: 99b - duplicate and replacement certificates
     And I check there is a "Print" link
     And I click "Print" and check the PDF contains:
       | VT                    |
-      | {reg}                 |
-      | {vin}                 |
+      | {registration1}       |
+      | {vin1}                |
