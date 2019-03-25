@@ -1,4 +1,4 @@
-@regression @demi
+@regression
   Feature: 26 - site and tester rag scores
 
     Scenario: VE user searches for a green site
