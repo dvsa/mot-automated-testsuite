@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -616,6 +617,24 @@ public class WebDriverWrapperTest {
         browseTo("/getTextFromHeading-1.html", "getTextFromHeading - 1");
         assertEquals("Should not find matching text", "",
                 driverWrapper.getTextFromHeading("Other Text"));
+    }
+
+    /**
+     * Tests <code>checkTextInSpanMatching()</code> with a matching example.
+     */
+    @Test
+    public void checkTextInSpanMatching() {
+        browseTo("/matchTextFromSpan.html", "matchTextFromSpan");
+        assertTrue(driverWrapper.checkTextInSpan("Span Text 1", "Other Text 1"));
+    }
+
+    /**
+     * Tests <code>checkTextInSpanMatching()</code> with a non matching example.
+     */
+    @Test
+    public void checkTextInSpanNotMatching() {
+        browseTo("/matchTextFromSpan.html", "matchTextFromSpan");
+        assertFalse(driverWrapper.checkTextInSpan("Span Text 1", "Other Text 2"));
     }
 
     /**

@@ -203,13 +203,16 @@ These steps are specific to the DVSA MOT application screens.
 * I get the slot count from the homepage for site ```{..siteKey..}```
 * I check a slot was successfully used for site ```{..siteKey..}```
 * I check a slot was not used for site ```{..siteKey..}```
+* I get the slot count for organisation ```{..organisationKey..}```
+* I check a slot was not used for organisation ```{..organisationKey..}```
 
 ### PurchaseSlotsStepDefinitions
 
 * I order ```..amount..``` slots
-* I enter the card details ```"..cardNumber.."```, ```"..expiryDate.."```, ```"..securityCode.."```
+* I enter card details from csv ```"..csvName.."```
 * I enter the card holders name as ```"..name.."```
-* I make the payment for card ```"..cardNumber.."```
+* I make the payment for card from csv ```"..csvName.."```
+* I make an orphan payment for card from csv ```"..csvName.."```
 * I check that ```..amount..``` slots were bought successfully
 
 ### SiteAdminStepDefinitions
@@ -234,6 +237,7 @@ These steps are specific to the DVSA MOT application screens.
 * I start an MOT test for ```{..reg key..}```, ```{..vin key..}``` with engine changed to ```"..fuel type.."```  with capacity ```..cc's..```
 * I browse for a ```"Failure or PRS or Advisory"``` defect of (```"..category.."```, ```"..defect.."```) with comment ```"..comment.."```
 * I browse for a ```"Failure or PRS or Advisory"``` defect of (```"..category.."```, ```"..sub-category.."```, ```"..defect.."```) with comment ```"..comment.."```
+* I browse for a ```"Failure or PRS or Advisory"``` defect of (```"..category.."```, ```"..sub-category.."```, ```"..defect.."```) with comment ```"..comment.."``` with a first use date alert
 * I search for a ```"Failure or PRS or Advisory"``` defect of ```"..category.."``` with comment ```"..comment.."```
 * I add a manual advisory of ```"..defect.."```
 * I edit the ```"Failure or PRS or Advisory"``` defect of ```"..defect.."``` with comment ```"..comment.."``` and not dangerous

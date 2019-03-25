@@ -170,9 +170,11 @@ Feature: 05b - Tester does...
     And I check the minors section of the test summary has "None recorded"
     And I check the prs section of the test summary has "None recorded"
     And I check the advisory section of the test summary has "None recorded"
+    And I record the MOT test number
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
+      | Refusal of MOT test certificate                    |
       | VT30                                               |
       | Engine mounting fractured                          |
       | Test defect 1                                      |
@@ -204,12 +206,14 @@ Feature: 05b - Tester does...
     And I check the minors section of the test summary has "None recorded"
     And I check the prs section of the test summary has "None recorded"
     And I check the advisory section of the test summary has "None recorded"
+    And I record the MOT test number
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
     And I click "Print documents" and check the PDF contains:
-      | VT20            |
-      | {registration1} |
-      | {vin1}          |
+      | MOT test certificate |
+      | VT20                 |
+      | {registration1}      |
+      | {vin1}               |
     And I click the "Back to user home" link
 
 
@@ -290,7 +294,6 @@ Feature: 05b - Tester does...
     And I check the major failures section of the test summary does not have "Brakes imbalanced across an axle"
     And I check the major failures section of the test summary does not have "Front (Axle 1)"
     And I check the major failures section of the test summary does not have "Rear (Axle 2)"
-
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the minors section of the test summary has "None recorded"
     And I check the prs section of the test summary has "None recorded"
@@ -298,10 +301,10 @@ Feature: 05b - Tester does...
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
     And I click "Print documents" and check the PDF contains:
-      | VT30                              |
+      | VT30                                                      |
       | Wheel hub spigot mounting excessively worn                |
-      | Test defect 2                     |
-      | Tyre fouling a part of the vehicle  |
-      | Test defect 3                     |
-      | {registration1}                   |
-      | {vin1}                            |
+      | Test defect 2                                             |
+      | Tyre fouling a part of the vehicle                        |
+      | Test defect 3                                             |
+      | {registration1}                                           |
+      | {vin1}                                                    |

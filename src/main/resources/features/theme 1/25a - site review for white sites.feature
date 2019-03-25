@@ -90,6 +90,7 @@
       And I check the "People" field row has value "Comment: People outcome comment"
       And I check the "Activity" field row has value "Comment: Activity outcome comment"
       And I check the "AE representative" field row has value "John Doe"
+      And I check the "Date of site visit" field row has value {dateOfSiteVisit}
       And I click the "Back" link
 
       #Check that the previous site review is shown when recording a new one

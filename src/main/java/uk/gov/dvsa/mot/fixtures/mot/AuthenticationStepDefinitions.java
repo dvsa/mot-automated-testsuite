@@ -404,7 +404,6 @@ public class AuthenticationStepDefinitions implements En {
             // try to login
             switch (handlePasswordScreen(username, password)) {
                 case PasswordFailed:
-                    // login failed, loop around to try again
                     break;
 
                 default:
@@ -418,6 +417,10 @@ public class AuthenticationStepDefinitions implements En {
                         case "temporary":
                             // And I click the "Temporary sign in" link
                             driverWrapper.clickLink("Temporary sign in");
+                            break;
+                        case "Lost, forgotten or damaged security":
+                            // And I click the "Temporary sign in" link
+                            driverWrapper.clickLink("Lost, forgotten or damaged security card?");
                             break;
                         default:
                             String message = "Unknown card issue journey " + journey;

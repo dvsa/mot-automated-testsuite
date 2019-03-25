@@ -14,7 +14,7 @@ Feature: 12b - Vehicle Examiner
 
   Scenario: MOT test search by VRM
     Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
-    And I load "VEHICLE_REG_MOT_LATEST_TEST" as {reg}, {vin}, {mileage}
+    And I load "VEHICLE_CLASS_4_LATEST" as {reg}, {vin}, {mileage}
     And I click the "MOT tests" link
     When I search for an mot by "Registration (comparison available)" with {reg}
     And I click the first "View" link
