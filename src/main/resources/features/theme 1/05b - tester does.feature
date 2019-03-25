@@ -19,10 +19,11 @@ Feature: 05b - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Pass"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+    And I check the brake test summary section has "Brake results overall" of "Pass"
+
     And I check the prs section of the test summary has "Brake pipe at imminent risk of failure or fracture"
     And I check the prs section of the test summary has "Handlebar fractured to the extent that steering is adversely affected"
     And I check the prs section of the test summary has "Test prs 1"
@@ -82,10 +83,10 @@ Feature: 05b - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Pass"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the brake test summary section has "Brake results overall" of "Pass"
 
     And I check the major failures section of the test summary has "Exhaust system insecure"
     And I check the major failures section of the test summary has "Edited failure 2"
@@ -157,9 +158,9 @@ Feature: 05b - Tester does...
     And I press the "Review test" button
 
     And The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the brake results section of the test summary is "Pass"
     And I check the dangerous failures section of the test summary has "Engine mounting fractured"
     And I check the dangerous failures section of the test summary has "Test defect 1"
@@ -197,9 +198,9 @@ Feature: 05b - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT re-test summary"
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
     And I check the brake results section of the test summary is "None Recorded"
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the major failures section of the test summary has "None recorded"
@@ -233,9 +234,9 @@ Feature: 05b - Tester does...
     And I press the "Review test" button
 
     And The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the brake results section of the test summary is "Fail"
     And I check the dangerous failures section of the test summary has "Engine mounting bracket excessively loose"
     And I check the dangerous failures section of the test summary has "Test defect 1"
@@ -281,10 +282,9 @@ Feature: 05b - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT re-test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Pass"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the major failures section of the test summary has "Wheel hub spigot mounting excessively worn"
     And I check the major failures section of the test summary has "Test defect 2"
     And I check the major failures section of the test summary has "Tyre fouling a part of the vehicle"
@@ -294,6 +294,7 @@ Feature: 05b - Tester does...
     And I check the major failures section of the test summary does not have "Brakes imbalanced across an axle"
     And I check the major failures section of the test summary does not have "Front (Axle 1)"
     And I check the major failures section of the test summary does not have "Rear (Axle 2)"
+
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the minors section of the test summary has "None recorded"
     And I check the prs section of the test summary has "None recorded"

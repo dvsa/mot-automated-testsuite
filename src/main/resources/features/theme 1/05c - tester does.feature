@@ -16,9 +16,9 @@ Feature: 05c - Tester does...
     And I press the "Review test" button
 
     And The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the brake results section of the test summary is "Not tested"
     And I check the dangerous failures section of the test summary has "Engine mounting fractured"
     And I check the dangerous failures section of the test summary has "Test defect 1"
@@ -54,9 +54,9 @@ Feature: 05c - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT re-test summary"
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
     And I check the brake results section of the test summary is "Pass"
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the major failures section of the test summary has "None recorded"
@@ -85,9 +85,9 @@ Feature: 05c - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
     And I check the brake results section of the test summary is "Pass"
     And I check the major failures section of the test summary has "None recorded"
     And I check the prs section of the test summary has "None recorded"
@@ -116,10 +116,13 @@ Feature: 05c - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the vehicle summary section of the test summary has "Colour" of "Blue"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+
+    #Needs more thorough check to see location of colour after responsive UI changes
+    #And I check the vehicle summary section of the test summary has "Colour" of "Blue"
+    And The page contains "Blue"
     And I check the brake results section of the test summary is "Fail"
     And I check the major failures section of the test summary has "Stop lamp showing white light to the rear"
     And I check the major failures section of the test summary has "Test defect 1"
@@ -154,10 +157,13 @@ Feature: 05c - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the vehicle summary section of the test summary has "Fuel type" of "Petrol"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+
+    #Needs more thorough check to check location of fuel type after responsive UI changes
+    #And I check the vehicle summary section of the test summary has "Fuel type" of "Petrol"
+    And The page contains "Petrol"
     And I check the brake results section of the test summary is "Pass"
     And I check the advisory section of the test summary has "Nail in tyre"
     And I check the advisory section of the test summary has "Test advisory 1"
@@ -191,9 +197,9 @@ Feature: 05c - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the brake results section of the test summary is "Fail"
     And I check the dangerous failures section of the test summary has "Brakes imbalanced across an axle by more than 50%"
     And I check the major failures section of the test summary has "Brakes imbalanced across an axle"
