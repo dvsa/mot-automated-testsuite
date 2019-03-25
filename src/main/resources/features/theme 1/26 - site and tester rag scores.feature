@@ -30,3 +30,5 @@
       And I click the "Service reports" link
       And I find the {siteName} site in the service reports
       Then I check the row with value {siteNumber} also has value "Red"
+
+      #Currently cannot add Tester RAG scores as all tester usernames with RAG scores have NULL usernames in the anon dataset
