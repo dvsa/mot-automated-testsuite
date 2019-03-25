@@ -2,7 +2,7 @@ SELECT DISTINCT s.site_number, s.name as site_name
 FROM site s
 JOIN ( SELECT max(submitted_date) AS subDate, site_id
            FROM mot_test_current
-           WHERE submitted_date > date_sub(CURDATE(), INTERVAL 2 MONTH)
+           WHERE submitted_date > date_sub(CURDATE(), INTERVAL 3 MONTH)
            GROUP BY site_id
            ) mtc
            ON s.id = mtc.site_id
