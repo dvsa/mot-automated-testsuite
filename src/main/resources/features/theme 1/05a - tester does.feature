@@ -50,11 +50,9 @@ Feature: 05a - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
     And I check the vehicle summary section of the test summary has "Result" of "FAIL"
-
     And I check the brake test summary section has "Brake results overall" of "Fail"
     And I check the defect section has "Dangerous failures" with value "None recorded"
     And I check the major failures section of the test summary has "Parking brake efficiency below requirements"
@@ -62,6 +60,7 @@ Feature: 05a - Tester does...
     And I check the defect section has "PRS" with value "None recorded"
     And I check the defect section has "Advisory text" with value "None recorded"
     And I press the "Save test result" button
+
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
       | VT30                                         |

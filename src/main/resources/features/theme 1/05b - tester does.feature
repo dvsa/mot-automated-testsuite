@@ -24,7 +24,6 @@ Feature: 05b - Tester does...
     And I check the vehicle summary section of the test summary has "Result" of "PASS"
     And I check the brake test summary section has "Brake results overall" of "Pass"
 
-
     And I check the prs section of the test summary has "Brake pipe at imminent risk of failure or fracture"
     And I check the prs section of the test summary has "Handlebar fractured to the extent that steering is adversely affected"
     And I check the prs section of the test summary has "Test prs 1"
