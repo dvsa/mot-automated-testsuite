@@ -9,6 +9,7 @@ Feature: 99b - duplicate and replacement certificates
     And I load uniquely "VEHICLE_CLASS_4_NOT_UPDATED_TODAY" as {reg}, {vin}, {mileage}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
+    And The page does not contain "Change"
     And I press the "Edit this MOT test result" button
     And I edit the vehicle vin with "DVLA304050921024"
     And I edit the vehicle registration with "DVLA904"
@@ -28,6 +29,7 @@ Feature: 99b - duplicate and replacement certificates
     And I load uniquely "VEHICLE_CLASS_4_HISTORIC_10_DAYS" as {reg}, {vin}, {mileage}, {testNumber}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
+    And The page does not contain "Change"
     And I press the "Edit this MOT test result" button
     And I edit the vehicle vin with "DVLA304050921020"
     And I edit the vehicle registration with "DVLA903"
@@ -48,6 +50,7 @@ Feature: 99b - duplicate and replacement certificates
     And I search for certificates with reg {reg}
     And I click the "Show older tests" link
     And I click the first "View certificate" link
+    And The page does not contain "Change"
     And I press the "Edit this MOT test result" button
     And I edit the make "FORD" and model "FOCUS"
     And I edit the primary colour "Red" and secondary colour "White"
@@ -101,6 +104,7 @@ Feature: 99b - duplicate and replacement certificates
 
     And I search for certificates with reg {registration1}
     And I click the first "View certificate" link
+    And The page does not contain "Change"
     And I press the "Edit this MOT test result" button
     And I update the odometer reading by 3000
     And I edit the primary colour "Red" and secondary colour "White"

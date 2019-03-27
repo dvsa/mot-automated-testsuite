@@ -11,6 +11,7 @@ Feature: 99a - duplicate and replacement certificates
     And I load "SITE" as {siteNumber}, {siteName}
     When I search for certificates with reg {reg}
     And I click the first "View certificate" link
+    And The page does not contain "Change"
     And I press the "Edit this MOT test result" button
     And I update the odometer reading by 3000
     And I update the testing location to {siteNumber}, {siteName}
@@ -34,6 +35,7 @@ Feature: 99a - duplicate and replacement certificates
     And I load "VEHICLE_CLASS_4_MOT_LAST_10_DAYS" as {reg}, {vin}, {mileage}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
+    And The page does not contain "Change"
     And I check there is a "Print certificate" link
     And I click "Print certificate" and check the PDF contains:
       | Duplicate certificate            |
@@ -79,6 +81,7 @@ Feature: 99a - duplicate and replacement certificates
 
     And I search for certificates with reg {registration1}
     And I click the first "View certificate" link
+    And The page does not contain "Change"
     And I check there is a "Print certificate" link
     And I press the "Edit this MOT test result" button
     And I update the odometer reading by 3000
@@ -99,6 +102,7 @@ Feature: 99a - duplicate and replacement certificates
     Given I login with 2FA using "MOT_TESTER_CLASS_4_WITH_OTHER_SITE_TEST" as {tester}, {site}, {reg}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
+    And The page does not contain "Change"
     And I check there is a "Print certificate" link
     And I check there is no "Edit this MOT test result" button
     And I click "Print certificate" and check the PDF contains:
