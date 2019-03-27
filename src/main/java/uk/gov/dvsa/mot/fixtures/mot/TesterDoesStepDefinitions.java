@@ -55,6 +55,20 @@ public class TesterDoesStepDefinitions implements En {
                 // unfortunately given no proper formed label etc we have to use the id
                 assertTrue("Wrong MOT status", driverWrapper.getElementText("testStatus").contains(status)));
 
+        When("^I search for a vehicle \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String regKey, String vinKey, String siteNameKey) ->
+                        searchForVehicle(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
+                                driverWrapper.getData(siteNameKey)));
+
+        When("^I select an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}"
+                 + " with \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String regKey, String vinKey, String siteNameKey,
+                 String colour1Key,  String colour2Key,  String issueDateKey) ->
+                 motTestSelect(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
+                    driverWrapper.getData(siteNameKey), driverWrapper.getData(colour1Key),
+                    driverWrapper.getData(colour2Key), driverWrapper.getData(issueDateKey),
+                        false, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
+
         When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String regKey, String vinKey, String siteNameKey) ->
                 startMotTest(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
@@ -451,19 +465,6 @@ public class TesterDoesStepDefinitions implements En {
      * @param registration  The registration number to use
      * @param vin           The VIN to use
      * @param siteName      The name of the site to use (for multi-site testers)
-     * @param colour1       The primary colour
-     * @param colour2       The secondary colour
-     * @param issueDate     The issue date of the MOT for the vehicle
-     */
-    private void startMotTest(String data, String data1, String data2, String data3, String data4, String data5, boolean b, Optional<T> empty, Optional<T> empty1, Optional<T> empty2, Optional<T> empty3) {
-    }
-
-    /**
-     * Starts an MOT test for the specified vehicle. Refactored repeated cucumber steps, the original steps are
-     * detailed below.
-     * @param registration  The registration number to use
-     * @param vin           The VIN to use
-     * @param siteName      The name of the site to use (for multi-site testers)
      * @param isRetest      Whether this is a retest
      * @param vehicleClass  The vehicle class to nominate (if any)
      * @param colour        The new primary colour to change to (if any)
@@ -475,6 +476,103 @@ public class TesterDoesStepDefinitions implements En {
                     Optional<Integer> capacity) {
         //And I Search for a vehicle
         searchForVehicle(registration, vin, siteName);
+
+        if (isRetest) {
+
+            //And I click the "Select vehicle for retest" link
+            driverWrapper.clickLink("Select vehicle for retest");
+
+            //And The page title contains "Confirm vehicle for retest"
+            driverWrapper.checkCurrentPageTitle("Confirm vehicle for retest");
+
+            //And I press the "Confirm and start retest" button
+            driverWrapper.pressButton("Confirm and start retest");
+
+            //And The page title contains "MOT test started"
+            driverWrapper.checkCurrentPageTitle("MOT retest started");
+
+        } else {
+            //And I click the "Select vehicle" link
+            driverWrapper.clickLink("Select vehicle");
+
+            //And The page title contains "Confirm vehicle and start test"
+            driverWrapper.checkCurrentPageTitle("Confirm vehicle and start test");
+
+            if (vehicleClass.isPresent()) {
+                //And I click the "Change" link for the MOT test class
+                driverWrapper.clickLink("dt", "MOT test class", "../dd/", "Change");
+
+                //And I select the "Class <n>" radio button
+                driverWrapper.selectRadio("Class " + vehicleClass.get());
+
+                //And I press the "Continue" button
+                driverWrapper.pressButton("Continue");
+            }
+
+            if (colour.isPresent()) {
+                //And I click the "Change" link for the colour
+                driverWrapper.clickLinkContainingHrefValue("change-under-test/colour");
+
+                //And I select <colour> in the "Primary Colour" field
+                driverWrapper.selectOptionInField(colour.get(), "Primary colour");
+
+                //And I select "Not stated" in the "Secondary Colour" field
+                driverWrapper.selectOptionInField("Not stated", "Secondary colour");
+
+                //And I press the "Continue" button
+                driverWrapper.pressButton("Continue");
+            }
+
+            if (fuelType.isPresent() || capacity.isPresent()) {
+                //And I click the "Change" link for the engine
+                driverWrapper.clickLinkContainingHrefValue("change-under-test/engine");
+
+                fuelType.ifPresent(value -> {
+                    //And I select <fuel type> in the "Fuel type" field
+                    driverWrapper.selectOptionInField(value, "Fuel type");
+                });
+
+                capacity.ifPresent(value -> {
+                    //And I enter <capacity> in the "Cylinder capacity" field
+                    driverWrapper.enterIntoField(String.valueOf(value), "Cylinder capacity");
+                });
+
+                //And I press the "Continue" button
+                driverWrapper.pressButton("Continue");
+            }
+
+            //And I press the "Confirm and start test" button
+            driverWrapper.clickButton("Confirm and start test");
+
+            //And The page title contains "MOT test started - MOT testing service"
+            driverWrapper.checkCurrentPageTitle("MOT test started - MOT testing service");
+        }
+
+        //And I click the "Return to home" link
+        driverWrapper.clickLink("Return to home");
+    }
+
+    /**
+     * *
+     * *
+     * *
+     * search for a vehicle to MOT test. Refactored repeated cucumber steps, the original steps are
+     * detailed below.
+     * @param registration  The registration number to use
+     * @param vin           The VIN to use
+     * @param siteName      The name of the site to use (for multi-site testers)
+     * @param isRetest      Whether this is a retest
+     * @param colour1       The new primary colour to change to (if any)
+     * @param colour2       The new primary colour to change to (if any)
+     * @param issueDate     The issue date of the last MOT for the vehicle selected
+     * @param vehicleClass  The vehicle class to nominate (if any)
+     * @param fuelType      The new engine fuel type to change to (if any)
+     * @param capacity      The new engine capacity to change to (if any)
+     */
+    private void motTestSelect(String registration, String vin, String siteName,
+                               String colour1, String colour2, String issueDate, boolean isRetest,
+                               Optional<Integer> vehicleClass, Optional<String> colour, Optional<String> fuelType,
+                               Optional<Integer> capacity) {
 
         if (isRetest) {
 
