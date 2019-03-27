@@ -574,6 +574,11 @@ public class TesterDoesStepDefinitions implements En {
                                Optional<Integer> vehicleClass, Optional<String> colour, Optional<String> fuelType,
                                Optional<Integer> capacity) {
 
+        assertTrue(driverWrapper.checkTextInSpan("Registration number", registration);
+        assertTrue(driverWrapper.checkTextInSpan("VIN", vin);
+        assertTrue(driverWrapper.checkTextInSpan("Colour", colour1);
+        assertTrue(driverWrapper.checkTextInSpan("vehicle-info", issueDate);
+
         if (isRetest) {
 
             //And I click the "Select vehicle for retest" link
@@ -601,38 +606,6 @@ public class TesterDoesStepDefinitions implements En {
 
                 //And I select the "Class <n>" radio button
                 driverWrapper.selectRadio("Class " + vehicleClass.get());
-
-                //And I press the "Continue" button
-                driverWrapper.pressButton("Continue");
-            }
-
-            if (colour.isPresent()) {
-                //And I click the "Change" link for the colour
-                driverWrapper.clickLinkContainingHrefValue("change-under-test/colour");
-
-                //And I select <colour> in the "Primary Colour" field
-                driverWrapper.selectOptionInField(colour.get(), "Primary colour");
-
-                //And I select "Not stated" in the "Secondary Colour" field
-                driverWrapper.selectOptionInField("Not stated", "Secondary colour");
-
-                //And I press the "Continue" button
-                driverWrapper.pressButton("Continue");
-            }
-
-            if (fuelType.isPresent() || capacity.isPresent()) {
-                //And I click the "Change" link for the engine
-                driverWrapper.clickLinkContainingHrefValue("change-under-test/engine");
-
-                fuelType.ifPresent(value -> {
-                    //And I select <fuel type> in the "Fuel type" field
-                    driverWrapper.selectOptionInField(value, "Fuel type");
-                });
-
-                capacity.ifPresent(value -> {
-                    //And I enter <capacity> in the "Cylinder capacity" field
-                    driverWrapper.enterIntoField(String.valueOf(value), "Cylinder capacity");
-                });
 
                 //And I press the "Continue" button
                 driverWrapper.pressButton("Continue");
