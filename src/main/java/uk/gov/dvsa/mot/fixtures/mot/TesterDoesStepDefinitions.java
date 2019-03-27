@@ -451,6 +451,19 @@ public class TesterDoesStepDefinitions implements En {
      * @param registration  The registration number to use
      * @param vin           The VIN to use
      * @param siteName      The name of the site to use (for multi-site testers)
+     * @param colour1       The primary colour
+     * @param colour2       The secondary colour
+     * @param issueDate     The issue date of the MOT for the vehicle
+     */
+    private void startMotTest(String data, String data1, String data2, String data3, String data4, String data5, boolean b, Optional<T> empty, Optional<T> empty1, Optional<T> empty2, Optional<T> empty3) {
+    }
+
+    /**
+     * Starts an MOT test for the specified vehicle. Refactored repeated cucumber steps, the original steps are
+     * detailed below.
+     * @param registration  The registration number to use
+     * @param vin           The VIN to use
+     * @param siteName      The name of the site to use (for multi-site testers)
      * @param isRetest      Whether this is a retest
      * @param vehicleClass  The vehicle class to nominate (if any)
      * @param colour        The new primary colour to change to (if any)
