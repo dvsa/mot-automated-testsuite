@@ -5,6 +5,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 import cucumber.api.java8.En;
+import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
@@ -573,11 +574,11 @@ public class TesterDoesStepDefinitions implements En {
                                String colour1, String colour2, String issueDate, boolean isRetest,
                                Optional<Integer> vehicleClass, Optional<String> colour, Optional<String> fuelType,
                                Optional<Integer> capacity) {
-
-        assertTrue(driverWrapper.checkTextInSpan("Registration number", registration);
-        assertTrue(driverWrapper.checkTextInSpan("VIN", vin);
-        assertTrue(driverWrapper.checkTextInSpan("Colour", colour1);
-        assertTrue(driverWrapper.checkTextInSpan("vehicle-info", issueDate);
+        //And the Find a vehicle page contains the following attributes
+        assertTrue(driverWrapper.checkTextInSpan("Registration number", registration));
+        assertTrue(driverWrapper.checkTextInSpan("VIN", vin));
+        assertTrue(driverWrapper.checkTextInSpan("Colour", colour1));
+        assertTrue(driverWrapper.getElementText("results-table").contains(issueDate));
 
         if (isRetest) {
 
@@ -609,6 +610,14 @@ public class TesterDoesStepDefinitions implements En {
 
                 //And I press the "Continue" button
                 driverWrapper.pressButton("Continue");
+            }
+
+            //And I check both the primary and secondary colour
+            String colourElements = driverWrapper.getElementColour(colour1, colour2);
+            if (colour2.equals("Not Stated")) {
+                assertTrue(colourElements.equals(colour1));
+            } else {
+                assertTrue(colourElements.equals(colour1 + ", " + colour2));
             }
 
             //And I press the "Confirm and start test" button

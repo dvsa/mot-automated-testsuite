@@ -12,7 +12,6 @@ Feature: 00 - MOT details check
     And I enter an odometer reading in miles of {mileage1} plus 5000
     And I enter decelerometer results of service brake 58 and parking brake 16
     And I press the "Review test" button
-
     Then The page title contains "MOT test summary"
     And I check the registration plate {registration1} is shown within the registration number span text
     And I check the VIN {vin1} is shown within the VIN span text
@@ -23,7 +22,6 @@ Feature: 00 - MOT details check
     And I check the defect section has "Minors" with value "None recorded"
     And I check the defect section has "PRS" with value "None recorded"
     And I check the defect section has "Advisory text" with value "None recorded"
-
     And I record the MOT test number
     And I press the "Save test result" button
     And The page title contains "MOT test complete"

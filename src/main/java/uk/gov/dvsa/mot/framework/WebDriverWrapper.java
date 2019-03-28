@@ -800,6 +800,27 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Get the colour row, and extract the colour elements using the XPath
+     * expression.
+     * @param colour1         The primary colour
+     * @param colour2         The secondary colour
+     * @return The text
+     */
+    public String getElementColour(String colour1, String colour2) {
+        String colourXpath = "//*[@id=\"StartTestConfirmation\"]/fieldset[1]/dl/div[3]";
+        WebElement startingElement = webDriver.findElement(By.xpath(colourXpath));
+        WebElement relativeElement;
+        if (colour2.equals("Not Stated")) {
+            relativeElement = startingElement.findElement(By.xpath("//dd[contains(text(),'" + colour1 + "')]"));
+        } else {
+            relativeElement = startingElement.findElement(By.xpath("//dd[contains(text(),'" + colour1 + ", "
+                    + colour2 + "')]"));
+        }
+
+        return relativeElement.getText();
+    }
+
+    /**
      * Enters the specified text into the field.
      * @param value The value to enter
      * @param label The field label
