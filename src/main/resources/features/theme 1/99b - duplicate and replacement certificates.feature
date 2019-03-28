@@ -108,7 +108,6 @@ Feature: 99b - duplicate and replacement certificates
     And I search for certificates with reg {registration1}
     And I click the first "View certificate" link
     And The page contains "Duplicate or replacement certificate"
-    And The page does not contain "Change"
     And I press the "Edit this MOT test result" button
     And I update the odometer reading by 3000
     And I edit the primary colour "Red" and secondary colour "White"
