@@ -1,6 +1,5 @@
-# WIP to check the start mot details page
-@regression
-Feature: 00 - MOT details check
+@smoke @regression
+Feature: 00 - MOT details check - Find vehicle, confirm and start test
 
   Scenario: Tester enters MOT test and validates the vehicle MOT Testing details
     Given I load "VEHICLE_CLASS_4_DETAILS" as {registration1}, {vin1}, {mileage1}, {colour1}, {colour2}, {issueDate}
