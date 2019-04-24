@@ -65,6 +65,7 @@ MOT History:
 * **@mothrecall** = MOT History Recall only regression tests
 * **@mothhgv** = MOT History HGV/PSV only regression tests (trailers excluded)
 * **@mothtrailers** = MOT History HGV/PSV only regression tests for trailers
+* **@mothprint** = MOT certificate printing only regression tests
 
 ## Reports
 Reporting is done via the [Extender Cucumber Runner](http://mkolisnyk.github.io/cucumber-reports/extended-cucumber-runner) library. The results are placed in the `target` directory along with screenshots of failing tests, and the HTML of the last page reached (if configured).

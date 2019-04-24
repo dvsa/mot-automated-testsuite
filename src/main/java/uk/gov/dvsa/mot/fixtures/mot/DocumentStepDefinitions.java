@@ -35,8 +35,26 @@ public class DocumentStepDefinitions implements En {
         And("^I click \"([^\"]+)\" and check the PDF contains:$",
                 (String link, DataTable table) -> assertTrue(pdfContainsData(link, table)));
 
+        And("^I click the certificate link and check the MOT certificate PDF contains:$",
+                (DataTable table) -> assertTrue(motCertificatePdfContainsData(table)));
+
         And("^I click \"([^\"]+)\" and check the CSV contains:$",
                 (String link, DataTable table) -> assertTrue(csvContainsData(link, table)));
+    }
+
+    /**
+     * Converts the raw data array and verifies all values are contained within the PDF.
+     * @param rawData   The raw list of data items to check for
+     * @return          Whether all data items were present in the PDF
+     */
+    private boolean motCertificatePdfContainsData(DataTable rawData) {
+        List<String> rawDataRows = rawData.asList(String.class);
+        List<String> processedDataRows = new ArrayList<>();
+        for (String dataItem : rawDataRows) {
+            processedDataRows.add(getStringValue(dataItem));
+        }
+
+        return driverWrapper.motCertPdfContains(processedDataRows);
     }
 
     /**
