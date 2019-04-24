@@ -88,8 +88,31 @@ Feature: 11 - Finance
     And I click the "purchase history" link
     And I click the link "Return to Authorised Examiner" with id "returnToExaminer"
 
+  @smoke @cpms
+  Scenario Outline: A finance user generates the <report> report for <startDate> days ago to <endDate> days ago
+    Given I login without 2FA using "FINANCE_USER" as {username}
+    And I click the "Generate financial reports" link
+    And I select "<report>" in the field with id "input_report_type"
+    And I get the date <startDate> days ago as {start_day}, {start_month}, {start_year}
+    And I set the finance report from date to {start_day} {start_month} {start_year}
+    And I get the date <endDate> days ago as {end_day}, {end_month}, {end_year}
+    And I set the finance report to date to {end_day} {end_month} {end_year}
+    And I press the "Generate report" button
+    And I record the finance report URL
+    And I wait "<seconds>" seconds then "<refresh>" the page until "Download Report" button displays
+    And I click "Download Report" and check the CSV contains:
+      | receipt_reference            |
+      | total_amount                 |
+      | status_description           |
+      | Successful payment received  |
+      | payment_type                 |
+
+    Examples:
+      | report                | startDate | endDate | seconds  | refresh |
+      | All Payments          | 30        | 0       | 30       | 20      |
+
   @cpms
-  Scenario Outline: A finance user generates <report> CPMS All Payments finance report for <startDate> days ago to <endDate> days ago
+  Scenario Outline: A finance user generates the <report> finance report for <startDate> days ago to <endDate> days ago
     Given I login without 2FA using "FINANCE_USER" as {username}
     And I click the "Generate financial reports" link
     And I select "<report>" in the field with id "input_report_type"
@@ -109,11 +132,10 @@ Feature: 11 - Finance
     Examples:
       | report                | startDate | endDate | seconds  | refresh |
       | All Payments          | 14        | 7       | 30       | 20      |
-      | All Payments          | 30        | 0       | 60       | 30      |
       | All Payments          | 212       | 182     | 30       | 20      |
 
   @cpms
-  Scenario Outline: A finance user generates <report> CPMS General Ledger Sales finance report for <startDate> days ago to <endDate> days ago
+  Scenario Outline: A finance user generates the <report> finance report for <startDate> days ago to <endDate> days ago
     Given I login without 2FA using "FINANCE_USER" as {username}
     And I click the "Generate financial reports" link
     And I select "<report>" in the field with id "input_report_type"
@@ -139,7 +161,7 @@ Feature: 11 - Finance
       | General Ledger Sales  | 212       | 182     | 30       | 20      |
 
   @cpms
-  Scenario Outline: A finance user generates <report> CPMS finance Transaction Breakdown report for <startDate> days ago to <endDate> days ago
+  Scenario Outline: A finance user generates the <report> report for <startDate> days ago to <endDate> days ago
     Given I login without 2FA using "FINANCE_USER" as {username}
     And I click the "Generate financial reports" link
     And I select "<report>" in the field with id "input_report_type"
@@ -163,26 +185,3 @@ Feature: 11 - Finance
       | Transaction Breakdown | 30        | 0       | 30       | 20      |
       | Transaction Breakdown | 14        | 7       | 30       | 20      |
       | Transaction Breakdown | 212       | 182     | 30       | 20      |
-
-  @smoke
-  Scenario Outline: A finance user generates <report> SMOKE finance report for <startDate> days ago to <endDate> days ago
-    Given I login without 2FA using "FINANCE_USER" as {username}
-    And I click the "Generate financial reports" link
-    And I select "<report>" in the field with id "input_report_type"
-    And I get the date <startDate> days ago as {start_day}, {start_month}, {start_year}
-    And I set the finance report from date to {start_day} {start_month} {start_year}
-    And I get the date <endDate> days ago as {end_day}, {end_month}, {end_year}
-    And I set the finance report to date to {end_day} {end_month} {end_year}
-    And I press the "Generate report" button
-    And I record the finance report URL
-    And I wait "<seconds>" seconds then "<refresh>" the page until "Download Report" button displays
-    And I click "Download Report" and check the CSV contains:
-          | receipt_reference            |
-          | total_amount                 |
-          | status_description           |
-          | Successful payment received  |
-          | payment_type                 |
- 
-    Examples:
-      | report                | startDate | endDate | seconds  | refresh |
-      | All Payments          | 30        | 0       | 30       | 20      |
