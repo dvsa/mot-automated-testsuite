@@ -52,7 +52,7 @@ Feature: 99a - duplicate and replacement certificates
   @regressiondata
   Scenario: Tester completes a test then issues duplicate certificate and can edit test
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
-    And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
+    And I login with 2FA using "MOT_TESTER_CLASS_4_WITH_ONLY_ONE_SITE" as {username1}, {site}
 
     When I start an MOT test for {registration1}, {vin1}, {site}
     And The page title contains "Your home"
