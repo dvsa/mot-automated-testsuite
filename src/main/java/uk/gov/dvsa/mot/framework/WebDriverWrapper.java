@@ -156,7 +156,6 @@ public class WebDriverWrapper {
 
             // path to driver executable
             System.setProperty("webdriver.chrome.driver", env.getRequiredProperty("driver"));
-            System.out.println(env.getRequiredProperty("driver"));
 
             //If gridURL is set create a remote webdriver instance
             if (env.containsProperty("gridURL")) {
@@ -1522,43 +1521,47 @@ public class WebDriverWrapper {
      * Goes to the next tab.
      */
     public void goNextTab() {
-        String oldTab = webDriver.getWindowHandle();
-        List<String> newTab = new ArrayList<String>(webDriver.getWindowHandles());
-        newTab.remove(oldTab);
-        int numTabs = newTab.size();
-        
-        // temp test - is this really a timing problem? 
-        timeWait(5);
+        List<String> allTabs = new ArrayList<String>(webDriver.getWindowHandles());
 
-        if (numTabs > 2) {
-            String message = "Too many tabs. Expected 2 but there are " + numTabs;
+        // we've removed 1 tab already - there should only be one other tab.
+        if (allTabs.size() > 2) {
+            String message = "Too many tabs. Expected 2 but there are " + allTabs.size();
             logger.error(message);
             throw new IllegalStateException(message);
         }
 
-        // if there's only 1 tab, we will wait for up to 5 seconds for a new
-        // tab to appear, then give up.
-        if (numTabs == 1) {
-            for (int i = 0; i < 5; i++) {
-                String message = "Waiting a second for a new tab...";
-                logger.info(message);
-                // wait slightly longer each time
+        // if there's only 1 tab, we will wait a while for a new one
+        // to appear, then give up.
+        if (allTabs.size() == 1) {
+            for (int i = 1; i < 5; i++) {
+                logger.info("Waiting a for a new tab...");
+                // wait slightly longer each time for our new tab to appear
                 timeWait(i);
-                if ( getCurrentTabsCount() > 1) {
+                allTabs = new ArrayList<String>(webDriver.getWindowHandles());
+                if ( allTabs.size() > 1) {
                     break;
                 }
             }
         }
 
         // we've waited, and still only 1 tab.
-        if ( getCurrentTabsCount() == 1) {
+        if (allTabs.size() == 1) {
             String message = "Trying to switch to next tab, but there is only one";
             logger.error(message);
             throw new IllegalStateException(message);
         }
-        
-        // change focus to new tab
-        webDriver.switchTo().window(newTab.get(0));
+
+        // the order of getWindowHandls() is not defined, so jsut switch to the
+        // one that isn't the current one
+        String curHandle = webDriver.getWindowHandle();
+        String newTab = "";
+        for (String handle : webDriver.getWindowHandles()) {
+            if (!handle.equals(curHandle)) {
+                newTab = handle;
+            }
+        }
+
+        webDriver.switchTo().window(newTab);
     }
 
     /**
