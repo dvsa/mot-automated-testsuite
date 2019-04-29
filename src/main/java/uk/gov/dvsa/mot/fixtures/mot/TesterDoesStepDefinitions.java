@@ -588,6 +588,12 @@ public class TesterDoesStepDefinitions implements En {
             //And The page title contains "Confirm vehicle for retest"
             driverWrapper.checkCurrentPageTitle("Confirm vehicle for retest");
 
+            assertTrue(driverWrapper.containsMessage("MOT testing"));
+            assertTrue(driverWrapper.containsMessage("Confirm vehicle and start retest"));
+
+            //And I check the Confirm vehicle and start retest page
+            //Add in a mew method
+
             //And I press the "Confirm and start retest" button
             driverWrapper.pressButton("Confirm and start retest");
 
@@ -601,6 +607,9 @@ public class TesterDoesStepDefinitions implements En {
             //And The page title contains "Confirm vehicle and start test"
             driverWrapper.checkCurrentPageTitle("Confirm vehicle and start test");
 
+            assertTrue(driverWrapper.containsMessage("MOT testing"));
+            assertTrue(driverWrapper.containsMessage("Confirm vehicle and start test"));
+
             if (vehicleClass.isPresent()) {
                 //And I click the "Change" link for the MOT test class
                 driverWrapper.clickLink("dt", "MOT test class", "../dd/", "Change");
@@ -612,13 +621,8 @@ public class TesterDoesStepDefinitions implements En {
                 driverWrapper.pressButton("Continue");
             }
 
-            //And I check both the primary and secondary colour
-            String colourElements = driverWrapper.getElementColour(colour1, colour2);
-            if (colour2.equals("Not Stated")) {
-                assertTrue(colourElements.equals(colour1));
-            } else {
-                assertTrue(colourElements.equals(colour1 + ", " + colour2));
-            }
+            //And I check the Confirm vehicle and start test page
+            //Add in a mew method
 
             //And I press the "Confirm and start test" button
             driverWrapper.clickButton("Confirm and start test");
@@ -629,6 +633,65 @@ public class TesterDoesStepDefinitions implements En {
 
         //And I click the "Return to home" link
         driverWrapper.clickLink("Return to home");
+    }
+
+    /**
+     * Check the Confirm vehicle and start (re)test pages
+     * @param registration  The registration number to use
+     * @param vin           The VIN to use
+     * @param siteName      The name of the site to use (for multi-site testers)
+     * @param colour1       The new primary colour to change to (if any)
+     * @param colour2       The new primary colour to change to (if any)
+     * @param issueDate     The issue date of the last MOT for the vehicle selected
+     * @param vehicleClass  The vehicle class to nominate (if any)
+     * @param fuelType      The new engine fuel type to change to (if any)
+     * @param capacity      The new engine capacity to change to (if any)
+     */
+    private void motCheckConfirm(String registration, String vin, String siteName,
+                               String colour1, String colour2, String issueDate,
+                               Optional<Integer> vehicleClass, Optional<String> colour, Optional<String> fuelType,
+                               Optional<Integer> capacity) {
+
+        //And the vehicle information section contains the following attributes
+        assertTrue(driverWrapper.checkTextInSpan("Vehicle", "Make and Model from SQL"));
+        assertTrue(driverWrapper.checkTextInSpan("Registration number", registration));
+        assertTrue(driverWrapper.checkTextInSpan("VIN", vin));
+        assertTrue(driverWrapper.checkTextInSpan("Colour", colour1));
+
+        //And I check both the primary and secondary colour
+        String colourElements = driverWrapper.getElementColour(colour1, colour2);
+        if (colour2.equals("Not Stated")) {
+            assertTrue(colourElements.equals(colour1));
+        } else {
+            assertTrue(colourElements.equals(colour1 + ", " + colour2));
+        }
+
+        //And the vehicle specification section contains the following attributes
+        //Make and model	        SUZUKI, SPLASH
+        assertEquals("Make and Model from SQL", driverWrapper.getTextFromDefinitionList("Make and model"));
+        //Engine	                Petrol, 996
+        assertEquals("Fuel Type and Engine size from SQL", driverWrapper.getTextFromDefinitionList("Engine"));
+        //Colour	                Black
+        assertEquals(colour1, driverWrapper.getTextFromDefinitionList("Colour"));
+        //Brake test weight	        1075 kg
+        assertEquals("weight from SQL" + "kg", driverWrapper.getTextFromDefinitionList("Brake test weight"));
+
+        //And the vehicle registration section contains the following attributes
+        //Registration mark	        GT93EJL
+        assertEquals(registration, driverWrapper.getTextFromDefinitionList("Registration mark"));
+        //VIN	                    LJETGJAAAAA011133
+        assertEquals(vin, driverWrapper.getTextFromDefinitionList("VIN"));
+        //Country of registration	GB, UK, ENG, CYM, SCO (UK) - Great Britain
+        assertEquals("Country of registration from SQL", driverWrapper.getTextFromDefinitionList("Country of registration"));
+        //MOT test class	        4
+        assertEquals("MOT test class from SQL", driverWrapper.getTextFromDefinitionList("MOT test class"));
+        //Vehicle category	        M1
+        assertEquals("Vehicle category from DVLA SQL", driverWrapper.getTextFromDefinitionList("Vehicle category"));
+        //Date of first use	        26 July 2013
+        assertEquals(issueDate, driverWrapper.getTextFromDefinitionList("Date of first use"));
+        //MOT expiration date       26 August 2018
+        assertEquals("MOT expiration date from SQL", driverWrapper.getTextFromDefinitionList("MOT expiration date"));
+
     }
 
     /**

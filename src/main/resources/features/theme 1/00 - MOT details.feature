@@ -1,4 +1,4 @@
-@smoke @regression
+@smoke @regression @karl
 Feature: 00 - MOT details check - Find vehicle, confirm and start test
 
   Scenario: Tester enters MOT test and validates the vehicle MOT Testing details
@@ -6,6 +6,7 @@ Feature: 00 - MOT details check - Find vehicle, confirm and start test
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
     When I search for a vehicle {registration1}, {vin1}, {site}
     And I select an MOT test for {registration1}, {vin1}, {site} with {colour1}, {colour2}, {issueDate}
+    And I confirm vehicle and start MOT test for
     And The page title contains "Your home"
     And I click the "Enter test results" link
     And I enter an odometer reading in miles of {mileage1} plus 5000
