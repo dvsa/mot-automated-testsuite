@@ -1769,18 +1769,19 @@ public class WebDriverWrapper {
      * @param seconds The delay between each screen refresh
      * @param refresh refresh the screen once the wait time has passed
      */
-    public void waitForButton(Integer seconds, Integer refresh, String buttonText) {
+    public void waitForButton(Integer seconds, Integer loop, String buttonText) {
 
-        for (int i = 0; i < refresh; i++) {
-            webDriver.navigate().refresh();
+        for (int i = 0; i < loop; i++) {
             List<WebElement> button = findLinks(buttonText);
 
             if (button.size() == 1) {
                 String message = "button found with text: " + buttonText;
                 logger.info(message);
+                break;
 
             } else if (button.size() == 0) {
                 timeWait(seconds);
+                webDriver.navigate().refresh();
 
             } else {
                 String message = "button not found in time allocated: " + buttonText;
