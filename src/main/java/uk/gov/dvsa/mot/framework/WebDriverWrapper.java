@@ -1772,6 +1772,7 @@ public class WebDriverWrapper {
     public void waitForButton(Integer seconds, Integer refresh, String buttonText) {
 
         for (int i = 0; i < refresh; i++) {
+            webDriver.navigate().refresh();
             List<WebElement> button = findLinks(buttonText);
 
             if (button.size() == 1) {
@@ -1779,7 +1780,6 @@ public class WebDriverWrapper {
                 logger.info(message);
 
             } else if (button.size() == 0) {
-                webDriver.navigate().refresh();
                 timeWait(seconds);
 
             } else {
