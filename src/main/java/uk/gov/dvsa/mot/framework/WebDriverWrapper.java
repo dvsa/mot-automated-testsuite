@@ -1551,8 +1551,8 @@ public class WebDriverWrapper {
             throw new IllegalStateException(message);
         }
 
-        // the order of getWindowHandls() is not defined, so jsut switch to the
-        // one that isn't the current one
+        // the order of webDriver.getWindowHandle() is not defined, so switch to the
+        // one that isn't the current handle
         String curHandle = webDriver.getWindowHandle();
         String newTab = "";
         for (String handle : webDriver.getWindowHandles()) {
