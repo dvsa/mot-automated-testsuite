@@ -38,8 +38,8 @@ Feature: 99a - duplicate and replacement certificates
     And I click the first "View certificate" link
     And The page contains "Duplicate or replacement certificate"
     And The page does not contain "Change"
-    And I check there is a "Print certificate" link
-    And I click "Print certificate" and check the PDF contains:
+    And I check there is a "View certificate" link
+    And I click "View certificate" and check the PDF contains:
       | Duplicate certificate            |
       | VT                               |
 
@@ -85,7 +85,7 @@ Feature: 99a - duplicate and replacement certificates
     And I click the first "View certificate" link
     And The page contains "Duplicate or replacement certificate"
     And The page does not contain "Change"
-    And I check there is a "Print certificate" link
+    And I check there is a "View certificate" link
     And I press the "Edit this MOT test result" button
     And I update the odometer reading by 3000
     And I edit the primary colour "Red" and secondary colour "White"
@@ -107,9 +107,9 @@ Feature: 99a - duplicate and replacement certificates
     And I click the first "View certificate" link
     And The page contains "Duplicate or replacement certificate"
     And The page does not contain "Change"
-    And I check there is a "Print certificate" link
+    And I check there is a "View certificate" link
     And I check there is no "Edit this MOT test result" button
-    And I click "Print certificate" and check the PDF contains:
+    And I click "View certificate" and check the PDF contains:
       | Duplicate certificate            |
 
   @smoke @regressiondata
