@@ -102,13 +102,13 @@ Feature: 99a - duplicate and replacement certificates
 
 
   Scenario: Tester issues duplicate certificate and cannot edit another sites tests
-    Given I login with 2FA using "MOT_TESTER_CLASS_4_WITH_OTHER_SITE_TEST" as {tester}, {site}, {reg}
+    Given I login with 2FA using "MOT_TESTER_CLASS_4_WITH_OTHER_SITE_TEST" as {tester}, {site}, {reg}, {v5c}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
     And The page contains "Duplicate or replacement certificate"
     And The page does not contain "Change"
-    And I check there is a "View certificate" link
     And I check there is no "Edit this MOT test result" button
+    And I enter {v5c} in the field with id "v5c"
     And I click "View certificate" and check the PDF contains:
       | Duplicate certificate            |
 
