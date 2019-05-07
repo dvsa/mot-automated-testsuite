@@ -109,7 +109,9 @@ Feature: 99a - duplicate and replacement certificates
     And The page does not contain "Change"
     And I check there is no "Edit this MOT test result" button
     And I enter {v5c} in the field with id "v5c"
-    And I click "View certificate" and check the PDF contains:
+    And I click the button which contains text "View certificate"
+    And The page contains "View duplicate certificate"
+    And I click "PDF" and check the PDF contains:
       | Duplicate certificate            |
 
   @smoke @regressiondata
