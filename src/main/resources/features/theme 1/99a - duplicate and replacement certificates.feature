@@ -101,7 +101,7 @@ Feature: 99a - duplicate and replacement certificates
       | {vin1}                |
 
 
-  Scenario: Tester issues duplicate certificate and cannot edit another sites tests
+  Scenario: Tester issues duplicate certificate with a valid v5c number and cannot edit another sites tests
     Given I login with 2FA using "MOT_TESTER_CLASS_4_WITH_OTHER_SITE_TEST" as {tester}, {site}, {reg}, {v5c}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
@@ -109,10 +109,11 @@ Feature: 99a - duplicate and replacement certificates
     And The page does not contain "Change"
     And I check there is no "Edit this MOT test result" button
     And I enter {v5c} in the field with id "v5c"
-    And I click the button which contains text "View certificate"
+    And I press the "View certificate" button
     And The page contains "View duplicate certificate"
     And I click "PDF" and check the PDF contains:
       | Duplicate certificate            |
+      | {reg}                            |
 
   @smoke @regressiondata
   Scenario: AO1 user edits vehicle details on latest certificate
