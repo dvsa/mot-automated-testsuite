@@ -8,8 +8,8 @@ Feature: 14b - CSCO
     And I click the first "View certificate" link
     And The page contains "Duplicate or replacement certificate"
     And The page does not contain "Change"
-    And I check there is a "Print certificate" link
-    And I click "Print certificate" and check the PDF contains:
+    And I check there is a "View certificate" link
+    And I click "View certificate" and check the PDF contains:
       | Duplicate certificate          |
 
 
