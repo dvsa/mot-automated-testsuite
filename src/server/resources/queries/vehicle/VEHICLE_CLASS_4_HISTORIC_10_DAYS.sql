@@ -4,7 +4,7 @@ INNER JOIN (SELECT count(vehicle_id) as test_count, min(id) as id, vehicle_id
 			from mot_test_current
 			WHERE created_on > CURRENT_DATE - INTERVAL 4 YEAR -- only current certificates can be pulled
  	   		GROUP BY vehicle_id
- 	   		limit 100000) AS oldest_mot
+ 	   		limit 500000) AS oldest_mot
  	   		ON mtc.id = oldest_mot.id
 where veh.model_detail_id = md.id
 and md.vehicle_class_id = 4 -- cars only
