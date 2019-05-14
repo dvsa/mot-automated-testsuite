@@ -36,8 +36,8 @@ import uk.gov.dvsa.mot.framework.pdf.MotCertFormFields;
 import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
 import uk.gov.dvsa.mot.framework.pdf.PdfException;
 
-import java.io.Console;
 import java.io.BufferedWriter;
+import java.io.Console;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
