@@ -22,6 +22,7 @@ High level:
 
 * I browse to ```URL```
 * I press the ```"..button text.."``` button
+* I press the first ```"..button text.."``` button
 * I click the button which contains text ```"..button text.."```
    * Note: this finds the text element then clicks the button that is its ancestor. For use with nested tags in buttons.
 * I click the button with class name ```"..class name.."```
@@ -299,6 +300,7 @@ These steps are specific to the DVSA MOT application screens.
 * I close extra tabs
 * I click the accordion section with the id ```..text..```
 * I click the ```..text..``` help link
+* I click the certificate link and check the MOT certificate PDF contains ```{dataTable}```
 
 ### ElasticSearchStepDefinitons
 

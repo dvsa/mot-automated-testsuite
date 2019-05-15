@@ -1,11 +1,14 @@
 package uk.gov.dvsa.mot.fixtures.moth;
 
+import static junit.framework.TestCase.assertTrue;
+
 import cucumber.api.java8.En;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 import javax.inject.Inject;
+
 
 public class MothStepDefintions implements En {
 
@@ -33,9 +36,14 @@ public class MothStepDefintions implements En {
         When("^I click the last \"([^\"]+)\" text$", (String linkText) ->
                 driverWrapper.clickLastText(linkText));
 
+        When("^I click the first \"([^\"]+)\" text$", (String linkText) ->
+                driverWrapper.clickFirstText(linkText));
+
         When("^I go to the next tab$", () -> driverWrapper.goNextTab());
 
         When("^I close extra tabs$", () -> driverWrapper.closeTabs());
+
+        When("^PDF is embedded in the page$", () -> assertTrue(driverWrapper.containsEmbeddedPdf()));
     }
 
 
