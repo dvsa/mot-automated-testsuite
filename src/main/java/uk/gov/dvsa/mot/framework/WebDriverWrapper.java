@@ -129,6 +129,7 @@ public class WebDriverWrapper {
             if ("true".equals(env.getProperty("headless"))) {
                 chromeOptions.addArguments("--headless");
                 chromeOptions.addArguments("window-size=1920,1080");
+                chromeOptions.addArguments("enable-features=NetworkServiceInProcess");
             }
 
             if ("true".equals(env.getProperty("securityProxy"))) {
