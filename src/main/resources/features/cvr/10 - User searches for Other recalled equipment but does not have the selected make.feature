@@ -1,5 +1,5 @@
 @cvrpp @cvrint
-Feature: 09 - User searches for Other recalled equipment but does not have the selected make
+Feature: 10 - User searches for Other recalled equipment but does not have the selected make
 
   Scenario: A CVR user searches for Other recalled equipment but does not have the selected make and clicks on the "Why is my equipment make not listed?" link
     Given I browse to /

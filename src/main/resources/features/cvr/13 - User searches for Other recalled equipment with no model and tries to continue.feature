@@ -1,5 +1,5 @@
 @cvrpp @cvrint
-Feature: 12 - User searches for Other recalled equipment with no model and tries to continue
+Feature: 13 - User searches for Other recalled equipment with no model and tries to continue
 
   Scenario: User searches for Other recalled equipment they have the make but does not have the selected model and tries to continue and will see the "There was a problem banner".
     Given I browse to /
