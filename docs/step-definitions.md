@@ -83,6 +83,7 @@ High level:
    * Note: allows partial match of the cookie name
 * I wait for ```"..number.."``` seconds
 * I set the starting url key as ```"..starting url key.."```
+* I create an accessibility report ```"..report name.."```
 
 Lower level, only use if higher level steps can't be used:
 
