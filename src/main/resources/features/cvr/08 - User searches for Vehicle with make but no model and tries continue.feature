@@ -8,5 +8,5 @@ Feature: 08 - User searches for Vehicle with make but no model and tries continu
     And I select "ALFA ROMEO" in the field with id "make"
     And I click the "Continue" button
     And I click the "Continue" button
-    // When I Check the 'There was a problem' banner text
+#    When I Check the 'There was a problem' banner text
     Then I click the "Select the vehicle model" link
