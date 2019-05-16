@@ -17,9 +17,10 @@ Feature: Tester accessibility reports
     Then I click the "Return to your profile" link
     And I click the "Test logs" link
     And I create an accessibility report "tester_test_logs"
-    Then I click the "Return to Your profile" link
-    And I click the "Test quality information" link
-    And I create an accessibility report "tester_tqi"
+#    The following line need to be enabled after BL-9599
+#    Then I click the "Return to Your profile" link
+#    And I click the "Test quality information" link
+#    And I create an accessibility report "tester_tqi"
 
   Scenario: Accessibility report for mot journey
     Given I load "DVLA_VEHICLE" as {registration1}, {vin1}, {mileage1}
