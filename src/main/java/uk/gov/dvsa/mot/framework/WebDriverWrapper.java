@@ -151,7 +151,11 @@ public class WebDriverWrapper {
             LoggingPreferences loggingPreferences = new LoggingPreferences();
 
             // logging turned off completely
-            loggingPreferences.enable(LogType.BROWSER, Level.ALL);
+            if ("true".equals(env.getProperty("browserConsole"))) {
+                loggingPreferences.enable(LogType.BROWSER, Level.ALL);
+            } else {
+                loggingPreferences.enable(LogType.BROWSER, Level.OFF);
+            }
             loggingPreferences.enable(LogType.PERFORMANCE, Level.OFF);
             loggingPreferences.enable(LogType.PROFILER, Level.OFF);
             loggingPreferences.enable(LogType.SERVER, Level.OFF);
