@@ -58,6 +58,7 @@ MOT:
 * **@regressiondata** = Generate data for manual checking
 * **@VEinspection** = Vehicle Examiner Inspection test suite
 * **@OpenInterfaceTests** = Covers MOT tests for OpenIF
+* **@accessibility** = Runs the AXE accessibility checks output to `target/accessibility`. Note you must run `npm install` first to install the necessary axe libraries.
 
 MOT History:
 * **@mothint** = MOT History regression tests on the INT Environment
@@ -66,6 +67,8 @@ MOT History:
 * **@mothhgv** = MOT History HGV/PSV only regression tests (trailers excluded)
 * **@mothtrailers** = MOT History HGV/PSV only regression tests for trailers
 * **@mothprint** = MOT certificate printing only regression tests
+* **@mothaccessibility** = Runs the AXE accessibility checks output to `target/accessibility`. Note you must run `npm install` first to install the necessary axe libraries.
+
 
 ## Reports
 Reporting is done via the [Extender Cucumber Runner](http://mkolisnyk.github.io/cucumber-reports/extended-cucumber-runner) library. The results are placed in the `target` directory along with screenshots of failing tests, and the HTML of the last page reached (if configured).

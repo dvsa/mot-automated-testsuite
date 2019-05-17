@@ -137,6 +137,9 @@ public class WebStepDefinitions implements En {
         Then("^The page title contains \"([^\"]+)\"$", (String expected) ->
                 driverWrapper.checkCurrentPageTitle(expected));
 
+        Then("^I create an accessibility report \"([^\"]*)\"$", (String filename) ->
+                driverWrapper.generateAccessibilityReport(filename));
+
         And("^I check there is a \"([^\"]+)\" link$", (String link) ->
                 assertTrue(driverWrapper.hasLink(link)));
 

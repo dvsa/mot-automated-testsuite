@@ -1,6 +1,8 @@
 package uk.gov.dvsa.mot.framework;
 
+import com.deque.axe.AXE;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.json.JSONObject;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -34,7 +36,12 @@ import uk.gov.dvsa.mot.framework.pdf.MotCertFormFields;
 import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
 import uk.gov.dvsa.mot.framework.pdf.PdfException;
 
+import java.io.BufferedWriter;
+import java.io.Console;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -185,6 +192,76 @@ public class WebDriverWrapper {
         logger.debug("WebDriverWrapper.reset");
         webDriver.manage().deleteAllCookies();
         data.clear();
+    }
+
+    /**
+     * Generates the AXE accessibility report to WCAG 2.0 AA standard.
+     * Will overwrite existing file if file already exists.
+     * See https://github.com/dequelabs/axe-selenium-java/blob/master/src/test/java/com/deque/axe/ExampleTest.java
+     * @param filename the filename to save the report to.
+     */
+    public void generateAccessibilityReport(String filename) {
+        try {
+            // Path to the AXE JS file
+            // You need to run npm install from the root directory to download the latest executables
+            File axeJs = new File("node_modules/axe-core/axe.min.js");
+            AXE.Builder builder = new AXE.Builder(this.webDriver, axeJs.toURI().toURL());
+
+            // Set to WCAG 2.0 AA standard
+            // Chrome plugin uses ["wcag2a", "wcag2aa", "section508", "best-practice"]
+            builder.options("{runOnly: {type: \"tag\",values: [\"wcag2a\", \"wcag2aa\"]}}");
+
+            JSONObject results = builder.analyze();
+
+            // Create folder for the reports if it doesn't already exist
+            File dir = new File("target/accessibility");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            String fullFilename = dir + File.separator
+                    + filename.replaceAll("/", "-").replaceAll(" ", "_");
+
+            // Write JSON results - all passes and violations
+            AXE.writeResults(fullFilename, results);
+
+            // Write TXT results of any violations
+            writeAccessibilityReport(fullFilename, results);
+
+        } catch (MalformedURLException ex) {
+            // Cannot configure AXE
+            logger.error("Unable to configure AXE", ex);
+            throw new RuntimeException("Unable to configure AXE", ex);
+        }
+    }
+
+    /**
+     * Writes the Accessibility report violations to a simple text file.
+     * @param filename      the full file name and path
+     * @param jsonResults   the json results of the accessibility report
+     */
+    private void writeAccessibilityReport(String filename, JSONObject jsonResults) {
+        File file = null;
+        try {
+            file = new File(filename + ".txt");
+            file.createNewFile();
+
+        } catch (IOException ex) {
+            String message = "Error creating file: " + ex.getMessage();
+            logger.error(message, ex);
+            // swallow error, abort the write
+            return;
+        }
+
+        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file), "UTF-8"))) {
+            out.write(AXE.report(jsonResults.getJSONArray("violations")));
+
+        } catch (IOException ex) {
+            String message = "Error writing file: " + ex.getMessage();
+            logger.error(message, ex);
+            // swallow error and continue
+        }
     }
 
     /**
