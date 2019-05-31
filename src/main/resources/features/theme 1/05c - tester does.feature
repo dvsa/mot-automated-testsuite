@@ -58,6 +58,8 @@ Feature: 05c - Tester does...
     And I check the VIN {vin1} is shown within the VIN span text
     And I check the vehicle summary section of the test summary has "Result" of "PASS"
     And I check the brake results section of the test summary is "Pass"
+    And I check the dangerous failures section of the brake test summary of the test summary has "None recorded"
+    And I check the major failures section of the brake test summary of the test summary has "None recorded"
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the major failures section of the test summary has "None recorded"
     And I check the minors section of the test summary has "None recorded"
@@ -89,6 +91,9 @@ Feature: 05c - Tester does...
     And I check the VIN {vin1} is shown within the VIN span text
     And I check the vehicle summary section of the test summary has "Result" of "PASS"
     And I check the brake results section of the test summary is "Pass"
+    And I check the dangerous failures section of the brake test summary of the test summary has "None recorded"
+    And I check the major failures section of the brake test summary of the test summary has "None recorded"
+    And I check the dangerous failures section of the test summary has "None recorded"
     And I check the major failures section of the test summary has "None recorded"
     And I check the prs section of the test summary has "None recorded"
     And I check the advisory section of the test summary has "None recorded"
@@ -128,9 +133,10 @@ Feature: 05c - Tester does...
     And I check the major failures section of the test summary has "Test defect 1"
     And I check the major failures section of the test summary has "Throttle operating incorrectly"
     And I check the major failures section of the test summary has "Test defect 2"
-    And I check the major failures section of the test summary has "Decelerometer brake test Neither brake control achieves an efficiency of 25%"
     And I check the prs section of the test summary has "None recorded"
     And I check the advisory section of the test summary has "None recorded"
+    And I check the dangerous failures section of the brake test summary of the test summary has "None recorded"
+    And I check the major failures section of the brake test summary of the test summary has "Decelerometer brake test Neither brake control achieves an efficiency of 25%"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
@@ -171,6 +177,8 @@ Feature: 05c - Tester does...
     And I check the major failures section of the test summary has "None recorded"
     And I check the minors section of the test summary has "None recorded"
     And I check the prs section of the test summary has "None recorded"
+    And I check the dangerous failures section of the brake test summary of the test summary has "None recorded"
+    And I check the major failures section of the brake test summary of the test summary has "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
@@ -201,10 +209,12 @@ Feature: 05c - Tester does...
     And I check the VIN {vin1} is shown within the VIN span text
     And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the brake results section of the test summary is "Fail"
-    And I check the dangerous failures section of the test summary has "Brakes imbalanced across an axle by more than 50%"
-    And I check the major failures section of the test summary has "Brakes imbalanced across an axle"
+    And I check the dangerous failures section of the brake test summary of the test summary has "Brakes imbalanced across an axle by more than 50%"
+    And I check the major failures section of the brake test summary of the test summary has "Brakes imbalanced across an axle"
     And I check the major failures section of the test summary does not have "Steering system excessively rough"
     And I check the major failures section of the test summary does not have "Test failure 1"
+    And I check the dangerous failures section of the test summary has "None recorded"
+    And I check the major failures section of the test summary has "None recorded"
     And I check the minors section of the test summary has "None recorded"
     And I check the prs section of the test summary has "None recorded"
     And I check the advisory section of the test summary has "None recorded"

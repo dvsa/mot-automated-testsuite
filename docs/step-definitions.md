@@ -259,9 +259,13 @@ These steps are specific to the DVSA MOT application screens.
 * I check the fails section of the test summary has ```"..text.."```
 * I check the prs section of the test summary has ```"..text.."```
 * I check the advisory section of the test summary has ```"..text.."```
+* I check the dangerous failures section of the brake test summary of the test summary has ```"...text...""```
+* I check the major failures section of the brake test summary of the test summary has ```"...text...""```
 * I check the fails section of the test summary does not have ```"..text.."```
 * I check the prs section of the test summary does not have ```"..text.."```
 * I check the advisory section of the test summary does not have ```"..text.."```
+* I check the dangerous failures section of the brake test summary of the test summary does not have ```"...text...""```
+* I check the major failures section of the brake test summary of the test summary does not have ```"...text...""```
 * I enter the current time for the contingency test
 * I search for defect ```"..defect.."``` and open the ```"..manualLinkText.."``` manual link, I expect the ```".manualPageTitle."``` manual page
 * I record the MOT test number

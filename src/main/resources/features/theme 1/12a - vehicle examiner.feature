@@ -10,6 +10,8 @@ Feature: 12a - Vehicle Examiner
     And I click the first "View" link
     When I start a "<ConfirmTestType>" test
     And I press the "Start inspection" button
+    And I click the "Return to home" link
+    And I click the "Resume Reinspection" link
     And I enter an odometer reading in miles of {mileage1} plus 1000
     And I enter decelerometer results of service brake 60 and parking brake 60
     Then I click the "Cancel test" link
@@ -37,6 +39,8 @@ Feature: 12a - Vehicle Examiner
     And I click the first "View" link
     When I start a "<ConfirmTestType>" test
     And I press the "Start inspection" button
+    And I click the "Return to home" link
+    And I click the "Resume Reinspection" link
     And I enter an odometer reading in miles of {mileage1} plus 1000
     And I enter decelerometer results of service brake 60 and parking brake 60
     Then I press the "Review test" button
@@ -88,6 +92,8 @@ Feature: 12a - Vehicle Examiner
     And I click the first "View" link
     And I start a "<ConfirmTestType>" test
     And I press the "Start inspection" button
+    And I click the "Return to home" link
+    And I click the "Resume Reinspection" link
     And I enter an odometer reading in miles of {mileage1} plus 1125
     And I enter decelerometer results of service brake 30 and parking brake 16
     And I press the "Review test" button
@@ -96,10 +102,11 @@ Feature: 12a - Vehicle Examiner
     And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the brake results section of the test summary is "Fail"
     And I check the dangerous failures section of the test summary has "None recorded"
-    And I check the major failures section of the test summary has "Service brake efficiency below requirements"
+    And I check the major failures section of the test summary has "None recorded"
     And I check the minors section of the test summary has "None recorded"
     And I check the prs section of the test summary has "None recorded"
     And I check the advisory section of the test summary has "None recorded"
+    And I check the major failures section of the brake test summary of the test summary has "Service brake efficiency below requirements"
     And I press the "Finish reinspection" button
     And The page title contains "MOT reinspection complete"
     And I click "Print documents" and check the PDF contains:
@@ -139,6 +146,8 @@ Feature: 12a - Vehicle Examiner
     And I click the first "View" link
     And I start a "<ConfirmTestType>" test
     And I press the "Start inspection" button
+    And I click the "Return to home" link
+    And I click the "Resume Reinspection" link
     And I enter an odometer reading in miles of {mileage1} plus 1125
     And I enter decelerometer results of service brake 88 and parking brake 88
     And I press the "Review test" button
@@ -190,6 +199,8 @@ Feature: 12a - Vehicle Examiner
     And I click the first "View" link
     And I start a "<ConfirmTestType>" test
     And I press the "Start inspection" button
+    And I click the "Return to home" link
+    And I click the "Resume Reinspection" link
     And I enter an odometer reading in miles of {mileage1} plus 1005
     And I enter decelerometer results of service brake 12 and parking brake 6
     And I browse for a "PRS" defect of ("Brakes", "Brake actuators", "Hydraulic brake callipers", "Corroded, excessively weakened") with comment "Test prs 1"
@@ -202,9 +213,9 @@ Feature: 12a - Vehicle Examiner
     And I check the VIN {vin1} is shown within the VIN span text
     And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the brake results section of the test summary is "Fail"
+    And I check the dangerous failures section of the brake test summary of the test summary has "Service brake efficiency less than"
+    And I check the dangerous failures section of the brake test summary of the test summary has "Parking brake efficiency less than"
     And I check the dangerous failures section of the test summary has "Road wheel fractured"
-    And I check the dangerous failures section of the test summary has "Service brake efficiency less than"
-    And I check the dangerous failures section of the test summary has "Parking brake efficiency less than"
     And I check the major failures section of the test summary has "Registration plate incorrect"
     And I check the minors section of the test summary has "Brake valve has an excessive discharge of oil"
     And I check the prs section of the test summary has "Hydraulic brake calliper excessively weakened by corrosion"
@@ -249,6 +260,8 @@ Feature: 12a - Vehicle Examiner
     And I start a "Inverted Appeal" test
     And I enter "AB1236T" in the field with id "complaintRef"
     And I press the "Start inspection" button
+    And I click the "Return to home" link
+    And I click the "Resume Reinspection" link
     And I enter an odometer reading in miles of {mileage1} plus 80
     And I enter decelerometer results of service brake 12 and parking brake 6
     And I browse for a "PRS" defect of ("Brakes", "Brake actuators", "Hydraulic brake callipers", "Corroded, excessively weakened") with comment "Test prs 1"
@@ -262,8 +275,8 @@ Feature: 12a - Vehicle Examiner
     And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the brake results section of the test summary is "Fail"
     And I check the dangerous failures section of the test summary has "Road wheel fractured"
-    And I check the dangerous failures section of the test summary has "Service brake efficiency less than"
-    And I check the dangerous failures section of the test summary has "Parking brake efficiency less than"
+    And I check the dangerous failures section of the brake test summary of the test summary has "Service brake efficiency less than"
+    And I check the dangerous failures section of the brake test summary of the test summary has "Parking brake efficiency less than"
     And I check the major failures section of the test summary has "Registration plate incorrect"
     And I check the minors section of the test summary has "Brake valve has an excessive discharge of oil"
     And I check the prs section of the test summary has "Hydraulic brake calliper excessively weakened by corrosion"
@@ -303,6 +316,8 @@ Feature: 12a - Vehicle Examiner
     And I start a "Statutory Appeal" test
     And I enter "AB1236T" in the field with id "complaintRef"
     And I press the "Start inspection" button
+    And I click the "Return to home" link
+    And I click the "Resume Reinspection" link
     And I enter an odometer reading in miles of {mileage1} plus 80
     And I enter decelerometer results of service brake 90 and parking brake 90
     And I press the "Review test" button

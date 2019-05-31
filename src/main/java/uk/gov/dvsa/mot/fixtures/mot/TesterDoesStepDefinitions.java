@@ -396,6 +396,24 @@ public class TesterDoesStepDefinitions implements En {
         And("^I check the advisory section of the test summary has \"([^\"]+)\"$", (String text) ->
                 assertTrue(driverWrapper.getTextFromDefinitionList("Advisory text").contains(text)));
 
+        And("^I check the dangerous failures section of the brake test summary of the test summary has \"([^\"]+)\"$",
+                (String text) -> assertTrue(driverWrapper.getTextFromDefinitionListOfIndex("Dangerous failures", 1)
+                        .contains(text)));
+
+        And("^I check the major failures section of the brake test summary of the test summary has \"([^\"]+)\"$",
+                (String text) -> assertTrue(driverWrapper.getTextFromDefinitionListOfIndex("Major failures", 1)
+                        .contains(text)));
+
+        And("^I check the dangerous failures section of the brake test summary of the test summary "
+                        + "does not have \"([^\"]+)\"$",
+                (String text) -> assertFalse(driverWrapper.getTextFromDefinitionListOfIndex("Dangerous failures", 1)
+                        .contains(text)));
+
+        And("^I check the major failures section of the brake test summary of the test summary "
+                        + "does not have \"([^\"]+)\"$",
+                (String text) -> assertFalse(driverWrapper.getTextFromDefinitionListOfIndex("Major failures", 1)
+                        .contains(text)));
+
         And("^I check the fails section of the test summary does not have \"([^\"]+)\"$", (String text) ->
                 assertFalse(driverWrapper.getTextFromUnorderedList("Fails").contains(text)));
 

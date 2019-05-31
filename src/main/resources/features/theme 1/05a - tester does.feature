@@ -55,10 +55,12 @@ Feature: 05a - Tester does...
     And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the brake test summary section has "Brake results overall" of "Fail"
     And I check the defect section has "Dangerous failures" with value "None recorded"
-    And I check the major failures section of the test summary has "Parking brake efficiency below requirements"
+    And I check the major failures section of the test summary has "None recorded"
     And I check the defect section has "Minors" with value "None recorded"
     And I check the defect section has "PRS" with value "None recorded"
     And I check the defect section has "Advisory text" with value "None recorded"
+    And I check the dangerous failures section of the brake test summary of the test summary has "None recorded"
+    And I check the major failures section of the brake test summary of the test summary has "Service brake efficiency below requirements"
     And I press the "Save test result" button
 
     And The page title contains "MOT test complete"
@@ -106,6 +108,8 @@ Feature: 05a - Tester does...
     And I check the major failures section of the test summary has "Test defect 3"
     And I check the major failures section of the test summary does not have "Steering column deformed to the extent that steering is affected"
     And I check the major failures section of the test summary does not have "Test defect 1"
+    And I check the dangerous failures section of the brake test summary of the test summary has "None recorded"
+    And I check the major failures section of the brake test summary of the test summary has "None recorded"
     And I check the defect section has "Minors" with value "None recorded"
     And I check the defect section has "PRS" with value "None recorded"
     And I check the defect section has "Advisory text" with value "None recorded"
@@ -147,6 +151,9 @@ Feature: 05a - Tester does...
     And I check the defect section has "Minors" with value "None recorded"
     And I check the defect section has "PRS" with value "None recorded"
     And I check the defect section has "Advisory text" with value "None recorded"
+    And I check the dangerous failures section of the brake test summary of the test summary has "None recorded"
+    And I check the major failures section of the brake test summary of the test summary has "None recorded"
+
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
