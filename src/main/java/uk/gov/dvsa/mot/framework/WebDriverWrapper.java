@@ -1461,7 +1461,7 @@ public class WebDriverWrapper {
         }
 
 
-//        ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+        // ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
 
 
         // wait until page loaded, ready and JQuery processing completed...
