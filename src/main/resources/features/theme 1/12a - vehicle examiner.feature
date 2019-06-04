@@ -321,7 +321,7 @@ Feature: 12a - Vehicle Examiner
     And I check the case outcome "Advisory warning letter" is saved
 
 
-    Scenario: Authorised Examiner Search
+    Scenario: Authorised Examiner Search, slot check and PDF download
       Given I login without 2FA using "VEHICLE_EXAMINER_USER" as {vehicleExaminer}
       And I load "AUTHORISED_EXAMINER" as {aeNumber}, {aeName}, {slotUsage}
       When I search for AE information with {aeNumber}
@@ -329,6 +329,9 @@ Feature: 12a - Vehicle Examiner
       And I click the "Slot usage" link
       And The page contains "Test slot usage"
       And I check the slot usage for the past 30 days is {slotUsage}
+      And I click "PDF" and check the PDF contains:
+    | Slot usage history |
+    | {aeName}           |
 
 
   Scenario: Site information search and abort active test
