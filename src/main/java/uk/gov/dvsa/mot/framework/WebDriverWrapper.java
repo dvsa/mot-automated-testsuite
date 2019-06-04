@@ -3,6 +3,7 @@ package uk.gov.dvsa.mot.framework;
 import com.deque.axe.AXE;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.json.JSONObject;
+import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -18,6 +19,8 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
@@ -46,10 +49,10 @@ import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -149,7 +152,11 @@ public class WebDriverWrapper {
             LoggingPreferences loggingPreferences = new LoggingPreferences();
 
             // logging turned off completely
-            loggingPreferences.enable(LogType.BROWSER, Level.OFF);
+            if ("true".equals(env.getProperty("browserConsole"))) {
+                loggingPreferences.enable(LogType.BROWSER, Level.ALL);
+            } else {
+                loggingPreferences.enable(LogType.BROWSER, Level.OFF);
+            }
             loggingPreferences.enable(LogType.PERFORMANCE, Level.OFF);
             loggingPreferences.enable(LogType.PROFILER, Level.OFF);
             loggingPreferences.enable(LogType.SERVER, Level.OFF);
@@ -182,6 +189,17 @@ public class WebDriverWrapper {
             String message = "Unsupported browser: " + browser;
             logger.error(message);
             throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * Analyses the browser logs.
+     */
+    public void analyseLog() {
+        LogEntries logEntries = webDriver.manage().logs().get(LogType.BROWSER);
+        for (LogEntry entry : logEntries) {
+            Assert.fail("The following console error has been found: " + new Date(entry.getTimestamp())
+                    + " " + entry.getLevel() + " " + entry.getMessage());
         }
     }
 
