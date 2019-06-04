@@ -37,13 +37,13 @@ import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
 import uk.gov.dvsa.mot.framework.pdf.PdfException;
 
 import java.io.BufferedWriter;
-import java.io.Console;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -728,7 +728,7 @@ public class WebDriverWrapper {
      */
     private Alert getAlert() {
         logger.debug("Waiting for alert to popup...");
-        (new WebDriverWait(webDriver, pageWaitSeconds)).pollingEvery(pollFrequencyMilliseconds, TimeUnit.MILLISECONDS)
+        (new WebDriverWait(webDriver, pageWaitSeconds)).pollingEvery(Duration.ofMillis(pollFrequencyMilliseconds))
                 .until(ExpectedConditions.alertIsPresent());
         logger.debug("Alert has popped up...");
 
@@ -1461,9 +1461,9 @@ public class WebDriverWrapper {
         }
 
         // wait until page loaded, ready and JQuery processing completed...
-        if ((Boolean) ((JavascriptExecutor)webDriver).executeScript("return window.jQuery != undefined")) {
+        if ((Boolean) ((JavascriptExecutor)webDriver).executeScript("return !!window.jQuery && jQuery.active == 0")) {
             new WebDriverWait(webDriver, pageWaitSeconds)
-                    .pollingEvery(pollFrequencyMilliseconds, TimeUnit.MILLISECONDS).until(
+                    .pollingEvery(Duration.ofMillis(pollFrequencyMilliseconds)).until(
                         (ExpectedCondition<Boolean>) wd ->
                             ((JavascriptExecutor) wd).executeScript("return jQuery.active").equals(0L));
 
@@ -1475,7 +1475,7 @@ public class WebDriverWrapper {
         if (!webDriver.getTitle().contains("Customer Payment Management System")
                 && !webDriver.getTitle().contains("Payment details - BJSS")) {
             (new WebDriverWait(webDriver, pageWaitSeconds))
-                .pollingEvery(pollFrequencyMilliseconds, TimeUnit.MILLISECONDS)
+                .pollingEvery(Duration.ofMillis(pollFrequencyMilliseconds))
                     .until(ExpectedConditions.presenceOfElementLocated(By.id("footer")));
             logger.debug("Footer image available");
         }
