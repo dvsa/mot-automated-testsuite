@@ -59,7 +59,9 @@ public class LifecycleHooks {
         logger.debug("After cucumber scenario: ********** {} **********", scenario.getName());
 
         //gets browser logs
-        driverWrapper.analyseLog();
+        if ("true".equals(env.getProperty("browserConsole"))) {
+            driverWrapper.analyseLog();
+        }
 
         // add to the test report
         outputDataUse(scenario);
