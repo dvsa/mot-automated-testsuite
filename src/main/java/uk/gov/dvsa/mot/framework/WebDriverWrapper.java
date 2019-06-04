@@ -1465,7 +1465,7 @@ public class WebDriverWrapper {
             new WebDriverWait(webDriver, pageWaitSeconds)
                     .pollingEvery(Duration.ofMillis(pollFrequencyMilliseconds)).until(
                         (ExpectedCondition<Boolean>) wd ->
-                                ((JavascriptExecutor) wd).executeScript("return jQuery.active").equals(0L));
+                             ((JavascriptExecutor) wd).executeScript("return jQuery.active").equals(0L));
 
             logger.debug("Page loaded, ready and JQuery activity complete, waiting for footer image...");
         }
