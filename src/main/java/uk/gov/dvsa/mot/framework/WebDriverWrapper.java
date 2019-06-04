@@ -1460,16 +1460,12 @@ public class WebDriverWrapper {
             throw new RuntimeException(message);
         }
 
-
-        // ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-
-
         // wait until page loaded, ready and JQuery processing completed...
-        if ((Boolean) ((JavascriptExecutor)webDriver).executeScript("return window.jQuery != undefined")) {
+        if ((Boolean) ((JavascriptExecutor)webDriver).executeScript("return !!window.jQuery && jQuery.active == 0")) {
             new WebDriverWait(webDriver, pageWaitSeconds)
                     .pollingEvery(Duration.ofMillis(pollFrequencyMilliseconds)).until(
                         (ExpectedCondition<Boolean>) wd ->
-                            ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+                                ((JavascriptExecutor) wd).executeScript("return jQuery.active").equals(0L));
 
             logger.debug("Page loaded, ready and JQuery activity complete, waiting for footer image...");
         }
