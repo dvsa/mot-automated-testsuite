@@ -1,7 +1,7 @@
 @regression
 Feature: 09a - AEDM and AED
 
-  @smoke
+  @smoke @cpms
   Scenario: AEDM buys slots
     Given I login with 2FA using "AEDM_USER" as {AEDM}, {ORGANISATION}
     And I click the first {ORGANISATION} link
