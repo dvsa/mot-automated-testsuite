@@ -60,7 +60,7 @@ Feature: 05f - Tester does...
     And I check the dangerous failures section of the brake test summary of the test summary has "None recorded"
     And I check the major failures section of the brake test summary of the test summary has "Parking brake efficiency below requirements"
     And I check the dangerous failures section of the test summary has "None recorded"
-    And I check the major failures section of the test summary has "Parking brake efficiency below requirements"
+    And I check the major failures section of the test summary has "None recorded"
     And I check the minors section of the test summary has "None recorded"
     And I check the prs section of the test summary has "None recorded"
     And I check the advisory section of the test summary has "None recorded"
