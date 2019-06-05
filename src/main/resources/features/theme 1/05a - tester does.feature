@@ -46,7 +46,7 @@ Feature: 05a - Tester does...
     And I click the "Enter test results" link
 
     And I enter an odometer reading in miles of {mileage1} plus 5000
-    And I enter decelerometer results of service brake 50 and parking brake 15
+    And I enter decelerometer results of service brake 49 and parking brake 15
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
@@ -61,6 +61,7 @@ Feature: 05a - Tester does...
     And I check the defect section has "Advisory text" with value "None recorded"
     And I check the dangerous failures section of the brake test summary of the test summary has "None recorded"
     And I check the major failures section of the brake test summary of the test summary has "Service brake efficiency below requirements"
+    And I check the major failures section of the brake test summary of the test summary has "Parking brake efficiency below requirements"
     And I press the "Save test result" button
 
     And The page title contains "MOT test complete"
