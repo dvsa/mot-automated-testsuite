@@ -1223,6 +1223,16 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Fetches the data in the dd element following a specific dt element, in a flat dt/dd list.
+     * @param termText  The text that will find the term
+     * @return The description text found
+     */
+    public String getTextFromDefinitionListOfIndex(String termText, Integer index) {
+        return webDriver.findElements(
+                By.xpath("//dt[contains(text(),'" + termText + "')]/following-sibling::dd[1]")).get(index).getText();
+    }
+
+    /**
      * Fetches the text from any span elements within a h2 element that also has the specified text.
      * @param headingText  The heading text
      * @return The span text found
