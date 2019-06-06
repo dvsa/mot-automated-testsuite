@@ -15,6 +15,5 @@ Feature: 32 - DVLA Vehicle without an Outstanding Recall
     And I wait for "6" seconds
     And The page contains "This vehicle hasn't had its first MOT."
     And The page contains "No outstanding safety recalls found"
-    And The page contains "There are no outstanding manufacturer's safety recalls for {make} {model} {registration}"
-    And The page contains "There can be a delay before we receive information about safety recalls. If you are concerned, contact your vehicle manufacturer’s dealership."
+    And The page contains "This information is provided by the vehicle manufacturer. If you think the information is wrong, contact the vehicle manufacturer's dealership. Please do not contact the DVSA, as we are not able to change the recall status."
     And The page contains "Was this vehicle recall information useful to you? Tell us your views so we can improve the service."
