@@ -636,7 +636,7 @@ public class TesterDoesStepDefinitions implements En {
     }
 
     /**
-     * Check the Confirm vehicle and start (re)test pages
+     * Check the Confirm vehicle and start (re)test pages.
      * @param registration  The registration number to use
      * @param vin           The VIN to use
      * @param siteName      The name of the site to use (for multi-site testers)
@@ -667,29 +667,30 @@ public class TesterDoesStepDefinitions implements En {
         }
 
         //And the vehicle specification section contains the following attributes
-        //Make and model	        SUZUKI, SPLASH
+        //Make and model
         assertEquals("Make and Model from SQL", driverWrapper.getTextFromDefinitionList("Make and model"));
-        //Engine	                Petrol, 996
+        //Engine
         assertEquals("Fuel Type and Engine size from SQL", driverWrapper.getTextFromDefinitionList("Engine"));
-        //Colour	                Black
+        //Colourk
         assertEquals(colour1, driverWrapper.getTextFromDefinitionList("Colour"));
-        //Brake test weight	        1075 kg
+        //Brake test weight
         assertEquals("weight from SQL" + "kg", driverWrapper.getTextFromDefinitionList("Brake test weight"));
 
         //And the vehicle registration section contains the following attributes
-        //Registration mark	        GT93EJL
+        //Registration mark
         assertEquals(registration, driverWrapper.getTextFromDefinitionList("Registration mark"));
-        //VIN	                    LJETGJAAAAA011133
+        //VIN
         assertEquals(vin, driverWrapper.getTextFromDefinitionList("VIN"));
-        //Country of registration	GB, UK, ENG, CYM, SCO (UK) - Great Britain
-        assertEquals("Country of registration from SQL", driverWrapper.getTextFromDefinitionList("Country of registration"));
-        //MOT test class	        4
+        //Country of registration
+        assertEquals("Country of registration from SQL",
+                driverWrapper.getTextFromDefinitionList("Country of registration"));
+        //MOT test class
         assertEquals("MOT test class from SQL", driverWrapper.getTextFromDefinitionList("MOT test class"));
-        //Vehicle category	        M1
+        //Vehicle category
         assertEquals("Vehicle category from DVLA SQL", driverWrapper.getTextFromDefinitionList("Vehicle category"));
-        //Date of first use	        26 July 2013
+        //Date of first use
         assertEquals(issueDate, driverWrapper.getTextFromDefinitionList("Date of first use"));
-        //MOT expiration date       26 August 2018
+        //MOT expiration date
         assertEquals("MOT expiration date from SQL", driverWrapper.getTextFromDefinitionList("MOT expiration date"));
 
     }
