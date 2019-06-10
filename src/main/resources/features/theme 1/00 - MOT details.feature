@@ -1,4 +1,3 @@
-@smoke @regression @karl
 Feature: 00 - MOT details check - Find vehicle, confirm and start test
 
   Scenario: Tester enters MOT test and validates the vehicle MOT Testing details
