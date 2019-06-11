@@ -30,10 +30,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.framework.csv.CsvDocument;
 import uk.gov.dvsa.mot.framework.csv.CsvException;
+import uk.gov.dvsa.mot.framework.pdf.MotCertFormFields;
 import uk.gov.dvsa.mot.framework.pdf.PdfDocument;
 import uk.gov.dvsa.mot.framework.pdf.PdfException;
 
-import java.io.Console;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -1172,6 +1172,17 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Checks whether the current page contains embedded PDF.
+     * @return true if PDF was found
+     */
+    public boolean containsEmbeddedPdf() {
+        WebDriverWait wait = new WebDriverWait(webDriver, 30);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("plugin")));
+
+        return webDriver.findElement(By.id("plugin")).getAttribute("type").equals("application/pdf");
+    }
+
+    /**
      * Checks whether the current page does not contain the specified message, anywhere within the page. Use only with
      * long unique messages - may contain single quotes, and <code>{key}</code> format data keys, but not double quotes.
      * @param message   The message
@@ -1521,17 +1532,47 @@ public class WebDriverWrapper {
      * Goes to the next tab.
      */
     public void goNextTab() {
-        String oldTab = webDriver.getWindowHandle();
-        List<String> newTab = new ArrayList<String>(webDriver.getWindowHandles());
-        newTab.remove(oldTab);
-        int numTabs = newTab.size();
-        if (numTabs > 2) {
-            String message = "Too many tabs. Expected 2 but there are " + numTabs;
+        List<String> allTabs = new ArrayList<String>(webDriver.getWindowHandles());
+
+        // we've removed 1 tab already - there should only be one other tab.
+        if (allTabs.size() > 2) {
+            String message = "Too many tabs. Expected 2 but there are " + allTabs.size();
             logger.error(message);
             throw new IllegalStateException(message);
         }
-        // change focus to new tab
-        webDriver.switchTo().window(newTab.get(0));
+
+        // if there's only 1 tab, we will wait a while for a new one
+        // to appear, then give up.
+        if (allTabs.size() == 1) {
+            for (int i = 1; i < 5; i++) {
+                logger.info("Waiting a for a new tab...");
+                // wait slightly longer each time for our new tab to appear
+                timeWait(i);
+                allTabs = new ArrayList<String>(webDriver.getWindowHandles());
+                if ( allTabs.size() > 1) {
+                    break;
+                }
+            }
+        }
+
+        // we've waited, and still only 1 tab.
+        if (allTabs.size() == 1) {
+            String message = "Trying to switch to next tab, but there is only one";
+            logger.error(message);
+            throw new IllegalStateException(message);
+        }
+
+        // the order of webDriver.getWindowHandle() is not defined, so switch to the
+        // one that isn't the current handle
+        String curHandle = webDriver.getWindowHandle();
+        String newTab = "";
+        for (String handle : webDriver.getWindowHandles()) {
+            if (!handle.equals(curHandle)) {
+                newTab = handle;
+            }
+        }
+
+        webDriver.switchTo().window(newTab);
     }
 
     /**
@@ -1567,6 +1608,40 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Clicks the first occurrence of the text, which may contain single quotes, and <code>{key}</code> format
+     * data keys, but not double quotes.
+     * @param linkText  The text used to find the text
+     */
+    public void clickFirstText(String linkText) {
+        List<WebElement> spans = findSpans(linkText);
+        if (spans.size() == 0) {
+            String message = "Text not found: " + linkText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            clickAndWaitForPageLoad(spans.get(0));
+        }
+    }
+
+    /**
+     * Creates a new MOT certificate PDF from the request handler, url and form data.
+     * @param url                       the URL of the PDF document
+     * @return                          the PDF Document
+     * @throws PdfException             error loading PDF document
+     */
+    private PdfDocument createMotCertPdfDocument(String url, MotCertFormFields formFields) throws PdfException {
+        try {
+            PDFTextStripper textStripper = new PDFTextStripper();
+            textStripper.setSortByPosition(true);
+
+            return new PdfDocument(requestHandler.getMotCertificatePdfOnMoth(url, formFields));
+        } catch (IOException ioException) {
+            throw new PdfException("Unable to find or open PDF", ioException);
+        }
+    }
+
+    /**
      * Creates a new PDF document from the request handler and the url.
      * @param url                       the URL of the PDF document
      * @return                          the PDF Document
@@ -1580,6 +1655,31 @@ public class WebDriverWrapper {
             return new PdfDocument(requestHandler.getPdfDocument(url));
         } catch (IOException ioException) {
             throw new PdfException("Unable to find or open PDF", ioException);
+        }
+    }
+
+    /**
+     * Requests MOT certificate PDF using the hidden form data and checks whether it contains expected values.
+     * @param values    Array of values to check are contained
+     * @return          Whether the PDF contains all expected values
+     */
+    public boolean motCertPdfContains(List<String> values) {
+        String certFormAction = this.webDriver.findElement(By.id("print-certificate-form")).getAttribute("action");
+
+        MotCertFormFields formFields = new MotCertFormFields()
+                .setCsrfToken(this.webDriver.findElement(By.id("csrf-token-input")).getAttribute("value"))
+                .setVrm(this.webDriver.findElement(By.id("vrm-input")).getAttribute("value"))
+                .setChecksum(this.webDriver.findElement(By.id("checksum-input")).getAttribute("value"))
+                .setV5c(this.webDriver.findElement(By.id("v5c-input")).getAttribute("value"))
+                .setTimestamp(this.webDriver.findElement(By.id("timestamp-input")).getAttribute("value"))
+                .setTestNumber(this.webDriver.findElement(By.id("test-number-input")).getAttribute("value"));
+        try {
+            PdfDocument pdfDocument = createMotCertPdfDocument(certFormAction, formFields);
+
+            return pdfDocument.contains(values);
+        } catch (PdfException ex) {
+            logger.error("Unable to load PDF document", ex);
+            throw new RuntimeException("Error processing PDF document", ex);
         }
     }
 

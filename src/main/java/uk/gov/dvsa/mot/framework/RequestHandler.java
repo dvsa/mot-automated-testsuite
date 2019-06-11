@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.dvsa.mot.framework.csv.CsvDocument;
 import uk.gov.dvsa.mot.framework.csv.CsvException;
+import uk.gov.dvsa.mot.framework.pdf.MotCertFormFields;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +32,7 @@ public class RequestHandler {
     /** These are the default cookie names for authentication. **/
     private static final String DEFAULT_TOKEN_COOKIE_NAME = "iPlanetDirectoryPro";
     private static final String DEFAULT_SESSION_COOKIE_NAME = "PHPSESSID";
+    private static final String CSRF_COOKIE_NAME = "_csrf_token";
 
     /** The logger to use. */
     private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
@@ -71,6 +73,33 @@ public class RequestHandler {
      */
     private Cookie getCookie(String name) {
         return webDriver.manage().getCookieNamed(name);
+    }
+
+    /**
+     * Get the MOT certificate PDF using a POST form which is disguised as a hyperlink.
+     * @param url of the file to load.
+     * @return loaded PDF document.
+     */
+    public PDDocument getMotCertificatePdfOnMoth(String url, MotCertFormFields formFields)
+            throws IOException {
+
+        Response serverResponse = with()
+                .cookie(CSRF_COOKIE_NAME, formFields.getCsrfToken())
+                .formParam("timestamp", formFields.getTimestamp())
+                .formParam("test-number", formFields.getTestNumber())
+                .formParam("checksum", formFields.getChecksum())
+                .formParam("vrm", formFields.getVrm())
+                .formParam("v5c", formFields.getV5c())
+                .formParam("_csrf_token", formFields.getCsrfToken())
+                .post(url);
+
+        String filename = url.replaceFirst("https://", "").replaceAll("/", "-") + ".pdf";
+        writeFile(filename, url);
+
+        PDDocument pdDocument = PDDocument.load(serverResponse.asInputStream());
+        serverResponse.asInputStream().close();
+
+        return pdDocument;
     }
 
     /**

@@ -16,15 +16,16 @@ Feature: 05a - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Pass"
-    And I check the dangerous failures section of the test summary has "None recorded"
-    And I check the major failures section of the test summary has "None recorded"
-    And I check the minors section of the test summary has "None recorded"
-    And I check the prs section of the test summary has "None recorded"
-    And I check the advisory section of the test summary has "None recorded"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+    And I check the brake test summary section has "Brake results overall" of "Pass"
+    And I check the defect section has "Dangerous failures" with value "None recorded"
+    And I check the defect section has "Major failures" with value "None recorded"
+    And I check the defect section has "Minors" with value "None recorded"
+    And I check the defect section has "PRS" with value "None recorded"
+    And I check the defect section has "Advisory text" with value "None recorded"
+
     And I record the MOT test number
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
@@ -49,16 +50,17 @@ Feature: 05a - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Fail"
-    And I check the dangerous failures section of the test summary has "None recorded"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the brake test summary section has "Brake results overall" of "Fail"
+    And I check the defect section has "Dangerous failures" with value "None recorded"
     And I check the major failures section of the test summary has "Parking brake efficiency below requirements"
-    And I check the minors section of the test summary has "None recorded"
-    And I check the prs section of the test summary has "None recorded"
-    And I check the advisory section of the test summary has "None recorded"
+    And I check the defect section has "Minors" with value "None recorded"
+    And I check the defect section has "PRS" with value "None recorded"
+    And I check the defect section has "Advisory text" with value "None recorded"
     And I press the "Save test result" button
+
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
       | VT30                                         |
@@ -86,25 +88,27 @@ Feature: 05a - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Pass"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the brake test summary section has "Brake results overall" of "Pass"
+
     And I check the dangerous failures section of the test summary has "Steering column deformed to the extent that steering is affected"
     And I check the dangerous failures section of the test summary has "Test defect 1"
     And I check the dangerous failures section of the test summary does not have "Exhaust system insecure"
     And I check the dangerous failures section of the test summary does not have "Test defect 2"
     And I check the dangerous failures section of the test summary does not have "Stop lamp(s) not working"
     And I check the dangerous failures section of the test summary does not have "Test defect 3"
+
     And I check the major failures section of the test summary has "Exhaust system insecure"
     And I check the major failures section of the test summary has "Test defect 2"
     And I check the major failures section of the test summary has "Stop lamp(s) not working"
     And I check the major failures section of the test summary has "Test defect 3"
     And I check the major failures section of the test summary does not have "Steering column deformed to the extent that steering is affected"
     And I check the major failures section of the test summary does not have "Test defect 1"
-    And I check the minors section of the test summary has "None recorded"
-    And I check the prs section of the test summary has "None recorded"
-    And I check the advisory section of the test summary has "None recorded"
+    And I check the defect section has "Minors" with value "None recorded"
+    And I check the defect section has "PRS" with value "None recorded"
+    And I check the defect section has "Advisory text" with value "None recorded"
     And I record the MOT test number
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
@@ -134,15 +138,15 @@ Feature: 05a - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Not tested"
-    And I check the major failures section of the test summary has "Brake performance not tested"
-    And I check the dangerous failures section of the test summary has "None recorded"
-    And I check the minors section of the test summary has "None recorded"
-    And I check the prs section of the test summary has "None recorded"
-    And I check the advisory section of the test summary has "None recorded"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+
+    And I check the brake test summary section has "Brake results overall" of "Not tested"
+    And I check the defect section has "Dangerous failures" with value "None recorded"
+    And I check the defect section has "Minors" with value "None recorded"
+    And I check the defect section has "PRS" with value "None recorded"
+    And I check the defect section has "Advisory text" with value "None recorded"
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
@@ -171,10 +175,10 @@ Feature: 05a - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Pass"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+    And I check the brake test summary section has "Brake results overall" of "Pass"
     And I check the advisory section of the test summary has "Bumper mountings corroded but not likely to become detached"
     And I check the advisory section of the test summary has "Nail in tyre"
     And I check the advisory section of the test summary has "Stub axle has slight vertical movement between stub axle and axle beam"
@@ -184,10 +188,10 @@ Feature: 05a - Tester does...
     And I check the advisory section of the test summary has "Test advisory 3"
     And I check the advisory section of the test summary has "Test advisory 4"
     And I check the advisory section of the test summary has "Test manual advisory"
-    And I check the dangerous failures section of the test summary has "None recorded"
-    And I check the major failures section of the test summary has "None recorded"
-    And I check the minors section of the test summary has "None recorded"
-    And I check the prs section of the test summary has "None recorded"
+    And I check the defect section has "Dangerous failures" with value "None recorded"
+    And I check the defect section has "Major failures" with value "None recorded"
+    And I check the defect section has "Minors" with value "None recorded"
+    And I check the defect section has "PRS" with value "None recorded"
     And I record the MOT test number
     And I press the "Save test result" button
     And The page title contains "MOT test complete"

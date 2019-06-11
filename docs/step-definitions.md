@@ -22,6 +22,7 @@ High level:
 
 * I browse to ```URL```
 * I press the ```"..button text.."``` button
+* I press the first ```"..button text.."``` button
 * I click the button which contains text ```"..button text.."```
    * Note: this finds the text element then clicks the button that is its ancestor. For use with nested tags in buttons.
 * I click the button with class name ```"..class name.."```
@@ -238,6 +239,7 @@ These steps are specific to the DVSA MOT application screens.
 * I start an MOT test for ```{..reg key..}```, ```{..vin key..}``` with engine changed to ```"..fuel type.."```  with capacity ```..cc's..```
 * I browse for a ```"Failure or PRS or Advisory"``` defect of (```"..category.."```, ```"..defect.."```) with comment ```"..comment.."```
 * I browse for a ```"Failure or PRS or Advisory"``` defect of (```"..category.."```, ```"..sub-category.."```, ```"..defect.."```) with comment ```"..comment.."```
+* I browse for a ```"Failure or PRS or Advisory"``` defect of (```"..category.."```, ```"..sub-category.."```, ```"..defect.."```) with comment ```"..comment.."``` with a first use date alert
 * I search for a ```"Failure or PRS or Advisory"``` defect of ```"..category.."``` with comment ```"..comment.."```
 * I add a manual advisory of ```"..defect.."```
 * I edit the ```"Failure or PRS or Advisory"``` defect of ```"..defect.."``` with comment ```"..comment.."``` and not dangerous
@@ -263,6 +265,11 @@ These steps are specific to the DVSA MOT application screens.
 * I enter the current time for the contingency test
 * I search for defect ```"..defect.."``` and open the ```"..manualLinkText.."``` manual link, I expect the ```".manualPageTitle."``` manual page
 * I record the MOT test number
+* I check the registration plate ```{..reg key..}``` is shown within the registration number span text
+* I check the VIN ```{..vin key..}``` is shown within the VIN span text
+* I check the brake test summary section has ```"..text.."``` of ```"Pass or Fail"```
+* I check the defect section has ```"..text.."``` with value ```"..text.."```
+* I check the defect section contains ```"..text.."``` with value ```"..text.."```
 
 ### VehicleExaminerStepDefinitions
 
@@ -294,6 +301,7 @@ These steps are specific to the DVSA MOT application screens.
 * I close extra tabs
 * I click the accordion section with the id ```..text..```
 * I click the ```..text..``` help link
+* I click the certificate link and check the MOT certificate PDF contains ```{dataTable}```
 
 ### ElasticSearchStepDefinitons
 

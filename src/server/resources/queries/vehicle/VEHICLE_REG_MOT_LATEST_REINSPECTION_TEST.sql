@@ -8,12 +8,11 @@ INNER JOIN (SELECT  vehicle_id, max(id) AS id
 WHERE veh.model_detail_id = md.id
 AND mtc.status_id = 6 -- Passed tests only
 AND mtc.document_id IS NOT NULL  -- exclude where there are no MOT certificates
-AND mtc.mot_test_type_id in (4,5,6,7) -- Latest Reinspection Test
+AND mtc.mot_test_type_id in (4,5,6) -- Latest Reinspection Test
 AND md.vehicle_class_id = 4 -- cars only
 AND veh.id = mtc.vehicle_id
 AND md.model_id = mo.id
 AND mo.make_id = ma.id
-AND mtc.status_id = 6 -- status pass
 AND odometer_result_type = 'OK'
 AND veh.registration not like "%-%" -- exclude dodgy test data on ACPT
 AND veh.registration is not null -- nullable in PP/Prod

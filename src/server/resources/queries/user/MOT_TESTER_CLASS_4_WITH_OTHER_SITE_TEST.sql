@@ -1,7 +1,8 @@
 SELECT DISTINCT
   p.username as username,
   s.name as site,
-  registration as registration
+  vehicle_registration as registration,
+  d.recent_v5_document_number as v5c
 
 FROM
   person p
@@ -21,7 +22,7 @@ FROM
   JOIN site s
     ON sbrm.site_id = s.id
   -- Check current MOT test details
-  LEFT JOIN (SELECT DISTINCT(mtc.site_id) AS mtcsId, max(mtc.id) AS Id, mtc.vehicle_id AS mtcVid, mtc.number AS TestNumber, v.registration as registration
+  LEFT JOIN (SELECT DISTINCT(mtc.site_id) AS mtcsId, max(mtc.id) AS Id, mtc.vehicle_id AS mtcVid, mtc.number AS TestNumber, v.registration as vehicle_registration
        FROM mot_test_current mtc, vehicle v
       WHERE mtc.status_id = 6 -- Passed tests only
       And v.id = mtc.vehicle_id
@@ -41,6 +42,8 @@ FROM
     ON osm.organisation_id = o.id
   JOIN auth_for_ae afa
     ON o.id = afa.organisation_id
+  JOIN dvla_vehicle d
+    ON vehicle_registration = d.registration
 WHERE
   -- Check the security card assigned to them is active
   sc.security_card_status_lookup_id = 1

@@ -1,5 +1,9 @@
 @cvrpp @cvrint
+<<<<<<< HEAD
 Feature: 02 - User searches for Other recalled equipment
+=======
+Feature: 03 - User searches for Other recalled equipment
+>>>>>>> c4a64622ba7293b3c239329936ecf1782b785cb7
 
   Scenario: A CVR user searches for equipment with an outstanding recall
     Given I browse to /

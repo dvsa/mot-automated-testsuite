@@ -75,6 +75,7 @@
       And I check the "Activity" field row has value "Satisfactory"
       And I check the "Activity" field row has value "MOT test number: 123456789012"
       And I check the "AE representative" field row has value "John Doe"
+      And I check the "Date of site visit" field row has value {dateOfSiteVisit}
 
     Scenario: VE user creates an improve site review and creates an event
 
@@ -154,6 +155,7 @@
       And I check the "People" field row has value "Advice given: People outcome comment"
       And I check the "Activity" field row has value "Advice given: Activity outcome comment"
       And I check the "AE representative" field row has value "John Doe"
+      And I check the "Date of site visit" field row has value {dateOfSiteVisit}
       And I click the button with id "back-button"
 
       #Check that an event has been created
@@ -161,6 +163,7 @@
       And I click the first "Site Review" link
       Then I check the "Event type" field row has value "Site Review"
       And I check the "Description" field row has value "No further action"
+      And I check the "Event date" field row has value {dateOfSiteVisit}
       
     Scenario: VE user creates an unsatisfactory site review with no activity performed and creates an event
 
@@ -243,6 +246,7 @@
       And I check the "Management and quality" field row has value "Advice given: Management and quality outcome comment"
       And I check the "People" field row has value "Advice given: People outcome comment"
       And I check the "AE representative" field row has value "John Doe"
+      And I check the "Date of site visit" field row has value {dateOfSiteVisit}
       And I click the button with id "back-button"
 
       #Check that an event has been created
@@ -250,3 +254,4 @@
       And I click the first "Site Review" link
       Then I check the "Event type" field row has value "Site Review"
       And I check the "Description" field row has value "Advisory Warning Letter (AWL)"
+      And I check the "Event date" field row has value {dateOfSiteVisit}

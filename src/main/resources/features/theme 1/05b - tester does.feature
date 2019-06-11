@@ -19,10 +19,11 @@ Feature: 05b - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Pass"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
+    And I check the brake test summary section has "Brake results overall" of "Pass"
+
     And I check the prs section of the test summary has "Brake pipe at imminent risk of failure or fracture"
     And I check the prs section of the test summary has "Handlebar fractured to the extent that steering is adversely affected"
     And I check the prs section of the test summary has "Test prs 1"
@@ -82,10 +83,10 @@ Feature: 05b - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Pass"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
+    And I check the brake test summary section has "Brake results overall" of "Pass"
 
     And I check the major failures section of the test summary has "Exhaust system insecure"
     And I check the major failures section of the test summary has "Edited failure 2"
@@ -157,9 +158,9 @@ Feature: 05b - Tester does...
     And I press the "Review test" button
 
     And The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the brake results section of the test summary is "Pass"
     And I check the dangerous failures section of the test summary has "Engine mounting fractured"
     And I check the dangerous failures section of the test summary has "Test defect 1"
@@ -174,6 +175,7 @@ Feature: 05b - Tester does...
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
     And I click "Print documents" and check the PDF contains:
+      | Refusal of MOT test certificate                    |
       | VT30                                               |
       | Engine mounting fractured                          |
       | Test defect 1                                      |
@@ -196,21 +198,23 @@ Feature: 05b - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT re-test summary"
-    And I check the test information section of the test summary is "Pass"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "PASS"
     And I check the brake results section of the test summary is "None Recorded"
     And I check the dangerous failures section of the test summary has "None recorded"
     And I check the major failures section of the test summary has "None recorded"
     And I check the minors section of the test summary has "None recorded"
     And I check the prs section of the test summary has "None recorded"
     And I check the advisory section of the test summary has "None recorded"
+    And I record the MOT test number
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
     And I click "Print documents" and check the PDF contains:
-      | VT20            |
-      | {registration1} |
-      | {vin1}          |
+      | MOT test certificate |
+      | VT20                 |
+      | {registration1}      |
+      | {vin1}               |
     And I click the "Back to user home" link
 
 
@@ -230,9 +234,9 @@ Feature: 05b - Tester does...
     And I press the "Review test" button
 
     And The page title contains "MOT test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the brake results section of the test summary is "Fail"
     And I check the dangerous failures section of the test summary has "Engine mounting bracket excessively loose"
     And I check the dangerous failures section of the test summary has "Test defect 1"
@@ -278,10 +282,9 @@ Feature: 05b - Tester does...
     And I press the "Review test" button
 
     Then The page title contains "MOT re-test summary"
-    And I check the test information section of the test summary is "Fail"
-    And I check the vehicle summary section of the test summary has "Registration number" of {registration1}
-    And I check the vehicle summary section of the test summary has "VIN/Chassis number" of {vin1}
-    And I check the brake results section of the test summary is "Pass"
+    And I check the registration plate {registration1} is shown within the registration number span text
+    And I check the VIN {vin1} is shown within the VIN span text
+    And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the major failures section of the test summary has "Wheel hub spigot mounting excessively worn"
     And I check the major failures section of the test summary has "Test defect 2"
     And I check the major failures section of the test summary has "Tyre fouling a part of the vehicle"
@@ -299,10 +302,10 @@ Feature: 05b - Tester does...
     And I press the "Save test result" button
     And The page title contains "MOT re-test complete"
     And I click "Print documents" and check the PDF contains:
-      | VT30                              |
+      | VT30                                                      |
       | Wheel hub spigot mounting excessively worn                |
-      | Test defect 2                     |
-      | Tyre fouling a part of the vehicle  |
-      | Test defect 3                     |
-      | {registration1}                   |
-      | {vin1}                            |
+      | Test defect 2                                             |
+      | Tyre fouling a part of the vehicle                        |
+      | Test defect 3                                             |
+      | {registration1}                                           |
+      | {vin1}                                                    |

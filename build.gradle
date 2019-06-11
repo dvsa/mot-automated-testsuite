@@ -5,7 +5,8 @@ ext {
     javaVersion = '1.8'
     junitVersion = '4.12'
     cucumberVersion = '1.2.5'
-    seleniumVersion = '3.11.0'
+    seleniumVersion = '3.141.59'
+    htmlUnitVersion = '2.34.0'
     springVersion = '4.3.11.RELEASE'
     springBootVersion = '1.5.7.RELEASE'
     slf4jVersion = '1.7.25'
@@ -296,6 +297,7 @@ dependencies {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-opera-driver'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
     }
+    compile "org.seleniumhq.selenium:htmlunit-driver:$htmlUnitVersion"
     compile "org.slf4j:slf4j-api:$slf4jVersion"
     runtime "org.slf4j:log4j-over-slf4j:$slf4jVersion"
     runtime "org.slf4j:jcl-over-slf4j:$slf4jVersion"

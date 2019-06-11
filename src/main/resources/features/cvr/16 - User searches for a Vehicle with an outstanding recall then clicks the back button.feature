@@ -1,5 +1,9 @@
 @cvrpp @cvrint
+<<<<<<< HEAD
 Feature: 15 - User searches for a Vehicle with an outstanding recall then clicks the back button
+=======
+Feature: 13 - User searches for a Vehicle with an outstanding recall then clicks the back button
+>>>>>>> c4a64622ba7293b3c239329936ecf1782b785cb7
 
   Scenario: User searches for a Vehicle with an outstanding recall then clicks the back button to return to the CVR home page
     Given I browse to /

@@ -51,6 +51,8 @@ Feature: 14a - CSCO
     And I load "VEHICLE_CLASS_4_MOT_LAST_10_DAYS" as {reg}, {vin}, {mileage}
     And I search for certificates with reg {reg}
     And I click the first "View certificate" link
-    And I check there is a "Print certificate" link
-    And I click "Print certificate" and check the PDF contains:
+    And The page contains "Duplicate or replacement certificate"
+    And The page does not contain "Change"
+    And I check there is a "View certificate" link
+    And I click "View certificate" and check the PDF contains:
       | Duplicate certificate          |

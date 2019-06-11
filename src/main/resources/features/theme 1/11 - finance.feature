@@ -110,7 +110,7 @@ Feature: 11 - Finance
     Examples:
       | report                | startDate | endDate | seconds  | refresh |
       | All Payments          | 14        | 7       | 30       | 20      |
-      | All Payments          | 30        | 0       | 30       | 20      |
+      | All Payments          | 30        | 0       | 60       | 30      |
       | All Payments          | 212       | 182     | 30       | 20      |
 
   @cpms
