@@ -9,7 +9,7 @@ SELECT
                vehicle_id
           FROM mot_test_current
          GROUP BY vehicle_id
-       LIMIT 50000) as lmot -- Latest MOT
+       LIMIT 500000) as lmot -- Latest MOT
     ON lmot.max_date = mtc.submitted_date AND lmot.vehicle_id = mtc.vehicle_id
  WHERE md.vehicle_class_id = 5 -- class 5 only
    AND mtc.status_id not in (4,5) -- exclude vehicles whose latest status is under test or failed
