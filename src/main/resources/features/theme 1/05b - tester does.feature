@@ -196,7 +196,7 @@ Feature: 05b - Tester does...
     And I mark the defect "Engine mounting fractured " as repaired
     And I mark the defect "Brake pipe likely to become detached or damaged" as repaired
     And I mark the defect "Steering column has excessive movement up and down" as repaired
-    And I mark the defect " " as repaired
+    And I mark the manual advisory defect as repaired
     And I press the "Review test" button
 
     Then The page title contains "MOT re-test summary"
