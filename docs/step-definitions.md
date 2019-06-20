@@ -250,6 +250,7 @@ These steps are specific to the DVSA MOT application screens.
 * I edit decelerometer results of service brake ```..amount..``` and parking brake ```..amount..```
 * I enter decelerometer service brake result of ```..amount..``` and gradient parking brake result of ```"Pass or Fail"```
 * I mark the defect ```"..defect.."``` as repaired
+* I mark the manual advisory defect as repaired
 * I search for a vehicle with ```"..reg.."```, ```"..vin.."```
 * I check the "Add brake test" link is hidden
 * I check the vehicle summary section of the test summary has ```"..field label.."``` of ```{key}```
