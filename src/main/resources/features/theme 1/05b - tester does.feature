@@ -141,7 +141,7 @@ Feature: 05b - Tester does...
       | {registration1} |
       | {vin1}          |
 
-  @smoke
+  @smoke @karl
   Scenario: Tester enters a class 4 MOT retest pass, all failures repaired, no need to repeat brake test
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {username1}, {site}
@@ -154,6 +154,7 @@ Feature: 05b - Tester does...
     And I browse for a "Dangerous" defect of ("Body, chassis, structure", "Engine mounting", "Engine mounting condition", "Fractured") with comment "Test defect 1"
     And I browse for a "Major" defect of ("Brakes", "Rigid brake pipes", "Likely to become detached or damaged") with comment "Test defect 2"
     And I browse for a "Major" defect of ("Steering", "Steering column", "Excessive movement up and down") with comment "Test defect 3"
+    And I add a manual advisory of "Test manual advisory"
     And I enter decelerometer results of service brake 61 and parking brake 16
     And I press the "Review test" button
 
@@ -162,6 +163,7 @@ Feature: 05b - Tester does...
     And I check the VIN {vin1} is shown within the VIN span text
     And I check the vehicle summary section of the test summary has "Result" of "FAIL"
     And I check the brake results section of the test summary is "Pass"
+    And I check the advisory section of the test summary has "Test manual advisory"
     And I check the dangerous failures section of the test summary has "Engine mounting fractured"
     And I check the dangerous failures section of the test summary has "Test defect 1"
     And I check the major failures section of the test summary has "Brake pipe likely to become detached or damaged"
@@ -170,7 +172,6 @@ Feature: 05b - Tester does...
     And I check the major failures section of the test summary has "Test defect 3"
     And I check the minors section of the test summary has "None recorded"
     And I check the prs section of the test summary has "None recorded"
-    And I check the advisory section of the test summary has "None recorded"
     And I record the MOT test number
     And I press the "Save test result" button
     And The page title contains "MOT test complete"
@@ -195,6 +196,7 @@ Feature: 05b - Tester does...
     And I mark the defect "Engine mounting fractured " as repaired
     And I mark the defect "Brake pipe likely to become detached or damaged" as repaired
     And I mark the defect "Steering column has excessive movement up and down" as repaired
+    And I mark the defect " " as repaired
     And I press the "Review test" button
 
     Then The page title contains "MOT re-test summary"
