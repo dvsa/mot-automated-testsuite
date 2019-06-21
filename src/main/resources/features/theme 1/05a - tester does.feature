@@ -180,6 +180,8 @@ Feature: 05a - Tester does...
     And I search for a "Advisory" defect of "Standard fitment seat belt missing" with comment "Test advisory 4"
     And I add a manual advisory of "Test manual advisory"
     And I enter class 4 roller results for vehicle weight of 1000 as service brake 200,200,200,200 and parking brake 100,100
+    And I remove the "Advisory" defect of "Test manual advisory"
+    And I add a manual advisory of "2nd Test manual advisory"
     And I press the "Review test" button
 
     Then The page title contains "MOT test summary"
@@ -195,7 +197,7 @@ Feature: 05a - Tester does...
     And I check the advisory section of the test summary has "Test advisory 2"
     And I check the advisory section of the test summary has "Test advisory 3"
     And I check the advisory section of the test summary has "Test advisory 4"
-    And I check the advisory section of the test summary has "Test manual advisory"
+    And I check the advisory section of the test summary has "2nd Test manual advisory"
     And I check the defect section has "Dangerous failures" with value "None recorded"
     And I check the defect section has "Major failures" with value "None recorded"
     And I check the defect section has "Minors" with value "None recorded"

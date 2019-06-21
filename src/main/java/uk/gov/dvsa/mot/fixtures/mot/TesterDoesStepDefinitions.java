@@ -338,6 +338,8 @@ public class TesterDoesStepDefinitions implements En {
 
         And("^I mark the defect \"([^\"]+)\" as repaired$", this::markAsRepaired);
 
+        And("^I mark the manual advisory defect as repaired$", () -> markManualAdvisoryAsRepaired());
+
         And("^I search for a vehicle with \\{([^\\}]+)\\}$", (String siteNameKey) ->
                 searchForVehicle("", "", driverWrapper.getData(siteNameKey)));
 
@@ -1674,6 +1676,17 @@ public class TesterDoesStepDefinitions implements En {
         // And I press the "Mark as repaired" button for the specified defect
         driverWrapper.pressButtonWithSiblingElement(
                 "Mark as repaired","input", "value", defect);
+    }
+
+    /**
+     * Marks the manual advisory defect as repaired.
+     */
+    private void markManualAdvisoryAsRepaired() {
+        // And The page title contains "MOT test results"
+        driverWrapper.checkCurrentPageTitle("MOT test results");
+        // And I press the "Mark as repaired" button for the specified defect
+        driverWrapper.pressButtonWithSiblingElement(
+                "Mark as repaired","input", "value", " ");
     }
 
     /**
