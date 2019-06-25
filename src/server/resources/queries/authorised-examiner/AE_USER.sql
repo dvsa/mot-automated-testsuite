@@ -5,5 +5,5 @@ and afe.organisation_id = o.id
 and obrm.organisation_id = o.id
 and aedm_user.username is not null
 and obrm.person_id = aedm_user.id
-order by slots_balance asc
+order by RAND()
 limit 20

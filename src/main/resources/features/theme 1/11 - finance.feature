@@ -104,7 +104,6 @@ Feature: 11 - Finance
       | receipt_reference            |
       | total_amount                 |
       | status_description           |
-      | Successful payment received  |
       | payment_type                 |
 
     Examples:
