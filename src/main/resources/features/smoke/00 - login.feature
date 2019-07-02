@@ -1,4 +1,4 @@
-@smoke
+@smoke @regression
 Feature: 00 - Login
 
   # Note: if run on CI Green, the user is actually redirected to CI Blue
