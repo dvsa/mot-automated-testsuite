@@ -1,4 +1,3 @@
-
 Feature: 00 - Login
   @smoke
   # Note: if run on CI Green, the user is actually redirected to CI Blue
