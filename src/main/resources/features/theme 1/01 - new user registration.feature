@@ -1,4 +1,4 @@
-@regression
+@regression @smoke
 Feature: 01 - new user registration
 
   Scenario: Create new user with unique details
