@@ -1,5 +1,5 @@
 Feature: 00 - Login
-  @smoke
+
   Scenario: Redirect to login page from home page
     When I browse to /
     Then The page title contains "Sign in"
