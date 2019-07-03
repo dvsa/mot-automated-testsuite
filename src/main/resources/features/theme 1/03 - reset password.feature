@@ -1,4 +1,4 @@
-@regression @smoke
+@regression
 Feature: 03 - reset password
 
   Scenario: User logs into account and then resets their password multiple times
