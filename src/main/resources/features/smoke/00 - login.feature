@@ -1,5 +1,5 @@
 Feature: 00 - Login
-  @smoke @karl
+  @smoke
   Scenario: Redirect to login page if go to an internal screen when not logged in, then log in
     When I browse to /your-profile
     Then The page title contains "Sign in"
