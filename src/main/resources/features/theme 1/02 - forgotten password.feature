@@ -1,4 +1,4 @@
-@regression @smoke
+@regression
 Feature: 02 - forgotten password
 
   #Scenario: User has forgotten password

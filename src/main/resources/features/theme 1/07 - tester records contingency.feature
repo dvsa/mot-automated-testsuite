@@ -324,7 +324,7 @@ Feature: 07 - Tester records Contingency Test
       | {vin}          |
     And I click the "Return to home" link
 
-  @smoke
+
   Scenario: A tester prints CT certificates
     Given I login with 2FA using "MOT_TESTER_CLASS_4_WITH_ONLY_ONE_SITE" as {username}, {site}
     And I click "CT20 Pass Certificate" and check the PDF contains:

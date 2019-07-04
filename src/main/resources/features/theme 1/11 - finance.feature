@@ -164,7 +164,7 @@ Feature: 11 - Finance
       | Transaction Breakdown | 14        | 7       | 30       | 20      |
       | Transaction Breakdown | 212       | 182     | 30       | 20      |
 
-  @smoke
+
   Scenario Outline: A finance user generates <report> SMOKE finance report for <startDate> days ago to <endDate> days ago
     Given I login without 2FA using "FINANCE_USER" as {username}
     And I click the "Generate financial reports" link

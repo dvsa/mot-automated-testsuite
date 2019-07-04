@@ -4,7 +4,7 @@
 @regression
 Feature: 99a - duplicate and replacement certificates
 
-  @smoke
+
   Scenario: AO1 edits non-vehicle details on certificate
     Given I login without 2FA using "AO1_USER" as {AO1}
     And I load uniquely "VEHICLE_CLASS_4_WITH_MOT" as {reg}, {vin}, {mileage}
@@ -115,7 +115,7 @@ Feature: 99a - duplicate and replacement certificates
       | Duplicate certificate            |
       | {reg}                            |
 
-  @smoke @regressiondata
+  @regressiondata
   Scenario: AO1 user edits vehicle details on latest certificate
     Given I login without 2FA using "AO1_USER" as {AO1}
     And I load "VEHICLE_CLASS_4" as {reg}, {vin}, {mileage}
