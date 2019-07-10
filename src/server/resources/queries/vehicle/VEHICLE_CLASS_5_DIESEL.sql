@@ -13,7 +13,7 @@ FROM vehicle veh
          AND vehicle_weight_source_lookup_id IN (3,9,13)
 		 AND odometer_value < 994999
    		 GROUP BY vehicle_id
-   		  LIMIT 5000 -- change this value to speed up the sql query or increase the total amount of records required
+   		  LIMIT 10000 -- change this value to speed up the sql query or increase the total amount of records required
             		 ) AS mtc -- Find last submitted MOT date
         ON mtc.vehicle_id = veh.id
      -- Latest MOT date linked back to extract odometer reading
