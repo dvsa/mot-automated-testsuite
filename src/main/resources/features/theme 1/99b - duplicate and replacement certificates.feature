@@ -127,6 +127,6 @@ Feature: 99b - duplicate and replacement certificates
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {tester}, {site}
 
     And I search for certificates with reg {registration1}
-    And The page does not contain "vin"
+    And The page does not contain "VIN"
 
     
