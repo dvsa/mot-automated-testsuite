@@ -125,8 +125,5 @@ Feature: 99b - duplicate and replacement certificates
   Scenario: Tester prints a duplicate certificate
     Given I load "VEHICLE_CLASS_4" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_4" as {tester}, {site}
-
     And I search for certificates with reg {registration1}
     And The page does not contain "VIN"
-
-    
