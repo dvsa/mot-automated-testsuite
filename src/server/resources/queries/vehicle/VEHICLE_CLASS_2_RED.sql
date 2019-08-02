@@ -23,7 +23,7 @@ WHERE veh.vin IS NOT NULL
   AND mtc.odometer_result_type = 'OK'
   AND mtc.odometer_value < 994999
   AND mtc.status_id = 6                                                                                                             -- Passed MOT tests
-  AND md.vehicle_class_id = 3                                                                                                       -- cars only
+  AND md.vehicle_class_id = 2                                                                                                       -- cars only
   AND veh.primary_colour_id = 13 -- 13 is "Red"
   AND veh.secondary_colour_id = 19 -- 19 is "Not Stated"
 LIMIT 15;

@@ -1,4 +1,4 @@
-SELECT veh.registration, veh.vin, mtc.odometer_value mtc.number AS number
+SELECT veh.registration, veh.vin, mtc.odometer_value, mtc.number AS number
  FROM vehicle AS veh
  JOIN (SELECT ROUND(RAND() * (SELECT MAX(id) FROM vehicle)) AS id ) AS x       ON veh.id >= x.id
  JOIN mot_test_current AS mtc                                                  ON veh.id = mtc.vehicle_id
