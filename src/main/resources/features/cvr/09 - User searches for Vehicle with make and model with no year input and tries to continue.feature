@@ -1,9 +1,7 @@
 @cvrpp @cvrint
-<<<<<<< HEAD
-Feature: 08 - User searches for Vehicle with make and model with no year input and tries to continue.feature
-=======
+
 Feature: 09 - User searches for Vehicle with make and model with no year input and tries to continue.feature
->>>>>>> c4a64622ba7293b3c239329936ecf1782b785cb7
+
 
   Scenario: User searches for Vehicle with make and model with no year input and tries to continue but will see the There was a problem banner
     Given I browse to /

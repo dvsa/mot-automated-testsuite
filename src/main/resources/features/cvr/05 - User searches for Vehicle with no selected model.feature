@@ -1,9 +1,7 @@
 @cvrpp @cvrint
-<<<<<<< HEAD
-Feature: 04 - User searches for Vehicle but does not have the selected model
-=======
+
 Feature: 05 - User searches for Vehicle but does not have the selected model
->>>>>>> c4a64622ba7293b3c239329936ecf1782b785cb7
+
 
   Scenario: A CVR user On the page What model is the vehicle? The user clicks on the "Why is my vehicle make not listed?" link.
     Given I browse to /

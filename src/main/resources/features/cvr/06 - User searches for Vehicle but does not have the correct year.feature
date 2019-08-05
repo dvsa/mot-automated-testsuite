@@ -1,9 +1,7 @@
 @cvrpp @cvrint
-<<<<<<< HEAD
-Feature: 05 - User searches for Vehicle but does not have the correct year
-=======
+
 Feature: 06 - User searches for Vehicle but does not have the correct year
->>>>>>> c4a64622ba7293b3c239329936ecf1782b785cb7
+
 
 Scenario: User searches for Vehicle recall but does not have the correct year
   Given I browse to /
