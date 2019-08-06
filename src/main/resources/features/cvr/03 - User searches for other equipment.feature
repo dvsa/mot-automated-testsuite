@@ -1,7 +1,5 @@
-@cvrpp @cvrint
-
+@cvrpp @cvrint @cvrdemo
 Feature: 03 - User searches for Other recalled equipment
-
 
   Scenario: A CVR user searches for equipment with an outstanding recall
     Given I browse to /

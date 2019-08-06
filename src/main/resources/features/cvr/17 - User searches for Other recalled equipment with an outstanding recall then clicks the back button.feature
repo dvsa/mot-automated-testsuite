@@ -1,7 +1,5 @@
-@cvrpp @cvrint
-
+@cvrpp @cvrint @cvrdemo
 Feature: 17 - User searches for Other recalled equipment with an outstanding recall then clicks the back button
-
 
   Scenario: A CVR user searches for Other recalled equipment with an outstanding recall then clicks the back button to return to the CVR home page
     Given I browse to /

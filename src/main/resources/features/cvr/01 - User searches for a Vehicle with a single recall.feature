@@ -1,4 +1,4 @@
-@cvrpp @cvrint
+@cvrpp @cvrint @cvrdemo
 Feature: 01 - User searches for a Vehicle with a single recall
 
   Scenario: A CVR user searches for a vehicle with an outstanding recall

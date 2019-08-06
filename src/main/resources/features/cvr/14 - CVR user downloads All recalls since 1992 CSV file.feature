@@ -1,5 +1,4 @@
-@cvrpp @cvrint
-
+@cvrpp @cvrint @cvrdemo
 Feature: 14 - CVR user downloads All recalls since 1992 CSV file
 
   Scenario: CVR user downloads All recalls since 1992 CSV file and checks that all the correct headings are displayed

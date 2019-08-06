@@ -1,4 +1,4 @@
-@cvrpp @cvrint
+@cvrpp @cvrint @cvrdemo
 Feature: 02 - User searches for a Vehicle with multiple recalls
 
   Scenario: A CVR user searches for a vehicle with multiple outstanding recalls

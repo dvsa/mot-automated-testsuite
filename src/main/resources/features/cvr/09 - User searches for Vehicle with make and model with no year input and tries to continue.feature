@@ -1,7 +1,5 @@
-@cvrpp @cvrint
-
+@cvrpp @cvrint @cvrdemo
 Feature: 09 - User searches for Vehicle with make and model with no year input and tries to continue.feature
-
 
   Scenario: User searches for Vehicle with make and model with no year input and tries to continue but will see the There was a problem banner
     Given I browse to /

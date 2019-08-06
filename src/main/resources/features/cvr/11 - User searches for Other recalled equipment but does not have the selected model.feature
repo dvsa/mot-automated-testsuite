@@ -1,7 +1,5 @@
-@cvrpp @cvrint
-
+@cvrpp @cvrint @cvrdemo
 Feature: 11 - User searches for Other recalled equipment but does not have the selected model
-
 
   Scenario: A CVR user searches for Other recalled equipment but does not have the selected model and clicks on the "Why is my equipment model not listed?" link
     Given I browse to /

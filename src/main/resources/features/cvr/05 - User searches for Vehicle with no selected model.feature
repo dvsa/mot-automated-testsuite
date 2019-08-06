@@ -1,7 +1,5 @@
-@cvrpp @cvrint
-
+@cvrpp @cvrint @cvrdemo
 Feature: 05 - User searches for Vehicle but does not have the selected model
-
 
   Scenario: A CVR user On the page What model is the vehicle? The user clicks on the "Why is my vehicle make not listed?" link.
     Given I browse to /

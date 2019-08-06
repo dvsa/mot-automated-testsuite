@@ -1,7 +1,5 @@
-@cvrpp @cvrint
-
+@cvrpp @cvrint @cvrdemo
 Feature: 07 - User searches for Vehicle with no make and tries continue
-
 
   Scenario: User searches for Vehicle but does not have the selected make tries to continue and see the There was a problem banner
     Given I browse to /
