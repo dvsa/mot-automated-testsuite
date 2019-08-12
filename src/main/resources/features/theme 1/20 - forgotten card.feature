@@ -64,12 +64,7 @@ Feature: 20 - Existing user has forgotten 2FA card
     And I click the "Lost, forgotten or damaged security card?" link
     And The page title contains "Sign in without your security card"
     When I click the "Continue" link
-
-
-
-
-    And I enter "MOT Tester" in the "What did you want to be when you grew up?" field
-    And I enter "MOT Test Centre" in the "What was your favourite place to visit as a child?" field
+    And I enter the correct answer to the security question
     And I press the "Continue" button
     Then The page title contains "Sign in successful"
     And The page contains "You have signed in without your security card"
@@ -80,9 +75,8 @@ Feature: 20 - Existing user has forgotten 2FA card
     # Subsequent logins that day do not ask for 2FA pin, because cookie is set
     And I click the "Sign out" link
     And I login without 2FA as {username}
-    And The page title contains "Your security questions"
-    And I enter "MOT Tester" in the "What did you want to be when you grew up?" field
-    And I enter "MOT Test Centre" in the "What was your favourite place to visit as a child?" field
+    And The page title contains "Your security question - MOT testing service"
+    And I enter the correct answer to the security question
     And I press the "Continue" button
     And The page title contains "Sign in successful"
     And The page contains "You have signed in without your security card"

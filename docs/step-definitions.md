@@ -160,6 +160,7 @@ These steps are specific to the DVSA MOT application screens.
    * Note: ```drift period``` is of the format ```+/-<n>``` (e.g. +2, +0, -10)
 * I generate 2FA PIN with previous drift ```{..last drift key..}``` as ```{key}```  
 * I login and click ```"..journey type.."``` card using ```"..dataset name.."``` as ```{..username key..}```, ```{key2}```, ```{key3}```, ```{key4}```
+* I enter the correct answer to the security question
 
 
 ### CreateVehicleStepDefinitions
