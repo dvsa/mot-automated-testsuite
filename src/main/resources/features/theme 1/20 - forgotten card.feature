@@ -1,4 +1,4 @@
-@regression @test20
+@regression
 Feature: 20 - Existing user has forgotten 2FA card
 
   Scenario: Active 2FA card user can login via security questions with the Temporary sign in link

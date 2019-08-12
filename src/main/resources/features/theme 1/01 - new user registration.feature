@@ -1,4 +1,4 @@
-@regression @test01
+@regression
 Feature: 01 - new user registration
 
   Scenario: Create new user with unique details
@@ -32,7 +32,6 @@ Feature: 01 - new user registration
     And I enter "MOT Tester" in the field with id "answer1"
     And I select "What was your favourite place to visit as a child?" in the field with id "question2"
     And I enter "MOT Test Centre" in the field with id "answer2"
-    And I press the "Continue" button
     And I select "In what city or town did you spend your honeymoon?" in the field with id "question3"
     And I enter "MOT Testing Centre" in the field with id "answer3"
     And I press the "Continue" button

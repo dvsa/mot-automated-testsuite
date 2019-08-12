@@ -1,4 +1,4 @@
-@regression @test24
+@regression
 Feature: 24 - Verify Q&A policy is enabled and working
 
   Scenario: Verify that the user is able to login to their user account and change their security questions and answers according to the new policy.

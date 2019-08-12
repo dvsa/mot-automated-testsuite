@@ -1,4 +1,4 @@
-@regression @test19
+@regression
 Feature: 19 - New trade user orders and activates 2FA card
 
   Scenario: New non-tester orders and activates security card, then logs in
