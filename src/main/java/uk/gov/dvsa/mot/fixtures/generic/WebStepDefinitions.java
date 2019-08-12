@@ -90,7 +90,7 @@ public class WebStepDefinitions implements En {
                 driverWrapper.clearCheckbox(labelText));
 
         When("^I enter \"([^\"]+)\" in the \"([^\"]+)\" field$", (String text, String label) ->
-                driverWrapper.enterIntoField(text, label));
+                driverWrapper.enterIntoField(driverWrapper.getData(text), label));
 
         When("^I enter \"([^\"]+)\" in the \\{([^\\}]+)\\} field$", (String text, String labelKey) ->
                 driverWrapper.enterIntoField(text, driverWrapper.getData(labelKey)));
