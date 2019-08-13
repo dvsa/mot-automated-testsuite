@@ -11,6 +11,4 @@ Feature: 03 - User searches for Other recalled equipment
     And I click the "Continue" button
     When I click the "TYRE TREAD MAY SEPARATE" button
     Then I click the "Search again" link
-
-
-    #Then I click the "Safety recall" button
+    Then I click the "Safety recall" button
