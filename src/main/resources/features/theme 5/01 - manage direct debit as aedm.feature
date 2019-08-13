@@ -13,9 +13,10 @@ Feature: 01 - Manage Direct Debit as AEDM
     And The page contains "£205.00 per month"
     And The page contains "5th of the month"
     And I click the "Continue to GoCardless" link
-    And I enter "Ibrahim" in the "First name" field
-    And I enter "Jassat" in the "Last name" field
-    And I enter "ibrahim.jassat@dvsa.gov.uk" in the "Email" field
+    And I enter "MyFirstame" in the "First name" field
+    And I enter "MyLastname" in the "Last name" field
+    And I generate a unique email address as {email}
+    And I enter {email} in the "Email" field
     And I enter "20-00-00" in the "Your sort code" field
     And I enter "55779911" in the "Your account number" field
 #    And I click the button which contains text "Click here to enter your address manually"
