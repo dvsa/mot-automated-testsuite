@@ -12,9 +12,4 @@ Feature: 09 - User searches for Vehicle with make and model with no year input a
     And I click the "Continue" button
     And I click the "Enter the year the vehicle was made" link
     Then I enter "2001" in the field with id "year"
-
-
-
-
-
-    # Then  // Check the 'There was a problem' banner text
+    Then  // Check the 'There was a problem' banner text
