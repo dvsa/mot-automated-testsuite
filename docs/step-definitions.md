@@ -76,7 +76,6 @@ High level:
    * Note: this step checks a td element is present in the same row as another td element (without a th element)
 * I check the ```"..heading text.."``` field column has value ```"..value.."```
 * I check the ```"..heading text.."``` field column has value ```{key}```
-   * Note: these steps check the contents of the ```td``` element in the first row and same column as a ```th``` element with the heading text    
    * Note: these steps check the contents of the ```td``` element in the first row and same column as a ```th``` element with the heading text
 * I check the alert popup contains ```"..text.."```
 * I check the ```"..name.."``` cookie is set
