@@ -92,12 +92,12 @@ Feature: 24 - Verify Q&A policy is enabled and working
     Then The page contains "Third memorable answer - security answers must not be the same"
     Then The page contains "Security answers must not be the same"
 
-    #Q&A3 - Enter blank spaces into the answer field and click submit, then verify the correct error message is shown.
-    And I enter " " in the field with id "answer3"
+    #Q&A3 - Enter from the Forbidden recovery answers csv file in the answer field and click submit, then verify the correct error message is shown.
+    And I enter "KIAKIA" in the field with id "answer3"
     When I press the "Continue" button
     Then The page contains "There was a problem with the information you entered:"
-    Then The page contains "Third memorable answer - enter a memorable answer"
-    Then The page contains "Enter a memorable answer"
+    Then The page contains "Third memorable answer - must not be a common answer"
+    Then The page contains "Must not be a common answer"
 
     #Q&A3 - Enter a valid answer that meets the security policy criteria for q2 and continue.
     And I enter "Secure answer55" in the field with id "answer3"
