@@ -117,6 +117,11 @@ public class AuthenticationStepDefinitions implements En {
                                 env.getRequiredProperty("maxLoginRetries", Integer.class), forgotOrLost, key2,
                                 key3, key4));
 
+        Given("^I login and click \"([^\"]+)\" card using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String forgotOrLost, String dataSetName, String usernameKey, String key2) ->
+                        loginAndClickForgottenCard(dataSetName, usernameKey, env.getRequiredProperty("password"),
+                                env.getRequiredProperty("maxLoginRetries", Integer.class), forgotOrLost, key2));
+
         Given("^I generate 2FA PIN with drift ([\\+|\\-]\\d+) as \\{([^\\}]+)\\}$",
                 (String drift, String pinKey) ->
                     driverWrapper.setData(pinKey,

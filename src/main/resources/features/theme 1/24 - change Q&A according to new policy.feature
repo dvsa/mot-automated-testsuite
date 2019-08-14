@@ -27,7 +27,6 @@ Feature: 24 - Verify Q&A policy is enabled and working
     Then The page contains "Choose a question from the list"
     Then The page contains "Enter a memorable answer"
     Then The page contains "Choose a question from the list"
-    Then The page contains "Enter a memorable answer"
 
     #Q&A1 - Enter an answer over 71 characters and submit to see the correct error message is shown.
     And I enter "This is an answer of 71 characters which will then given an error message that it is too long" in the field with id "answer1"
@@ -42,7 +41,6 @@ Feature: 24 - Verify Q&A policy is enabled and working
     Then The page contains "Choose a question from the list"
     Then The page contains "Enter a memorable answer"
     Then The page contains "Choose a question from the list"
-    Then The page contains "Enter a memorable answer"
 
     #Q&A1 - Enter an answer shorter than 6 characters and submit to see the correct error message is shown.
     And I enter "ans" in the field with id "answer1"
@@ -57,7 +55,6 @@ Feature: 24 - Verify Q&A policy is enabled and working
     Then The page contains "Choose a question from the list"
     Then The page contains "Enter a memorable answer"
     Then The page contains "Choose a question from the list"
-    Then The page contains "Enter a memorable answer"
 
     #Q&A1 - Now enter a valid answer that meets the security policy criteria for q1 and continue.
     And I enter "Secure answer33" in the field with id "answer1"
