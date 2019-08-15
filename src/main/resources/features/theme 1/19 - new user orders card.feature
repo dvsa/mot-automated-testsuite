@@ -28,6 +28,8 @@ Feature: 19 - New trade user orders and activates 2FA card
     And I enter "MOT Tester" in the field with id "answer1"
     And I select "What was your favourite place to visit as a child?" in the field with id "question2"
     And I enter "MOT Test Centre" in the field with id "answer2"
+    And I select "In what city or town did you spend your honeymoon?" in the field with id "question3"
+    And I enter "MOT Testing Centre" in the field with id "answer3"
     And I press the "Continue" button
     And I enter "MyPassword1234" in the "Create a password" field
     And I enter "MyPassword1234" in the "Re-type your password" field
@@ -144,7 +146,10 @@ Feature: 19 - New trade user orders and activates 2FA card
     And I enter "MOT Tester" in the field with id "answer1"
     And I select "What was your favourite place to visit as a child?" in the field with id "question2"
     And I enter "MOT Test Centre" in the field with id "answer2"
+    And I select "In what city or town did you spend your honeymoon?" in the field with id "question3"
+    And I enter "MOT Testing Centre" in the field with id "answer3"
     And I press the "Continue" button
+
     And I enter "MyPassword1234" in the "Create a password" field
     And I enter "MyPassword1234" in the "Re-type your password" field
     And I press the "Continue" button

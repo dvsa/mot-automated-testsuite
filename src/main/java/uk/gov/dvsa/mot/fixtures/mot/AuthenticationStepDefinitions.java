@@ -117,6 +117,11 @@ public class AuthenticationStepDefinitions implements En {
                                 env.getRequiredProperty("maxLoginRetries", Integer.class), forgotOrLost, key2,
                                 key3, key4));
 
+        Given("^I login and click \"([^\"]+)\" card using \"([^\"]+)\" as \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String forgotOrLost, String dataSetName, String usernameKey, String key2) ->
+                        loginAndClickForgottenCard(dataSetName, usernameKey, env.getRequiredProperty("password"),
+                                env.getRequiredProperty("maxLoginRetries", Integer.class), forgotOrLost, key2));
+
         Given("^I generate 2FA PIN with drift ([\\+|\\-]\\d+) as \\{([^\\}]+)\\}$",
                 (String drift, String pinKey) ->
                     driverWrapper.setData(pinKey,
@@ -127,6 +132,8 @@ public class AuthenticationStepDefinitions implements En {
                         driverWrapper.setData(pinKey,
                                 generatePin(env.getRequiredProperty("seed"), 0,
                                         Integer.parseInt(driverWrapper.getData(lastDriftKey)))));
+
+        Given("^I enter the correct answer to the security question$", this::answerSecurityQuestion);
     }
 
     /** Encapsulates the possible results from the login journey. */
@@ -533,4 +540,27 @@ public class AuthenticationStepDefinitions implements En {
 
         return pin;
     }
+
+    /**
+     * Enters the correct answer for the displayed security question.
+     */
+    private void answerSecurityQuestion() {
+        // These question are currently set during the scenario
+        String question1 = "What did you want to be when you grew up?";
+        String question2 = "What was your favourite place to visit as a child?";
+        String question3 = "What is the name of the street where you grew up?";
+
+        if (driverWrapper.containsLabelMessage(question1)) {
+            driverWrapper.enterIntoFieldWithId("MOT Tester", "answer");
+        } else if (driverWrapper.containsLabelMessage(question2)) {
+            driverWrapper.enterIntoFieldWithId("MOT Test Centre", "answer");
+        } else if (driverWrapper.containsLabelMessage(question3)) {
+            driverWrapper.enterIntoFieldWithId("MOT Testing Centre", "answer");
+        } else {
+            String message = "Unknown security question";
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+        }
+    }
+
 }

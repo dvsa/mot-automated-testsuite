@@ -1277,6 +1277,16 @@ public class WebDriverWrapper {
     }
 
     /**
+     * Checks whether the current page contains the specified label element, anywhere within the page.
+     * - may contain single quotes, and <code>{key}</code> format data keys, but not double quotes.
+     * @param label The label element
+     * @return <code>true</code> if found
+     */
+    public boolean containsLabelMessage(String label) {
+        return webDriver.findElements(By.xpath("//label[contains(text(),'" + label + "')]")).size() > 0;
+    }
+
+    /**
      * Checks whether the current page contains embedded PDF.
      * @return true if PDF was found
      */
