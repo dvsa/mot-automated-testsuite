@@ -17,7 +17,7 @@ Feature: Tester accessibility reports
     Then I click the "Return to your profile" link
     And I click the "Test logs" link
     And I create an accessibility report "tester_test_logs"
-    Then I click the "Return to Your profile" link
+    Then I click the "Return to your profile" link
     And I click the "Test quality information" link
     And I create an accessibility report "tester_tqi"
 
