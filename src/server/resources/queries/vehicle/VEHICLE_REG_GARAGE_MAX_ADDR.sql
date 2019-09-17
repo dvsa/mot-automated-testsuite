@@ -7,6 +7,8 @@ and s.id = mtc.site_id
 and scdm.site_id = s.id
 and cd.id = scdm.contact_detail_id
 and adr.id = cd.address_id
-and CHAR_LENGTH(adr.address_line_1) < 3
-and CHAR_LENGTH(adr.address_line_2) < 3
-limit 5;
+and CHAR_LENGTH(adr.address_line_1) > 40
+and CHAR_LENGTH(adr.address_line_2) > 9
+and CHAR_LENGTH(adr.town) > 23
+and CHAR_LENGTH(adr.postcode) > 7
+limit 5
