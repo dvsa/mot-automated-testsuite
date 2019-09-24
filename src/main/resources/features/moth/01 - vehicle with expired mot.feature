@@ -33,3 +33,35 @@ Feature: 01 - Check vehicle with expired MOT
     Then The page title contains "MOT rule changes: 20 May 2018 - GOV.UK"
     And I go to the next tab
     And I close extra tabs
+
+  Scenario: A MOTH user searches for a vehicle with an MOT about to expire tomorrow
+    Given I browse to /
+    And I load "VEHICLE_REG_DUE_TOMORROW" as {registration}, {model}
+    And I enter {registration} in the registration field
+    When I press the "Continue" button
+
+    Then The page contains "{registration}"
+    And The page contains "{model}"
+    And The page contains "This vehicle's MOT expires soon"
+
+  Scenario: A MOTH user searches for a vehicle with just expired MOT yesterday
+    Given I browse to /
+    And I load "VEHICLE_REG_JUST_EXPIRED" as {registration}, {model}
+    And I enter {registration} in the registration field
+    When I press the "Continue" button
+
+    Then The page contains "{registration}"
+    And The page contains "{model}"
+    And The page contains "This vehicle's MOT has expired"
+    And The page contains "You can be fined up to £1000 for driving without a valid MOT"
+    And The page contains "This vehicle may be MOT exempt, for more information refer to MOT exemption guidance"
+
+  Scenario: A MOTH user searches for a vehicle with an MOT that expires today
+    Given I browse to /
+    And I load "VEHICLE_REG_EXPIRES_TODAY" as {registration}, {model}
+    And I enter {registration} in the registration field
+    When I press the "Continue" button
+
+    Then The page contains "{registration}"
+    And The page contains "{model}"
+    And The page contains "This vehicle's MOT expires soon"

@@ -8,5 +8,5 @@ and rfr.rfr_type_id=1 -- Advisory reason for Reason for Rejection
 and rfr.failure_dangerous=1 -- shows results for tests that fail for a dangerous reason
 and mtc.vehicle_id = veh.id
 and mtc.status_id=6 -- MOT test passed
-and mtc.completed_date < str_to_date('20/05/2018', '%d/%m/%Y') -- select vehicles which where tested before the EU Road Worthiness changes
+and mtc.completed_date > str_to_date('20/05/2018', '%d/%m/%Y') -- select vehicles which where tested after the EU Road Worthiness changes
 limit 10
