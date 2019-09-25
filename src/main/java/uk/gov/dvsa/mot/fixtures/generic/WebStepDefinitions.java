@@ -30,6 +30,8 @@ public class WebStepDefinitions implements En {
         When("^I browse to (\\S+)$", (String relativePath) ->
                 driverWrapper.browseTo(relativePath));
 
+        When("^I go back to the previous page$", () -> driverWrapper.goBack());
+
         When("^I press the \"([^\"]+)\" button$", (String buttonText) ->
                 driverWrapper.pressButton(buttonText));
 

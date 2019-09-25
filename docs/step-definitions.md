@@ -21,6 +21,7 @@ Note, in the steps below:
 High level:
 
 * I browse to ```URL```
+* I go back to the previous page
 * I press the ```"..button text.."``` button
 * I press the first ```"..button text.."``` button
 * I click the button which contains text ```"..button text.."```

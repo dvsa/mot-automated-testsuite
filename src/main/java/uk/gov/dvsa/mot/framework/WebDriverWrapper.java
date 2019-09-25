@@ -2004,4 +2004,11 @@ public class WebDriverWrapper {
             }
         }
     }
+
+    /**
+     * Go back to the previous page in the browser.
+     */
+    public void goBack() {
+        webDriver.navigate().back();
+    }
 }
