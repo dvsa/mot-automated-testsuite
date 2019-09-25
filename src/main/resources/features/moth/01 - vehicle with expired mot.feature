@@ -1,5 +1,5 @@
 @mothpp @mothint
-Feature: 01 - Check vehicle with expired MOT
+Feature: 01 - MOT History vehicle check with expired/expiring test
 
   Scenario: A MOTH user searches for a vehicle with an expired MOT
     Given I browse to /

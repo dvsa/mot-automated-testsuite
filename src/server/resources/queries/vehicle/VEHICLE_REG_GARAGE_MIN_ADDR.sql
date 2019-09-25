@@ -1,4 +1,4 @@
-select veh.registration, left(mtc.number,4) as testno, adr.address_line_1, adr.address_line_2, dvla.recent_v5_document_number
+select veh.registration, concat(left(mtc.number,4), ' ', substring(mtc.number,5,4), ' ', right(mtc.number,4)) as testno, adr.address_line_1, adr.address_line_2, dvla.recent_v5_document_number
 from vehicle veh, address adr, contact_detail cd, site_contact_detail_map scdm, site s, mot_test_current mtc, dvla_vehicle dvla
 where veh.registration is not null
 and mtc.vehicle_id = veh.id
