@@ -60,3 +60,13 @@ Feature: 08 - Check fake and invalid registration numbers
     Then The page contains "There was a problem"
     And The page contains "Enter the vehicle's registration"
     And The page title contains "What is the vehicle's registration number"
+
+  Scenario: A MOTH user searches for a vehicle with a current valid MOT using the honeypot field
+    Given I browse to /
+    And I load "VEHICLE_REG_MOT_CURRENT" as {registration}, {model}, {date}, {mot_expiry}
+    And I enter {registration} in the hidden registration field
+    When I press the "Continue" button
+
+    Then The page contains "There was a problem"
+    And The page contains "Check that the registration you entered is correct"
+    And The page title contains "What is the vehicle's registration number"

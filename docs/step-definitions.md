@@ -304,6 +304,7 @@ These steps are specific to the DVSA MOT application screens.
 
 * I enter ```"..text.."``` in the registration field
 * I enter ```{key}``` in the registration field
+* I enter ```{key}``` in the hidden registration field
 * I click the last text ```..text..```
 * I go to the next tab
 * I close extra tabs
