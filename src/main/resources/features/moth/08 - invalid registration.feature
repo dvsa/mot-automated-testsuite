@@ -65,8 +65,8 @@ Feature: 08 - Check fake and invalid registration numbers
     Given I browse to /
     And I load "VEHICLE_REG_MOT_CURRENT" as {registration}, {model}, {date}, {mot_expiry}
     And I enter {registration} in the hidden registration field
-    When I press the "Continue" button
-
-    Then The page contains "There was a problem"
-    And The page contains "Check that the registration you entered is correct"
-    And The page title contains "What is the vehicle's registration number"
+#    When I press the "Continue" button
+#
+#    Then The page contains "There was a problem"
+#    And The page contains "Check that the registration you entered is correct"
+#    And The page title contains "What is the vehicle's registration number"
