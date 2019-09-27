@@ -7,11 +7,11 @@ Feature: 55 - Check whether MOT certificates can be downloaded after entering th
     When I press the "Continue" button
 
     And I click the accordion section with the id "mot-history-description"
-    And I click the first "View test certificate" text
+    And I click the View test certificate link for test number "9999 9999 00"
     Then The page contains "Enter latest V5C number"
 
-    Given I enter "12312312312" in the field with id "v5c-print-cert-input"
-    And I press the first "Show test certificate" button
+    And I enter "12312312312" in the v5c certificate field for test number "9999 9999 00"
+    And I press the Show test certificate button for test number "9999 9999 00"
     Then The page contains "View certificate"
     And I check the "Return to MOT test history" button is enabled
 
@@ -35,11 +35,11 @@ Feature: 55 - Check whether MOT certificates can be downloaded after entering th
     When I press the "Continue" button
 
     And I click the accordion section with the id "mot-history-description"
-    And I click the first "View test certificate" text
+    And I click the View test certificate link for test number "9999 9999 02"
     Then The page contains "Enter latest V5C number"
 
-    Given I enter "12312312312" in the field with id "v5c-print-cert-input"
-    And I press the first "Show test certificate" button
+    And I enter "12312312312" in the v5c certificate field for test number "9999 9999 02"
+    And I press the Show test certificate button for test number "9999 9999 02"
     Then The page contains "View certificate"
     And I check the "Return to MOT test history" button is enabled
 
@@ -74,11 +74,11 @@ Feature: 55 - Check whether MOT certificates can be downloaded after entering th
     When I press the "Continue" button
 
     And I click the accordion section with the id "mot-history-description"
-    And I click the first "View test certificate" text
+    And I click the View test certificate link for test number "9999 9999 04"
     Then The page contains "Enter latest V5C number"
 
-    Given I enter "12312312312" in the field with id "v5c-print-cert-input"
-    And I press the first "Show test certificate" button
+    And I enter "12312312312" in the v5c certificate field for test number "9999 9999 04"
+    And I press the Show test certificate button for test number "9999 9999 04"
     Then The page contains "View certificate"
     And I check the "Return to MOT test history" button is enabled
 
@@ -103,11 +103,11 @@ Feature: 55 - Check whether MOT certificates can be downloaded after entering th
     When I press the "Continue" button
 
     And I click the accordion section with the id "mot-history-description"
-    And I click the first "View test certificate" text
+    And I click the View test certificate link for test number "9999 9999 21"
     Then The page contains "Enter latest V5C number"
 
-    Given I enter "12312312312" in the field with id "v5c-print-cert-input"
-    And I press the first "Show test certificate" button
+    And I enter "12312312312" in the v5c certificate field for test number "9999 9999 21"
+    And I press the Show test certificate button for test number "9999 9999 21"
     Then The page contains "View certificate"
     And I check the "Return to MOT test history" button is enabled
 
@@ -132,4 +132,61 @@ Feature: 55 - Check whether MOT certificates can be downloaded after entering th
       | VT30W/2.0                                       |
       | CGSCYFP                                         |
       | 99 9999 9921                                    |
+    Then I go to the next tab
+
+  Scenario: A MOTH user searches for a vehicle with an PRS pass MOT test and downloads the English MOT certificate
+    Given I browse to /
+    And I enter "CGSENFP" in the registration field
+    When I press the "Continue" button
+
+    And I click the accordion section with the id "mot-history-description"
+    And I click the View test certificate link for test number "9999 9999 06"
+    Then The page contains "Enter latest V5C number"
+
+    And I enter "1231 2312 312" in the v5c certificate field for test number "9999 9999 06"
+    And I press the Show test certificate button for test number "9999 9999 06"
+    Then The page contains "View certificate"
+    And I check the "Return to MOT test history" button is enabled
+
+    Given I click the button with id "cert-download-link"
+    When I go to the next tab
+    Then PDF is embedded in the page
+
+    When I go to the next tab
+    Then I click the certificate link and check the MOT certificate PDF contains:
+      | MOT test certificate                    |
+      | Duplicate certificate issued by DVSA on |
+      | Issued by DVSA                          |
+      | VT20/2.0                                |
+      | CGSENFP                                 |
+      | 99 9999 9906                            |
+    Then I go to the next tab
+
+  Scenario: A MOTH user searches for a vehicle with an PRS fail MOT test and downloads the English MOT certificate
+    Given I browse to /
+    And I enter "CGSENFP" in the registration field
+    When I press the "Continue" button
+
+    And I click the accordion section with the id "mot-history-description"
+    And I click the View test certificate link for test number "9999 9999 05"
+    Then The page contains "Enter latest V5C number"
+
+    And I enter "1231 2312 312" in the v5c certificate field for test number "9999 9999 05"
+    And I press the Show test certificate button for test number "9999 9999 05"
+    Then The page contains "View certificate"
+    And I check the "Return to MOT test history" button is enabled
+
+    Given I click the button with id "cert-download-link"
+    When I go to the next tab
+    Then PDF is embedded in the page
+
+    When I go to the next tab
+    Then I click the certificate link and check the MOT certificate PDF contains:
+      | MOT test certificate                    |
+      | Fail                                    |
+      | Duplicate certificate issued by DVSA on |
+      | Issued by DVSA                          |
+      | VT30/2.0                                |
+      | CGSENFP                                 |
+      | 99 9999 9905                            |
     Then I go to the next tab

@@ -2027,4 +2027,42 @@ public class WebDriverWrapper {
     public void goBack() {
         webDriver.navigate().back();
     }
+
+    /**
+     * Click the view certificate link for the specified test number.
+     *
+     * @param testno The test number the link is associated with
+     */
+    public void clickTestnumberText(String testno) {
+        WebElement link = webDriver.findElement(By.xpath(
+                "//h3[contains(normalize-space(),'" + testno + "')]"
+                        + "//ancestor::div[4]//div[@class='column-one-third']/div/details/summary/span"));
+        link.click();
+    }
+
+    /**
+     * Click the value into the v5c field for the specified test number.
+     *
+     * @param text The test number to enter into the field
+     * @param testno The test number the field is associated with
+     */
+    public void enterV5cTestnumber(String text, String testno) {
+        WebElement textElement = webDriver.findElement(By.xpath("//h3[contains(normalize-space(),'" + testno + "')]"
+                        + "//ancestor::div[4]//div[@class='column-one-third']"
+                        + "/div/details/div/form/div[@class='form-group ']/input"));
+        textElement.clear();
+        textElement.sendKeys(text);
+    }
+
+    /**
+     * Press the button the corresponds the the Test number.
+     *
+     * @param testno The test number the button is associated with
+     */
+    public void pressButtonnumberText(String testno) {
+        WebElement button = webDriver.findElement(By.xpath("//h3[contains(normalize-space(),'" + testno + "')]"
+                + "//ancestor::div[4]//div[@class='column-one-third']/div/details/div/form/input[@class='button']"));
+        button.submit();
+        waitForFullPageLoad();
+    }
 }

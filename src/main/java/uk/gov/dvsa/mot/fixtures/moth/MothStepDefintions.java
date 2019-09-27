@@ -47,6 +47,16 @@ public class MothStepDefintions implements En {
         When("^I close extra tabs$", () -> driverWrapper.closeTabs());
 
         When("^PDF is embedded in the page$", () -> assertTrue(driverWrapper.containsEmbeddedPdf()));
+
+        And("^I click the View test certificate link for test number \"([^\"]+)\"$", (String testno) ->
+                driverWrapper.clickTestnumberText(testno));
+
+        And("^I enter \"([^\"]+)\" in the v5c certificate field for test number \"([^\"]+)\"$",
+                (String text, String testno) -> driverWrapper.enterV5cTestnumber(text, testno));
+
+        And("^I press the Show test certificate button for test number \"([^\"]+)\"$",
+                (String testno) -> driverWrapper.pressButtonnumberText(testno));
+
     }
 
 
