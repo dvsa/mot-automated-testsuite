@@ -9,6 +9,7 @@ and cd.id = scdm.contact_detail_id
 and adr.id = cd.address_id
 and CHAR_LENGTH(adr.address_line_1) > 40
 and CHAR_LENGTH(adr.address_line_2) > 9
-and CHAR_LENGTH(adr.town) > 23
 and CHAR_LENGTH(adr.postcode) > 7
+and adr.address_line_1 is not null
+and adr.address_line_2 is not null
 limit 5

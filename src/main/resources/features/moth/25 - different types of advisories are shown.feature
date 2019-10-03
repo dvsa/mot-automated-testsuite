@@ -15,7 +15,7 @@ Feature: 25 - Dangerous and Major RFR's types are shown
     And The page contains "Monitor and repair if necessary (advisories):"
     And The page contains "What are advisories?"
     And I click the "What are advisories?" help link
-    And The page contains "Advisory items are provided for advice. For some of these, if they became more serious, your vehicle may no longer be roadworthy and could require immediate attention."
+    And The page contains "Advisories are given for guidance. Some of these may need to be monitored in case they become more serious and need immediate repairs."
 
   Scenario: A MOTH user searches for an MOT test with dangerous advisories before 20th May 2019 (EU Road Worthiness)
     Given I browse to /
@@ -45,7 +45,6 @@ Feature: 25 - Dangerous and Major RFR's types are shown
     And The page contains "What are defects?"
     And I click the "What are defects?" help link
     And The page contains "Dangerous defects are a direct and immediate risk to the road safety or the environment. A vehicle with a dangerous defect will fail the test."
-    And The page contains "Major defects may compromise the safety of the vehicle, put other road users at risk, or harm the environment. A vehicle with a major defect will fail the test."
     And The page title contains "Check MOT history"
 
   Scenario: A MOTH user searches for an MOT test with dangerous failures before 20th May 2019 (EU Road Worthiness)
@@ -73,10 +72,9 @@ Feature: 25 - Dangerous and Major RFR's types are shown
     And I click the accordion section with the id "mot-history-description"
     And The page contains "Fail"
     And The page contains "Do not drive until repaired (dangerous defects):"
-    And The page contains "What are defects and advisories?"
-    And I click the "What are defects and advisories?" help link
+    And The page contains "What are defects?"
+    And I click the "What are defects?" help link
     And The page contains "Dangerous defects are a direct and immediate risk to the road safety or the environment. A vehicle with a dangerous defect will fail the test."
-    And The page contains "Advisories are given for guidance. Some of these may need to be monitored in case they become more serious and need immediate repairs."
     And The page title contains "Check MOT history"
 
   Scenario: A MOTH user searches for an MOT test with dangerous PRS before 20th May 2018 (EU Road Worthiness)
@@ -108,7 +106,6 @@ Feature: 25 - Dangerous and Major RFR's types are shown
     And The page contains "Repair immediately (major defects):"
     And The page contains "What are defects?"
     And I click the "What are defects?" help link
-    And The page contains "Dangerous defects are a direct and immediate risk to the road safety or the environment. A vehicle with a dangerous defect will fail the test."
     And The page contains "Major defects may compromise the safety of the vehicle, put other road users at risk, or harm the environment. A vehicle with a major defect will fail the test."
     And The page title contains "Check MOT history"
 

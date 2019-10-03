@@ -8,4 +8,7 @@ and scdm.site_id = s.id
 and cd.id = scdm.contact_detail_id
 and adr.id = cd.address_id
 and mtc.mot_test_type_id = 1
+and s.name != 'Example Site' -- removes test data
+and adr.address_line_1 is not null
+and adr.address_line_2 is not null
 limit 5
