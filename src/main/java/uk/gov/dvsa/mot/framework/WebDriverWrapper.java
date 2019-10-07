@@ -2065,4 +2065,18 @@ public class WebDriverWrapper {
         button.submit();
         waitForFullPageLoad();
     }
+
+    /**
+     * Waits for the v5c certificate input field to be visible.
+     *
+     * @param testno The test number the field is associated with
+     */
+    public void waitForElementVisibleById(String testno) {
+        (new WebDriverWait(webDriver, pageWaitSeconds))
+                .pollingEvery(Duration.ofMillis(pollFrequencyMilliseconds))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h3[contains(normalize-space(),'"
+                        + testno + "')]//ancestor::div[4]//div[@class='column-one-third']"
+                        + "/div/details/div/form/div[@class='form-group ']/input")));
+        logger.debug("Element Visible");
+    }
 }

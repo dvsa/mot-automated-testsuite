@@ -226,12 +226,6 @@ public class WebStepDefinitions implements En {
                 (Integer seconds, Integer refresh, String buttonText) ->
                         driverWrapper.waitForButton(seconds, refresh, buttonText));
 
-        And("^I click the accordion section with the id \"([^\"]+)\"$", (String accordionId) ->
-                driverWrapper.accordionClick(accordionId));
-
-        When("^I click the \"([^\"]+)\" help link$", (String helpText) ->
-                driverWrapper.helptextClick(helpText));
-
         And("^I set the starting url key as \"([^\"]+)\"$", (String startingUrlKey) ->
                 driverWrapper.setStartingUrl(startingUrlKey));
 

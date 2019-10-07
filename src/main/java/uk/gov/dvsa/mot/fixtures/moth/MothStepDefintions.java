@@ -57,7 +57,27 @@ public class MothStepDefintions implements En {
         And("^I press the Show test certificate button for test number \"([^\"]+)\"$",
                 (String testno) -> driverWrapper.pressButtonnumberText(testno));
 
-    }
+        And("^I enter \"([^\"]+)\" in the v5c certificate field for test number \\{([^\\}]+)\\}$",
+                (String text, String testno) -> driverWrapper.enterV5cTestnumber(text, driverWrapper.getData(testno)));
 
+        And("^I click the View test certificate link for test number \\{([^\\}]+)\\}$", (String testno) ->
+                driverWrapper.clickTestnumberText(driverWrapper.getData(testno)));
+
+        And("^I enter \\{([^\\}]+)\\} in the v5c certificate field for test number \\{([^\\}]+)\\}$",
+                (String text, String testno) ->
+                        driverWrapper.enterV5cTestnumber(driverWrapper.getData(text), driverWrapper.getData(testno)));
+
+        And("^I press the Show test certificate button for test number \\{([^\\}]+)\\}$",
+                (String testno) -> driverWrapper.pressButtonnumberText(driverWrapper.getData(testno)));
+
+        And("^I wait for certificate input field for tests number \\{([^\\}]+)\\} to be visible$",
+                (String testno) -> driverWrapper.waitForElementVisibleById(driverWrapper.getData(testno)));
+
+        And("^I click the accordion section with the id \"([^\"]+)\"$", (String accordionId) ->
+                driverWrapper.accordionClick(accordionId));
+
+        When("^I click the \"([^\"]+)\" help link$", (String helpText) ->
+                driverWrapper.helptextClick(helpText));
+    }
 
 }

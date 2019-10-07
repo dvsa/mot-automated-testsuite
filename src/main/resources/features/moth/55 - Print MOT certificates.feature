@@ -1,5 +1,5 @@
 @mothprint @mothint
-Feature: 55 - Check whether MOT certificates can be downloaded after entering the V5C number
+Feature: 55 - Check whether MOT certificates can be downloaded after entering the correct V5C number
 
   Scenario: A MOTH user searches for a vehicle with an pass MOT test and downloads the English MOT certificate
     Given I browse to /
@@ -190,3 +190,44 @@ Feature: 55 - Check whether MOT certificates can be downloaded after entering th
       | CGSENFP                                 |
       | 99 9999 9905                            |
     Then I go to the next tab
+
+    @mothpp
+  Scenario: A MOTH user enters an incorrect V5C number and an appropriate error message is displayed
+    Given I browse to /
+    And I load "VEHICLE_REG_INVALID_CERT" as {registration}, {testnumber}, {v5c}
+    And I enter {registration} in the registration field
+    When I press the "Continue" button
+
+    When I click the accordion section with the id "mot-history-description"
+    Then I click the View test certificate link for test number {testnumber}
+    And I wait for certificate input field for tests number {testnumber} to be visible
+    Then The page contains "Enter latest V5C number"
+
+    Given I enter "00000000000" in the v5c certificate field for test number {testnumber}
+    And I press the Show test certificate button for test number {testnumber}
+    And I wait for certificate input field for tests number {testnumber} to be visible
+    Then The page contains "Check that the V5C number you entered is correct"
+
+    Given I enter " " in the v5c certificate field for test number {testnumber}
+    And I press the Show test certificate button for test number {testnumber}
+    And I wait for certificate input field for tests number {testnumber} to be visible
+    Then The page contains "Enter the V5C number"
+
+    Given I enter "123" in the v5c certificate field for test number {testnumber}
+    And I press the Show test certificate button for test number {testnumber}
+    And I wait for certificate input field for tests number {testnumber} to be visible
+    Then The page contains "The V5C number must be 11 numbers"
+
+    Given I enter "123123123AB" in the v5c certificate field for test number {testnumber}
+    And I press the Show test certificate button for test number {testnumber}
+    And I wait for certificate input field for tests number {testnumber} to be visible
+    Then The page contains "The V5C number can only contain numbers"
+
+    Given I enter {v5c} in the v5c certificate field for test number {testnumber}
+    And I press the Show test certificate button for test number {testnumber}
+
+    Then The page contains "View certificate"
+    And I check the "Return to MOT test history" button is enabled
+    When I click the button with id "cert-download-link"
+    And I go to the next tab
+    Then The page contains "The certificate is currently unavailable"
