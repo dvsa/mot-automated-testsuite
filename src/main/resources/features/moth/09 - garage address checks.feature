@@ -1,5 +1,5 @@
 @mothpp @mothint
-Feature: 23 - Garage with address details
+Feature: 09 - Garage with address details
 
   Scenario: A MOTH user searches for a vehicle, enter correct v5c and test location is correct
     Given I browse to /

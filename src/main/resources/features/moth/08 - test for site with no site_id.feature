@@ -1,5 +1,5 @@
 @mothpp @mothint
-Feature: 21 - No site id
+Feature: 08 - No site id
 
   Scenario: A MOTH user searches for a test where there is no site id
     Given I browse to /

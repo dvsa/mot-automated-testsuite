@@ -1,5 +1,5 @@
 @mothtrailers @mothint
-Feature: 48 - Check HGV/PSV for Trailer with a current Annual Test
+Feature: 16 - Check HGV/PSV for Trailer with a current Annual Test
 
   Scenario: A MOTH user searches for a Trailer with a current a current Annual Test
     Given I browse to /

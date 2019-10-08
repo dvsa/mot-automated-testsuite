@@ -1,5 +1,5 @@
 @mothpp @mothint
-Feature: 17 - Check vehicle with appeal tests
+Feature: 07 - Check vehicle with appeal tests
 
   Scenario: A MOTH user searches for a vehicle with statutory appeal pass that shows
     Given I browse to /

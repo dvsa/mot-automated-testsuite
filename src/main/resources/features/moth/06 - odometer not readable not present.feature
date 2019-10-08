@@ -1,5 +1,5 @@
 @mothpp @mothint
-Feature: 16 - Check vehicle with odometer unreadable/not present
+Feature: 06 - Check vehicle with odometer unreadable/not present
 
   Scenario: A MOTH user searches for a vehicle with unreadable odometer
     Given I browse to /

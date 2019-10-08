@@ -1,5 +1,5 @@
 @mothtrailers @mothint
-Feature: 46 - Check HGV/PSV for Trailer with an expired Annual Test
+Feature: 15 - Check HGV/PSV for Trailer with an expired Annual Test
 
   Scenario: A MOTH user searches for a Trailer with an expired Annual Test
     Given I browse to /

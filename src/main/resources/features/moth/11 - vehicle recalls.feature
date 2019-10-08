@@ -1,5 +1,5 @@
 @mothrecall @mothpp @mothint
-Feature: 28 - Vehicle without an Outstanding Recall
+Feature: 11 - Vehicle without an Outstanding Recall
 
   Scenario: A MOTH user searches for a vehicle without an Outstanding Recall
     Given I browse to /

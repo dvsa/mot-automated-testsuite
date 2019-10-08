@@ -1,5 +1,5 @@
 @mothpp @mothint
-Feature: 06 - Check vehicle with no MOT history
+Feature: 03 - Check vehicle with no MOT history
 
   Scenario: A MOTH user searches for a expired vehicle with a 3 year due date
     Given I browse to /

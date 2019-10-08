@@ -1,5 +1,5 @@
 @mothpp @mothint
-Feature: 08 - Check fake and invalid registration numbers
+Feature: 04 - Check fake and invalid registration numbers
 
   Scenario Outline: A MOTH user searches for a vehicle with an invalid reg
     Given I browse to /

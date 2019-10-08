@@ -1,5 +1,5 @@
 @mothpp @mothint
-Feature: 13 - Check correct vehicle registration variations
+Feature: 05 - Check correct vehicle registration variations
 
   Scenario: A MOTH user searches for a vehicle reg with lowercase letters
     Given I browse to /

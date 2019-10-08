@@ -1,5 +1,5 @@
 @mothhgv @mothint
-Feature: 38 - HGV History vehicle check with expired/expiring Annual Test
+Feature: 12 - HGV History vehicle check with expired/expiring Annual Test
 
   Scenario: A MOTH user searches for a HGV with an expired Annual Test
     Given I browse to /
