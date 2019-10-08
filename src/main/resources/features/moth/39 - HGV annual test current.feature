@@ -50,7 +50,7 @@ Feature: 39 - Check HGV with a current Annual Test
 
     And I click the last "Find out more" link
     And I go to the next tab
-    Then The page title contains "Heavy goods vehicle (HGV) inspection manual - GOV.UK"
+    Then The page title contains "MOT inspection manual: heavy goods vehicles (HGVs) - GOV.UK"
     And I go to the next tab
     And I close extra tabs
 

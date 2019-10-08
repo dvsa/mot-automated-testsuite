@@ -19,6 +19,6 @@ Feature: 44 - Check HGV that has no Annual Test history and the vehicle is less 
 
     And I click the last "Find out more" link
     And I go to the next tab
-    Then The page title contains "Public service vehicle (PSV) inspection manual - GOV.UK"
+    Then The page title contains "MOT inspection manual: public service vehicles (PSVs) - GOV.UK"
     And I go to the next tab
     And I close extra tabs
