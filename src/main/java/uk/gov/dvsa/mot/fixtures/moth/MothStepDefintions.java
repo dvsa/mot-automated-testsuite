@@ -34,7 +34,8 @@ public class MothStepDefintions implements En {
                         driverWrapper.getData(dataKey)));
 
         When("^I enter \\{([^\\}]+)\\} in the hidden registration field$", (String dataKey) ->
-                driverWrapper.enterIntoHiddenFieldWithLabel(driverWrapper.getData(dataKey)));
+                driverWrapper.enterIntoHiddenFieldWithLabel("Do not enter any",
+                        driverWrapper.getData(dataKey)));
 
         When("^I click the last \"([^\"]+)\" text$", (String linkText) ->
                 driverWrapper.clickLastText(linkText));

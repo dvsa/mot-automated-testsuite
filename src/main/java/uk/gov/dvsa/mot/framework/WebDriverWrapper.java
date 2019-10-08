@@ -1647,14 +1647,22 @@ public class WebDriverWrapper {
     /**
      * Enters the specified text into the hidden field.
      * @param text The text to enter
+     * @param labelText  The element text to find
      */
-    public void enterIntoHiddenFieldWithLabel(String text) {
-        // change class name to make the element visible to the test
+    public void enterIntoHiddenFieldWithLabel(String labelText, String text) {
+        // change class names to make the elements visible to the test
         JavascriptExecutor jse = (JavascriptExecutor)webDriver;
         jse.executeScript(
-                "document.getElementsByClassName('form-group')[0].setAttribute('class','use_me')");
-        // find the input associated with the specified class name
-        WebElement textElement = webDriver.findElement(By.xpath("//div[contains(@class, 'use_me')]//input"));
+                "var els = document.getElementsByClassName('form-group'),\n"
+                        + "    i = els.length;\n"
+                        + "while (i--) {\n"
+                        + "    els[i].setAttribute('class','no_longer_hidden');\n"
+                        + "}");
+
+        // find the input associated with the specified label...
+        WebElement labelElement = webDriver.findElement(
+                By.xpath("//*[contains(text(),'" + labelText + "')]//ancestor::label"));
+        WebElement textElement = webDriver.findElement(By.id(labelElement.getAttribute("for")));
         textElement.clear();
         textElement.sendKeys(text);
     }
