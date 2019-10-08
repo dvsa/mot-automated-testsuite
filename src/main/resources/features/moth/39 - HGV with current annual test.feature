@@ -1,5 +1,5 @@
 @mothhgv @mothint
-Feature: 39 - Check HGV with a current Annual Test
+Feature: 39 - Check HGV vehicle with current valid Annual Test
 
   Scenario: A MOTH user searches for a HGV with a current a current Annual Test
     Given I browse to /
@@ -66,3 +66,24 @@ Feature: 39 - Check HGV with a current Annual Test
     And I click the "What are failures and advisories?" help link
     And The page contains "Failure items must be fixed before the vehicle can pass its annual test."
     And The page contains "Advisory items are provided for advice. For some of these, if they became more serious, your vehicle may no longer be roadworthy and could require immediate attention."
+
+  Scenario: A MOTH user searches for a HGV with test after eu go live date looks like pre eu test and handles PG9 tests correctly
+    Given I browse to /
+    And I enter "PROHIBH" in the registration field
+    When I press the "Continue" button
+
+    Then The page contains "RENAULT"
+    And The page contains "SCANIA"
+    And The page contains "The annual test changed on 20 May 2018"
+    And The page does not contain "Defects are now categorised according to their severity – dangerous, major, and minor."
+    And The page contains "Find out more"
+
+    And I click the accordion section with the id "mot-history-description"
+    And The page contains "7 July 2018"
+    And The page contains "Brake Systems and Components - Prohibition"
+    And The page contains "Brake Systems and Components - Failure"
+
+    And The page contains "PG9PARTRE"
+    And The page contains "PG9FULL"
+    And The page does not contain "Condition of Body - PG9 FULL INSPECTION & FEE - Fail"
+    And The page does not contain "Condition of Body - PG9 PART PAID RETEST - Prohibition"

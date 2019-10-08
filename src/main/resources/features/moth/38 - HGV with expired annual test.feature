@@ -1,5 +1,5 @@
 @mothhgv @mothint
-Feature: 38 - Check HGV with an expired Annual Test
+Feature: 38 - HGV History vehicle check with expired/expiring Annual Test
 
   Scenario: A MOTH user searches for a HGV with an expired Annual Test
     Given I browse to /
@@ -54,3 +54,50 @@ Feature: 38 - Check HGV with an expired Annual Test
     And I click the "What are failures and advisories?" help link
     And The page contains "Failure items must be fixed before the vehicle can pass its annual test."
     And The page contains "Advisory items are provided for advice. For some of these, if they became more serious, your vehicle may no longer be roadworthy and could require immediate attention."
+
+  Scenario: A MOTH user searches for a HGV with a current Annual Test that expires tomorrow
+    Given I browse to /
+    And I enter "EXTOMOR" in the registration field
+    When I press the "Continue" button
+
+    Then The page contains "EXTOMOR"
+    And The page contains "CONVERSION"
+    And The page contains "This vehicle's annual test expires soon"
+
+  Scenario: A MOTH user searches for a HGV with a Annual Test that is just about to expire
+    Given I browse to /
+    And I enter "EXYESTE" in the registration field
+    When I press the "Continue" button
+
+    Then The page contains "EXYESTE"
+    And The page contains "CONVERSION"
+    And The page contains "This vehicle's annual test has expired"
+    And The page contains "If the vehicle has been tested recently, it can take up to 10 working days for us to update our records"
+    And The page contains "This vehicle may be MOT exempt, for more information refer to MOT exemption guidance"
+
+    And I click the "MOT exemption guidance" link
+    And I go to the next tab
+    And I go to the next tab
+    And I close extra tabs
+
+  Scenario: A MOTH user searches for a HGV with a Annual Test that expires today
+    Given I browse to /
+    And I enter "EXTODAY" in the registration field
+    When I press the "Continue" button
+
+    Then The page contains "EXTODAY"
+    And The page contains "CONVERSION"
+    And The page contains "This vehicle's annual test expires soon"
+
+  Scenario: A MOTH user searches for a HGV with a Annual Test that is due soon
+    Given I browse to /
+    And I enter "NOHOLD1" in the registration field
+    When I press the "Continue" button
+
+    Then The page contains "NOHOLD1"
+    And The page contains "IVECO FORD CARGO ML75E17"
+    And The page contains "This vehicle hasn't had its first annual test"
+    And The page contains "If the vehicle has been tested recently, it can take up to 10 working days for us to update our records"
+    And I click the accordion section with the id "mot-history-description"
+
+    And The page contains "This vehicle hasn't had its first annual test."
