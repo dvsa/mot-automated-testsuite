@@ -1,4 +1,4 @@
-@mothpp @mothint
+@mothpp @mothint @karl1
 Feature: 10 - Dangerous and Major RFR's types are shown
 
   Scenario: A MOTH user searches for an MOT test with dangerous advisories after 20th May 2018 (EU Road Worthiness)
@@ -123,3 +123,31 @@ Feature: 10 - Dangerous and Major RFR's types are shown
     And I click the "What are advisories?" help link
     And The page contains "Advisories are given for guidance. Some of these may need to be monitored in case they become more serious and need immediate repairs."
     And The page title contains "Check MOT history"
+
+  Scenario: A MOTH user searches for an MOT test with dangerous manual advisories after 20th May 2018 (EU Road Worthiness)
+    Given I browse to /
+    And I load "VEHICLE_REG_DANGEROUS_MANUAL_EURW" as {registration}, {rfr_description}
+    And I enter {registration} in the registration field
+    When I press the "Continue" button
+
+    Then The page title contains "Check MOT history"
+    And The page contains "{registration}"
+    And I click the accordion section with the id "mot-history-description"
+    And The page contains "Fail"
+    And The page contains "Dangerous"
+    And The page contains "Monitor and repair if necessary (advisories):"
+    And The page contains "{rfr_description}"
+
+  Scenario: A MOTH user searches for an MOT test with dangerous manual advisories before 20th May 2019 (EU Road Worthiness)
+    Given I browse to /
+    And I load "VEHICLE_REG_DANGEROUS_MANUAL" as {registration}, {rfr_description}
+    And I enter {registration} in the registration field
+    When I press the "Continue" button
+
+    Then The page title contains "Check MOT history"
+    And The page contains "{registration}"
+    And I click the accordion section with the id "mot-history-description"
+    And The page contains "Fail"
+    And The page contains "Dangerous"
+    And The page contains "Advisory notice item(s)"
+    And The page contains "{rfr_description}"
