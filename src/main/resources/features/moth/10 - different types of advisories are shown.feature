@@ -1,4 +1,4 @@
-@mothpp @mothint @karl1
+@mothpp @mothint
 Feature: 10 - Dangerous and Major RFR's types are shown
 
   Scenario: A MOTH user searches for an MOT test with dangerous advisories after 20th May 2018 (EU Road Worthiness)
