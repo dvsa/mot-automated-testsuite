@@ -232,5 +232,9 @@ public class WebStepDefinitions implements En {
 
         And("^I set the starting url key as \"([^\"]+)\"$", (String startingUrlKey) ->
                 driverWrapper.setStartingUrl(startingUrlKey));
+
+        And("^I check the \"([^\"]+)\" field column does not have the value \\{([^\\}]+)\\}$",
+                (String fieldName, String valueKey) -> Assert.assertFalse("Wrong field value",
+                        driverWrapper.getTextFromTableColumn(fieldName).contains(driverWrapper.getData(valueKey))));
     }
 }
