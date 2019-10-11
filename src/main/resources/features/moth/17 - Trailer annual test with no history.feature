@@ -1,4 +1,4 @@
-@mothtrailers @mothint
+@mothtrailers @mothint @mothpp
 Feature: 17 - Check Trailer that has no Annual Test history
 
   Scenario: A MOTH user searches for a Trailer that has no Annual Test history and the vehicle is less than a year old

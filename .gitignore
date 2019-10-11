@@ -6,5 +6,7 @@
 /.idea/
 /.gradle/
 /configuration/testsuite.properties
+/node_modules/
 *.DS_Store
 *.iml
+package-lock.json
