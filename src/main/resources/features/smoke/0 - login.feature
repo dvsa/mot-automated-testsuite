@@ -11,5 +11,5 @@ Feature: 00 - Login
     Then The page title contains "Your home"
 
   Scenario: Redirect to login page if go to an internal screen when not logged in
-    When I browse to /your-profile
+    When I browse to /training-test-vehicle-search
     Then The page title contains "Sign in"
