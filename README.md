@@ -15,6 +15,8 @@ Checkout the ```mot/2fa-pin-generator``` project into a directory alongside the 
 
 Get a copy of ```testsuite.properties``` from another member of the team and save it in the ```configuration``` directory. See [Configuration Settings](configuration/README.md) for further details.
 
+Get a copy of the current [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/) that matches the installed version of chrome and copy this to the ```drivers``` directory. This also needs to be referenced in the ```testsuite.properties``` file.
+
 ## How to run
 To run all scenarios (in serial) within one specific feature, run the following at the command line. The filename can include any sub-directories below the ```features``` directory (e.g. ```sub-dir/example.feature```):
 
