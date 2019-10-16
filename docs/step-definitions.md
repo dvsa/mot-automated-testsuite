@@ -161,6 +161,7 @@ These steps are specific to the DVSA MOT application screens.
 * I generate 2FA PIN with previous drift ```{..last drift key..}``` as ```{key}```  
 * I login and click ```"..journey type.."``` card using ```"..dataset name.."``` as ```{..username key..}```, ```{key2}```, ```{key3}```, ```{key4}```
 * I enter the correct answer to the security question
+* I enter the default password in the ```"..label.."``` field
 
 
 ### CreateVehicleStepDefinitions

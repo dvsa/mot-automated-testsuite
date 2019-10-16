@@ -1,4 +1,4 @@
-@regression
+@regression @smoke
 Feature: 03 - reset password
 
   Scenario: User logs into account and then resets their password multiple times
@@ -10,7 +10,7 @@ Feature: 03 - reset password
     And The page title contains "Change your password"
 
     # Check password length validation
-    And I enter "Password1" in the "Current password" field
+    And I enter the default password in the "Current password" field
     And I enter "Pass1" in the "New password" field
     And I enter "Pass1" in the "Re-type your new password" field
     And I press the "Change password" button
@@ -18,7 +18,7 @@ Feature: 03 - reset password
     And The page contains "must be at least 8 characters long"
 
     # Check numerical password validation
-    And I enter "Password1" in the "Current password" field
+    And I enter the default password in the "Current password" field
     And I enter "Password" in the "New password" field
     And I enter "Password" in the "Re-type your new password" field
     And I press the "Change password" button
@@ -26,7 +26,7 @@ Feature: 03 - reset password
     And The page contains "Must contain 1 or more numbers"
 
     # Check upper case and lower case validation
-    And I enter "Password1" in the "Current password" field
+    And I enter the default password in the "Current password" field
     And I enter "password1" in the "New password" field
     And I enter "password1" in the "Re-type your new password" field
     And I press the "Change password" button
@@ -34,7 +34,7 @@ Feature: 03 - reset password
     And The page contains "Must contain both upper and lower case characters"
 
     # Check common password validation
-    And I enter "Password1" in the "Current password" field
+    And I enter the default password in the "Current password" field
     And I enter "Qwerty123" in the "New password" field
     And I enter "Qwerty123" in the "Re-type your new password" field
     And I press the "Change password" button
@@ -42,7 +42,7 @@ Feature: 03 - reset password
     And The page contains "must not be a common password"
 
     # Change the password properly
-    And I enter "Password1" in the "Current password" field
+    And I enter the default password in the "Current password" field
     And I enter "Password2" in the "New password" field
     And I enter "Password2" in the "Re-type your new password" field
     And I press the "Change password" button

@@ -134,6 +134,9 @@ public class AuthenticationStepDefinitions implements En {
                                         Integer.parseInt(driverWrapper.getData(lastDriftKey)))));
 
         Given("^I enter the correct answer to the security question$", this::answerSecurityQuestion);
+
+        When("^I enter the default password in the \"([^\"]+)\" field$", (String label) ->
+                driverWrapper.enterIntoField(env.getRequiredProperty("password"), label));
     }
 
     /** Encapsulates the possible results from the login journey. */
