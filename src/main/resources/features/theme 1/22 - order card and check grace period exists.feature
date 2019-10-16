@@ -1,4 +1,4 @@
-@regression
+@test22
 Feature: 22 - order card and check grace period exists
 
   Scenario: User logs in with temporary login and checks grace period is created, orders a card and checks that grace period is still active.
@@ -24,15 +24,6 @@ Feature: 22 - order card and check grace period exists
     And The page title contains "Your security questions have been changed - MOT testing service"
     And I click the "Continue to home" link
     And The page title contains "Your home"
-
-    #Update security answers to meet new security policy requirements, continue to user homepage and then signout.
-    Then The page title contains "Change security questions - Reset your account security - MOT testing service"
-    And I press the "Continue" button
-    When I enter "answer" in the field with id "answer"
-    And I press the "Continue" button
-    And The page title contains "Review security question changes - MOT testing service"
-    And I press the "Save Changes" button
-    And I click the "Continue to home" link
     And I click the "Sign out" link
 
     #Login again with temporary sign in and verify that grace period is active.
@@ -64,8 +55,8 @@ Feature: 22 - order card and check grace period exists
 
     #User continues to login with their security answers.
     And I click the "Continue" link
-    And The page title contains "Your security questions - MOT testing service"
-    And I enter "answer" in the field with id "answer"
+    And The page title contains "Your security question - MOT testing service"
+    And I enter the correct answer to the security question
     And I press the "Continue" button
 
     #Verify that the page shows text regarding signing in without security card sign in and grace period.
