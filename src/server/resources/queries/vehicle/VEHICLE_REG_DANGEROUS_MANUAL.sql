@@ -11,4 +11,4 @@ and rfr.rfr_type_id = 6 -- manually entered defect
 and mtc.status_id = 5 -- Failed test
 and mtc.mot_test_type_id = 1 -- Normal test
 and mtc.completed_date < str_to_date('20/05/2018', '%d/%m/%Y') -- competed mot tests before EURW changes
-limit 10;
+limit 1
