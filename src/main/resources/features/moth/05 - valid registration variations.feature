@@ -32,11 +32,11 @@ Feature: 05 - Check correct vehicle registration variations
     And The page title contains "Check MOT history"
 
   Scenario: A MOTH user searches for a vehicle with dash
-    Given I load "VEHICLE_REG_DASH" as {registration1}, {make}
-    And I browse to /
-    And I enter {registration1} in the registration field
+    Given I browse to /
+    And I load "VEHICLE_REG_DASH" as {registration}, {make}
+    And I enter {registration} in the registration field
     When I press the "Continue" button
 
-    Then The page contains "{registration1}"
+    Then The page contains "{registration}"
     And The page contains "{make}"
     And The page title contains "Check MOT history"
