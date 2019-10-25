@@ -11,4 +11,6 @@ and mtc.mot_test_type_id = 1
 and s.name != 'Example Site' -- removes test data
 and adr.address_line_1 is not null
 and adr.address_line_2 is not null
-limit 5
+and adr.address_line_1 not like "%  %" -- excludes invalid data containing to spaces
+and adr.address_line_1 not like "%  %" -- excludes invalid data containing to spaces
+limit 2

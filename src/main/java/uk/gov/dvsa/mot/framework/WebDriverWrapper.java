@@ -1647,9 +1647,10 @@ public class WebDriverWrapper {
     /**
      * Enters the specified text into the hidden field.
      * @param text The text to enter
-     * @param labelText  The element text to find
+     * @param labelText1  The 1st element text to find
+     * @param labelText2 The 2md element text to find
      */
-    public void enterIntoHiddenFieldWithLabel(String labelText, String text) {
+    public void enterIntoHiddenFieldWithLabel(String labelText1, String labelText2, String text) {
         // change class names to make the elements visible to the test
         JavascriptExecutor jse = (JavascriptExecutor)webDriver;
         jse.executeScript(
@@ -1659,12 +1660,21 @@ public class WebDriverWrapper {
                         + "    els[i].setAttribute('class','no_longer_hidden');\n"
                         + "}");
 
-        // find the input associated with the specified label...
-        WebElement labelElement = webDriver.findElement(
-                By.xpath("//*[contains(text(),'" + labelText + "')]//ancestor::label"));
-        WebElement textElement = webDriver.findElement(By.id(labelElement.getAttribute("for")));
-        textElement.clear();
-        textElement.sendKeys(text);
+        // find the input associated with the specified label, if the first label doesn't exist use the second label
+        List<WebElement> fields =  webDriver.findElements(
+                By.xpath("//*[contains(text(),'" + labelText1 + "')]//ancestor::label"));
+        if (fields.size() == 0) {
+            WebElement labelElement = webDriver.findElement(
+                    By.xpath("//*[contains(text(),'" + labelText2 + "')]//ancestor::label"));
+            WebElement textElement = webDriver.findElement(By.id(labelElement.getAttribute("for")));
+            textElement.clear();
+            textElement.sendKeys(text);
+
+        } else {
+            WebElement textElement = webDriver.findElement(By.id(fields.get(0).getAttribute("for")));
+            textElement.clear();
+            textElement.sendKeys(text);
+        }
     }
 
     /**

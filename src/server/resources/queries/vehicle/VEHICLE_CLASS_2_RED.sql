@@ -16,7 +16,7 @@ SELECT
    AND mtc.odometer_result_type = 'OK'
    AND mtc.odometer_value < 994999
    AND veh.vin IS NOT NULL
-   AND veh.registration NOT IN ('R3GHAU5', 'R3GHA01', 'R3GHDVL5', 'DVLA903') -- Exclude vehicles that have been modified by automation
+   AND veh.registration NOT IN ('R3GHAU5', 'R3GHA01', 'R3GDVL5', 'DVLA903') -- Exclude vehicles that have been modified by automation
    AND veh.registration NOT LIKE '%-%' -- exclude dodgy test data on ACPT
    AND veh.primary_colour_id = 13 -- 13 is "Red"
    AND veh.secondary_colour_id = 19 -- 19 is "Not Stated"

@@ -20,7 +20,7 @@ SELECT
    AND mtc.odometer_value < 994999
    AND mtc.status_id = 6 -- Passed MOT tests
    AND veh.vin IS NOT NULL
-   AND veh.registration NOT IN ('R3GHAU5', 'R3GHA01', 'R3GHDVL5', 'DVLA903') -- Exclude vehicles that have already been modified by automation
+   AND veh.registration NOT IN ('R3GHAU5', 'R3GHA01', 'R3GDVL5', 'DVLA903') -- Exclude vehicles that have already been modified by automation
    AND veh.registration NOT LIKE '%-%' -- exclude dodgy test data on ACPT
    AND NOT EXISTS (
       SELECT 1 FROM vehicle v
