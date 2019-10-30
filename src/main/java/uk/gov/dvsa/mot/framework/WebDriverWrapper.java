@@ -1648,7 +1648,7 @@ public class WebDriverWrapper {
      * Enters the specified text into the hidden field.
      * @param text The text to enter
      * @param labelText1  The 1st element text to find
-     * @param labelText2 The 2md element text to find
+     * @param labelText2 The 2nd element text to find
      */
     public void enterIntoHiddenFieldWithLabel(String labelText1, String labelText2, String text) {
         // change class names to make the elements visible to the test
