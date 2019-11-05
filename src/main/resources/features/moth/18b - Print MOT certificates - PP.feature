@@ -1,6 +1,7 @@
-@mothprint @mothint
+@mothpp
 Feature: 18 - Check whether MOT certificates can be downloaded after entering the correct V5C number
 
+  @karl1
   Scenario: A MOTH user searches for a vehicle with an pass MOT test and downloads the English MOT certificate
     Given I browse to /
     And I enter "CGSENOK" in the registration field
@@ -29,6 +30,7 @@ Feature: 18 - Check whether MOT certificates can be downloaded after entering th
       | 99 9999 9900                            |
     Then I go to the next tab
 
+  @karl
   Scenario: A MOTH user searches for a vehicle with an pass MOT test and downloads the Welsh MOT certificate
     Given I browse to /
     And I enter "CGSCYOK" in the registration field
@@ -68,6 +70,7 @@ Feature: 18 - Check whether MOT certificates can be downloaded after entering th
       | 99 9999 9902                                            |
     Then I go to the next tab
 
+  @karl
   Scenario: A MOTH user searches for a vehicle with an failed MOT test and downloads the English MOT certificate
     Given I browse to /
     And I enter "CGSENFP" in the registration field
@@ -97,6 +100,7 @@ Feature: 18 - Check whether MOT certificates can be downloaded after entering th
       | 99 9999 9904                            |
     Then I go to the next tab
 
+  @karl
   Scenario: A MOTH user searches for a vehicle with an failed MOT test and downloads the Welsh MOT certificate
     Given I browse to /
     And I enter "CGSCYFP" in the registration field
@@ -134,6 +138,7 @@ Feature: 18 - Check whether MOT certificates can be downloaded after entering th
       | 99 9999 9921                                    |
     Then I go to the next tab
 
+  @karl
   Scenario: A MOTH user searches for a vehicle with an PRS pass MOT test and downloads the English MOT certificate
     Given I browse to /
     And I enter "CGSENFP" in the registration field
@@ -162,6 +167,7 @@ Feature: 18 - Check whether MOT certificates can be downloaded after entering th
       | 99 9999 9906                            |
     Then I go to the next tab
 
+  @karl
   Scenario: A MOTH user searches for a vehicle with an PRS fail MOT test and downloads the English MOT certificate
     Given I browse to /
     And I enter "CGSENFP" in the registration field
@@ -191,7 +197,6 @@ Feature: 18 - Check whether MOT certificates can be downloaded after entering th
       | 99 9999 9905                            |
     Then I go to the next tab
 
-    @mothpp
   Scenario: A MOTH user enters an incorrect V5C number and an appropriate error message is displayed
     Given I browse to /
     And I load "VEHICLE_REG_INVALID_CERT" as {registration}, {testnumber}, {v5c}
