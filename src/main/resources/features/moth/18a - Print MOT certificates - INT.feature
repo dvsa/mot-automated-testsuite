@@ -1,5 +1,5 @@
 @mothint
-Feature: 18 - Check whether MOT certificates can be downloaded after entering the correct V5C number
+Feature: 18a - Check whether MOT certificates can be downloaded after entering the correct V5C number on MOTH INT
 
   Scenario: A MOTH user searches for a vehicle with an pass MOT test and downloads the English MOT certificate
     Given I browse to /

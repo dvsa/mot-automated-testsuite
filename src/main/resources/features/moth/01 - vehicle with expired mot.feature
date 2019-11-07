@@ -1,7 +1,6 @@
 @mothpp @mothint
 Feature: 01 - MOT History vehicle check with expired/expiring test
 
-  @moth_pp_test
   Scenario: A MOTH user searches for a vehicle with an expired MOT
     Given I browse to /
     And I load "VEHICLE_REG_MOT_EXPIRED" as {registration}, {model}, {date}, {mot_expiry}

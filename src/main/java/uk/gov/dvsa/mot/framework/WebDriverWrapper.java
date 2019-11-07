@@ -1291,9 +1291,9 @@ public class WebDriverWrapper {
      * @return true if PDF was found
      */
     public boolean containsEmbeddedPdf() {
-        WebDriverWait wait = new WebDriverWait(webDriver, 30);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("plugin")));
-
+        //  WebDriverWait wait = new WebDriverWait(webDriver, 30);
+        //  wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("plugin")));
+        timeWait(30);
         return webDriver.findElement(By.id("plugin")).getAttribute("type").equals("application/pdf");
     }
 
@@ -1641,7 +1641,7 @@ public class WebDriverWrapper {
                 By.xpath("//*[text() = '" + labelText + "']//ancestor::label"));
         WebElement textElement = webDriver.findElement(By.id(labelElement.getAttribute("for")));
         textElement.clear();
-        textElement.sendKeys(text);
+        textElement.sendKeys(expandDataKeys(text));
     }
 
     /**
@@ -2053,7 +2053,7 @@ public class WebDriverWrapper {
      */
     public void clickTestnumberText(String testno) {
         WebElement link = webDriver.findElement(By.xpath(
-                "//h3[contains(normalize-space(),'" + testno + "')]"
+                "//h3[contains(normalize-space(),'" + expandDataKeys(testno) + "')]"
                         + "//ancestor::div[4]//div[@class='column-one-third']/div/details/summary/span"));
         link.click();
     }
@@ -2065,11 +2065,11 @@ public class WebDriverWrapper {
      * @param testno The test number the field is associated with
      */
     public void enterV5cTestnumber(String text, String testno) {
-        WebElement textElement = webDriver.findElement(By.xpath("//h3[contains(normalize-space(),'" + testno + "')]"
-                        + "//ancestor::div[4]//div[@class='column-one-third']"
-                        + "/div/details/div/form/div[@class='form-group ']/input"));
+        WebElement textElement = webDriver.findElement(By.xpath("//h3[contains(normalize-space(),'"
+                + expandDataKeys(testno) + "')]//ancestor::div[4]//div[@class='column-one-third']"
+                + "/div/details/div/form/div[@class='form-group ']/input"));
         textElement.clear();
-        textElement.sendKeys(text);
+        textElement.sendKeys(expandDataKeys(text));
     }
 
     /**
@@ -2078,7 +2078,8 @@ public class WebDriverWrapper {
      * @param testno The test number the button is associated with
      */
     public void pressButtonnumberText(String testno) {
-        WebElement button = webDriver.findElement(By.xpath("//h3[contains(normalize-space(),'" + testno + "')]"
+        WebElement button = webDriver.findElement(By.xpath("//h3[contains(normalize-space(),'"
+                + expandDataKeys(testno) + "')]"
                 + "//ancestor::div[4]//div[@class='column-one-third']/div/details/div/form/input[@class='button']"));
         button.submit();
         waitForFullPageLoad();

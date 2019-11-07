@@ -1,21 +1,22 @@
 @mothpp
-Feature: 18 - Check whether MOT certificates can be downloaded after entering the correct V5C number
+Feature: 18b - Check whether MOT certificates can be downloaded after entering the correct V5C number on MOTH PP
 
   @karl1
   Scenario: A MOTH user searches for a vehicle with an pass MOT test and downloads the English MOT certificate
     Given I browse to /
-    And I enter "CGSENOK" in the registration field
+    And I load "VEHICLE_REG_WITH_MOT_ENG_CERT_PASS" as {registration}, {model}, {date}, {mot_expiry}, {testno}, {v5c}
+    And I enter {registration} in the registration field
     When I press the "Continue" button
 
     And I click the accordion section with the id "mot-history-description"
-    And I click the View test certificate link for test number "9999 9999 00"
+    And I click the View test certificate link for test number "{testno}"
     Then The page contains "Enter latest V5C number"
 
-    And I enter "12312312312" in the v5c certificate field for test number "9999 9999 00"
-    And I press the Show test certificate button for test number "9999 9999 00"
+    And I enter "{v5c}" in the v5c certificate field for test number "{testno}"
+    And I press the Show test certificate button for test number "{testno}"
+
     Then The page contains "View certificate"
     And I check the "Return to MOT test history" button is enabled
-
     Given I click the button with id "cert-download-link"
     When I go to the next tab
     Then PDF is embedded in the page
@@ -26,8 +27,8 @@ Feature: 18 - Check whether MOT certificates can be downloaded after entering th
       | Duplicate certificate issued by DVSA on |
       | Issued by DVSA                          |
       | VT20/2.0                                |
-      | CGSENOK                                 |
-      | 99 9999 9900                            |
+      | {registration}                          |
+      | {testno}                                |
     Then I go to the next tab
 
   @karl
