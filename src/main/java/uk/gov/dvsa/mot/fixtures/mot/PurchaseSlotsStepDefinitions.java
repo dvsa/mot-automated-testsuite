@@ -54,12 +54,13 @@ public class PurchaseSlotsStepDefinitions implements En {
         });
 
         And("^I make the payment for card from csv \"([^\"]+)\"$", (String csvName) -> {
-            makeCompletePayment(csvName);
+            makePayment(csvName);
         });
 
         And("^I make an orphan payment for card from csv \"([^\"]+)\"$", (String csvName) -> {
             makePayment(csvName);
         });
+
         And("^I check that (\\d+) slots were bought successfully$", (Integer slots) -> {
             checkTheSummaryInformation(slots);
         });
@@ -199,19 +200,6 @@ public class PurchaseSlotsStepDefinitions implements En {
                 driverWrapper.clickButton("Continue");
             }
         }
-    }
-
-    /**
-     * Clicks the make payment button and enters the password for the card.
-     * Saves the payment to the account
-     * @param csvName    The csv name that contains the card number used in the payment
-     */
-    private void makeCompletePayment(String csvName) {
-        //And I click the make payment button
-        makePayment(csvName);
-
-        //And I click the save button to save the payment to the account
-        driverWrapper.clickButton("Cancel");
     }
 
     private void checkTheSummaryInformation(int slots) {
