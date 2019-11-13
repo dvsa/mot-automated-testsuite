@@ -1291,9 +1291,10 @@ public class WebDriverWrapper {
      * @return true if PDF was found
      */
     public boolean containsEmbeddedPdf() {
-        //  WebDriverWait wait = new WebDriverWait(webDriver, 30);
-        //  wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("plugin")));
-        timeWait(30);
+        WebDriverWait wait = new WebDriverWait(webDriver, 30);
+        // The following step is no longer valid in Chrome version 78
+        // see https://bugs.chromium.org/p/chromedriver/issues/detail?id=3211#c5
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("plugin")));
         return webDriver.findElement(By.id("plugin")).getAttribute("type").equals("application/pdf");
     }
 

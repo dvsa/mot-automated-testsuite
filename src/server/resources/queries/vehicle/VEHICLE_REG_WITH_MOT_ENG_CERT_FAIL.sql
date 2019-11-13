@@ -16,7 +16,7 @@ and md.model_id = mo.id
 and mo.make_id = ma.id
 and mtc.document_id is not null
 and mtc.mot_test_type_id = 1 -- Normal test
-and mtc.status_id = 6 -- Passed test
+and mtc.status_id = 5 -- Failed test
 and ma.name is not null
 and mo.name is not null
 and ma.name not like "	%" -- exclude dodgy test data on PREP

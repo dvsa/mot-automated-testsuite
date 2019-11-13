@@ -8,7 +8,7 @@ where veh.registration is not null
 and lmot.max_date = mtc.submitted_date
 and lmot.vehicle_id = mtc.vehicle_id
 and mtc.site_id = s.id
-and s.dual_language = 0 -- English certificate
+and s.dual_language = 1 -- Welsh certificate
 and mtc.vehicle_id = veh.id
 and veh.model_detail_id = md.id
 and veh.dvla_vehicle_id = dvla.dvla_vehicle_id
@@ -16,7 +16,7 @@ and md.model_id = mo.id
 and mo.make_id = ma.id
 and mtc.document_id is not null
 and mtc.mot_test_type_id = 1 -- Normal test
-and mtc.status_id = 6 -- Passed test
+and mtc.status_id = 5 -- Failed test
 and ma.name is not null
 and mo.name is not null
 and ma.name not like "	%" -- exclude dodgy test data on PREP

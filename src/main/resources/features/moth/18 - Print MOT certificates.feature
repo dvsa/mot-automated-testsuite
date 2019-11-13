@@ -1,20 +1,21 @@
-@mothpp
+@mothpp @mothint @karl
 Feature: 18b - Check whether MOT certificates can be downloaded after entering the correct V5C number on MOTH PP
 
-  @karl1
   Scenario: A MOTH user searches for a vehicle with an pass MOT test and downloads the English MOT certificate
     Given I browse to /
-    And I load "VEHICLE_REG_WITH_MOT_ENG_CERT_PASS" as {registration}, {model}, {date}, {mot_expiry}, {testno}, {v5c}
+    And I load "VEHICLE_REG_WITH_MOT_ENG_CERT_PASS" as {registration}, {model}, {testno}, {v5c}
     And I enter {registration} in the registration field
     When I press the "Continue" button
 
+    And The page contains "{registration}"
+    And The page contains "{model}"
     And I click the accordion section with the id "mot-history-description"
+    And The page contains "{testno}"
     And I click the View test certificate link for test number "{testno}"
     Then The page contains "Enter latest V5C number"
 
     And I enter "{v5c}" in the v5c certificate field for test number "{testno}"
     And I press the Show test certificate button for test number "{testno}"
-
     Then The page contains "View certificate"
     And I check the "Return to MOT test history" button is enabled
     Given I click the button with id "cert-download-link"
@@ -29,23 +30,26 @@ Feature: 18b - Check whether MOT certificates can be downloaded after entering t
       | VT20/2.0                                |
       | {registration}                          |
       | {testno}                                |
+      | {model}                                 |
     Then I go to the next tab
 
-  @karl
   Scenario: A MOTH user searches for a vehicle with an pass MOT test and downloads the Welsh MOT certificate
     Given I browse to /
-    And I enter "CGSCYOK" in the registration field
+    And I load "VEHICLE_REG_WITH_MOT_WELSH_CERT_PASS" as {registration}, {model}, {testno}, {v5c}
+    And I enter {registration} in the registration field
     When I press the "Continue" button
 
+    And The page contains "{registration}"
+    And The page contains "{model}"
     And I click the accordion section with the id "mot-history-description"
-    And I click the View test certificate link for test number "9999 9999 02"
+    And The page contains "{testno}"
+    And I click the View test certificate link for test number "{testno}"
     Then The page contains "Enter latest V5C number"
 
-    And I enter "12312312312" in the v5c certificate field for test number "9999 9999 02"
-    And I press the Show test certificate button for test number "9999 9999 02"
+    And I enter "{v5c}" in the v5c certificate field for test number "{testno}"
+    And I press the Show test certificate button for test number "{testno}"
     Then The page contains "View certificate"
     And I check the "Return to MOT test history" button is enabled
-
     Given I click the button with id "cert-download-link"
     When I go to the next tab
     Then PDF is embedded in the page
@@ -58,31 +62,30 @@ Feature: 18b - Check whether MOT certificates can be downloaded after entering t
       | Duplicate certificate issued by DVSA on                 |
       | Dyblyg wedi ei gyhoeddi gan ASGC ar                     |
 
-      | Body not fully secure [6.2.2 (a) (i)]                   |
-      | Air/vacuum reservoir slightly corroded [1.1.9 (a) (ii)] |
-      | Corff: nid yw'n gwbl ddiogel [6.2.2 (a) (i)]            |
-      | Cronfa aer/gwactod: wedi rhydu ychydig [1.1.9 (a) (ii)] |
-
       | Issued by DVSA                                          |
       | Cyhoeddwyd gan ASGC                                     |
 
       | VT20/2.0                                                |
-      | CGSCYOK                                                 |
-      | 99 9999 9902                                            |
+      | {registration}                                          |
+      | {testno}                                                |
+      | {model}                                                 |
     Then I go to the next tab
 
-  @karl
   Scenario: A MOTH user searches for a vehicle with an failed MOT test and downloads the English MOT certificate
     Given I browse to /
-    And I enter "CGSENFP" in the registration field
+    And I load "VEHICLE_REG_WITH_MOT_ENG_CERT_FAIL" as {registration}, {model}, {testno}, {v5c}
+    And I enter {registration} in the registration field
     When I press the "Continue" button
 
+    And The page contains "{registration}"
+    And The page contains "{model}"
     And I click the accordion section with the id "mot-history-description"
-    And I click the View test certificate link for test number "9999 9999 04"
+    And The page contains "{testno}"
+    And I click the View test certificate link for test number "{testno}"
     Then The page contains "Enter latest V5C number"
 
-    And I enter "12312312312" in the v5c certificate field for test number "9999 9999 04"
-    And I press the Show test certificate button for test number "9999 9999 04"
+    And I enter "{v5c}" in the v5c certificate field for test number "{testno}"
+    And I press the Show test certificate button for test number "{testno}"
     Then The page contains "View certificate"
     And I check the "Return to MOT test history" button is enabled
 
@@ -94,25 +97,28 @@ Feature: 18b - Check whether MOT certificates can be downloaded after entering t
     Then I click the certificate link and check the MOT certificate PDF contains:
       | Refusal of MOT test certificate         |
       | Duplicate certificate issued by DVSA on |
-      | Fuel hose damaged [6.1.3 (c) (ii)]      |
       | Issued by DVSA                          |
       | VT30/2.0                                |
-      | CGSENFP                                 |
-      | 99 9999 9904                            |
+      | {registration}                          |
+      | {testno}                                |
+      | {model}                                 |
     Then I go to the next tab
 
-  @karl
   Scenario: A MOTH user searches for a vehicle with an failed MOT test and downloads the Welsh MOT certificate
     Given I browse to /
-    And I enter "CGSCYFP" in the registration field
+    And I load "VEHICLE_REG_WITH_MOT_WELSH_CERT_FAIL" as {registration}, {model}, {testno}, {v5c}
+    And I enter {registration} in the registration field
     When I press the "Continue" button
 
+    And The page contains "{registration}"
+    And The page contains "{model}"
     And I click the accordion section with the id "mot-history-description"
-    And I click the View test certificate link for test number "9999 9999 21"
+    And The page contains "{testno}"
+    And I click the View test certificate link for test number "{testno}"
     Then The page contains "Enter latest V5C number"
 
-    And I enter "12312312312" in the v5c certificate field for test number "9999 9999 21"
-    And I press the Show test certificate button for test number "9999 9999 21"
+    And I enter "{v5c}" in the v5c certificate field for test number "{testno}"
+    And I press the Show test certificate button for test number "{testno}"
     Then The page contains "View certificate"
     And I check the "Return to MOT test history" button is enabled
 
@@ -128,29 +134,30 @@ Feature: 18b - Check whether MOT certificates can be downloaded after entering t
       | Duplicate certificate issued by DVSA on         |
       | Dyblyg wedi ei gyhoeddi gan ASGC ar             |
 
-      | Fuel hose damaged [6.1.3 (c) (ii)]              |
-      | Peipen danwydd hyblyg: difrodi [6.1.3 (c) (ii)] |
-
       | Issued by DVSA                                  |
       | Cyhoeddwyd gan ASGC                             |
 
       | VT30W/2.0                                       |
-      | CGSCYFP                                         |
-      | 99 9999 9921                                    |
+      | {registration}                                  |
+      | {testno}                                        |
+      | {model}                                         |
     Then I go to the next tab
 
-  @karl
   Scenario: A MOTH user searches for a vehicle with an PRS pass MOT test and downloads the English MOT certificate
     Given I browse to /
-    And I enter "CGSENFP" in the registration field
+    And I load "VEHICLE_REG_WITH_MOT_ENG_CERT_PRS_PASS" as {registration}, {model}, {testno}, {v5c}
+    And I enter {registration} in the registration field
     When I press the "Continue" button
 
+    And The page contains "{registration}"
+    And The page contains "{model}"
     And I click the accordion section with the id "mot-history-description"
-    And I click the View test certificate link for test number "9999 9999 06"
+    And The page contains "{testno}"
+    And I click the View test certificate link for test number "{testno}"
     Then The page contains "Enter latest V5C number"
 
-    And I enter "1231 2312 312" in the v5c certificate field for test number "9999 9999 06"
-    And I press the Show test certificate button for test number "9999 9999 06"
+    And I enter "{v5c}" in the v5c certificate field for test number "{testno}"
+    And I press the Show test certificate button for test number "{testno}"
     Then The page contains "View certificate"
     And I check the "Return to MOT test history" button is enabled
 
@@ -164,22 +171,27 @@ Feature: 18b - Check whether MOT certificates can be downloaded after entering t
       | Duplicate certificate issued by DVSA on |
       | Issued by DVSA                          |
       | VT20/2.0                                |
-      | CGSENFP                                 |
-      | 99 9999 9906                            |
+      | {registration}                          |
+      | {testno}                                |
+      | {model}                                 |
     Then I go to the next tab
 
-  @karl
+  @karl1
   Scenario: A MOTH user searches for a vehicle with an PRS fail MOT test and downloads the English MOT certificate
     Given I browse to /
-    And I enter "CGSENFP" in the registration field
+    And I load "VEHICLE_REG_WITH_MOT_ENG_CERT_PRS_FAIL" as {registration}, {model}, {testno}, {v5c}
+    And I enter {registration} in the registration field
     When I press the "Continue" button
 
+    And The page contains "{registration}"
+    And The page contains "{model}"
     And I click the accordion section with the id "mot-history-description"
-    And I click the View test certificate link for test number "9999 9999 05"
+    And The page contains "{testno}"
+    And I click the View test certificate link for test number "{testno}"
     Then The page contains "Enter latest V5C number"
 
-    And I enter "1231 2312 312" in the v5c certificate field for test number "9999 9999 05"
-    And I press the Show test certificate button for test number "9999 9999 05"
+    And I enter "{v5c}" in the v5c certificate field for test number "{testno}"
+    And I press the Show test certificate button for test number "{testno}"
     Then The page contains "View certificate"
     And I check the "Return to MOT test history" button is enabled
 
@@ -194,8 +206,9 @@ Feature: 18b - Check whether MOT certificates can be downloaded after entering t
       | Duplicate certificate issued by DVSA on |
       | Issued by DVSA                          |
       | VT30/2.0                                |
-      | CGSENFP                                 |
-      | 99 9999 9905                            |
+      | {registration}                          |
+      | {testno}                                |
+      | {model}                                 |
     Then I go to the next tab
 
   Scenario: A MOTH user enters an incorrect V5C number and an appropriate error message is displayed
