@@ -30,6 +30,8 @@ public class WebStepDefinitions implements En {
         When("^I browse to (\\S+)$", (String relativePath) ->
                 driverWrapper.browseTo(relativePath));
 
+        When("^I go back to the previous page$", () -> driverWrapper.goBack());
+
         When("^I press the \"([^\"]+)\" button$", (String buttonText) ->
                 driverWrapper.pressButton(buttonText));
 
@@ -223,12 +225,6 @@ public class WebStepDefinitions implements En {
         And("^I wait \"([^\"]+)\" seconds then \"([^\"]+)\" the page until \"([^\"]+)\" button displays$",
                 (Integer seconds, Integer refresh, String buttonText) ->
                         driverWrapper.waitForButton(seconds, refresh, buttonText));
-
-        And("^I click the accordion section with the id \"([^\"]+)\"$", (String accordionId) ->
-                driverWrapper.accordionClick(accordionId));
-
-        When("^I click the \"([^\"]+)\" help link$", (String helpText) ->
-                driverWrapper.helptextClick(helpText));
 
         And("^I set the starting url key as \"([^\"]+)\"$", (String startingUrlKey) ->
                 driverWrapper.setStartingUrl(startingUrlKey));

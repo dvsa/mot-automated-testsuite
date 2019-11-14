@@ -21,6 +21,7 @@ Note, in the steps below:
 High level:
 
 * I browse to ```URL```
+* I go back to the previous page
 * I press the ```"..button text.."``` button
 * I press the first ```"..button text.."``` button
 * I click the button which contains text ```"..button text.."```
@@ -303,9 +304,20 @@ These steps are specific to the DVSA MOT application screens.
 
 * I enter ```"..text.."``` in the registration field
 * I enter ```{key}``` in the registration field
+* I enter ```{key}``` in the hidden registration field
 * I click the last text ```..text..```
+* I click the first text ```..text..```
 * I go to the next tab
 * I close extra tabs
+* PDF is embedded in the page
+* I click the View test certificate link for test number ```"..text.."```
+* I enter ```"..text.."``` in the v5c certificate field for test number ```"..text.."```
+* I press the Show test certificate button for test number ```"..text.."```
+* I enter ```"..text.."``` in the v5c certificate field for test number ```{key}```
+* I click the View test certificate link for test number ```{key}```
+* I enter ```{key}``` in the v5c certificate field for test number ```{key}```
+* I press the Show test certificate button for test number ```{key}```
+* I wait for certificate input field for tests number ```{key}``` to be visible
 * I click the accordion section with the id ```..text..```
 * I click the ```..text..``` help link
 * I click the certificate link and check the MOT certificate PDF contains ```{dataTable}```

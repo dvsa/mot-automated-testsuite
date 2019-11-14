@@ -8,4 +8,5 @@ and rfr.failure_dangerous=1 -- shows results for tests that fail for a dangerous
 and rfr.rfr_type_id = 3 -- PRS failure defect
 and mtc.status_id = 5 -- Failed test (part of the PRS)
 and mtc.mot_test_type_id = 1 -- Normal test
+and mtc.completed_date < str_to_date('20/05/2018', '%d/%m/%Y') -- completed mot tests before EURW changes
 limit 1

@@ -154,10 +154,10 @@ Feature: 99a - duplicate and replacement certificates
     And I edit the make "FORD" and model "FOCUS"
     And I edit the primary colour "Red" and secondary colour "White"
     And I edit the vehicle vin with "VINR3V0LDVLA"
-    And I edit the vehicle registration with "R3GHDVL5"
+    And I edit the vehicle registration with "R3GDVL5"
     And I edit the country of registration with "GB, NI (UK) - Northern Ireland"
     When I submit the certificate changes
-    And I check the registration on the confirmation page is "R3GHDVL5"
+    And I check the registration on the confirmation page is "R3GDVL5"
     And I check the vin on the confirmation page is "VINR3V0LDVLA"
     And I check the make on the confirmation page is "FORD"
     And I check the model on the confirmation page is "FOCUS"
@@ -166,7 +166,7 @@ Feature: 99a - duplicate and replacement certificates
     And The page title contains "Test Results Updated Successfully"
     And I check there is a "Print" link
     And I click "Print" and check the PDF contains:
-      | R3GHDVL5              |
+      | R3GDVL5               |
       | VINR3V0LDVLA          |
       | FORD                  |
       | FOCUS                 |

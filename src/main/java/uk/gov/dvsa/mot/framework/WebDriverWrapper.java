@@ -1292,8 +1292,9 @@ public class WebDriverWrapper {
      */
     public boolean containsEmbeddedPdf() {
         WebDriverWait wait = new WebDriverWait(webDriver, 30);
+        // The following step is no longer valid in Chrome version 78
+        // see https://bugs.chromium.org/p/chromedriver/issues/detail?id=3211#c5
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("plugin")));
-
         return webDriver.findElement(By.id("plugin")).getAttribute("type").equals("application/pdf");
     }
 
@@ -1633,6 +1634,7 @@ public class WebDriverWrapper {
     /**
      * Enters the specified text into the field.
      * @param text  The text to enter
+     * @param labelText  The element text to find
      */
     public void enterIntoFieldWithLabel(String labelText, String text) {
         // find the input associated with the specified label...
@@ -1640,7 +1642,40 @@ public class WebDriverWrapper {
                 By.xpath("//*[text() = '" + labelText + "']//ancestor::label"));
         WebElement textElement = webDriver.findElement(By.id(labelElement.getAttribute("for")));
         textElement.clear();
-        textElement.sendKeys(text);
+        textElement.sendKeys(expandDataKeys(text));
+    }
+
+    /**
+     * Enters the specified text into the hidden field.
+     * @param text The text to enter
+     * @param labelText1  The 1st element text to find
+     * @param labelText2 The 2nd element text to find
+     */
+    public void enterIntoHiddenFieldWithLabel(String labelText1, String labelText2, String text) {
+        // change class names to make the elements visible to the test
+        JavascriptExecutor jse = (JavascriptExecutor)webDriver;
+        jse.executeScript(
+                "var els = document.getElementsByClassName('form-group'),\n"
+                        + "    i = els.length;\n"
+                        + "while (i--) {\n"
+                        + "    els[i].setAttribute('class','no_longer_hidden');\n"
+                        + "}");
+
+        // find the input associated with the specified label, if the first label doesn't exist use the second label
+        List<WebElement> fields =  webDriver.findElements(
+                By.xpath("//*[contains(text(),'" + labelText1 + "')]//ancestor::label"));
+        if (fields.size() == 0) {
+            WebElement labelElement = webDriver.findElement(
+                    By.xpath("//*[contains(text(),'" + labelText2 + "')]//ancestor::label"));
+            WebElement textElement = webDriver.findElement(By.id(labelElement.getAttribute("for")));
+            textElement.clear();
+            textElement.sendKeys(text);
+
+        } else {
+            WebElement textElement = webDriver.findElement(By.id(fields.get(0).getAttribute("for")));
+            textElement.clear();
+            textElement.sendKeys(text);
+        }
     }
 
     /**
@@ -2003,5 +2038,65 @@ public class WebDriverWrapper {
                 throw new IllegalArgumentException(message);
             }
         }
+    }
+
+    /**
+     * Go back to the previous page in the browser.
+     */
+    public void goBack() {
+        webDriver.navigate().back();
+    }
+
+    /**
+     * Click the view certificate link for the specified test number.
+     *
+     * @param testno The test number the link is associated with
+     */
+    public void clickTestnumberText(String testno) {
+        WebElement link = webDriver.findElement(By.xpath(
+                "//h3[contains(normalize-space(),'" + expandDataKeys(testno) + "')]"
+                        + "//ancestor::div[4]//div[@class='column-one-third']/div/details/summary/span"));
+        link.click();
+    }
+
+    /**
+     * Click the value into the v5c field for the specified test number.
+     *
+     * @param text The test number to enter into the field
+     * @param testno The test number the field is associated with
+     */
+    public void enterV5cTestnumber(String text, String testno) {
+        WebElement textElement = webDriver.findElement(By.xpath("//h3[contains(normalize-space(),'"
+                + expandDataKeys(testno) + "')]//ancestor::div[4]//div[@class='column-one-third']"
+                + "/div/details/div/form/div[@class='form-group ']/input"));
+        textElement.clear();
+        textElement.sendKeys(expandDataKeys(text));
+    }
+
+    /**
+     * Press the button the corresponds the the Test number.
+     *
+     * @param testno The test number the button is associated with
+     */
+    public void pressButtonnumberText(String testno) {
+        WebElement button = webDriver.findElement(By.xpath("//h3[contains(normalize-space(),'"
+                + expandDataKeys(testno) + "')]"
+                + "//ancestor::div[4]//div[@class='column-one-third']/div/details/div/form/input[@class='button']"));
+        button.submit();
+        waitForFullPageLoad();
+    }
+
+    /**
+     * Waits for the v5c certificate input field to be visible.
+     *
+     * @param testno The test number the field is associated with
+     */
+    public void waitForElementVisibleById(String testno) {
+        (new WebDriverWait(webDriver, pageWaitSeconds))
+                .pollingEvery(Duration.ofMillis(pollFrequencyMilliseconds))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h3[contains(normalize-space(),'"
+                        + testno + "')]//ancestor::div[4]//div[@class='column-one-third']"
+                        + "/div/details/div/form/div[@class='form-group ']/input")));
+        logger.debug("Element Visible");
     }
 }

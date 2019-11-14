@@ -11,6 +11,7 @@ and md.model_id = mo.id
 and mo.make_id = ma.id
 and mtc.id = latest_mot.id
 and mtc.status_id not in (4,5) -- exclude vehicles whose latest status is under test or failed
+AND mtc.mot_test_type_id = 1 -- Normal MOT test
 and odometer_result_type = 'OK'
 and veh.registration not like "%-%" -- exclude dodgy test data on ACPT
 and veh.registration is not null -- nullable in PP/Prod
