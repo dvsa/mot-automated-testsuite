@@ -1,4 +1,4 @@
-@mothpp @mothint @karl
+@mothpp @mothint
 Feature: 18b - Check whether MOT certificates can be downloaded after entering the correct V5C number on MOTH PP
 
   Scenario: A MOTH user searches for a vehicle with an pass MOT test and downloads the English MOT certificate
@@ -176,7 +176,6 @@ Feature: 18b - Check whether MOT certificates can be downloaded after entering t
       | {model}                                 |
     Then I go to the next tab
 
-  @karl1
   Scenario: A MOTH user searches for a vehicle with an PRS fail MOT test and downloads the English MOT certificate
     Given I browse to /
     And I load "VEHICLE_REG_WITH_MOT_ENG_CERT_PRS_FAIL" as {registration}, {model}, {testno}, {v5c}

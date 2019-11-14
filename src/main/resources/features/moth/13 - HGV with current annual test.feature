@@ -14,7 +14,6 @@ Feature: 13 - Check HGV vehicle with current valid Annual Test
     And The page contains "Fuel type"
     And The page contains "Date registered"
     And The page contains "Annual test valid until"
-    And The page contains "31 October 2018"
     And The page does not contain "reminders"
     And The page contains "If you think the annual test expiry date or any of the vehicle details are wrong, contact DVSA."
 
