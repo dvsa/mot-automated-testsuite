@@ -2,7 +2,7 @@
 Feature: 01 - MOT Reminders vehicle check via email
 
   Scenario: A MOTr user searches for a vehicle with an valid MOT and signs up via email
-    Given I browse to /
+    Given I browse to /vrm
     And I load "VEHICLE_REG_MOT_CURRENT" as {registration}, {model}, {date}, {mot_expiry}
     Then The page title contains "What is the vehicle’s registration number? – MOT reminders"
     And The page contains "What is the vehicle’s registration number?"
@@ -10,7 +10,7 @@ Feature: 01 - MOT Reminders vehicle check via email
     And The page contains "For example, CU57ABC"
 
     And I click the "Looking for HGV trailer reminders?" help link
-    And The page contains "You can get HGV trailer annual test reminders on MOT reminders.Enter the trailer ID into the registration number input field to search for HGV trailers."
+    And The page contains "You can get HGV trailer annual test reminders on MOT reminders. Enter the trailer ID into the registration number input field to search for HGV trailers."
     And The page contains "For example, C236718 or A787121."
     And I click the "Looking for HGV trailer reminders?" help link
 
