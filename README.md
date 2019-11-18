@@ -71,6 +71,9 @@ MOT History:
 * **@mothprint** = MOT certificate printing only regression tests
 * **@mothaccessibility** = Runs the AXE accessibility checks output to `target/accessibility`. Note you must run `npm install` first to install the necessary axe libraries.
 
+MOT Reminders:
+* **@motrint** = MOT Reminders regression tests on the INT Environment
+* **@motrpp** = MOT Reminders regression tests on the PP Environment
 
 ## Reports
 Reporting is done via the [Extender Cucumber Runner](http://mkolisnyk.github.io/cucumber-reports/extended-cucumber-runner) library. The results are placed in the `target` directory along with screenshots of failing tests, and the HTML of the last page reached (if configured).
