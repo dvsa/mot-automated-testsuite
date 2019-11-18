@@ -73,6 +73,7 @@ MOT History:
 
 MOT Reminders:
 * **@motrint** = MOT Reminders regression tests on the INT Environment
+* **@motrdemo** = MOT Reminders regression tests on the DEMO Environment
 * **@motrpp** = MOT Reminders regression tests on the PP Environment
 
 ## Reports
