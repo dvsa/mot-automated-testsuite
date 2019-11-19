@@ -72,7 +72,6 @@ MOT History:
 * **@mothaccessibility** = Runs the AXE accessibility checks output to `target/accessibility`. Note you must run `npm install` first to install the necessary axe libraries.
 
 MOT Reminders:
-* **@motrint** = MOT Reminders regression tests on the INT Environment
 * **@motrdemo** = MOT Reminders regression tests on the DEMO Environment
 * **@motrpp** = MOT Reminders regression tests on the PP Environment
 

@@ -7,6 +7,7 @@ import uk.gov.dvsa.mot.data.DataProvider;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
 
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -76,7 +77,7 @@ public class UserManagementStepDefinitions implements En {
     }
 
     /**
-     * Calculates the usename that will have been generated and fills in a given field with the value.
+     * Calculates the username that will have been generated and fills in a given field with the value.
      * @param label The field label
      */
     private void enterGeneratedUsernameIntoField(String label) {
