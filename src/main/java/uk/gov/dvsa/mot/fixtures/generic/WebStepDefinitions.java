@@ -4,6 +4,7 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
 import cucumber.api.java8.En;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -236,5 +237,10 @@ public class WebStepDefinitions implements En {
         And("^I check the \"([^\"]+)\" field column does not have the value \\{([^\\}]+)\\}$",
                 (String fieldName, String valueKey) -> Assert.assertFalse("Wrong field value",
                         driverWrapper.getTextFromTableColumn(fieldName).contains(driverWrapper.getData(valueKey))));
+
+        And("^I enter unique mobile number in the field with id \"([^\"]*)\"$", (String fieldName) -> {
+            driverWrapper.enterIntoFieldWithId("079" + RandomStringUtils.randomNumeric(8), fieldName);
+        });
+
     }
 }
