@@ -1,4 +1,4 @@
-@test27
+@regression
 Feature: 27 - Checking the correct error messages
 
   Scenario: Enter an incorrect mobile phone number and an incorrect code in text message

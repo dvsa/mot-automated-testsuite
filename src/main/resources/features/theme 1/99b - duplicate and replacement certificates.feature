@@ -1,7 +1,7 @@
 # The themes 99a and 99b need to be ran last as they change vehicle data that
 # other tests may use and would have cached prior to other tests running
 # subsequently this can cause errors such as vehicle not found if these tests change in running order
-@test99
+@regression
 Feature: 99b - duplicate and replacement certificates
 
   Scenario: DVLA Manager edits VRM / VIN on latest certificate
