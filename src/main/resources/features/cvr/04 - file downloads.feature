@@ -1,5 +1,5 @@
-@cvrpp @cvrint @cvrdemo
-Feature: 14 - CVR user downloads All recalls since 1992 CSV file
+@cvr
+Feature: 14 - CVR user downloads files
 
   Scenario: CVR user downloads All recalls since 1992 CSV file and checks that all the correct headings are displayed
     Given I browse to /
@@ -19,3 +19,7 @@ Feature: 14 - CVR user downloads All recalls since 1992 CSV file
 #      | VIN End						 |
 #      | Build Start					 |
 #      | Build End					 |
+
+  Scenario: CVR user downloads CVR user downloads Recalls data guide DOC file
+    Given I browse to /
+    And I click the button with id "data-guide-link"
