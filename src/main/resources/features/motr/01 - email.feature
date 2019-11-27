@@ -1,9 +1,9 @@
 @motrpp @motrdemo
 Feature: 01 - MOT Reminders vehicle check via email
 
-  Scenario: A MOTr user searches for a vehicle with an valid MOT and signs up via email
+  Scenario Outline: A MOTr user searches for a vehicle with an valid MOT and signs up via email
     Given I browse to /vrm
-    And I load "VEHICLE_REG_MOT_CURRENT_MOTR" as {registration}, {make}, {model}, {manu_year}, {mot_expiry}
+    And I load "<DATASET>" as {registration}, {make}, {model}, {manu_year}, {mot_expiry}
     Then The page title contains "What is the vehicle’s registration number? – MOT reminders"
     And The page contains "Get an annual MOT reminder"
     And The page contains "This is a new service – your "
@@ -73,6 +73,10 @@ Feature: 01 - MOT Reminders vehicle check via email
     Then The page title contains "One more step – MOT reminders"
     And The page contains "One more step"
     And The page contains "Check your inbox "
-    And The page contains "{email}"
+    And The page contains "karl.beckett@bjss.com"
     And The page contains "and click the link in the email from GOV.UK to activate your MOT reminder."
     And The page contains "The link expires 24h from now."
+
+    Examples:
+      | DATASET                      |
+      | VEHICLE_REG_MOT_CURRENT_MOTR |
