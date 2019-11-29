@@ -1,5 +1,5 @@
 @cvr
-Feature: o4 - CVR user downloads files
+Feature: 04 - CVR user downloads files
 
   Scenario: CVR user downloads All recalls since 1992 CSV file and checks that all the correct headings are displayed
     Given I browse to /
