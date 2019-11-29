@@ -110,7 +110,7 @@ Feature: 05c - Tester does...
     Given I load "VEHICLE_CLASS_2_BLUE" as {registration1}, {vin1}, {mileage1}
     And I login with 2FA using "MOT_TESTER_CLASS_2" as {username1}, {site}
 
-    When I start an MOT test for {registration1}, {vin1}, {site} with colour changed to "Blue"
+    When I start an MOT test for {registration1}, {vin1}, {site} with colour changed to "Red"
     And The page title contains "Your home"
     And I click the "Enter test results" link
 
@@ -127,7 +127,7 @@ Feature: 05c - Tester does...
 
     #Needs more thorough check to see location of colour after responsive UI changes
     #And I check the vehicle summary section of the test summary has "Colour" of "Blue"
-    And The page contains "Blue"
+    And The page contains "Red"
     And I check the brake results section of the test summary is "Fail"
     And I check the major failures section of the test summary has "Stop lamp showing white light to the rear"
     And I check the major failures section of the test summary has "Test defect 1"
