@@ -322,6 +322,10 @@ These steps are specific to the DVSA MOT application screens.
 * I click the ```..text..``` help link
 * I click the certificate link and check the MOT certificate PDF contains ```{dataTable}```
 
+### CVRStepDefinitions
+
+* And I click ```"..text.."``` and check the CVR CSV contains:
+
 ### ElasticSearchStepDefinitons
 
 * I query elastic search with ```"..csv file name.."``` as ```"..data key.."```

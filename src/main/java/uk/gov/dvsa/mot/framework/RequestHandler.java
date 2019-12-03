@@ -126,11 +126,11 @@ public class RequestHandler {
     }
 
     /**
-     * Get CSV document.
+     * Get CSV document with Session and Tokens.
      * @param url of the file to load.
      * @return csv document as a string.
      */
-    public CsvDocument getCsvDocument(String url) throws CsvException {
+    public CsvDocument getCsvDocumentSessionId(String url) throws CsvException {
         Cookie session = getCookie(DEFAULT_SESSION_COOKIE_NAME);
         Cookie token = getCookie(DEFAULT_TOKEN_COOKIE_NAME);
 
@@ -138,6 +138,25 @@ public class RequestHandler {
                 .cookie(session.getName(), session.getValue())
                 .cookie(token.getName(), token.getValue())
                 .get(url);
+
+        String document = new String(serverResponse.asByteArray());
+        try {
+            String filename = url.replaceFirst("https://", "").replaceAll("/", "-") + ".csv";
+            writeFile(filename, url);
+
+            return new CsvDocument(CSVParser.parse(document, CSVFormat.DEFAULT));
+        } catch (IOException ex) {
+            throw new CsvException("Error parsing CSV file", ex);
+        }
+    }
+
+    /**
+     * Get CSV document without session or tokens.
+     * @param url of the file to load.
+     * @return csv document as a string.
+     */
+    public CsvDocument getCsvDocument(String url) throws CsvException {
+        Response serverResponse = with().get(url);
 
         String document = new String(serverResponse.asByteArray());
         try {
