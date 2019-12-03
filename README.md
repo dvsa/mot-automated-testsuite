@@ -83,7 +83,7 @@ A custom report detailing the usage of database test data is also output in the 
 ## Data Server
 This test suite requires sharing/co-ordination of data between tests, however Cucumber-JVM does not support multi-threading.
 
-The test suite uses the [Courgette JVM](https://github.com/prashant-ramcharan/courgette-jvm) runner, which runs features in separate processes. Before the test suite starts, a data sever (which is a small SpringBoot microservice) is started. During each test, a simple REST API is invoked from each feature process to obtain test data. After the test suite completes, the data server is automatically shut down.
+The test suite uses the [Courgette JVM](https://github.com/prashant-ramcharan/courgette-jvm) runner, which runs features in separate processes. Before the test suite starts, a data server (which is a small SpringBoot microservice) is started. During each test, a simple REST API is invoked from each feature process to obtain test data. After the test suite completes, the data server is automatically shut down.
 
 
 ## Source Code Folders
