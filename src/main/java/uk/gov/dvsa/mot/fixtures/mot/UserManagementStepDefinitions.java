@@ -76,7 +76,7 @@ public class UserManagementStepDefinitions implements En {
     }
 
     /**
-     * Calculates the usename that will have been generated and fills in a given field with the value.
+     * Calculates the username that will have been generated and fills in a given field with the value.
      * @param label The field label
      */
     private void enterGeneratedUsernameIntoField(String label) {
