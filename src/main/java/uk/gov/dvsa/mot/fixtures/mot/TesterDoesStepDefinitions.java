@@ -5,6 +5,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 import cucumber.api.java8.En;
+import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dvsa.mot.framework.WebDriverWrapper;
@@ -54,6 +55,20 @@ public class TesterDoesStepDefinitions implements En {
         And("^The MOT status is \"([^\"]+)\"$", (String status) ->
                 // unfortunately given no proper formed label etc we have to use the id
                 assertTrue("Wrong MOT status", driverWrapper.getElementText("testStatus").contains(status)));
+
+        When("^I search for a vehicle \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String regKey, String vinKey, String siteNameKey) ->
+                        searchForVehicle(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
+                                driverWrapper.getData(siteNameKey)));
+
+        When("^I select an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}"
+                 + " with \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
+                (String regKey, String vinKey, String siteNameKey,
+                 String colour1Key,  String colour2Key,  String issueDateKey) ->
+                 motTestSelect(driverWrapper.getData(regKey), driverWrapper.getData(vinKey),
+                    driverWrapper.getData(siteNameKey), driverWrapper.getData(colour1Key),
+                    driverWrapper.getData(colour2Key), driverWrapper.getData(issueDateKey),
+                        false, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()));
 
         When("^I start an MOT test for \\{([^\\}]+)\\}, \\{([^\\}]+)\\}, \\{([^\\}]+)\\}$",
                 (String regKey, String vinKey, String siteNameKey) ->
@@ -536,6 +551,148 @@ public class TesterDoesStepDefinitions implements En {
 
         //And I click the "Return to home" link
         driverWrapper.clickLink("Return to home");
+    }
+
+    /**
+     * *
+     * *
+     * *
+     * search for a vehicle to MOT test. Refactored repeated cucumber steps, the original steps are
+     * detailed below.
+     * @param registration  The registration number to use
+     * @param vin           The VIN to use
+     * @param siteName      The name of the site to use (for multi-site testers)
+     * @param isRetest      Whether this is a retest
+     * @param colour1       The new primary colour to change to (if any)
+     * @param colour2       The new primary colour to change to (if any)
+     * @param issueDate     The issue date of the last MOT for the vehicle selected
+     * @param vehicleClass  The vehicle class to nominate (if any)
+     * @param fuelType      The new engine fuel type to change to (if any)
+     * @param capacity      The new engine capacity to change to (if any)
+     */
+    private void motTestSelect(String registration, String vin, String siteName,
+                               String colour1, String colour2, String issueDate, boolean isRetest,
+                               Optional<Integer> vehicleClass, Optional<String> colour, Optional<String> fuelType,
+                               Optional<Integer> capacity) {
+        //And the Find a vehicle page contains the following attributes
+        assertTrue(driverWrapper.checkTextInSpan("Registration number", registration));
+        assertTrue(driverWrapper.checkTextInSpan("VIN", vin));
+        assertTrue(driverWrapper.checkTextInSpan("Colour", colour1));
+        assertTrue(driverWrapper.getElementText("results-table").contains(issueDate));
+
+        if (isRetest) {
+
+            //And I click the "Select vehicle for retest" link
+            driverWrapper.clickLink("Select vehicle for retest");
+
+            //And The page title contains "Confirm vehicle for retest"
+            driverWrapper.checkCurrentPageTitle("Confirm vehicle for retest");
+
+            assertTrue(driverWrapper.containsMessage("MOT testing"));
+            assertTrue(driverWrapper.containsMessage("Confirm vehicle and start retest"));
+
+            //And I check the Confirm vehicle and start retest page
+            //Add in a mew method
+
+            //And I press the "Confirm and start retest" button
+            driverWrapper.pressButton("Confirm and start retest");
+
+            //And The page title contains "MOT test started"
+            driverWrapper.checkCurrentPageTitle("MOT retest started");
+
+        } else {
+            //And I click the "Select vehicle" link
+            driverWrapper.clickLink("Select vehicle");
+
+            //And The page title contains "Confirm vehicle and start test"
+            driverWrapper.checkCurrentPageTitle("Confirm vehicle and start test");
+
+            assertTrue(driverWrapper.containsMessage("MOT testing"));
+            assertTrue(driverWrapper.containsMessage("Confirm vehicle and start test"));
+
+            if (vehicleClass.isPresent()) {
+                //And I click the "Change" link for the MOT test class
+                driverWrapper.clickLink("dt", "MOT test class", "../dd/", "Change");
+
+                //And I select the "Class <n>" radio button
+                driverWrapper.selectRadio("Class " + vehicleClass.get());
+
+                //And I press the "Continue" button
+                driverWrapper.pressButton("Continue");
+            }
+
+            //And I check the Confirm vehicle and start test page
+            //Add in a mew method
+
+            //And I press the "Confirm and start test" button
+            driverWrapper.clickButton("Confirm and start test");
+
+            //And The page title contains "MOT test started - MOT testing service"
+            driverWrapper.checkCurrentPageTitle("MOT test started - MOT testing service");
+        }
+
+        //And I click the "Return to home" link
+        driverWrapper.clickLink("Return to home");
+    }
+
+    /**
+     * Check the Confirm vehicle and start (re)test pages.
+     * @param registration  The registration number to use
+     * @param vin           The VIN to use
+     * @param siteName      The name of the site to use (for multi-site testers)
+     * @param colour1       The new primary colour to change to (if any)
+     * @param colour2       The new primary colour to change to (if any)
+     * @param issueDate     The issue date of the last MOT for the vehicle selected
+     * @param vehicleClass  The vehicle class to nominate (if any)
+     * @param fuelType      The new engine fuel type to change to (if any)
+     * @param capacity      The new engine capacity to change to (if any)
+     */
+    private void motCheckConfirm(String registration, String vin, String siteName,
+                               String colour1, String colour2, String issueDate,
+                               Optional<Integer> vehicleClass, Optional<String> colour, Optional<String> fuelType,
+                               Optional<Integer> capacity) {
+
+        //And the vehicle information section contains the following attributes
+        assertTrue(driverWrapper.checkTextInSpan("Vehicle", "Make and Model from SQL"));
+        assertTrue(driverWrapper.checkTextInSpan("Registration number", registration));
+        assertTrue(driverWrapper.checkTextInSpan("VIN", vin));
+        assertTrue(driverWrapper.checkTextInSpan("Colour", colour1));
+
+        //And I check both the primary and secondary colour
+        String colourElements = driverWrapper.getElementColour(colour1, colour2);
+        if (colour2.equals("Not Stated")) {
+            assertTrue(colourElements.equals(colour1));
+        } else {
+            assertTrue(colourElements.equals(colour1 + ", " + colour2));
+        }
+
+        //And the vehicle specification section contains the following attributes
+        //Make and model
+        assertEquals("Make and Model from SQL", driverWrapper.getTextFromDefinitionList("Make and model"));
+        //Engine
+        assertEquals("Fuel Type and Engine size from SQL", driverWrapper.getTextFromDefinitionList("Engine"));
+        //Colourk
+        assertEquals(colour1, driverWrapper.getTextFromDefinitionList("Colour"));
+        //Brake test weight
+        assertEquals("weight from SQL" + "kg", driverWrapper.getTextFromDefinitionList("Brake test weight"));
+
+        //And the vehicle registration section contains the following attributes
+        //Registration mark
+        assertEquals(registration, driverWrapper.getTextFromDefinitionList("Registration mark"));
+        //VIN
+        assertEquals(vin, driverWrapper.getTextFromDefinitionList("VIN"));
+        //Country of registration
+        assertEquals("Country of registration from SQL",
+                driverWrapper.getTextFromDefinitionList("Country of registration"));
+        //MOT test class
+        assertEquals("MOT test class from SQL", driverWrapper.getTextFromDefinitionList("MOT test class"));
+        //Vehicle category
+        assertEquals("Vehicle category from DVLA SQL", driverWrapper.getTextFromDefinitionList("Vehicle category"));
+        //Date of first use
+        assertEquals(issueDate, driverWrapper.getTextFromDefinitionList("Date of first use"));
+        //MOT expiration date
+        assertEquals("MOT expiration date from SQL", driverWrapper.getTextFromDefinitionList("MOT expiration date"));
+
     }
 
     /**
