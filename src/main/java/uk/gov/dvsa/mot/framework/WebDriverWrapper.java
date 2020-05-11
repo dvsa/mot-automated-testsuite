@@ -1865,6 +1865,42 @@ public class WebDriverWrapper {
      * @param       url of the target document
      * @return      parsed CSV containing the url output
      */
+    private CsvDocument createCsvDocumentSessionId(String url) {
+        try {
+            return requestHandler.getCsvDocumentSessionId(url);
+        } catch (CsvException ex) {
+            logger.error(String.format("Failed to load CSV document from %s.", url), ex);
+            throw new RuntimeException("Error processing CSV document", ex);
+        }
+    }
+
+    /**
+     * Checks whether a CSV contains expected values.
+     * @param linkText  The link to the PDF
+     * @param values    Array of values to check are contained
+     * @return          Whether the CSV contains all expected values
+     */
+    public boolean csvContainsSessionId(String linkText, List<String> values) {
+        // find any "a" elements with text containing the link text
+        List<WebElement> links = findLinks(linkText);
+
+        if (links.size() == 0) {
+            String message = "No links found with text: " + linkText;
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+
+        } else {
+            CsvDocument csvDocument = createCsvDocumentSessionId(links.get(0).getAttribute("href"));
+
+            return csvDocument.contains(values);
+        }
+    }
+
+    /**
+     * Creates a CSV document from the URL provided without the use of session id's.
+     * @param       url of the target document
+     * @return      parsed CSV containing the url output
+     */
     private CsvDocument createCsvDocument(String url) {
         try {
             return requestHandler.getCsvDocument(url);
@@ -1875,7 +1911,7 @@ public class WebDriverWrapper {
     }
 
     /**
-     * Checks whether a CSV contains expected values.
+     * Checks whether a CSV contains expected values without the use of session id's.
      * @param linkText  The link to the PDF
      * @param values    Array of values to check are contained
      * @return          Whether the CSV contains all expected values

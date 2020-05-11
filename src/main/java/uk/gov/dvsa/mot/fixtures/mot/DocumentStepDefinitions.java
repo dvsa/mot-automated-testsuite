@@ -39,6 +39,9 @@ public class DocumentStepDefinitions implements En {
                 (DataTable table) -> assertTrue(motCertificatePdfContainsData(table)));
 
         And("^I click \"([^\"]+)\" and check the CSV contains:$",
+                (String link, DataTable table) -> assertTrue(csvContainsDataSessionId(link, table)));
+
+        And("^I click \"([^\"]+)\" and check the CVR CSV contains:$",
                 (String link, DataTable table) -> assertTrue(csvContainsData(link, table)));
     }
 
@@ -71,6 +74,22 @@ public class DocumentStepDefinitions implements En {
         }
 
         return driverWrapper.pdfContains(link, processedDataRows);
+    }
+
+    /**
+     * Converts the raw data array and verifies all values are contained within the CSV.
+     * @param link      The link to the CSV
+     * @param rawData   The raw list of data items to check for
+     * @return          Whether all data items were present in the CSV
+     */
+    private boolean csvContainsDataSessionId(String link, DataTable rawData) {
+        List<String> rawDataRows = rawData.asList(String.class);
+        List<String> processedDataRows = new ArrayList<String>();
+        for (String dataItem : rawDataRows) {
+            processedDataRows.add(getStringValue(dataItem));
+        }
+
+        return driverWrapper.csvContainsSessionId(link, processedDataRows);
     }
 
     /**
